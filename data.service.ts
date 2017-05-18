@@ -5,6 +5,7 @@ import { Logger } from 'app/core/logger';
 
 export class DataService {
 	private prefix: string;
+	private baseOptions = { timeout: 10000 };
 
 	/* @ngInject */
 	constructor(
@@ -22,7 +23,16 @@ export class DataService {
 
 	public Get(url: string) {
 		return this.$http
-			.get(this.prefix + url)
+			.get(this.prefix + url, this.baseOptions)
+			.then(rsp => this.onSuccess(rsp))
+			.catch(err => this.onError(err));
+	}
+
+	public Post(url: string, data: any) {
+		const options = Object.assign({ data, params: { timestamp: Date.now() } }, this.baseOptions);
+
+		return this.$http
+			.post(this.prefix + url, options)
 			.then(rsp => this.onSuccess(rsp))
 			.catch(err => this.onError(err));
 	}
