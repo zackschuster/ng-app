@@ -5,7 +5,6 @@ import { Callback, Indexed } from '@ledge/types';
 
 export class Logger {
 	public log: ILogCall;
-	private noty: Noty;
 	private typeMap: Indexed<string> = {
 		warning: 'warn',
 		success: 'log',
@@ -16,7 +15,6 @@ export class Logger {
 	/* @ngInject */
 	constructor(private $log: ILogService) {
 		this.log = this.$log.log;
-		this.noty = new Noty({ theme: 'metroui', timeout: 1000, closeWith: ['click'] });
 	}
 
 	public error(msg: string) {
