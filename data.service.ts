@@ -30,7 +30,8 @@ export class DataService {
 			const rsp = await promise as IHttpPromiseCallbackArg<{}>;
 			return rsp == null ? defaultReturn : rsp.data as T;
 		} catch (err) {
-			throw this.onError(err);
+			this.onError(err);
+			return defaultReturn;
 		}
 	}
 
@@ -45,6 +46,9 @@ export class DataService {
 				break;
 			case 500:
 				this.logger.error('Internal server error. Please try again.');
+				break;
+			default:
+				this.logger.devWarning(`An unknown error occurred for '${err.config.url}'`);
 				break;
 		}
 		return err;
