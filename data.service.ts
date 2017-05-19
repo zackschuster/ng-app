@@ -1,61 +1,54 @@
-import { IHttpPromiseCallbackArg, IHttpService, IQService, ITimeoutService } from 'angular';
+import { IHttpPromiseCallbackArg, IHttpService, ITimeoutService } from 'angular';
 import { StateService } from 'angular-ui-router';
 import { config } from 'app/core/config';
 import { Logger } from 'app/core/logger';
 
 export class DataService {
-	private prefix: string;
+	private prefix = (config.PREFIX as { API: string }).API;
 	private baseOptions = { timeout: 10000 };
 
 	/* @ngInject */
 	constructor(
-		private $q: IQService,
 		private $http: IHttpService,
 		private $timeout: ITimeoutService,
 		private $state: StateService,
 		private logger: Logger,
-	) {
-		// tslint:disable-next-line:curly
-		if (config.PREFIX == null) return;
+	) { }
 
-		this.prefix = config.PREFIX.API as string;
+	public async Get<T = any>(url: string) {
+		const options = Object.assign({ params: { timestamp: Date.now() } }, this.baseOptions);
+
+		try {
+			const rsp = await this.$http.get(this.prefix + url, options) as IHttpPromiseCallbackArg<{}>;
+			return rsp.data as T;
+		} catch (err) {
+			throw this.onError(err);
+		}
 	}
 
-	public Get(url: string) {
-		return this.$http
-			.get(this.prefix + url, this.baseOptions)
-			.then(rsp => this.onSuccess(rsp))
-			.catch(err => this.onError(err));
-	}
-
-	public Post(url: string, data: any) {
-		const options = Object.assign({ data, params: { timestamp: Date.now() } }, this.baseOptions);
-
-		return this.$http
-			.post(this.prefix + url, options)
-			.then(rsp => this.onSuccess(rsp))
-			.catch(err => this.onError(err));
-	}
-
-	private onSuccess(rsp: IHttpPromiseCallbackArg<{}>) {
-		// only need the data
-		return rsp.data;
+	public async Post<T = any>(url: string, data: T) {
+		try {
+			const rsp = await this.$http.post(this.prefix + url, data, this.baseOptions) as IHttpPromiseCallbackArg<{}>;
+			return rsp.data as any;
+		} catch (err) {
+			throw this.onError(err);
+		}
 	}
 
 	private onError(err: IHttpPromiseCallbackArg<{}>) {
-		this.$timeout(_ => this.checkAuthError(err.status as number, err.data), 300);
-
-		// send full object to caller with $q.reject
-		return this.$q.reject(err);
+		this.$timeout(_ => this.checkAuthError(err.status), 300);
+		return err;
 	}
 
-	private checkAuthError(status: number, err: any) {
-		if (status === 401) {
-			this.logger.warning('You must be logged in to access this page');
-			this.$state.go('login');
-			return;
+	private checkAuthError(status: number) {
+		switch (status) {
+			case 401:
+				this.logger.warning('You must be logged in to access this page');
+				this.$state.go('login');
+				return;
+			case 500:
+				this.logger.error('Internal server error. Please try again.');
+				return;
 		}
-
-		this.logger.error(err.ExceptionMessage || err.Message);
 	}
 }
