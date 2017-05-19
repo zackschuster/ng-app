@@ -30,7 +30,7 @@ export class Logger {
 	}
 
 	public warning(msg: string) {
-		this.showNotification(msg, 'warning');
+		this.showNotification(msg, 'warning', false);
 	}
 
 	public devWarning(msg: string) {
@@ -40,8 +40,8 @@ export class Logger {
 		this.warning(`[DEV] ${msg}`);
 	}
 
-	private showNotification(text: string, type: NotyType) {
-		new Noty({ type, text, theme: 'metroui', progressBar: false, timeout: 1000, closeWith: ['click'] }).show();
+	private showNotification(text: string, type: NotyType, timeout: false | number = 1000) {
+		new Noty({ type, text, theme: 'metroui', progressBar: false, timeout, closeWith: ['click'] }).show();
 
 		const logType = this.typeMap[type];
 		(this.$log as ILogService & Indexed<Callback>)[logType](`${type}: ${text}`);
