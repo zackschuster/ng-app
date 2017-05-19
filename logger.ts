@@ -41,7 +41,7 @@ export class Logger {
 	}
 
 	private showNotification(text: string, type: NotyType) {
-		new Noty({ type, text, theme: 'metroui', timeout: 1000, closeWith: ['click'] }).show();
+		new Noty({ type, text, theme: 'metroui', progressBar: false, timeout: 1000, closeWith: ['click'] }).show();
 
 		const logType = this.typeMap[type];
 		(this.$log as ILogService & Indexed<Callback>)[logType](`${type}: ${text}`);
