@@ -5,7 +5,7 @@ import { Logger } from 'core/logger';
 
 export class DataService {
 	private prefix = (config.PREFIX as { API: string }).API;
-	private baseOptions = { timeout: 10000 };
+	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null };
 
 	/* @ngInject */
 	constructor(
