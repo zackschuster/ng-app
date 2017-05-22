@@ -1,12 +1,19 @@
 .panel.panel-default
 	.panel-heading
-		.col-lg-9
-			h3(ng-if="$ctrl.isEditing == false") {{$ctrl.ngModel.Description}}
-			input.form-control(ng-model="$ctrl.ngModel.Description" ng-if="$ctrl.isEditing == true")
-		.col-lg-3(ng-click="$ctrl.isEditing = !$ctrl.isEditing")
-			i.glyphicon(ng-class="'glyphicon-' + ($ctrl.isEditing ? 'ok' : 'pencil')" ng-click="$ctrl.save($ctrl.ngModel)")
-
+		div(ng-transclude="headerView" ng-hide="$ctrl.isEditing")
+		div(ng-transclude="headerEdit" ng-show="$ctrl.isEditing")
 	.panel-body
-		ng-transclude(slot="bodyView" ng-if="$ctrl.isEditing == false")
-		ng-transclude(slot="editView" ng-if="$ctrl.isEditing == true")
+		div(ng-transclude="bodyView" ng-hide="$ctrl.isEditing")
+		div(ng-transclude="bodyEdit" ng-show="$ctrl.isEditing")
+	.panel-footer.text-center
+		button.btn.btn-xs(ng-class="'btn-' + ($ctrl.isEditing ? 'success' : 'primary')" ng-click="!($ctrl.isEditing = !$ctrl.isEditing) && $ctrl.save($ctrl.model)")
+			i.glyphicon(ng-class="'glyphicon-' + ($ctrl.isEditing ? 'ok' : 'pencil')")
+			| {{$ctrl.isEditing ? ' Save' : ' Edit'}}
+		| &nbsp;
+		button.btn.btn-danger.btn-xs(ng-hide="$ctrl.isEditing" ng-click="$ctrl.delete($ctrl.model, $index)")
+			i.glyphicon.glyphicon-remove
+			|  Delete
+		button.btn.btn-warning.btn-xs(ng-show="$ctrl.isEditing" ng-click="$ctrl.restore($ctrl.model)")
+			i.glyphicon.glyphicon-trash
+			|  Cancel
 
