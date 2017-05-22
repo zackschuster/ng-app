@@ -1,6 +1,6 @@
 import Noty, { NotyType } from 'noty';
 import { ILogCall, ILogService } from 'angular';
-import { config } from 'app/core/config';
+import { config } from 'core/config';
 import { Callback, Indexed } from '@ledge/types';
 
 export class Logger {

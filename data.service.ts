@@ -1,7 +1,7 @@
 import { IHttpPromiseCallbackArg, IHttpService } from 'angular';
 import { StateService } from 'angular-ui-router';
-import { config } from 'app/core/config';
-import { Logger } from 'app/core/logger';
+import { config } from 'core/config';
+import { Logger } from 'core/logger';
 
 export class DataService {
 	private prefix = (config.PREFIX as { API: string }).API;
