@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import 'angular-ui-router';
 
-import { DataService } from 'core/data.service';
+import { DataService } from 'core/data/service';
 import { Logger } from 'core/logger';
 import { footerView } from 'core/layout/footer/component';
 import { editablePanel } from 'core/layout/panel/component';

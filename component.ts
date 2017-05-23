@@ -1,6 +1,6 @@
 import { ITimeoutService, copy } from 'angular';
 import { Indexed } from '@ledge/types';
-import { DataService } from 'core/data.service';
+import { DataService } from 'core/data/service';
 import { Logger } from 'core/logger';
 import { IBaseModel } from 'core/interfaces';
 
