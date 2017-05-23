@@ -1,12 +1,12 @@
-import { copy, ITimeoutService } from "angular";
+import { ITimeoutService, copy } from 'angular';
 import { Indexed } from '@ledge/types';
 
 interface BaseControllerOptions {
-	keys: string[],
-	reset: any,
-	timeout: ITimeoutService,
-	service: any,
-	listFn: string,
+	keys: string[];
+	reset: any;
+	timeout: ITimeoutService;
+	service: any;
+	listFn: string;
 }
 
 export abstract class BaseController<T extends Indexed> {
@@ -70,5 +70,5 @@ export abstract class BaseController<T extends Indexed> {
 
 	public abstract delete(item: T, id: number): void;
 
-	public abstract save(item: T) : PromiseLike<T>;
+	public abstract save(item: T): PromiseLike<T>;
 }
