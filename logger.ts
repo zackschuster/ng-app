@@ -17,6 +17,23 @@ export class Logger {
 		this.log = this.$log.log;
 	}
 
+	public confirm(action: Callback) {
+		const n = new Noty({
+			type: 'alert',
+			theme: 'metroui',
+			text: 'Do you want to continue?',
+			buttons: [
+				Noty.button('Yes', 'btn btn-success', (_: any) => {
+					action();
+					n.close();
+				}),
+				Noty.button('No', 'btn btn-danger', (_: any) => n.close()),
+			],
+		});
+
+		n.show();
+	}
+
 	public error(msg: string) {
 		this.showNotification(msg, 'error');
 	}
