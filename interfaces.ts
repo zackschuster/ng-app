@@ -11,7 +11,7 @@ export interface IComponentCtrl extends IBaseComponentCtrl {
 	$attrs: IAttributes;
 }
 
-export interface IBaseModel extends Indexed {
+export interface ICoreModel extends Indexed {
 	Id: number;
 	Description: string;
 }

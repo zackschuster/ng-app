@@ -2,9 +2,9 @@ import { ITimeoutService, copy } from 'angular';
 import { Indexed } from '@ledge/types';
 import { DataService } from 'core/data/service';
 import { Logger } from 'core/logger';
-import { IBaseModel } from 'core/interfaces';
+import { ICoreModel } from 'core/interfaces';
 
-interface BaseControllerOptions {
+interface CoreControllerOptions {
 	$timeout: ITimeoutService;
 	dataService: DataService;
 	logger: Logger;
@@ -14,7 +14,7 @@ interface BaseControllerOptions {
 	entity: string;
 }
 
-export abstract class BaseController<T extends IBaseModel> {
+export abstract class CoreController<T extends ICoreModel> {
 	protected $timeout: ITimeoutService;
 	protected dataService: DataService;
 	protected logger: Logger;
@@ -29,7 +29,7 @@ export abstract class BaseController<T extends IBaseModel> {
 	protected entity: string;
 	protected url: string;
 
-	constructor(options: BaseControllerOptions) {
+	constructor(options: CoreControllerOptions) {
 		Object.assign(this, options);
 
 		this.url = this.domain + '/' + this.entity;
