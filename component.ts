@@ -1,41 +1,43 @@
 import { ITimeoutService, copy } from 'angular';
 import { Indexed } from '@ledge/types';
+import { DataService } from 'core/data.service';
+import { Logger } from 'core/logger';
+import { IBaseModel } from 'core/interfaces';
 
 interface BaseControllerOptions {
+	$timeout: ITimeoutService;
+	dataService: DataService;
+	logger: Logger;
 	keys: string[];
 	reset: any;
-	timeout: ITimeoutService;
-	service: any;
-	listFn: string;
+	domain: string;
+	entity: string;
 }
 
-export abstract class BaseController<T extends Indexed> {
-	protected listFn: string;
-	protected service: any;
+export abstract class BaseController<T extends IBaseModel> {
 	protected $timeout: ITimeoutService;
+	protected dataService: DataService;
+	protected logger: Logger;
+
 	protected list: T[];
 	protected item: T;
+
 	protected reset: any;
 	protected keys: string[];
 
-	constructor(options: BaseControllerOptions) {
-		this.keys = options.keys || [];
-		this.reset = options.reset;
-		this.service = options.service;
-		this.listFn = options.listFn;
-		this.$timeout = options.timeout;
+	protected domain: string;
+	protected entity: string;
+	protected url: string;
 
-		this.resetItem();
+	constructor(options: BaseControllerOptions) {
+		Object.assign(this, options);
+
+		this.url = this.domain + '/' + this.entity;
 	}
 
 	public async $onInit() {
-		this.list = await this.service[this.listFn]();
-		this.$timeout();
-	}
-
-	public resetItem() {
-		this.item = copy(this.reset);
-		this.$timeout();
+		this.resetItem();
+		this.getList();
 	}
 
 	public search(params: Indexed) {
@@ -54,21 +56,60 @@ export abstract class BaseController<T extends Indexed> {
 	public async add() {
 		const item = copy(this.item);
 		this.list.push(item);
-		this.reset();
+		this.resetItem();
 		try {
 			const st = await this.save(item);
 			if (st != null) {
 				this.list.pop();
 				this.list.push(st as T);
+			} else {
+				throw new Error();
 			}
 		} catch (err) {
 			this.item = this.list.pop();
+			this.logger.error(`Failed to delete ${item.Description}`);
 		} finally {
 			this.$timeout();
 		}
 	}
 
-	public abstract delete(item: T, id: number): void;
+	public delete(item: T, index: number) {
+		this.logger.confirm(async _ => {
+			const original = copy(this.list);
+			this.list.splice(index, 1);
+			try {
+				if (item.Id) {
+					await this.dataService.Post<T>(`${this.url}/${item.Id}`);
+					this.logger.success(`Deleted ${item.Description}`);
+				}
+			} catch (err) {
+				this.list = original;
+			} finally {
+				this.$timeout();
+			}
+		});
+	}
 
-	public abstract save(item: T): PromiseLike<T>;
+	public async save(item: T) {
+		// tslint:disable-next-line:curly
+		if (!item || !item.Description) return;
+
+		try {
+			const rsp = await this.dataService.Post<T>(this.url, item);
+			this.logger.success('Saved');
+			return rsp;
+		} catch (err) {
+			return this.logger.devWarning(err);
+		}
+	}
+
+	protected resetItem() {
+		this.item = copy(this.reset);
+		this.$timeout();
+	}
+
+	protected async getList() {
+		this.list = await this.dataService.Get<T[]>(this.url, []);
+		this.$timeout();
+	}
 }
