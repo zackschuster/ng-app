@@ -1,5 +1,6 @@
 import * as angular from 'angular';
 import 'angular-ui-router';
+import 'angular-elastic';
 
 import { DataService } from 'core/data/service';
 import { Logger } from 'core/logger';
@@ -11,7 +12,10 @@ import { textBox } from 'core/input/text/box/component';
 
 export default
 	angular
-		.module('core', ['ui.router'])
+		.module('core', [
+			'ui.router',
+			'monospaced.elastic',
+		])
 		.service('dataService', DataService)
 		.service('logger', Logger)
 		.component('footerView', footerView)
