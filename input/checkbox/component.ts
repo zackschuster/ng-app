@@ -32,10 +32,7 @@ class CheckBoxController extends CoreInputController {
 					$previousElement.children().last().attr('style', 'margin-bottom:0;');
 				}
 
-				const $includesTextInput = this.containerHasFields(['text-input', 'text-box']);
-				const $embeddedInCheckBoxSet = this.containerHasParent('check-box-set');
-
-				if (this.$attrs.hasOwnProperty('bold') || $includesTextInput === true && $embeddedInCheckBoxSet === false) {
+				if (this.containerHasParent('check-box-set') === false) {
 					$('label[for=' + this.$scope.id + ']').wrapInner('<strong></strong>');
 				}
 			});
