@@ -3,6 +3,14 @@ import { Callback, Indexed } from '@ledge/types';
 
 /* @ngInject */
 export class CoreInputController {
+	public $baseAttrs = new Map([
+		['id', '{{id}}'],
+		['ng-model', '$ctrl.ngModel'],
+		['ng-required', 'required || $ctrl.ngRequired'],
+		['ng-disabled', 'disabled || $ctrl.ngdisabled'],
+		['ng-readonly', 'readonly || $ctrl.ngreadonly'],
+	]);
+
 	constructor(
 		public $scope: IScope,
 		public $element: IRootElementService,
@@ -47,6 +55,24 @@ export class CoreInputController {
 
 	public afterCurrentWorkload(action: Callback, delay: number = 0) {
 		return this.$timeout(action, delay);
+	}
+
+	public makeInput(type: string, attrs: Map<string, string> = null) {
+		const $input = $(`<input type="${type}" />`);
+
+		if (type !== 'checkbox') {
+			$input.addClass('form-control');
+		}
+
+		if (attrs != null) {
+			this.$baseAttrs = new Map([...this.$baseAttrs, ...attrs]);
+		}
+
+		for (const [key, value] of this.$baseAttrs) {
+			$input.attr(key, value);
+		}
+
+		return $input;
 	}
 
 	public wireToContainer($selector: string, $input: JQuery, $options?: { [index: string]: any }) {

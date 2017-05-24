@@ -7,22 +7,13 @@ class CheckBoxController extends CoreInputController {
 	}
 
 	public $postLink() {
-		const $checkbox = $(`
-			<input type="checkbox" id="{{id}}" ng-model="$ctrl.ngModel"
-				ng-required="required || $ctrl.ngRequired"
-				ng-disabled="disabled || $ctrl.ngDisabled"
-				ng-readonly="readonly || $ctrl.ngReadonly"
-			/>
-		`);
-
-		const $attrs = new Map([
+		const $checkbox = this.makeInput('checkbox', new Map<string, string>([
 			['value', 'ng-value'],
 			['ngTrueValue', 'ng-true-value'],
 			['ngFalseValue', 'ng-false-value'],
-		]);
+		]));
 
 		this
-			.applyAttrs($checkbox, $attrs)
 			.wireToContainer('label,legend', $checkbox, { prepend: true })
 			.afterCurrentWorkload(_ => {
 				const $previousElement = this.$element.prev();
@@ -33,7 +24,7 @@ class CheckBoxController extends CoreInputController {
 				}
 
 				if (this.containerHasParent('check-box-set') === false) {
-					$('label[for=' + this.$scope.id + ']').wrapInner('<strong></strong>');
+					$('label[for=' + this.$scope.id + ']').addClass('bold');
 				}
 			});
 	}
