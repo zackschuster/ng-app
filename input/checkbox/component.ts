@@ -1,15 +1,8 @@
 import { applyCoreDefinition } from 'core/input/definition';
 import { CoreInputController } from 'core/input/controller';
-import { IAttributes, ICompileService, IRootElementService, IScope, ITimeoutService } from '@types/angular';
 
 class CheckBoxController extends CoreInputController {
-	constructor(
-		$scope: IScope,
-		$element: IRootElementService,
-		$attrs: IAttributes,
-		$compile: ICompileService,
-		$timeout: ITimeoutService,
-	) {
+	constructor($scope: any, $element: any, $attrs: any, $compile: any, $timeout: any) {
 		super($scope, $element, $attrs, $compile, $timeout);
 	}
 
@@ -22,19 +15,14 @@ class CheckBoxController extends CoreInputController {
 			/>
 		`);
 
-		if (this.$attrs.value != null) {
-			$checkbox.attr('ng-value', this.$attrs.value);
-		}
-
-		if (this.$attrs.ngTrueValue != null) {
-			$checkbox.attr('ng-true-value', this.$attrs.ngTrueValue);
-		}
-
-		if (this.$attrs.ngFalseValue != null) {
-			$checkbox.attr('ng-false-value', this.$attrs.ngFalseValue);
-		}
+		const $attrs = new Map([
+			['value', 'ng-value'],
+			['ngTrueValue', 'ng-true-value'],
+			['ngFalseValue', 'ng-false-value'],
+		]);
 
 		this
+			.applyAttrs($checkbox, $attrs)
 			.wireToContainer('label,legend', $checkbox, { prepend: true })
 			.afterCurrentWorkload(_ => {
 				const $previousElement = this.$element.prev();
@@ -47,7 +35,7 @@ class CheckBoxController extends CoreInputController {
 				const $includesTextInput = this.containerHasFields(['text-input', 'text-box']);
 				const $embeddedInCheckBoxSet = this.containerHasParent('check-box-set');
 
-				if ($includesTextInput === true && $embeddedInCheckBoxSet === false && !this.$attrs.hasOwnProperty('noBold')) {
+				if (this.$attrs.hasOwnProperty('bold') || $includesTextInput === true && $embeddedInCheckBoxSet === false) {
 					$('label[for=' + this.$scope.id + ']').wrapInner('<strong></strong>');
 				}
 			});

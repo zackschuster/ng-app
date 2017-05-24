@@ -9,13 +9,18 @@ export class CoreInputController {
 		public $attrs: IAttributes,
 		public $compile: ICompileService,
 		public $timeout: ITimeoutService,
+
+		/**
+		 * Custom element properties
+		 */
+		public $props: Indexed = {},
 	) {}
 
 	public $onInit() {
 		this.registerCommonItems();
 	}
 
-	public registerCommonItems($props?: Indexed) {
+	public registerCommonItems() {
 		this.$scope.id = this.modelIdentifier();
 		this.$scope.srOnly = this.isSrOnly();
 
@@ -23,10 +28,18 @@ export class CoreInputController {
 		this.$scope.disabled = this.$attrs.hasOwnProperty('disabled');
 		this.$scope.readonly = this.$attrs.hasOwnProperty('readonly');
 
-		if (Object.prototype.toString.call($props) === '[object Object]') {
-			Object.keys($props).forEach($prop => {
-				this.$scope.$ctrl[$prop] = this.$attrs[$prop] || $props[$prop];
-			});
+		Object.keys(this.$props).forEach($prop => {
+			this.$scope[$prop] = this.$attrs[$prop] || this.$props[$prop];
+		});
+
+		return this;
+	}
+
+	public applyAttrs($element: JQuery, $attrs: Map<string, string>) {
+		for (const [key, value] of $attrs) {
+			if (this.$attrs[key] != null) {
+				$element.attr(value, this.$attrs[key]);
+			}
 		}
 
 		return this;
