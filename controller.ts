@@ -54,7 +54,7 @@ export abstract class CoreController<T extends ICoreModel> {
 	}
 
 	public async add() {
-		const item = copy(this.item);
+		const item = copy<T>(this.item);
 		this.list.push(item);
 		this.resetItem();
 		try {
@@ -75,7 +75,7 @@ export abstract class CoreController<T extends ICoreModel> {
 
 	public delete(item: T, index: number) {
 		this.logger.confirm(async _ => {
-			const original = copy(this.list);
+			const original = copy<T[]>(this.list);
 			this.list.splice(index, 1);
 			try {
 				if (item.Id) {
@@ -104,7 +104,7 @@ export abstract class CoreController<T extends ICoreModel> {
 	}
 
 	protected resetItem() {
-		this.item = copy(this.reset);
+		this.item = copy<T>(this.reset);
 		this.$timeout();
 	}
 
