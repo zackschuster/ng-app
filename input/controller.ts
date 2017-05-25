@@ -3,6 +3,8 @@ import { Callback, Indexed } from '@ledge/types';
 
 /* @ngInject */
 export class CoreInputController {
+	[index: string]: any;
+
 	public $baseAttrs = new Map([
 		['id', '{{id}}'],
 		['ng-model', '$ctrl.ngModel'],
