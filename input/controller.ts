@@ -78,7 +78,7 @@ export class CoreInputController {
 	}
 
 	public wireToContainer($selector: string, $input: JQuery, $options?: { [index: string]: any }) {
-		const $compiled = this.compileInput($input);
+		const $compiled = this.compile($input);
 		const $container = this.$element.find($selector);
 
 		const $opts = Object.assign({ prepend: false }, $options);
@@ -108,7 +108,7 @@ export class CoreInputController {
 		return this.$element.closest($selector).length > 0;
 	}
 
-	public compileInput($input: JQuery) {
+	public compile($input: JQuery) {
 		return this.$compile($input)(this.$scope);
 	}
 
