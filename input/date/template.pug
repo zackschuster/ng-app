@@ -1,0 +1,6 @@
+.form-group
+	label.control-label.bold(for="{{id}}" ng-class="{ 'sr-only': srOnly }")
+		ng-transclude
+	.input-group
+		.input-group-addon(ng-click="$ctrl.toggleDatepicker()")
+			i.fa.fa-calendar(aria-hidden="true")

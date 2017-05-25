@@ -9,6 +9,7 @@ import { checkBox } from 'core/input/checkbox/component';
 import { editablePanel } from 'core/layout/panel/component';
 import { textInput } from 'core/input/text/component';
 import { textBox } from 'core/input/text/box/component';
+import { dateInput } from 'core/input/date/component';
 
 export default
 	angular
@@ -19,6 +20,7 @@ export default
 		.service('dataService', DataService)
 		.service('logger', Logger)
 		.component('footerView', footerView)
+		.component('dateInput', dateInput)
 		.component('textInput', textInput)
 		.component('textBox', textBox)
 		.component('checkBox', checkBox)
