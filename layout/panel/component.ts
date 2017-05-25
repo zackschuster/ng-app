@@ -18,10 +18,10 @@ class PanelController {
 export const editablePanel = {
 	template: require('./template.pug')(),
 	transclude: {
-		headerView: 'headerView',
-		headerEdit: 'headerEdit',
-		bodyView: 'bodyView',
-		bodyEdit: 'bodyEdit',
+		headerView: '?headerView',
+		headerEdit: '?headerEdit',
+		bodyView: '?bodyView',
+		bodyEdit: '?bodyEdit',
 	},
 	bindings: {
 		model: '<',
