@@ -17,9 +17,8 @@ class CheckBoxController extends CoreInputController {
 			.wireToContainer('label,legend', $checkbox, { prepend: true })
 			.afterCurrentWorkload(_ => {
 				const $previousElement = this.$element.prev();
-				const $nextToCheckBox = $previousElement.is('check-box');
 
-				if ($nextToCheckBox) {
+				if ($previousElement.is('check-box')) {
 					$previousElement.children().last().attr('style', 'margin-bottom:0;');
 				}
 
