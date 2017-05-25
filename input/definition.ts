@@ -1,4 +1,4 @@
-import { IComponentOptions } from '@types/angular';
+import { IComponentOptions } from 'angular';
 
 export const coreDefinition: IComponentOptions = {
 	transclude: {

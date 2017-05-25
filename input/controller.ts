@@ -1,4 +1,4 @@
-import { IAttributes, ICompileService, IRootElementService, IScope, ITimeoutService } from '@types/angular';
+import { IAttributes, ICompileService, IRootElementService, IScope, ITimeoutService } from 'angular';
 import { Callback, Indexed } from '@ledge/types';
 
 /* @ngInject */
