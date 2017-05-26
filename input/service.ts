@@ -1,6 +1,6 @@
 import { IAttributes, ICompileService, IScope, ITimeoutService } from 'angular';
 import { Callback } from '@ledge/types';
-import { ng } from 'core/ng';
+import { ng } from 'core';
 
 /* @ngInject */
 export class InputService {
@@ -29,6 +29,8 @@ export class InputService {
 		this.$scope = $scope;
 		this.$element = $element;
 		this.$attrs = $attrs;
+
+		return this;
 	}
 
 	public scheduleForLater(action: Callback, delay: number = 0) {
@@ -54,18 +56,24 @@ export class InputService {
 		return this;
 	}
 
-	public makeInput(type: string, attrs: Map<string, string> = new Map()) {
+	public makeInput(type: string, attrs?: Map<string, string>) {
 		const $input = $(`<input type="${type}" />`);
 
 		if (type !== 'checkbox') {
 			$input.addClass('form-control');
 		}
 
-		for (const [key, value] of new Map([...this.$baseAttrs, ...attrs])) {
-			$input.attr(key, value);
-		}
+		this.applyAttributes($input, attrs);
 
 		return $input;
+	}
+
+	protected applyAttributes(input: JQuery, attrs: Map<string, string> = new Map()) {
+		for (const [key, value] of new Map([...this.$baseAttrs, ...attrs])) {
+			input.attr(key, value);
+		}
+
+		return this;
 	}
 
 	protected getTranscluded() {

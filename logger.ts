@@ -2,7 +2,7 @@ import { ILogCall, ILogService } from 'angular';
 import Noty, { NotyType } from 'noty';
 import { Callback, Indexed } from '@ledge/types';
 import { config } from 'core/config';
-import { ng } from 'core/ng';
+import { ng } from 'core';
 
 export class Logger {
 	public log: ILogCall;

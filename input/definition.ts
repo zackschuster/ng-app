@@ -16,23 +16,26 @@ export const coreDefinition: IComponentOptions = {
 interface IApplyCoreDefOpts {
 	class?: string;
 	slot?: string;
+	srOnly?: boolean;
 }
 
 // tslint:disable-next-line:max-line-length
 export function applyCoreDefinition(definition: IComponentOptions, options: IApplyCoreDefOpts = { class: 'form-group' }) {
-	// flamethrower approach: blow up everything, then fix the stragglers
+	// flamethrower approach: blow it all up, then fix the stragglers
 	const def = Object.assign({}, coreDefinition, definition);
 
 	// assign template
-	const { template } = def;
-	const $baseEl = $(`<div class=${options.class}></div>`);
+	const $baseEl = $(`<div class="${options.class || ''}"></div>`);
 
-	$baseEl.html(isFunction(template) ? (template as Callback)() : '');
-	$baseEl.prepend('<label ng-transclude></label>');
+	const { template } = def;
+	const $template = isFunction(template) ? (template as Callback)() : (template || '');
+
+	$baseEl.html($template);
+	$baseEl.prepend(`<label ng-transclude class="${options.srOnly ? 'sr-only' : ''}"></label>`);
 
 	def.template = $baseEl[0].outerHTML;
 
-	if (options.slot) {
+	if (options.slot != null) {
 		$baseEl.append(`<div style="padding-top:0.32em;" ng-transclude="${options.slot}"></div>`);
 	}
 

@@ -1,18 +1,19 @@
-import { ITimeoutService, copy } from 'angular';
+import { IScope, ITimeoutService, copy } from 'angular';
 import { Indexed } from '@ledge/types';
 import { DataService } from 'core/data/service';
 import { Logger } from 'core/logger';
 import { ICoreModel } from 'core/interfaces';
-import { ng } from 'core/ng';
+import { ng } from 'core';
 
 interface CoreControllerOptions {
 	domain: string;
 	entity: string;
-	keys: string[];
-	reset: any;
+	keys?: string[];
+	reset?: any;
 }
 
 export abstract class CoreController<T extends ICoreModel> {
+	protected $scope: IScope;
 	protected $timeout: ITimeoutService;
 	protected dataService: DataService;
 	protected logger: Logger;
@@ -28,13 +29,14 @@ export abstract class CoreController<T extends ICoreModel> {
 	protected url: string;
 
 	constructor(options: CoreControllerOptions) {
-		Object.assign(this, options);
-
+		this.$scope = ng.scope();
 		this.$timeout = ng.timeout();
 		this.dataService = new DataService();
 		this.logger = new Logger();
 
-		this.url = this.domain + '/' + this.entity;
+		this.keys = options.keys || [];
+		this.reset = options.reset || { Description: '' };
+		this.url = options.domain + '/' + options.entity;
 	}
 
 	public async $onInit() {

@@ -7,9 +7,9 @@ export class CoreInputController extends InputService {
 	protected ngModel: any;
 
 	constructor(
-		protected $scope: IScope,
-		protected $element: JQuery,
-		protected $attrs: IAttributes,
+		$scope: IScope,
+		$element: JQuery,
+		$attrs: IAttributes,
 		/**
 		 * Custom element properties
 		 */
@@ -17,22 +17,24 @@ export class CoreInputController extends InputService {
 	) {
 		super();
 
-		this.register($scope, $element, $attrs);
-
-		this.modifyScope();
-		this.scheduleForLater(_ => this.modifyLabel());
+		this
+			.register($scope, $element, $attrs)
+			.modifyScope()
+			.scheduleForLater(_ => this.modifyLabel());
 	}
 
-	private modifyScope() {
-		this.$scope.id = this.modelIdentifier();
+	private modifyScope($scope = this.$scope, $attrs = this.$attrs, $props = this.$props) {
+		$scope.id = this.modelIdentifier();
 
-		this.$scope.required = this.$attrs.hasOwnProperty('required');
-		this.$scope.disabled = this.$attrs.hasOwnProperty('disabled');
-		this.$scope.readonly = this.$attrs.hasOwnProperty('readonly');
+		$scope.required = $attrs.hasOwnProperty('required');
+		$scope.disabled = $attrs.hasOwnProperty('disabled');
+		$scope.readonly = $attrs.hasOwnProperty('readonly');
 
-		Object.keys(this.$props).forEach($prop => {
-			this.$scope[$prop] = this.$attrs[$prop] || this.$props[$prop];
+		Object.keys($props).forEach($prop => {
+			$scope[$prop] = $attrs[$prop] || $props[$prop];
 		});
+
+		return this;
 	}
 
 	private modifyLabel() {
@@ -45,5 +47,7 @@ export class CoreInputController extends InputService {
 		if ($label.is(':empty') || $labelChildren.length === 1 && $labelChildren.is('input')) {
 			$label.append(this.modelIdentifier({ unique: false }).split(/(?=[A-Z])/).join(' '));
 		}
+
+		return this;
 	}
 }

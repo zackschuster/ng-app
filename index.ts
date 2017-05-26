@@ -1,25 +1,32 @@
-import * as angular from 'angular';
+import { module } from 'angular';
+
+import 'angular-animate';
 import 'angular-elastic';
+import 'angular-ui-bootstrap';
 
-import { DataService } from 'core/data/service';
-import { Logger } from 'core/logger';
-import { footerView } from 'core/layout/footer/component';
-import { checkBox } from 'core/input/checkbox/component';
+import { Ng } from 'core/ng';
+
 import { editablePanel } from 'core/layout/panel/component';
-import { textInput } from 'core/input/text/component';
-import { textBox } from 'core/input/text/box/component';
-import { dateInput } from 'core/input/date/component';
+import { footerView } from 'core/layout/footer/component';
 
-export default
-	angular
-		.module('core', [
-			'monospaced.elastic',
-		])
-		.service('dataService', DataService)
-		.service('logger', Logger)
-		.component('footerView', footerView)
-		.component('dateInput', dateInput)
-		.component('textInput', textInput)
-		.component('textBox', textBox)
-		.component('checkBox', checkBox)
-		.component('editablePanel', editablePanel);
+import { checkBox } from 'core/input/checkbox/component';
+import { dateInput } from 'core/input/date/component';
+import { textBox } from 'core/input/text/box/component';
+import { textInput } from 'core/input/text/component';
+
+const $dependencies = [
+	'ngAnimate',
+	'ui.bootstrap',
+	'monospaced.elastic',
+];
+
+const core = module('core', $dependencies)
+	.component('editablePanel', editablePanel)
+	.component('footerView', footerView)
+	.component('checkBox', checkBox)
+	.component('dateInput', dateInput)
+	.component('textBox', textBox)
+	.component('textInput', textInput);
+
+export default core;
+export const ng: Ng = new Ng(core);

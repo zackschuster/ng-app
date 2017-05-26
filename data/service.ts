@@ -1,7 +1,7 @@
 import { IHttpPromiseCallbackArg, IHttpService } from 'angular';
 import { config } from 'core/config';
 import { Logger } from 'core/logger';
-import { ng } from 'core/ng';
+import { ng } from 'core';
 
 export class DataService {
 	private $http: IHttpService;
@@ -11,8 +11,8 @@ export class DataService {
 
 	/* @ngInject */
 	constructor() {
-		this.logger = new Logger();
 		this.$http = ng.http();
+		this.logger = new Logger();
 	}
 
 	public async Get<T = any>(url: string, defaultReturn: T = null) {

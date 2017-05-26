@@ -1,11 +1,16 @@
 // tslint:disable-next-line:max-line-length
-import { ICompileService, IHttpService, ILogService, IQService, IRootScopeService, ITimeoutService, auto, injector } from 'angular';
+import { ICompileService, IHttpService, ILogService, IModule, IQService, IRootScopeService, ITimeoutService, auto, injector } from 'angular';
 
-class Ng {
+export class Ng {
 	private $injector: auto.IInjectorService;
+	private $module: IModule;
 
-	constructor() {
-		this.$injector = injector(['ng']);
+	constructor($module: IModule) {
+		this.$module = $module;
+
+		$module.run(['$injector', ($injector: auto.IInjectorService) => {
+			this.$injector = $injector;
+		}]);
 	}
 
 	public compiler() {
@@ -33,8 +38,6 @@ class Ng {
 	}
 
 	private ngGet<T>(service: string) {
-		return this.$injector.get<T>(service);
+		return (this.$injector || injector(['ng'])).get<T>(service);
 	}
 }
-
-export const ng = new Ng();
