@@ -1,14 +1,18 @@
 import 'bootstrap-datepicker';
 
 import { isFunction } from 'angular';
+import { Callback } from '@ledge/types';
+
 import { applyCoreDefinition } from 'core/input/definition';
 import { CoreInputController } from 'core/input/controller';
 
 class DateInputController extends CoreInputController {
-	public hasFocus: boolean = false;
+	private hasFocus: boolean = false;
+	private onChange: Callback;
 
-	constructor($scope: any, $element: any, $attrs: any, $compile: any, $timeout: any) {
-		super($scope, $element, $attrs, $compile, $timeout, { maxlength: 3000, placeholder: '' });
+	/* @ngInject */
+	constructor($scope: any, $element: any, $attrs: any) {
+		super($scope, $element, $attrs, { maxlength: 3000, placeholder: '' });
 	}
 
 	public $postLink() {
@@ -57,6 +61,6 @@ class DateInputController extends CoreInputController {
 }
 
 export const dateInput = applyCoreDefinition({
-	template: require('./template.pug')(),
+	template: require('./template.pug'),
 	controller: DateInputController,
 });

@@ -1,11 +1,10 @@
-import { IAttributes, ICompileService, IRootElementService, IScope, ITimeoutService } from 'angular';
+import { IAttributes, ICompileService, IRootElementService, IScope, ITimeoutService, injector } from 'angular';
 import { Callback, Indexed } from '@ledge/types';
 
 /* @ngInject */
 export class CoreInputController {
-	[index: string]: any;
-
-	public $baseAttrs = new Map([
+	protected ngModel: any;
+	protected $baseAttrs = new Map([
 		['id', '{{id}}'],
 		['ng-model', '$ctrl.ngModel'],
 		['ng-required', 'required || $ctrl.ngRequired'],
@@ -13,71 +12,43 @@ export class CoreInputController {
 		['ng-readonly', 'readonly || $ctrl.ngreadonly'],
 	]);
 
-	constructor(
-		public $scope: IScope,
-		public $element: IRootElementService,
-		public $attrs: IAttributes,
-		public $compile: ICompileService,
-		public $timeout: ITimeoutService,
+	private $compile: ICompileService;
+	private $timeout: ITimeoutService;
+	private ngModelId: string;
 
+	constructor(
+		protected $scope: IScope,
+		protected $element: IRootElementService,
+		protected $attrs: IAttributes,
 		/**
 		 * Custom element properties
 		 */
 		public $props: Indexed = {},
-	) {}
+	) {
+		const $injector = injector(['ng']);
 
-	public $onInit() {
-		this.registerCommonItems();
+		this.$timeout = $injector.get('$timeout');
+		this.$compile = $injector.get('$compile');
+
+		this.modifyScope();
+		this.scheduleForLater(_ => this.modifyLabel());
 	}
 
-	public registerCommonItems() {
-		this.$scope.id = this.modelIdentifier();
-		this.$scope.srOnly = this.isSrOnly();
-
-		this.$scope.required = this.$attrs.hasOwnProperty('required');
-		this.$scope.disabled = this.$attrs.hasOwnProperty('disabled');
-		this.$scope.readonly = this.$attrs.hasOwnProperty('readonly');
-
-		Object.keys(this.$props).forEach($prop => {
-			this.$scope[$prop] = this.$attrs[$prop] || this.$props[$prop];
-		});
-
-		return this;
-	}
-
-	public applyAttrs($element: JQuery, $attrs: Map<string, string>) {
-		for (const [key, value] of $attrs) {
-			if (this.$attrs[key] != null) {
-				$element.attr(value, this.$attrs[key]);
-			}
-		}
-
-		return this;
-	}
-
-	public afterCurrentWorkload(action: Callback, delay: number = 0) {
-		return this.$timeout(action, delay);
-	}
-
-	public makeInput(type: string, attrs: Map<string, string> = null) {
+	protected makeInput(type: string, attrs: Map<string, string> = new Map()) {
 		const $input = $(`<input type="${type}" />`);
 
 		if (type !== 'checkbox') {
 			$input.addClass('form-control');
 		}
 
-		if (attrs != null) {
-			this.$baseAttrs = new Map([...this.$baseAttrs, ...attrs]);
-		}
-
-		for (const [key, value] of this.$baseAttrs) {
+		for (const [key, value] of new Map([...this.$baseAttrs, ...attrs])) {
 			$input.attr(key, value);
 		}
 
 		return $input;
 	}
 
-	public wireToContainer($selector: string, $input: JQuery, $options?: { [index: string]: any }) {
+	protected wireToContainer($selector: string, $input: JQuery, $options?: { [index: string]: any }) {
 		const $compiled = this.compile($input);
 		const $container = this.$element.find($selector);
 
@@ -92,35 +63,50 @@ export class CoreInputController {
 		return this;
 	}
 
-	public detachSlot() {
-		const $slot = this.getTranscluded();
-
-		$slot.detach();
-
-		return $slot;
+	protected scheduleForLater(action: Callback, delay: number = 0) {
+		return this.$timeout(action, delay);
 	}
 
-	public containerHasFields($selectors: string[]) {
-		return this.getTranscluded().find($selectors.join(',')).length > 0;
-	}
-
-	public containerHasParent($selector: string) {
-		return this.$element.closest($selector).length > 0;
-	}
-
-	public compile($input: JQuery) {
+	protected compile($input: JQuery) {
 		return this.$compile($input)(this.$scope);
 	}
 
-	public getTranscluded() {
+	protected getTranscluded() {
 		return this.$element.find('[ng-transclude-slot="include"]');
 	}
 
-	public isSrOnly() {
+	protected isSrOnly() {
 		return this.$attrs.hasOwnProperty('srOnly') || this.$element.closest('fieldset').is('[sr-only]');
 	}
 
-	public modelIdentifier() {
-		return (this.$attrs.ngModel as string).split('.').pop() + '_' + this.$scope.$id;
+	protected modelIdentifier(opts = { unique: true }) {
+		if (this.ngModelId == null) {
+			this.ngModelId = (this.$attrs.ngModel as string).split('.').pop();
+		}
+		return this.ngModelId + (opts.unique ? '_' + this.$scope.$id : '');
+	}
+
+	private modifyScope() {
+		this.$scope.id = this.modelIdentifier();
+
+		this.$scope.required = this.$attrs.hasOwnProperty('required');
+		this.$scope.disabled = this.$attrs.hasOwnProperty('disabled');
+		this.$scope.readonly = this.$attrs.hasOwnProperty('readonly');
+
+		Object.keys(this.$props).forEach($prop => {
+			this.$scope[$prop] = this.$attrs[$prop] || this.$props[$prop];
+		});
+	}
+
+	private modifyLabel() {
+		const $label = this.$element.find('label').attr('for', this.$scope.id);
+
+		if (this.isSrOnly()) {
+			$label.addClass('sr-only');
+		}
+		const $labelChildren = $label.children();
+		if ($label.is(':empty') || $labelChildren.length === 1 && $labelChildren.is('input')) {
+			$label.append(this.modelIdentifier({ unique: false }).split(/(?=[A-Z])/).join(' '));
+		}
 	}
 }

@@ -2,37 +2,35 @@ import { applyCoreDefinition } from 'core/input/definition';
 import { CoreInputController } from 'core/input/controller';
 
 class CheckBoxController extends CoreInputController {
-	constructor($scope: any, $element: any, $attrs: any, $compile: any, $timeout: any) {
-		super($scope, $element, $attrs, $compile, $timeout);
+	constructor($scope: any, $element: any, $attrs: any) {
+		super($scope, $element, $attrs);
 	}
 
 	public $postLink() {
 		const $checkbox = this.makeInput('checkbox', new Map<string, string>([
 			['value', 'ng-value'],
-			['ngTrueValue', 'ng-true-value'],
-			['ngFalseValue', 'ng-false-value'],
+			['trueValue', 'ng-true-value'],
+			['falseValue', 'ng-false-value'],
 		]));
 
 		this
 			.wireToContainer('label,legend', $checkbox, { prepend: true })
-			.afterCurrentWorkload(_ => {
+			.scheduleForLater(_ => {
 				const $previousElement = this.$element.prev();
 
 				if ($previousElement.is('check-box')) {
 					$previousElement.children().last().attr('style', 'margin-bottom:0;');
-				}
-
-				if (this.containerHasParent('check-box-set') === false) {
-					$('label[for=' + this.$scope.id + ']').addClass('bold');
 				}
 			});
 	}
 }
 
 export const checkBox = applyCoreDefinition({
-	template: require('./template.pug')(),
 	bindings: {
 		ngChecked: '<',
 	},
 	controller: CheckBoxController,
+}, {
+	class: 'checkbox',
+	slot: 'contain',
 });
