@@ -1,5 +1,4 @@
 import * as angular from 'angular';
-import 'angular-ui-router';
 import 'angular-elastic';
 
 import { DataService } from 'core/data/service';
@@ -14,7 +13,6 @@ import { dateInput } from 'core/input/date/component';
 export default
 	angular
 		.module('core', [
-			'ui.router',
 			'monospaced.elastic',
 		])
 		.service('dataService', DataService)

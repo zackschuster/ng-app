@@ -3,15 +3,13 @@ import { Indexed } from '@ledge/types';
 import { DataService } from 'core/data/service';
 import { Logger } from 'core/logger';
 import { ICoreModel } from 'core/interfaces';
+import { ng } from 'core/ng';
 
 interface CoreControllerOptions {
-	$timeout: ITimeoutService;
-	dataService: DataService;
-	logger: Logger;
-	keys: string[];
-	reset: any;
 	domain: string;
 	entity: string;
+	keys: string[];
+	reset: any;
 }
 
 export abstract class CoreController<T extends ICoreModel> {
@@ -31,6 +29,10 @@ export abstract class CoreController<T extends ICoreModel> {
 
 	constructor(options: CoreControllerOptions) {
 		Object.assign(this, options);
+
+		this.$timeout = ng.timeout();
+		this.dataService = new DataService();
+		this.logger = new Logger();
 
 		this.url = this.domain + '/' + this.entity;
 	}

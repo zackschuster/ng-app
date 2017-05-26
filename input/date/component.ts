@@ -1,6 +1,6 @@
 import 'bootstrap-datepicker';
 
-import { isFunction } from 'angular';
+import { IAttributes, IScope, isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
 import { applyCoreDefinition } from 'core/input/definition';
@@ -11,7 +11,7 @@ class DateInputController extends CoreInputController {
 	private onChange: Callback;
 
 	/* @ngInject */
-	constructor($scope: any, $element: any, $attrs: any) {
+	constructor($scope: IScope, $element: JQuery, $attrs: IAttributes) {
 		super($scope, $element, $attrs, { maxlength: 3000, placeholder: '' });
 	}
 
@@ -28,7 +28,7 @@ class DateInputController extends CoreInputController {
 			})
 			.on('changeDate', e => this.handleDateEvent(e))
 			.on('clearDate', e => this.handleDateEvent(e))
-			.on('blur', () => this.$timeout(() => this.onblur(), 200));
+			.on('blur', () => this.scheduleForLater(() => this.onblur(), 200));
 
 		this
 			.wireToContainer('.input-group', $input)
@@ -49,7 +49,7 @@ class DateInputController extends CoreInputController {
 	}
 
 	private handleDateEvent(e: DatepickerEventObject | JQueryEventObject) {
-		this.$timeout(() => {
+		this.scheduleForLater(() => {
 			const { date } = e as DatepickerEventObject;
 			this.ngModel = date != null ? this.formatDate(date) : null;
 

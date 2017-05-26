@@ -1,18 +1,19 @@
 import { IHttpPromiseCallbackArg, IHttpService } from 'angular';
-import { StateService } from 'angular-ui-router';
 import { config } from 'core/config';
 import { Logger } from 'core/logger';
+import { ng } from 'core/ng';
 
 export class DataService {
+	private $http: IHttpService;
+	private logger: Logger;
 	private prefix = (config.PREFIX as { API: string }).API;
 	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null };
 
 	/* @ngInject */
-	constructor(
-		private $http: IHttpService,
-		private $state: StateService,
-		private logger: Logger,
-	) { }
+	constructor() {
+		this.logger = new Logger();
+		this.$http = ng.http();
+	}
 
 	public async Get<T = any>(url: string, defaultReturn: T = null) {
 		const options = Object.assign({ params: { timestamp: Date.now() } }, this.baseOptions);
@@ -39,7 +40,6 @@ export class DataService {
 		switch (err.status) {
 			case 401:
 				this.logger.warning('You must be logged in to access this page');
-				this.$state.go('login');
 				break;
 			case 404:
 				this.logger.devWarning(`Route '${err.config.url}' not found`);
@@ -54,3 +54,5 @@ export class DataService {
 		return err;
 	}
 }
+
+export const dataService = new DataService();
