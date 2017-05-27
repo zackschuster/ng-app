@@ -20,9 +20,7 @@ export class CoreInputController extends InputService {
 		this
 			.register($scope, $element, $attrs)
 			.modifyScope()
-			.scheduleForLater(_ => {
-				this.modifyLabel();
-			});
+			.modifyLabel();
 	}
 
 	private modifyScope($scope = this.$scope, $attrs = this.$attrs, $props = this.$props) {
@@ -40,12 +38,14 @@ export class CoreInputController extends InputService {
 	}
 
 	private modifyLabel() {
-		const $label = this.$element.find('label');
-		const $labelChildren = $label.children();
+		this.scheduleForLater(_ => {
+			const $label = this.$element.find('label');
+			const $labelChildren = $label.children();
 
-		if ($label.is(':empty') || $labelChildren.length === 1 && $labelChildren.is('input')) {
-			$label.append(this.modelIdentifier({ unique: false }).split(/(?=[A-Z])/).join(' '));
-		}
+			if ($label.is(':empty') || $labelChildren.length === 1 && $labelChildren.is('input')) {
+				$label.append(this.modelIdentifier({ unique: false }).split(/(?=[A-Z])/).join(' '));
+			}
+		});
 
 		return this;
 	}
