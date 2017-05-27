@@ -1,11 +1,10 @@
 import { ILogCall, ILogService } from 'angular';
 import Noty, { NotyType } from 'noty';
 import { Callback, Indexed } from '@ledge/types';
-import { app } from 'core';
+import { config } from 'core';
 
 export class Logger {
 	public log: ILogCall;
-	private $log: ILogService;
 	private typeMap: Indexed<string> = {
 		warning: 'warn',
 		success: 'log',
@@ -14,8 +13,7 @@ export class Logger {
 	};
 
 	/* @ngInject */
-	constructor() {
-		this.$log = app.logger();
+	constructor(private $log: ILogService) {
 		this.log = this.$log.log;
 	}
 
@@ -54,7 +52,7 @@ export class Logger {
 
 	public devWarning(msg: string) {
 		// tslint:disable-next-line:curly
-		if (app.config.ENV === 'production') return;
+		if (config.ENV === 'production') return;
 
 		this.warning(`[DEV] ${msg}`);
 	}

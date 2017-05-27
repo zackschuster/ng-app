@@ -1,13 +1,17 @@
 // tslint:disable-next-line:max-line-length
 import { ICompileProvider, ICompileService, IComponentOptions, IHttpService, ILogService, IQService, IRootScopeService, ITimeoutService, auto, bootstrap, injector, module } from 'angular';
+import { CacheFactory } from 'cachefactory';
 import { IConfig } from '@ledge/types';
+
+import { DataService } from 'core/data/service';
+import { Logger } from 'core/log/service';
 
 import 'angular-animate';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
 export class App {
-	public readonly config: IConfig = {
+	private readonly $config: IConfig = {
 		NAME: 'ElevateCA Admin',
 		VERSION: '1.0.0',
 		PREFIX: {
@@ -16,7 +20,7 @@ export class App {
 		ENV: process.env.NODE_ENV,
 	};
 
-	private $id: string = 'core';
+	private $id: string = '$core';
 	private $dependencies = [
 		'ngAnimate',
 		'ui.bootstrap',
@@ -26,6 +30,10 @@ export class App {
 	private $module = module(this.$id, this.$dependencies);
 	private $injector = injector(['ng']);
 	private $bootstrap = bootstrap;
+	private $cache = new CacheFactory().createCache(this.$id, {
+		maxAge: 60 * 1000,
+		deleteOnExpire: 'aggressive',
+	});
 
 	private $components: Map<string, IComponentOptions> = new Map();
 
@@ -47,6 +55,10 @@ export class App {
 		}
 
 		this.$bootstrap(document, [this.$id]);
+	}
+
+	public config() {
+		return this.$config;
 	}
 
 	public name() {
@@ -72,16 +84,22 @@ export class App {
 		return this.$components.get(name);
 	}
 
+	public cache() {
+		return this.$cache;
+	}
+
 	public compiler() {
 		return this.ngGet<ICompileService>('$compile');
 	}
 
 	public http() {
-		return this.ngGet<IHttpService>('$http');
+		const $http = this.ngGet<IHttpService>('$http');
+		return new DataService($http, this.logger());
 	}
 
 	public logger() {
-		return this.ngGet<ILogService>('$log');
+		const $log = this.ngGet<ILogService>('$log');
+		return new Logger($log);
 	}
 
 	public q() {
@@ -89,14 +107,15 @@ export class App {
 	}
 
 	public scope() {
-		return this.ngGet<IRootScopeService>('$rootScope').$new();
+		const $rootScope = this.ngGet<IRootScopeService>('$rootScope');
+		return $rootScope.$new();
 	}
 
 	public timeout() {
 		return this.ngGet<ITimeoutService>('$timeout');
 	}
 
-	private ngGet<T>(service: string) {
+	protected ngGet<T>(service: string) {
 		return this.$injector.get<T>(service);
 	}
 }

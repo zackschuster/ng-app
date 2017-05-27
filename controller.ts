@@ -1,9 +1,6 @@
-import { IScope, ITimeoutService, copy } from 'angular';
+import { copy } from 'angular';
 import { Indexed } from '@ledge/types';
-
 import { ICoreModel, app } from 'core';
-import { DataService } from 'core/data/service';
-import { Logger } from 'core/log/service';
 
 interface CoreControllerOptions {
 	domain: string;
@@ -13,36 +10,31 @@ interface CoreControllerOptions {
 }
 
 export abstract class CoreController<T extends ICoreModel> {
-	protected $scope: IScope;
-	protected $timeout: ITimeoutService;
-	protected dataService: DataService;
-	protected logger: Logger;
+	protected $cache = app.cache();
+	protected $http = app.http();
+	protected $log = app.logger();
+	protected $scope = app.scope();
+	protected $timeout = app.timeout();
 
-	protected list: T[];
 	protected item: T;
-
-	protected reset: any;
-	protected keys: string[];
+	protected list: T[];
 
 	protected domain: string;
 	protected entity: string;
-	protected url: string;
+	protected keys: string[];
+	protected reset: any;
 
 	constructor(options: CoreControllerOptions) {
-		this.$scope = app.scope();
-		this.$timeout = app.timeout();
-
-		this.dataService = new DataService();
-		this.logger = new Logger();
-
+		this.domain = options.domain;
+		this.entity = options.entity;
 		this.keys = options.keys || [];
 		this.reset = options.reset || { Description: '' };
-		this.url = options.domain + '/' + options.entity;
 	}
 
 	public async $onInit() {
 		this.resetItem();
-		this.getList();
+		await this.getList();
+		this.$timeout();
 	}
 
 	public search(params: Indexed) {
@@ -72,20 +64,20 @@ export abstract class CoreController<T extends ICoreModel> {
 			}
 		} catch (err) {
 			this.item = this.list.pop();
-			this.logger.error(`Failed to delete ${item.Description}`);
+			this.$log.error(`Failed to delete ${item.Description}`);
 		} finally {
 			this.$timeout();
 		}
 	}
 
 	public delete(item: T, index: number) {
-		this.logger.confirm(async _ => {
+		this.$log.confirm(async _ => {
 			const original = copy<T[]>(this.list);
 			this.list.splice(index, 1);
 			try {
 				if (item.Id) {
-					await this.dataService.Post<T>(`${this.url}/${item.Id}`);
-					this.logger.success(`Deleted ${item.Description}`);
+					await this.$http.Post<T>(`${this.url}/${item.Id}`);
+					this.$log.success(`Deleted ${item.Description}`);
 				}
 			} catch (err) {
 				this.list = original;
@@ -100,21 +92,27 @@ export abstract class CoreController<T extends ICoreModel> {
 		if (!item || !item.Description) return;
 
 		try {
-			const rsp = await this.dataService.Post<T>(this.url, item);
-			this.logger.success('Saved');
+			const rsp = await this.$http.Post<T>(this.url, item);
+			this.$log.success('Saved');
 			return rsp;
 		} catch (err) {
-			return this.logger.devWarning(err);
+			return this.$log.devWarning(err);
 		}
 	}
 
 	protected resetItem() {
 		this.item = copy<T>(this.reset);
-		this.$timeout();
 	}
 
 	protected async getList() {
-		this.list = await this.dataService.Get<T[]>(this.url, []);
-		this.$timeout();
+		this.list = this.$cache.get(this.url);
+		if (this.list == null) {
+			this.list = await this.$http.Get<T[]>(this.url, []);
+			this.$cache.put(this.url, this.list);
+		}
+	}
+
+	protected get url() {
+		return this.domain + '/' + this.entity;
 	}
 }

@@ -1,4 +1,4 @@
-import { IAttributes, ICompileService, IScope, ITimeoutService } from 'angular';
+import { IAttributes, IScope } from 'angular';
 import { Callback } from '@ledge/types';
 import { app } from 'core';
 
@@ -16,14 +16,11 @@ export class InputService {
 	protected $element: JQuery;
 	protected $attrs: IAttributes;
 
-	private $compile: ICompileService;
-	private $timeout: ITimeoutService;
-	private ngModelId: string;
+	protected $log = app.logger();
+	private $compile = app.compiler();
+	private $timeout= app.timeout();
 
-	constructor() {
-		this.$compile = app.compiler();
-		this.$timeout = app.timeout();
-	}
+	private ngModelId: string;
 
 	public registerScope($scope: IScope) {
 		this.$scope = $scope;
