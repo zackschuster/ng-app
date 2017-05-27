@@ -7,11 +7,7 @@ class CheckBoxController extends CoreInputController {
 	}
 
 	public $postLink() {
-		const $checkbox = this.makeInput('checkbox', new Map<string, string>([
-			['value', 'ng-value'],
-			['trueValue', 'ng-true-value'],
-			['falseValue', 'ng-false-value'],
-		]));
+		const $checkbox = this.makeInput('checkbox');
 
 		this
 			.wireToContainer('label,legend', $checkbox, { prepend: true })

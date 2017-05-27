@@ -1,6 +1,4 @@
-import 'bootstrap-datepicker';
-
-import { IAttributes, IScope, isFunction } from 'angular';
+import { isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
 import { applyCoreDefinition } from 'core/input/definition';
@@ -11,28 +9,20 @@ class DateInputController extends CoreInputController {
 	private onChange: Callback;
 
 	/* @ngInject */
-	constructor($scope: IScope, $element: JQuery, $attrs: IAttributes) {
-		super($scope, $element, $attrs, { maxlength: 3000, placeholder: '' });
+	constructor($scope: any, $element: any, $attrs: any) {
+		super($scope, $element, $attrs);
 	}
 
 	public $postLink() {
-		const $input = this.makeInput('text', new Map([['ng-click', '$ctrl.hasFocus = true']]));
+		const $input = this.makeInput();
 
-		$input
-			.datepicker({
-				clearBtn: true,
-				autoclose: true,
-				keyboardNavigation: false,
-				todayBtn: true,
-				todayHighlight: true,
-			})
-			.on('changeDate', e => this.handleDateEvent(e))
-			.on('clearDate', e => this.handleDateEvent(e))
-			.on('blur', () => this.scheduleForLater(() => this.onblur(), 200));
+		$input.setAttribute('uib-datepicker-popup', 'MM/dd/yyyy');
+		$input.setAttribute('datepicker-append-to-body', 'true');
+		$input.setAttribute('is-open', '$ctrl.hasFocus');
+		$input.setAttribute('ng-click', '$ctrl.hasFocus = true');
+		$input.setAttribute('ng-change', '$ctrl.handleDateEvent()');
 
-		this
-			.wireToContainer('.input-group', $input)
-			.ngModel = this.formatDate();
+		this.wireToContainer('.input-group', $input).ngModel = new Date();
 	}
 
 	public toggleDatepicker() {
@@ -42,27 +32,27 @@ class DateInputController extends CoreInputController {
 		el[method]();
 	}
 
-	private onblur() {
-		this.hasFocus = false;
-	}
-
-	private formatDate(date: Date = new Date()) {
-		return date.toLocaleString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
-	}
-
-	private handleDateEvent(e: DatepickerEventObject | JQueryEventObject) {
-		this.scheduleForLater(() => {
-			const { date } = e as DatepickerEventObject;
-			this.ngModel = date != null ? this.formatDate(date) : null;
-
-			if (this.onChange != null && isFunction(this.onChange)) {
-				this.onChange(this.ngModel);
-			}
-		});
+	public handleDateEvent() {
+		if (this.onChange != null && isFunction(this.onChange)) {
+			this.onChange(this.ngModel);
+		}
 	}
 }
 
 export const dateInput = applyCoreDefinition({
-	template: require('./template.pug'),
+	render(h) {
+		const inputGroup = h.createElement('div', ['input-group']);
+
+		const inputGroupAddon = h.createElement('div', ['input-group-addon']);
+		inputGroupAddon.setAttribute('ng-click', '$ctrl.toggleDatepicker()');
+
+		const icon = h.createElement('span', ['glyphicon', 'glyphicon-calendar']);
+		icon.setAttribute('aria-hidden', 'true');
+
+		inputGroupAddon.appendChild(icon);
+		inputGroup.appendChild(inputGroupAddon);
+
+		return inputGroup;
+	},
 	controller: DateInputController,
 });

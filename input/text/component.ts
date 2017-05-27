@@ -8,12 +8,11 @@ class TextInputController extends CoreInputController {
 	}
 
 	public $postLink() {
-		const $input = this.makeInput('text');
+		const $input = this.makeInput();
 
 		if (this.$scope.disabled) {
-			$input
-				.removeAttr('ng-model')
-				.attr('placeholder', '{{$ctrl.ngModel}}');
+			$input.removeAttribute('ng-model');
+			$input.setAttribute('placeholder', '{{$ctrl.ngModel}}');
 		}
 
 		this.wireToContainer('.form-group', $input);

@@ -8,21 +8,20 @@ class TextBoxController extends CoreInputController {
 	}
 
 	public $postLink() {
-		const $input = $('<textarea class="form-control" msd-elastic></textarea>');
+		const $input = this.createElement('textarea');
+
+		$input.setAttribute('msd-elastic', '\n');
 
 		this
-			.applyAttributes($input, new Map([
+			.applyAttributes($input, [
 				['name', '{{id}}'],
 				['maxlength', '{{maxlength}}'],
 				['placeholder', '{{placeholder}}'],
-			]))
+			])
 			.wireToContainer('.form-group', $input);
 	}
 }
 
 export const textBox = applyCoreDefinition({
 	controller: TextBoxController,
-}, {
-	class: 'form-group',
-	srOnly: true,
 });

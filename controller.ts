@@ -1,9 +1,9 @@
 import { IScope, ITimeoutService, copy } from 'angular';
 import { Indexed } from '@ledge/types';
+
+import { ICoreModel, app } from 'core';
 import { DataService } from 'core/data/service';
-import { Logger } from 'core/logger';
-import { ICoreModel } from 'core/interfaces';
-import { ng } from 'core';
+import { Logger } from 'core/log/service';
 
 interface CoreControllerOptions {
 	domain: string;
@@ -29,8 +29,9 @@ export abstract class CoreController<T extends ICoreModel> {
 	protected url: string;
 
 	constructor(options: CoreControllerOptions) {
-		this.$scope = ng.scope();
-		this.$timeout = ng.timeout();
+		this.$scope = app.scope();
+		this.$timeout = app.timeout();
+
 		this.dataService = new DataService();
 		this.logger = new Logger();
 

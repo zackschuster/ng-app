@@ -1,5 +1,9 @@
-import { IComponentOptions, isFunction } from 'angular';
-import { Callback } from '@ledge/types';
+import { IAttributes, IComponentOptions } from 'angular';
+import { InputService } from 'core/input/service';
+
+interface IDefinitionOptions extends IComponentOptions {
+	render?(h: InputService): HTMLElement;
+}
 
 export const coreDefinition: IComponentOptions = {
 	transclude: {
@@ -20,24 +24,32 @@ interface IApplyCoreDefOpts {
 }
 
 // tslint:disable-next-line:max-line-length
-export function applyCoreDefinition(definition: IComponentOptions, options: IApplyCoreDefOpts = { class: 'form-group' }) {
+export function applyCoreDefinition(definition: IDefinitionOptions, options: IApplyCoreDefOpts = { class: 'form-group' }) {
 	// flamethrower approach: blow it all up, then fix the stragglers
-	const def = Object.assign({}, coreDefinition, definition);
+	const def = Object.assign({}, coreDefinition, definition) as IComponentOptions;
 
 	// assign template
-	const $baseEl = $(`<div class="${options.class || ''}"></div>`);
+	def.template = ['$element', '$attrs', ($element: JQuery, $attrs: IAttributes) => {
+		const h = new InputService()
+			.registerElement($element)
+			.registerAttributes($attrs);
 
-	const { template } = def;
-	const $template = isFunction(template) ? (template as Callback)() : (template || '');
+		const $template = h.createElement('div', [options.class || '']);
 
-	$baseEl.html($template);
-	$baseEl.prepend(`<label ng-transclude class="${options.srOnly ? 'sr-only' : ''}"></label>`);
+		$template.appendChild(h.makeLabel());
+		if (definition.render != null) {
+			$template.appendChild(definition.render(h));
+		}
 
-	def.template = $baseEl[0].outerHTML;
+		if (options.slot != null) {
+			const $slot = h.createElement('div');
+			$slot.style.paddingTop = '0.32em;';
+			$slot.setAttribute('ng-transclude', options.slot);
+			$template.appendChild($slot);
+		}
 
-	if (options.slot != null) {
-		$baseEl.append(`<div style="padding-top:0.32em;" ng-transclude="${options.slot}"></div>`);
-	}
+		return $template.outerHTML;
+	}];
 
 	// assign child objects
 	Object.assign(def.bindings, Object.assign(coreDefinition.bindings, definition.bindings));
