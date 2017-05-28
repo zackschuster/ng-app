@@ -25,25 +25,14 @@ export const coreComponent: IComponentOptions = {
 };
 
 export function defineInputComponent(component: ComponentOptions) {
-	// flamethrower approach: blow it all up, then fix the stragglers
-	const assigned = Object.assign({}, coreComponent, component) as IComponentOptions;
+	const assigned = Object.assign({}, coreComponent);
 
 	// assign child objects
-	Object.assign(assigned.bindings, Object.assign(coreComponent.bindings, component.bindings));
-	Object.assign(assigned.transclude, Object.assign(coreComponent.transclude, component.transclude));
-
-	// clean up straggler props
-	Reflect.deleteProperty(assigned, 'attrs');
-	Reflect.deleteProperty(assigned, 'templateClass');
-	Reflect.deleteProperty(assigned, 'labelClass');
-	Reflect.deleteProperty(assigned, 'nestInputInLabel');
-	Reflect.deleteProperty(assigned, 'render');
+	Object.assign(assigned.bindings, component.bindings);
+	Object.assign(assigned.transclude, component.transclude);
 
 	// assign controller
-	if (assigned.controller == null) {
-		assigned.controller = CoreInputController;
-	}
-
+	assigned.controller = component.controller || CoreInputController;
 	(assigned.controller as any).$inject = ['$attrs'];
 
 	// assign template
