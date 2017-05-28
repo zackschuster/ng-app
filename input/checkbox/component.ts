@@ -1,6 +1,6 @@
-import { defineComponent } from 'core/input/definition';
+import { defineInputComponent } from 'core/input/definition';
 
-export const checkBox = defineComponent({
+export const checkBox = defineInputComponent({
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',
 	nestInputInLabel: true,

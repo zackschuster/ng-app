@@ -1,6 +1,6 @@
-import { defineComponent } from 'core/input/definition';
+import { defineInputComponent } from 'core/input/definition';
 
-export const textInput = defineComponent({
+export const textInput = defineInputComponent({
 	attrs: { maxlength: 3000, placeholder: '' },
 	render(h) {
 		return h.createInput();

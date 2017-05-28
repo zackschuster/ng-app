@@ -24,7 +24,7 @@ export const coreComponent: IComponentOptions = {
 	},
 };
 
-export function defineComponent(component: ComponentOptions) {
+export function defineInputComponent(component: ComponentOptions) {
 	// flamethrower approach: blow it all up, then fix the stragglers
 	const assigned = Object.assign({}, coreComponent, component) as IComponentOptions;
 

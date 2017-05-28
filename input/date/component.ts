@@ -1,7 +1,7 @@
 import { isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
-import { defineComponent } from 'core/input/definition';
+import { defineInputComponent } from 'core/input/definition';
 import { CoreInputController } from 'core/input/controller';
 
 class DateInputController extends CoreInputController {
@@ -29,7 +29,7 @@ class DateInputController extends CoreInputController {
 	}
 }
 
-export const dateInput = defineComponent({
+export const dateInput = defineInputComponent({
 	render(h) {
 		const inputGroup = h.createElement('div', ['input-group']);
 		const inputGroupAddon = h.createElement('span', ['input-group-addon'], [
