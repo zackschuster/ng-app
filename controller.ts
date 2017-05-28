@@ -16,6 +16,7 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 
 	protected item: T;
 	protected list: T[];
+	protected searchList: T[];
 
 	protected domain: string;
 	protected entity: string;
@@ -29,6 +30,16 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 		this.entity = options.entity;
 		this.keys = options.keys || [];
 		this.reset = options.reset || { Description: '' };
+
+		this.$cache.setOnExpire(async () => {
+			await this.getList();
+			this.$timeout();
+		});
+
+		this.$scope.$watchCollection(
+			_ => this.item,
+			next => this.updateSearchList(next),
+		);
 	}
 
 	public async $onInit() {
@@ -37,17 +48,14 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 		this.$timeout();
 	}
 
-	public search(params: Indexed) {
-		if (params == null || this.keys.every(k => !params[k])) {
-			return this.list;
+	public updateSearchList(params: Indexed) {
+		if (params != null || this.keys.every(k => params[k])) {
+			const trueKeys = this.keys.filter(k => params[k] === true);
+			this.searchList = trueKeys.reduce((x, y) =>
+				x = x.filter(i => i[y] === true), [...(this.list || [])]);
+		} else {
+			this.searchList = this.list;
 		}
-
-		const trueKeys = this.keys.filter(k => params[k] === true);
-
-		const set = trueKeys.reduce((x, y) =>
-			x = x.filter(i => i[y] === true), [...this.list]);
-
-		return set;
 	}
 
 	public async add() {
@@ -110,6 +118,7 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 			this.list = await this.$http.Get<T[]>(this.url, []);
 			this.$cache.put(this.url, this.list);
 		}
+		this.updateSearchList(this.item);
 	}
 
 	protected get url() {
