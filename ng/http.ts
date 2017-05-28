@@ -1,18 +1,19 @@
 import { IHttpPromiseCallbackArg, IHttpService } from 'angular';
-
 import { config } from 'core';
 import { NgLogger } from 'core/ng/logger';
+
+import isIE11 from '@ledge/is-ie-11';
 
 export class NgDataService {
 	private prefix = (config.PREFIX as { API: string }).API;
 	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null };
 
 	/* @ngInject */
-	constructor(private $http: IHttpService, private logger: NgLogger) {
-	}
+	constructor(private $http: IHttpService, private logger: NgLogger) {}
 
 	public async Get<T = any>(url: string, defaultReturn: T = null) {
-		const options = Object.assign({ params: { timestamp: Date.now() } }, this.baseOptions);
+		const baseGetOptions = { params: { timestamp: (isIE11() ? Date.now() : null) } };
+		const options = Object.assign(baseGetOptions, this.baseOptions);
 		const promise = this.$http.get(this.prefix + url, options);
 		return this.safeAwait<T>(promise, defaultReturn);
 	}
