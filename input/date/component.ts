@@ -1,35 +1,25 @@
 import { isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
-import { applyCoreDefinition } from 'core/input/definition';
+import { defineComponent } from 'core/input/definition';
 import { CoreInputController } from 'core/input/controller';
 
 class DateInputController extends CoreInputController {
 	private hasFocus: boolean = false;
 	private onChange: Callback;
 
-	/* @ngInject */
-	constructor($scope: any, $element: any, $attrs: any) {
-		super($scope, $element, $attrs);
-	}
+	constructor($attrs: any) {
+		super($attrs);
 
-	public $postLink() {
-		const $input = this.makeInput();
-
-		$input.setAttribute('uib-datepicker-popup', 'MM/dd/yyyy');
-		$input.setAttribute('datepicker-append-to-body', 'true');
-		$input.setAttribute('is-open', '$ctrl.hasFocus');
-		$input.setAttribute('ng-click', '$ctrl.hasFocus = true');
-		$input.setAttribute('ng-change', '$ctrl.handleDateEvent()');
-
-		this.wireToContainer('.input-group', $input).ngModel = new Date();
+		this.ngModel = new Date();
+		this.$timeout();
 	}
 
 	public toggleDatepicker() {
-		const el = this.$element.find('input');
+		const input = this.getInput();
 		const method = (this.hasFocus = !this.hasFocus) ? 'focus' : 'blur';
 
-		el[method]();
+		input[method]();
 	}
 
 	public handleDateEvent() {
@@ -39,18 +29,27 @@ class DateInputController extends CoreInputController {
 	}
 }
 
-export const dateInput = applyCoreDefinition({
+export const dateInput = defineComponent({
 	render(h) {
 		const inputGroup = h.createElement('div', ['input-group']);
+		const inputGroupAddon = h.createElement('span', ['input-group-addon'], [
+			['ng-click', '$ctrl.toggleDatepicker()'],
+			['style', 'cursor:pointer'],
+		]);
 
-		const inputGroupAddon = h.createElement('div', ['input-group-addon']);
-		inputGroupAddon.setAttribute('ng-click', '$ctrl.toggleDatepicker()');
+		const input = h.createInput('text', [
+			['uib-datepicker-popup', 'MM/dd/yyyy'],
+			['datepicker-append-to-body', 'true'],
+			['is-open', '$ctrl.hasFocus'],
+			['ng-click', '$ctrl.hasFocus = true'],
+			['ng-change', '$ctrl.handleDateEvent()'],
+		]);
 
-		const icon = h.createElement('span', ['glyphicon', 'glyphicon-calendar']);
-		icon.setAttribute('aria-hidden', 'true');
+		const icon = h.createIcon('calendar');
 
 		inputGroupAddon.appendChild(icon);
 		inputGroup.appendChild(inputGroupAddon);
+		inputGroup.appendChild(input);
 
 		return inputGroup;
 	},

@@ -1,14 +1,14 @@
 import { IHttpPromiseCallbackArg, IHttpService } from 'angular';
 
 import { config } from 'core';
-import { Logger } from 'core/log/service';
+import { NgLogger } from 'core/ng/logger';
 
-export class DataService {
+export class NgDataService {
 	private prefix = (config.PREFIX as { API: string }).API;
 	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null };
 
 	/* @ngInject */
-	constructor(private $http: IHttpService, private logger: Logger) {
+	constructor(private $http: IHttpService, private logger: NgLogger) {
 	}
 
 	public async Get<T = any>(url: string, defaultReturn: T = null) {

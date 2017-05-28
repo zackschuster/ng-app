@@ -2,14 +2,14 @@ export const contacts = [
 	{
 		name: 'Marvin Lopez',
 		email: 'marvin.lopez@tcoe.org',
-		phone: '2092989927',
+		phone: '209-298-9927',
 		subject: 'Hello!',
 		message: 'I want to be a history teacher. I can send credentials if requested. Thanks!',
 	},
 	{
 		name: 'Donna Glassman-Sommer',
 		email: 'donna.glassman-sommer@tcoe.org',
-		phone: '2092989927',
+		phone: '209-298-9927',
 		subject: 'Can I be a teacher?',
 		message: `I'm interested in science and math. What's the process to apply?`,
 	},

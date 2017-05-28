@@ -1,11 +1,18 @@
 import { IAttributes, IComponentOptions } from 'angular';
-import { InputService } from 'core/input/service';
+import { Indexed } from '@ledge/types';
+import { NgRenderer } from 'core/ng/renderer';
+import { app } from 'core';
+import { CoreInputController } from 'core/input/controller';
 
-interface IDefinitionOptions extends IComponentOptions {
-	render?(h: InputService): HTMLElement;
+interface ComponentOptions extends IComponentOptions {
+	attrs?: Indexed;
+	templateClass?: string;
+	labelClass?: string;
+	nestInputInLabel?: boolean;
+	render?(h: NgRenderer): HTMLElement;
 }
 
-export const coreDefinition: IComponentOptions = {
+export const coreComponent: IComponentOptions = {
 	transclude: {
 		contain: '?contain',
 	},
@@ -17,43 +24,65 @@ export const coreDefinition: IComponentOptions = {
 	},
 };
 
-interface IApplyCoreDefOpts {
-	class?: string;
-	slot?: string;
-	srOnly?: boolean;
-}
-
-// tslint:disable-next-line:max-line-length
-export function applyCoreDefinition(definition: IDefinitionOptions, options: IApplyCoreDefOpts = { class: 'form-group' }) {
+export function defineComponent(component: ComponentOptions) {
 	// flamethrower approach: blow it all up, then fix the stragglers
-	const def = Object.assign({}, coreDefinition, definition) as IComponentOptions;
-
-	// assign template
-	def.template = ['$element', '$attrs', ($element: JQuery, $attrs: IAttributes) => {
-		const h = new InputService()
-			.registerElement($element)
-			.registerAttributes($attrs);
-
-		const $template = h.createElement('div', [options.class || '']);
-
-		$template.appendChild(h.makeLabel());
-		if (definition.render != null) {
-			$template.appendChild(definition.render(h));
-		}
-
-		if (options.slot != null) {
-			const $slot = h.createElement('div');
-			$slot.style.paddingTop = '0.32em;';
-			$slot.setAttribute('ng-transclude', options.slot);
-			$template.appendChild($slot);
-		}
-
-		return $template.outerHTML;
-	}];
+	const assigned = Object.assign({}, coreComponent, component) as IComponentOptions;
 
 	// assign child objects
-	Object.assign(def.bindings, Object.assign(coreDefinition.bindings, definition.bindings));
-	Object.assign(def.transclude, Object.assign(coreDefinition.transclude, definition.transclude));
+	Object.assign(assigned.bindings, Object.assign(coreComponent.bindings, component.bindings));
+	Object.assign(assigned.transclude, Object.assign(coreComponent.transclude, component.transclude));
 
-	return def;
+	// clean up straggler props
+	Reflect.deleteProperty(assigned, 'attrs');
+	Reflect.deleteProperty(assigned, 'templateClass');
+	Reflect.deleteProperty(assigned, 'labelClass');
+	Reflect.deleteProperty(assigned, 'nestInputInLabel');
+	Reflect.deleteProperty(assigned, 'render');
+
+	// assign controller
+	if (assigned.controller == null) {
+		assigned.controller = CoreInputController;
+	}
+
+	(assigned.controller as any).$inject = ['$attrs'];
+
+	// assign template
+	assigned.template = ['$element', '$attrs', ($element: JQuery, $attrs: IAttributes) => {
+		const h = app.renderer().registerElement($element);
+
+		const $template = h.createElement('div', [component.templateClass || 'form-group']);
+		const $label = h.createLabel([component.labelClass || 'form-control-label']);
+
+		if (h.isSrOnly($attrs)) {
+			$label.classList.add('sr-only');
+		}
+
+		$template.appendChild($label);
+
+		if (component.render != null) {
+			const $rendered = component.render(h);
+			if (component.nestInputInLabel === true) {
+				$label.appendChild($rendered);
+			} else {
+				$template.appendChild($rendered);
+			}
+		}
+
+		const $transclude = document.createElement('ng-transclude');
+		$transclude.innerHTML = h.getId($attrs).split(/(?=[A-Z])/).join(' ');
+		$label.appendChild($transclude);
+
+		const $slot = h.createElement('div', [], [['ng-transclude', 'contain']]);
+		$template.appendChild($slot);
+
+		let $html = $template.outerHTML.replace(/{{id}}/g, h.modelIdentifier($attrs));
+
+		Object.keys(component.attrs || {}).forEach(prop => {
+			$html = $html.replace(new RegExp('{{' + prop + '}}', 'g'), $attrs[prop] || component.attrs[prop]);
+		});
+
+		return $html;
+	}];
+
+	return assigned;
 }

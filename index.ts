@@ -1,12 +1,12 @@
 import { Indexed } from '@ledge/types';
-import { App } from 'core/app';
+import { NgApp } from 'core/ng/app';
 
 import * as input from 'core/input';
 import * as layout from 'core/layout';
 import * as mock from 'core/mock';
 
-export const app = new App().addComponents({ ...input, ...layout });
-export const config = app.config();
+export const app = new NgApp().registerComponents({ ...input, ...layout });
+export const { config, name } = app;
 
 export interface ICoreModel extends Indexed {
 	Id?: number;

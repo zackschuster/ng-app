@@ -1,6 +1,7 @@
 import { copy } from 'angular';
 import { Indexed } from '@ledge/types';
 import { ICoreModel, app } from 'core';
+import { NgController } from 'core/ng/controller';
 
 interface CoreControllerOptions {
 	domain: string;
@@ -9,12 +10,9 @@ interface CoreControllerOptions {
 	reset?: any;
 }
 
-export abstract class CoreController<T extends ICoreModel> {
-	protected $cache = app.cache();
+export abstract class CoreController<T extends ICoreModel = ICoreModel> extends NgController {
 	protected $http = app.http();
-	protected $log = app.logger();
-	protected $scope = app.scope();
-	protected $timeout = app.timeout();
+	protected $cache = app.cache();
 
 	protected item: T;
 	protected list: T[];
@@ -25,6 +23,8 @@ export abstract class CoreController<T extends ICoreModel> {
 	protected reset: any;
 
 	constructor(options: CoreControllerOptions) {
+		super();
+
 		this.domain = options.domain;
 		this.entity = options.entity;
 		this.keys = options.keys || [];
@@ -113,6 +113,7 @@ export abstract class CoreController<T extends ICoreModel> {
 	}
 
 	protected get url() {
-		return this.domain + '/' + this.entity;
+		const url = (this.domain || '') + '/' + (this.entity || '');
+		return url === '/' ? null : url;
 	}
 }

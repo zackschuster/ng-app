@@ -1,19 +1,11 @@
-.panel.panel-default
-	.panel-heading
-		div(ng-transclude="headerView" ng-hide="$ctrl.isEditing")
-		div(ng-transclude="headerEdit" ng-show="$ctrl.isEditing")
-	.panel-body
-		div(ng-transclude="bodyView" ng-hide="$ctrl.isEditing")
-		div(ng-transclude="bodyEdit" ng-show="$ctrl.isEditing")
-	.panel-footer.text-center
-		button.btn.btn-xs(ng-class="'btn-' + ($ctrl.isEditing ? 'success' : 'primary')" ng-click="!($ctrl.isEditing = !$ctrl.isEditing) && $ctrl.save($ctrl.model)")
-			i.glyphicon(ng-class="'glyphicon-' + ($ctrl.isEditing ? 'ok' : 'pencil')")
+.card
+	.card-block(ng-switch="$ctrl.isEditing")
+		div(ng-transclude="bodyView" ng-switch-when="false")
+		div(ng-transclude="bodyEdit" ng-switch-when="true")
+
+	.card-block.text-center
+		button.btn.btn-sm(ng-class="'btn-outline-' + ($ctrl.isEditing ? 'success' : 'primary')" ng-click="!($ctrl.isEditing = !$ctrl.isEditing) && $ctrl.save($ctrl.model)")
 			| {{$ctrl.isEditing ? ' Save' : ' Edit'}}
 		| &nbsp;
-		button.btn.btn-danger.btn-xs(ng-hide="$ctrl.isEditing" ng-click="$ctrl.delete($ctrl.model, $index)")
-			i.glyphicon.glyphicon-remove
-			|  Delete
-		button.btn.btn-warning.btn-xs(ng-show="$ctrl.isEditing" ng-click="$ctrl.restore($ctrl.model)")
-			i.glyphicon.glyphicon-trash
-			|  Cancel
-
+		button.btn.btn-sm(ng-class="'btn-outline-' + ($ctrl.isEditing ? 'warning' : 'danger')" ng-click="$ctrl.isEditing ? $ctrl.restore($ctrl.model) : $ctrl.delete($ctrl.model, $index)")
+			| {{$ctrl.isEditing ? ' Cancel' : ' Delete'}}
