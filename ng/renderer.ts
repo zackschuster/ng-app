@@ -12,7 +12,7 @@ export class NgRenderer extends NgController {
 		['ng-disabled', 'disabled || $ctrl.ngdisabled'],
 		['ng-readonly', 'readonly || $ctrl.ngreadonly'],
 	];
-	private ngModelId: string;
+	private modelId: string;
 
 	public registerElement($element: JQuery) {
 		this.$element = $element;
@@ -70,9 +70,9 @@ export class NgRenderer extends NgController {
 	}
 
 	public getId($attrs: IAttributes) {
-		if (this.ngModelId == null) {
-			this.ngModelId = ($attrs.ngModel as string).split('.').pop();
+		if (this.modelId == null) {
+			this.modelId = ($attrs.ngModel as string).split('.').pop();
 		}
-		return this.ngModelId;
+		return this.modelId;
 	}
 }
