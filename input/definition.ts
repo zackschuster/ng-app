@@ -58,8 +58,15 @@ export function defineInputComponent(component: ComponentOptions) {
 		}
 
 		const $transclude = document.createElement('ng-transclude');
-		$transclude.innerHTML = h.getId($attrs).split(/(?=[A-Z])/).join(' ');
+		$transclude.innerHTML = h.getIdForLabel($attrs);
 		$label.appendChild($transclude);
+
+		// const $labelText = h.getIdForLabel($attrs);
+		// const $labelTextNode = document.createTextNode($labelText);
+		// const $labelTextContainer = h.createElement('span');
+
+		// $labelTextContainer.appendChild($labelTextNode);
+		// $label.appendChild($labelTextContainer);
 
 		const $slot = h.createElement('div', [], [['ng-transclude', 'contain']]);
 		$template.appendChild($slot);
