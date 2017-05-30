@@ -67,7 +67,7 @@ export class NgApp {
 			this.$module.component(name, definition);
 		}
 
-		this.$bootstrap(document.querySelector('body'), [this.$id]);
+		this.$bootstrap(document.body, [this.$id]);
 	}
 
 	public registerComponents(components: { [name: string]: IComponentOptions }) {
