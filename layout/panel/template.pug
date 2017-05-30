@@ -1,11 +1,14 @@
-.card
-	.card-block(ng-switch="$ctrl.isEditing")
-		div(ng-transclude="bodyView" ng-switch-when="false")
-		div(ng-transclude="bodyEdit" ng-switch-when="true")
-
-	.card-block.text-center
-		button.btn.btn-sm(ng-class="'btn-outline-' + ($ctrl.isEditing ? 'success' : 'primary')" ng-click="!($ctrl.isEditing = !$ctrl.isEditing) && $ctrl.save($ctrl.model)")
-			| {{$ctrl.isEditing ? ' Save' : ' Edit'}}
+.card(ng-switch="$ctrl.isEditing")
+	.card-block.panel-view(ng-switch-when="false")
+		ng-transclude(ng-transclude-slot="bodyView")
+	.card-block.panel-view.text-center(ng-switch-when="false")
+		button.btn.btn-sm.btn-outline-primary(ng-click="$ctrl.isEditing = true") Edit
 		| &nbsp;
-		button.btn.btn-sm(ng-class="'btn-outline-' + ($ctrl.isEditing ? 'warning' : 'danger')" ng-click="$ctrl.isEditing ? $ctrl.restore($ctrl.model) : $ctrl.delete($ctrl.model, $index)")
-			| {{$ctrl.isEditing ? ' Cancel' : ' Delete'}}
+		button.btn.btn-sm.btn-outline-danger(ng-click="$ctrl.delete($ctrl.model, $index)") Delete
+
+	.card-block.panel-view(ng-switch-when="true")
+		ng-transclude(ng-transclude-slot="bodyEdit")
+	.card-block.panel-view.text-center(ng-switch-when="true")
+		button.btn.btn-sm.btn-outline-success(ng-click="!($ctrl.isEditing = false) && $ctrl.save($ctrl.model)") Save
+		| &nbsp;
+		button.btn.btn-sm.btn-outline-warning(ng-click="!($ctrl.isEditing = false) && $ctrl.restore($ctrl.model)") Cancel
