@@ -11,7 +11,7 @@ class PanelController {
 	}
 
 	public restore() {
-		Object.assign(this.model, this.original);
+		this.model = copy(this.original);
 		this.isEditing = false;
 	}
 }
