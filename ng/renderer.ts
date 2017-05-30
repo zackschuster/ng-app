@@ -75,4 +75,8 @@ export class NgRenderer extends NgController {
 		}
 		return this.modelId;
 	}
+
+	public getIdForLabel($attrs: IAttributes) {
+		return this.getId($attrs).split(/(?=[A-Z])/).join(' ');
+	}
 }
