@@ -47,7 +47,6 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 			_ => this.updateSearchList(),
 		);
 
-		console.log('fired');
 		await this.getList();
 	}
 
@@ -115,17 +114,14 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 	}
 
 	protected async getList() {
-		let list = this.$cache.get(this.url);
-		if (list == null) {
-			list = await this.$http.Get<T[]>(this.url, []);
-			if (equals(list, this.list) === false) {
-				this.list = list;
-				this.$cache.put(this.url, this.list);
-				this.$timeout();
-			}
-		} else {
+		const list = await this.$http.Get<T[]>(this.url, []);
+
+		if (equals(list, this.list) === false) {
 			this.list = list;
+			this.$cache.put(this.url, this.list);
 		}
+
+		this.$timeout();
 	}
 
 	protected get url() {
