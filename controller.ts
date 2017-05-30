@@ -1,5 +1,4 @@
-import { copy } from 'angular';
-import { Indexed } from '@ledge/types';
+import { copy, equals } from 'angular';
 import { ICoreModel, app } from 'core';
 import { NgController } from 'core/ng/controller';
 
@@ -31,30 +30,34 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 		this.keys = options.keys || [];
 		this.reset = options.reset || { Description: '' };
 
-		this.$cache.setOnExpire(async () => {
-			await this.getList();
-			this.$timeout();
-		});
+		this.$cache.setOnExpire(async () => await this.getList());
+	}
+
+	public async $onInit() {
+		this.resetItem();
+		this.$timeout();
 
 		this.$scope.$watchCollection(
 			_ => this.item,
 			next => this.updateSearchList(next),
 		);
-	}
 
-	public async $onInit() {
-		this.resetItem();
+		this.$scope.$watchCollection(
+			_ => this.list,
+			_ => this.updateSearchList(),
+		);
+
+		console.log('fired');
 		await this.getList();
-		this.$timeout();
 	}
 
-	public updateSearchList(params: Indexed) {
+	public updateSearchList(params = this.item) {
 		if (params != null || this.keys.every(k => params[k])) {
 			const trueKeys = this.keys.filter(k => params[k] === true);
 			this.searchList = trueKeys.reduce((x, y) =>
 				x = x.filter(i => i[y] === true), [...(this.list || [])]);
 		} else {
-			this.searchList = this.list;
+			this.searchList = copy(this.list);
 		}
 	}
 
@@ -65,30 +68,29 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 		try {
 			const st = await this.save(item);
 			if (st != null) {
-				this.list.pop();
-				this.list.push(st as T);
+				this.list[this.list.length - 1].Id = (st as any).Id;
 			} else {
 				throw new Error();
 			}
 		} catch (err) {
 			this.item = this.list.pop();
 			this.$log.error(`Failed to delete ${item.Description}`);
-		} finally {
-			this.$timeout();
 		}
 	}
 
-	public delete(item: T, index: number) {
+	public delete(item: T, searchListIndex: number) {
 		this.$log.confirm(async _ => {
-			const original = copy<T[]>(this.list);
-			this.list.splice(index, 1);
+			const searchListRemoved = this.searchList.splice(searchListIndex, 1);
+			const listIndex = this.list.findIndex(x => x.Id === item.Id);
+			const listRemoved = this.list.splice(listIndex, 1);
 			try {
-				if (item.Id) {
+				if (item.Id != null) {
 					await this.$http.Post<T>(`${this.url}/${item.Id}`);
-					this.$log.success(`Deleted ${item.Description}`);
 				}
+				this.$log.success(`Deleted ${item.Description}`);
 			} catch (err) {
-				this.list = original;
+				this.list.splice(listIndex, 0, listRemoved[0]);
+				this.searchList.splice(searchListIndex, 0, searchListRemoved[0]);
 			} finally {
 				this.$timeout();
 			}
@@ -113,12 +115,17 @@ export abstract class CoreController<T extends ICoreModel = ICoreModel> extends 
 	}
 
 	protected async getList() {
-		this.list = this.$cache.get(this.url);
-		if (this.list == null) {
-			this.list = await this.$http.Get<T[]>(this.url, []);
-			this.$cache.put(this.url, this.list);
+		let list = this.$cache.get(this.url);
+		if (list == null) {
+			list = await this.$http.Get<T[]>(this.url, []);
+			if (equals(list, this.list) === false) {
+				this.list = list;
+				this.$cache.put(this.url, this.list);
+				this.$timeout();
+			}
+		} else {
+			this.list = list;
 		}
-		this.updateSearchList(this.item);
 	}
 
 	protected get url() {
