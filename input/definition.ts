@@ -1,7 +1,6 @@
 import { IAttributes, IComponentOptions } from 'angular';
 import { Indexed } from '@ledge/types';
-import { NgRenderer } from 'core/ng/renderer';
-import { app } from 'core';
+import { app, models } from 'core';
 import { CoreInputController } from 'core/input/controller';
 
 interface ComponentOptions extends IComponentOptions {
@@ -9,7 +8,7 @@ interface ComponentOptions extends IComponentOptions {
 	templateClass?: string;
 	labelClass?: string;
 	nestInputInLabel?: boolean;
-	render?(h: NgRenderer): HTMLElement;
+	render?(h: models.Renderer): Element;
 }
 
 export const coreComponent: IComponentOptions = {

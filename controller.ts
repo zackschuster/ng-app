@@ -9,7 +9,7 @@ interface CoreControllerOptions {
 	reset?: any;
 }
 
-export abstract class CoreController<T extends models.ICoreModel = models.ICoreModel> extends NgController {
+export abstract class CoreController<T extends models.CoreModel = models.CoreModel> extends NgController {
 	protected $http = app.http();
 	protected $cache = app.cache();
 

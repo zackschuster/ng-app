@@ -1,8 +1,9 @@
 import { IAttributes } from 'angular';
 import { NgController } from 'core/ng/controller';
+import { Renderer } from 'core/models';
 
 /* @ngInject */
-export class NgRenderer extends NgController {
+export class NgRenderer extends NgController implements Renderer {
 	public baseInputAttrs: [string, string][] = [
 		['id', '{{id}}'],
 		['maxlength', '{{maxlength}}'],

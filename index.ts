@@ -4,7 +4,7 @@ import * as models from 'core/models';
 
 import { NgApp } from 'core/ng/app';
 
-export const app = new NgApp().registerComponents({ ...input });
+export const app: models.IApp = new NgApp().registerComponents({ ...input });
 export const { config, name } = app;
 
 export { CoreController } from 'core/controller';

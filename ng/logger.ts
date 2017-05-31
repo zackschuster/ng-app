@@ -3,7 +3,7 @@ import Noty, { NotyType } from 'noty';
 import { Callback, Indexed } from '@ledge/types';
 import { config, models } from 'core';
 
-export class NgLogger implements models.ILogger {
+export class NgLogger implements models.Logger {
 	public log: ILogCall;
 	private typeMap: Indexed<string> = {
 		warning: 'warn',

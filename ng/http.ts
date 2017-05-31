@@ -4,7 +4,7 @@ import { NgLogger } from 'core/ng/logger';
 
 import isIE11 from '@ledge/is-ie-11';
 
-export class NgDataService implements models.IDataService {
+export class NgDataService implements models.DataService {
 	private prefix = (config.PREFIX as { API: string }).API;
 	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null };
 
