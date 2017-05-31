@@ -1,5 +1,5 @@
 import { copy, equals } from 'angular';
-import { ICoreModel, app } from 'core';
+import { app, models } from 'core';
 import { NgController } from 'core/ng/controller';
 
 interface CoreControllerOptions {
@@ -9,7 +9,7 @@ interface CoreControllerOptions {
 	reset?: any;
 }
 
-export abstract class CoreController<T extends ICoreModel = ICoreModel> extends NgController {
+export abstract class CoreController<T extends models.ICoreModel = models.ICoreModel> extends NgController {
 	protected $http = app.http();
 	protected $cache = app.cache();
 

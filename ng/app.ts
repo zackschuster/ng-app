@@ -3,6 +3,7 @@ import { ICompileProvider, IComponentOptions, animate, auto, bootstrap, injector
 import { CacheFactory, CacheOptions } from 'cachefactory';
 import { IConfig } from '@ledge/types';
 
+import { IApp } from 'core/models';
 import { NgDataService } from 'core/ng/http';
 import { NgLogger } from 'core/ng/logger';
 import { NgRenderer } from 'core/ng/renderer';
@@ -11,7 +12,7 @@ import 'angular-animate';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
-export class NgApp {
+export class NgApp implements IApp {
 	private readonly $id: string = '$core';
 	private readonly $dependencies = [
 		'ngAnimate',
