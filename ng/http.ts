@@ -45,7 +45,7 @@ export class NgDataService implements models.DataService {
 				this.logger.error('Internal server error. Please try again.');
 				break;
 			default:
-				this.logger.devWarning(`An unknown error occurred for '${err.config.url}'`);
+				this.logger.devWarning(`An unregistered error occurred for '${err.config.url}' (code: ${err.status})`);
 				break;
 		}
 		return err;
