@@ -53,5 +53,5 @@ export const dateInput = defineInputComponent({
 
 		return inputGroup;
 	},
-	controller: DateInputController,
+	controller: DateInputController as any,
 });

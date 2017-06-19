@@ -1,4 +1,4 @@
-import { IHttpPromiseCallbackArg, IHttpService } from 'angular';
+import { IHttpPromise, IHttpPromiseCallbackArg, IHttpService } from 'angular';
 import { config, models } from 'core';
 import { NgLogger } from 'core/ng/logger';
 
@@ -14,16 +14,16 @@ export class NgDataService implements models.DataService {
 	public async Get<T = any>(url: string, defaultReturn: T = null) {
 		const baseGetOptions = { params: { timestamp: (isIE11() ? Date.now() : null) } };
 		const options = Object.assign(baseGetOptions, this.baseOptions);
-		const promise = this.$http.get(this.prefix + url, options);
+		const promise: IHttpPromise<T> = this.$http.get(this.prefix + url, options);
 		return this.safeAwait<T>(promise, defaultReturn);
 	}
 
 	public async Post<T = any>(url: string, data: T = null) {
-		const promise = this.$http.post(this.prefix + url, data, this.baseOptions);
+		const promise: IHttpPromise<T> = this.$http.post(this.prefix + url, data, this.baseOptions);
 		return this.safeAwait<T>(promise);
 	}
 
-	private async safeAwait<T = any>(promise: PromiseLike<T>, defaultReturn: T = null) {
+	private async safeAwait<T = any>(promise: IHttpPromise<T>, defaultReturn: T = null) {
 		try {
 			const rsp = await promise as IHttpPromiseCallbackArg<{}>;
 			return rsp == null ? defaultReturn : rsp.data as T;

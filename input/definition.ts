@@ -31,7 +31,7 @@ export function defineInputComponent(component: ComponentOptions) {
 	Object.assign(assigned.transclude, component.transclude);
 
 	// assign controller
-	assigned.controller = component.controller || CoreInputController;
+	assigned.controller = component.controller || (CoreInputController as any);
 	(assigned.controller as any).$inject = ['$attrs'];
 
 	// assign template
