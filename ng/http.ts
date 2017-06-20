@@ -6,7 +6,7 @@ import isIE11 from '@ledge/is-ie-11';
 
 export class NgDataService implements models.DataService {
 	private prefix = (config.PREFIX as { API: string }).API;
-	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null };
+	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null, withCredentials: true };
 
 	/* @ngInject */
 	constructor(private $http: IHttpService, private logger: NgLogger) {}
@@ -35,14 +35,14 @@ export class NgDataService implements models.DataService {
 
 	private onError(err: IHttpPromiseCallbackArg<{}>) {
 		switch (err.status) {
-			case 401:
-				this.logger.warning('You must be logged in to access this page');
-				break;
 			case 404:
 				this.logger.devWarning(`Route '${err.config.url}' not found`);
 				break;
 			case 500:
 				this.logger.error('Internal server error. Please try again.');
+				break;
+			case 401:
+				this.logger.warning('You must be logged in to access this page');
 				break;
 			default:
 				this.logger.devWarning(`An unregistered error occurred for '${err.config.url}' (code: ${err.status})`);

@@ -1,14 +1,16 @@
 // tslint:disable-next-line:max-line-length
-import { ICompileProvider, IComponentOptions, animate, auto, bootstrap, injector, module } from 'angular';
+import { ICompileProvider, IComponentOptions, ILocationProvider, animate, auto, bootstrap, injector, module, route } from 'angular';
 import { CacheFactory, CacheOptions } from 'cachefactory';
 import { IConfig } from '@ledge/types';
 
 import { IApp } from 'core/models';
 import { NgDataService } from 'core/ng/http';
 import { NgLogger } from 'core/ng/logger';
+import { NgModalService } from 'core/ng/modal';
 import { NgRenderer } from 'core/ng/renderer';
 
 import 'angular-animate';
+import 'angular-route';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
@@ -16,6 +18,7 @@ export class NgApp implements IApp {
 	private readonly $id: string = '$core';
 	private readonly $dependencies = [
 		'ngAnimate',
+		'ngRoute',
 		'ui.bootstrap',
 		'monospaced.elastic',
 	];
@@ -35,13 +38,18 @@ export class NgApp implements IApp {
 	private $cacheFactory = new CacheFactory();
 
 	private $components: Map<string, IComponentOptions> = new Map();
+	private $routes: Map<string, route.IRoute> = new Map();
 
 	constructor() {
 		this.$module
-			.config(['$compileProvider', ($compileProvider: ICompileProvider) => {
-				$compileProvider
-					.commentDirectivesEnabled(false)
-					.cssClassDirectivesEnabled(false);
+			.config([
+				'$compileProvider', '$locationProvider',
+				($compileProvider: ICompileProvider, $locationProvider: ILocationProvider) => {
+					$compileProvider
+						.commentDirectivesEnabled(false)
+						.cssClassDirectivesEnabled(false);
+
+					$locationProvider.html5Mode(true);
 			}])
 			.run(['$injector', '$animate', ($injector: auto.IInjectorService, $animate: animate.IAnimateService) => {
 				this.$injector = $injector;
@@ -68,7 +76,23 @@ export class NgApp implements IApp {
 			this.$module.component(name, definition);
 		}
 
+		this.$module.config(['$routeProvider', ($routeProvider: route.IRouteProvider) => {
+			for (const [name, definition] of this.$routes) {
+				$routeProvider.when(name, definition);
+			}
+		}]);
+
 		this.$bootstrap(document.body, [this.$id]);
+	}
+
+	public registerRoutes(routes: { [name: string]: route.IRoute }) {
+		const names = Object.keys(routes);
+
+		for (const name of names) {
+			this.route(name, routes[name]);
+		}
+
+		return this;
 	}
 
 	public registerComponents(components: { [name: string]: IComponentOptions }) {
@@ -83,6 +107,10 @@ export class NgApp implements IApp {
 
 	public compiler() {
 		return this.$injector.get('$compile');
+	}
+
+	public modal() {
+		return new NgModalService(this.$injector.get('$uibModal'));
 	}
 
 	public http() {
@@ -114,6 +142,11 @@ export class NgApp implements IApp {
 
 	private component(name: string, definition: IComponentOptions) {
 		this.$components.set(name, definition);
+		return this;
+	}
+
+	private route(name: string, definition: route.IRoute) {
+		this.$routes.set(name, definition);
 		return this;
 	}
 }

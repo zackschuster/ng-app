@@ -1,6 +1,6 @@
 // tslint:disable:no-empty-interface max-line-length
-
 import { IAttributes, ICompileService, IComponentOptions, IRootElementService, IScope, ITimeoutService } from 'angular';
+import { IModalInstanceService } from 'angular-ui-bootstrap';
 import { Callback, IConfig, Indexed } from '@ledge/types';
 import { Cache, CacheOptions } from 'cachefactory';
 
@@ -11,6 +11,7 @@ export interface IApp {
 	cache(options?: CacheOptions): Cache;
 	http(): DataService;
 	logger(): Logger;
+	modal(): ModalService;
 	registerComponents(components: { [name: string]: IComponentOptions }): this;
 	compiler(): Compiler;
 	root(): RootElement;
@@ -32,6 +33,18 @@ export interface Timeout extends ITimeoutService {}
 export interface DataService {
 	Get<T = any>(url: string, defaultReturn?: T): PromiseLike<T>;
 	Post<T = any>(url: string, data?: T): PromiseLike<T>;
+}
+
+export interface ModalOptions {
+	template?: string;
+	appendTo?: Element;
+	size?: 'sm' | 'md' | 'lg';
+	controller?: any;
+	controllerAs?: string;
+}
+
+export interface ModalService {
+	open(options: ModalOptions): IModalInstanceService;
 }
 
 export interface Logger {
