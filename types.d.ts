@@ -113,3 +113,27 @@ interface RenderObjects {
 export const app: IApp;
 export const config: IConfig;
 export const name: string;
+
+export abstract class NgController {
+	protected $scope: IScope;
+	protected $element?: JQuery;
+	protected $timeout?: ITimeoutService;
+	protected $log?: Logger;
+
+	constructor(
+		$scope?: IScope,
+		$element?: JQuery,
+		$timeout?: ITimeoutService,
+		$log?: Logger,
+	);
+}
+
+export class NgRenderer implements Renderer {
+	baseInputAttrs: [string, string][];
+	createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes?: string[], attrs?: [string, string][]): HTMLElementTagNameMap[T];
+	createInput(type?: string, attrs?: [string, string][]): HTMLInputElement;
+	createTextArea(): HTMLTextAreaElement;
+	createIcon(icon: string): HTMLSpanElement;
+	createLabel(classList: string[]): HTMLLabelElement;
+	createSlot(name: string): Element;
+}
