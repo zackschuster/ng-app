@@ -1,5 +1,5 @@
 // tslint:disable:no-empty-interface max-line-length
-import { IAttributes, ICompileService, IComponentOptions, IRootElementService, IScope, ITimeoutService } from 'angular';
+import { ICompileService, IComponentOptions, IRootElementService, IScope, ITimeoutService } from 'angular';
 import { IModalInstanceService } from 'angular-ui-bootstrap';
 import { Callback, IConfig, Indexed } from '@ledge/types';
 import { Cache, CacheOptions } from 'cachefactory';
@@ -58,14 +58,10 @@ export interface Logger {
 
 export interface Renderer {
 	baseInputAttrs: [string, string][];
-	registerElement($element: JQuery): this;
-	createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes?: string[], attrs?: [string, string][]): Element;
+	createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes?: string[], attrs?: [string, string][]): HTMLElementTagNameMap[T];
 	createInput(type?: string, attrs?: [string, string][]): HTMLInputElement;
 	createTextArea(): HTMLTextAreaElement;
 	createIcon(icon: string): HTMLSpanElement;
 	createLabel(classList: string[]): HTMLLabelElement;
-	isSrOnly($attrs: IAttributes): boolean;
-	modelIdentifier($attrs: IAttributes, opts?: { unique: true }): string;
-	getId($attrs: IAttributes): string;
-	getIdForLabel($attrs: IAttributes): string;
+	createSlot(name: string): Element;
 }

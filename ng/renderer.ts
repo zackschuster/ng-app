@@ -1,28 +1,21 @@
-import { IAttributes } from 'angular';
-import { NgController } from 'core/ng/controller';
+// import { NgController } from 'core/ng/controller';
 import { Renderer } from 'core/models';
 
 /* @ngInject */
-export class NgRenderer extends NgController implements Renderer {
+export class NgRenderer implements Renderer {
 	public baseInputAttrs: [string, string][] = [
 		['id', '{{id}}'],
-		['maxlength', '{{maxlength}}'],
-		['placeholder', '{{placeholder}}'],
 		['ng-model', '$ctrl.ngModel'],
 		['ng-required', 'required || $ctrl.ngRequired'],
-		['ng-disabled', 'disabled || $ctrl.ngdisabled'],
-		['ng-readonly', 'readonly || $ctrl.ngreadonly'],
+		['ng-disabled', 'disabled || $ctrl.ngDisabled'],
+		['ng-readonly', 'readonly || $ctrl.ngReadonly'],
 	];
-	private modelId: string;
 
-	public registerElement($element: JQuery) {
-		this.$element = $element;
-		return this;
-	}
+	public nameAttr: [string, string] = ['name', '{{id}}'];
 
 	// tslint:disable-next-line:max-line-length
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes: string[] = [], attrs: [string, string][] = null) {
-		const $el = document.createElement<T>(tagName);
+		const $el = document.createElement(tagName);
 
 		$el.classList.add(...classes);
 
@@ -36,7 +29,20 @@ export class NgRenderer extends NgController implements Renderer {
 	}
 
 	public createInput(type: string = 'text', attrs: [string, string][] = []) {
-		const $class = type === 'checkbox' ? ['form-check-input'] : ['form-control'];
+		const $isRadio = type === 'radio';
+		const $isCheckbox = type === 'checkbox';
+		const $class = $isRadio || $isCheckbox ? ['form-check-input'] : ['form-control'];
+
+		if ($isRadio) {
+			attrs.pop();
+			attrs.unshift(['id', '{{id}}{{$index}}']);
+			attrs.push(this.nameAttr);
+		}
+
+		if (!$isRadio && !$isCheckbox) {
+			attrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
+		}
+
 		return this.createElement('input', $class, [
 			...attrs,
 			...this.baseInputAttrs,
@@ -47,8 +53,8 @@ export class NgRenderer extends NgController implements Renderer {
 	public createTextArea() {
 		return this.createElement('textarea', ['form-control'], [
 			...this.baseInputAttrs,
+			this.nameAttr,
 			['msd-elastic', ''],
-			['name', '{{id}}'],
 			['maxlength', '{{maxlength}}'],
 			['placeholder', '{{placeholder}}'],
 		]);
@@ -62,22 +68,7 @@ export class NgRenderer extends NgController implements Renderer {
 		return this.createElement('label', classList, [['for', '{{id}}']]);
 	}
 
-	public isSrOnly($attrs: IAttributes) {
-		return $attrs.hasOwnProperty('srOnly');
-	}
-
-	public modelIdentifier($attrs: IAttributes, opts = { unique: true }) {
-		return this.getId($attrs) + (opts.unique ? '_' + this.$scope.$id : '');
-	}
-
-	public getId($attrs: IAttributes) {
-		if (this.modelId == null) {
-			this.modelId = ($attrs.ngModel as string).split('.').pop();
-		}
-		return this.modelId;
-	}
-
-	public getIdForLabel($attrs: IAttributes) {
-		return this.getId($attrs).split(/(?=[A-Z])/).join(' ');
+	public createSlot(name: string) {
+		return this.createElement('div', [], [['ng-transclude', name]]);
 	}
 }

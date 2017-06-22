@@ -7,4 +7,8 @@ export abstract class NgController {
 		protected $timeout = app.timeout(),
 		protected $log = app.logger(),
 	) {}
+
+	public registerElement($element: JQuery) {
+		this.$element = $element;
+	}
 }
