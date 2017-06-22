@@ -1,0 +1,59 @@
+{
+  "name": "@ledge/ng-app",
+  "version": "0.0.0",
+  "description": "An easier way to use Angular.js",
+  "homepage": "https://github.com/zackschuster/ng-app",
+  "author": "Zack Schuster (https://github.com/zackschuster)",
+  "repository": "zackschuster/ng-app",
+  "bugs": {
+    "url": "https://github.com/zackschuster/ng-app/issues"
+  },
+  "license": "GPL-3.0",
+  "files": [
+    "LICENSE.md",
+    "main.js",
+    "module.js",
+    "types.d.ts"
+  ],
+  "main": "main.js",
+  "module": "module.js",
+  "types": "types.d.ts",
+  "scripts": {
+    "build": "rollup -c rollup.config.ts",
+    "ava": "tsc -m commonjs && ava test/*.js",
+    "trash": "del-cli index.js test/*.js",
+    "test": "yarn ava && yarn trash"
+  },
+  "peerDependencies": {
+    "angular": ">=1.6.4",
+    "angular-animate": ">=1.6.4",
+    "angular-elastic": ">=2.5.1",
+    "angular-route": ">=1.6.4",
+    "angular-ui-bootstrap": ">=2.5.0",
+    "noty": ">=3.1.0",
+    "ui-select": ">=0.19.8"
+  },
+  "dependencies": {
+    "@ledge/configs": "^1.0.0",
+    "@ledge/is-ie-11": "^1.0.0",
+    "@ledge/types": "^2.0.0",
+    "@types/angular": "^1.6.19",
+    "@types/angular-animate": "^1.5.7",
+    "@types/angular-route": "^1.3.4",
+    "@types/angular-ui-bootstrap": "^0.13.43"
+  },
+  "devDependencies": {
+    "angular": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-elastic": "^2.5.1",
+    "angular-route": "^1.6.4",
+    "angular-ui-bootstrap": "^2.5.0",
+    "ava": "^0.19.1",
+    "del-cli": "^1.0.0",
+    "noty": "^3.1.0",
+    "rollup": "^0.43.0",
+    "tslint": "^5.4.3",
+    "typescript": "^2.4.0",
+    "ui-select": "^0.19.8"
+  }
+}
