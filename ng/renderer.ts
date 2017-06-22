@@ -1,4 +1,3 @@
-// import { NgController } from 'core/ng/controller';
 import { Renderer } from 'core/models';
 
 /* @ngInject */
@@ -31,23 +30,24 @@ export class NgRenderer implements Renderer {
 	public createInput(type: string = 'text', attrs: [string, string][] = []) {
 		const $isRadio = type === 'radio';
 		const $isCheckbox = type === 'checkbox';
-		const $class = $isRadio || $isCheckbox ? ['form-check-input'] : ['form-control'];
+		const $isFormCheck = $isRadio || $isCheckbox;
 
-		if ($isRadio) {
-			attrs.pop();
-			attrs.unshift(['id', '{{id}}{{$index}}']);
-			attrs.push(this.nameAttr);
-		}
+		const $class = $isFormCheck ? ['form-check-input'] : ['form-control'];
 
-		if (!$isRadio && !$isCheckbox) {
+		// parens for syntax highlighting
+		const inputAttrs: [string, string][] = [...(this.baseInputAttrs), ...attrs, ['type', type]];
+
+		if ($isFormCheck) {
+			inputAttrs.shift();
+			if ($isRadio) {
+				inputAttrs.unshift(['id', '{{id}}{{$index}}']);
+				inputAttrs.push(this.nameAttr);
+			}
+		} else {
 			attrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
 		}
 
-		return this.createElement('input', $class, [
-			...attrs,
-			...this.baseInputAttrs,
-			['type', type],
-		]);
+		return this.createElement('input', $class, inputAttrs);
 	}
 
 	public createTextArea() {
