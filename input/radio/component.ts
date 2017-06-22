@@ -13,7 +13,8 @@ class RadioListController extends CoreInputController {
 	}
 
 	public toggle(value: any) {
-		if (this.ngModel === value) {
+		// tslint:disable-next-line:triple-equals
+		if (this.ngModel == value) {
 			this.ngModel = null;
 		} else {
 			this.ngModel = value;
@@ -32,6 +33,11 @@ export const radioList = defineInputComponent({
 		radio.setAttribute('ng-value', '{{item.Value}}');
 		radio.setAttribute('ng-checked', '$ctrl.ngModel == item.Value');
 		radio.setAttribute('ng-click', '$ctrl.toggle(item.Value)');
+
+		if (this.$attrs.hasOwnProperty('inline')) {
+			this.$template.classList.remove('form-check');
+			this.$template.classList.add('form-check-inline');
+		}
 
 		this.$template.setAttribute('ng-repeat', 'item in $ctrl.list');
 
