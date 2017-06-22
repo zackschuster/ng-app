@@ -5,9 +5,6 @@ export class NgRenderer implements Renderer {
 	public baseInputAttrs: [string, string][] = [
 		['id', '{{id}}'],
 		['ng-model', '$ctrl.ngModel'],
-		['ng-required', 'required || $ctrl.ngRequired'],
-		['ng-disabled', 'disabled || $ctrl.ngDisabled'],
-		['ng-readonly', 'readonly || $ctrl.ngReadonly'],
 	];
 
 	public nameAttr: [string, string] = ['name', '{{id}}'];

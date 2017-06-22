@@ -4,6 +4,7 @@ import { CacheFactory, CacheOptions } from 'cachefactory';
 import { IConfig } from '@ledge/types';
 
 import { IApp } from 'core/models';
+import { InputComponentOptions, InputService } from 'core/input/service';
 import { NgDataService } from 'core/ng/http';
 import { NgLogger } from 'core/ng/logger';
 import { NgModalService } from 'core/ng/modal';
@@ -99,9 +100,14 @@ export class NgApp implements IApp {
 
 	public registerComponents(components: { [name: string]: IComponentOptions }) {
 		const names = Object.keys(components);
+		const inputService = new InputService();
 
 		for (const name of names) {
-			this.component(name, components[name]);
+			let component = components[name];
+			if ((component as InputComponentOptions).type === 'input') {
+				component = inputService.defineInputComponent(component as InputComponentOptions);
+			}
+			this.component(name, component);
 		}
 
 		return this;

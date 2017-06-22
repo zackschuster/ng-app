@@ -1,7 +1,8 @@
 // tslint:disable:no-invalid-this
-import { defineInputComponent } from 'core/input/definition';
+import { InputComponentOptions } from 'core/input/service';
 
-export const checkBox = defineInputComponent({
+export const checkBox: InputComponentOptions = {
+	type: 'input',
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',
 	nestInputInLabel: true,
@@ -18,4 +19,4 @@ export const checkBox = defineInputComponent({
 	bindings: {
 		ngChecked: '<',
 	},
-});
+};

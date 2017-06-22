@@ -1,14 +1,14 @@
-import { IAttributes } from 'angular';
-import { InputService } from 'core/input/service';
+import { NgController } from 'core/ng/controller';
 
-export class CoreInputController extends InputService {
-	protected ngModel: any;
+export class CoreInputController extends NgController {
+	public ngModel: any;
 
-	constructor($attrs: IAttributes) {
-		super($attrs);
-
-		this.$scope.required = $attrs.hasOwnProperty('required');
-		this.$scope.disabled = $attrs.hasOwnProperty('disabled');
-		this.$scope.readonly = $attrs.hasOwnProperty('readonly');
+	public $postLink() {
+		this.$timeout(_ => {
+			const el = document.querySelector('[ng-transclude="contain"]');
+			if (el.innerHTML === '') {
+				el.remove();
+			}
+		});
 	}
 }

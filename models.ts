@@ -65,3 +65,5 @@ export interface Renderer {
 	createLabel(classList: string[]): HTMLLabelElement;
 	createSlot(name: string): Element;
 }
+
+export { InputComponentOptions } from 'core/input/service';

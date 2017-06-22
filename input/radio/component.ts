@@ -1,17 +1,8 @@
 // tslint:disable:no-invalid-this
 import { CoreInputController } from 'core/input/controller';
-import { defineInputComponent } from 'core/input/definition';
+import { InputComponentOptions } from 'core/input/service';
 
 class RadioListController extends CoreInputController {
-	public $postLink() {
-		this.$timeout(_ => {
-			const el = document.querySelector('[ng-transclude="contain"]');
-			if (el.innerHTML === '') {
-				el.remove();
-			}
-		});
-	}
-
 	public toggle(value: any) {
 		// tslint:disable-next-line:triple-equals
 		if (this.ngModel == value) {
@@ -22,7 +13,8 @@ class RadioListController extends CoreInputController {
 	}
 }
 
-export const radioList = defineInputComponent({
+export const radioList: InputComponentOptions = {
+	type: 'input',
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',
 	nestInputInLabel: true,
@@ -44,17 +36,17 @@ export const radioList = defineInputComponent({
 		return radio;
 	},
 	renderLabel() {
-		const label = this.$template.querySelector('label');
 		const labelText = document.createTextNode('{{item.Text}}');
 		const spanTag = document.createElement('span');
 
 		spanTag.appendChild(labelText);
-		label.setAttribute('for', '{{id}}{{$index}}');
-		label.appendChild(spanTag);
+
+		this.$label.setAttribute('for', '{{id}}{{$index}}');
+		this.$label.appendChild(spanTag);
 	},
 	bindings: {
 		list: '<',
 		ngChecked: '<',
 	},
-	controller: RadioListController,
-});
+	ctrl: RadioListController,
+};

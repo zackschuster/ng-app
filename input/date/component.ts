@@ -1,15 +1,15 @@
 import { isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
-import { defineInputComponent } from 'core/input/definition';
 import { CoreInputController } from 'core/input/controller';
+import { InputComponentOptions } from 'core/input/service';
 
 class DateInputController extends CoreInputController {
 	private hasFocus: boolean = false;
 	private onChange: Callback;
 
-	constructor($attrs: any) {
-		super($attrs);
+	constructor() {
+		super();
 
 		this.ngModel = new Date();
 		this.$timeout();
@@ -29,7 +29,8 @@ class DateInputController extends CoreInputController {
 	}
 }
 
-export const dateInput = defineInputComponent({
+export const dateInput: InputComponentOptions = {
+	type: 'input',
 	render(h) {
 		const inputGroup = h.createElement('div', ['input-group']);
 		const inputGroupAddon = h.createElement('span', ['input-group-addon'], [
@@ -53,5 +54,5 @@ export const dateInput = defineInputComponent({
 
 		return inputGroup;
 	},
-	controller: DateInputController as any,
-});
+	ctrl: DateInputController,
+};
