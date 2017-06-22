@@ -13,6 +13,7 @@ import 'angular-animate';
 import 'angular-route';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
+import 'ui-select';
 
 export class NgApp implements IApp {
 	private readonly $id: string = '$core';
@@ -20,6 +21,7 @@ export class NgApp implements IApp {
 		'ngAnimate',
 		'ngRoute',
 		'ui.bootstrap',
+		'ui.select',
 		'monospaced.elastic',
 	];
 
