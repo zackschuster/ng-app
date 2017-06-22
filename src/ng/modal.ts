@@ -1,12 +1,12 @@
 import { element } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 
-import { models } from '../..';
+import { ModalOptions } from '../..';
 
 export class NgModalService {
 	constructor(private $uibModal: IModalService) {}
 
-	public open(options: models.ModalOptions) {
+	public open(options: ModalOptions) {
 		const defaults = { appendTo: document.body, template: '', size: 'lg', controllerAs: '$ctrl' };
 		const { template, size, controller, controllerAs, appendTo } = Object.assign(defaults, options);
 

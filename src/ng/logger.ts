@@ -1,9 +1,9 @@
 import { ILogCall, ILogService } from 'angular';
 import Noty, { NotyType } from 'noty';
 import { Callback, Indexed } from '@ledge/types';
-import { config, models } from '../..';
+import { Logger, config } from '../..';
 
-export class NgLogger implements models.Logger {
+export class NgLogger implements Logger {
 	public log: ILogCall;
 	private typeMap: Indexed<string> = {
 		warning: 'warn',

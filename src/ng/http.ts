@@ -1,10 +1,10 @@
 import { IHttpPromise, IHttpPromiseCallbackArg, IHttpService } from 'angular';
-import { config, models } from '../..';
 import { NgLogger } from './logger';
+import { DataService, config } from '../..';
 
 import isIE11 from '@ledge/is-ie-11';
 
-export class NgDataService implements models.DataService {
+export class NgDataService implements DataService {
 	private prefix = (config.PREFIX as { API: string }).API;
 	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null, withCredentials: true };
 

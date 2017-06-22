@@ -1,4 +1,4 @@
-import { Renderer } from '../models';
+import { Renderer } from '../..';
 
 /* @ngInject */
 export class NgRenderer implements Renderer {

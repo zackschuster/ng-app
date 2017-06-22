@@ -2,7 +2,7 @@ import { isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
 import { CoreInputController } from '../controller';
-import { InputComponentOptions } from '../../../types';
+import { InputComponentOptions } from '../../..';
 
 class DateInputController extends CoreInputController {
 	private hasFocus: boolean = false;
