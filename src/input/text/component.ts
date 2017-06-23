@@ -1,4 +1,4 @@
-import { InputComponentOptions } from '../../..';
+import { InputComponentOptions } from '../../../types';
 
 export const textInput: InputComponentOptions = {
 	type: 'input',

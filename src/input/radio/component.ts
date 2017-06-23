@@ -1,6 +1,6 @@
 // tslint:disable:no-invalid-this
 import { CoreInputController } from '../controller';
-import { InputComponentOptions } from '../../..';
+import { InputComponentOptions } from '../../../types';
 
 class RadioListController extends CoreInputController {
 	public toggle(value: any) {
