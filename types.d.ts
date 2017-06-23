@@ -70,7 +70,6 @@ export interface NgModalOptions {
 	controllerAs?: string;
 }
 
-
 export interface InputComponentOptions extends IComponentOptions {
 	/**
 	 * Set this so the app knows how to register your $definition
