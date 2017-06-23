@@ -18,27 +18,45 @@ export class InputService {
 		},
 	};
 
-	public modelIdentifier($attrs: IAttributes, { unique } = { unique: true }) {
-		return this.getId($attrs) + (unique ? '_' + this.$counter++ : '');
-	}
-
-	public getId($attrs: IAttributes) {
+	/**
+	 * Retrieves the identifying name for an ngModel
+	 */
+	public modelIdentifier($attrs: IAttributes) {
 		return ($attrs.ngModel as string).split('.').pop();
 	}
 
-	public getIdForLabel($attrs: IAttributes) {
-		return this.getId($attrs).split(/(?=[A-Z])/).join(' ');
+	/**
+	 * Get an optionally unique input id
+	 */
+	public getId($attrs: IAttributes, { unique } = { unique: true }) {
+		return this.modelIdentifier($attrs) + (unique ? '_' + this.$counter++ : '');
+	}
+
+	public getDefaultLabelText($attrs: IAttributes) {
+		return this.modelIdentifier($attrs).split(/(?=[A-Z])/).join(' ');
 	}
 
 	// these next two are fairly silly, but it beats having to remember strings
+	/**
+	 * Determines if an element's label text should be screen-reader only
+	 */
 	public isSrOnly($attrs: IAttributes) {
 		return $attrs.hasOwnProperty('srOnly');
 	}
 
+	/**
+	 * Determines if an element has been marked as inline
+	 */
 	public isInline($attrs: IAttributes) {
 		return $attrs.hasOwnProperty('inline');
 	}
 
+	/**
+	 * Sets required, disabled, readonly, as well as their ng-equivalents
+	 *
+	 * @param $input - The input to set attributes on
+	 * @param $attrs - The Angular.js $attrs object
+	 */
 	public setInteractivityAttributes($input: Element, $attrs: IAttributes) {
 		['required', 'ngRequired', 'disabled', 'ngDisabled', 'readonly', 'ngReadonly']
 			.filter(x => $attrs.hasOwnProperty(x))
@@ -60,6 +78,7 @@ export class InputService {
 
 		// assign controller
 		$definition.controller = component.ctrl || CoreInputController;
+		$definition.controller.$inject = ['$element'];
 
 		// assign template
 		$definition.template = ['$attrs', ($attrs: IAttributes) => {
@@ -78,6 +97,7 @@ export class InputService {
 				{ $template, $attrs }, // allow consumer to access $template and $attrs attributes from `this`
 				h);
 
+			// required, disabled, readonly, and their ng-equivalents
 			this.setInteractivityAttributes($input, $attrs);
 
 			if (component.nestInputInLabel === true) {
@@ -97,7 +117,7 @@ export class InputService {
 			} else {
 				// TODO: figure out how consumers can pass in label text without requiring two transclusion slots
 				const $transclude = document.createElement('ng-transclude');
-				$transclude.innerHTML = this.getIdForLabel($attrs);
+				$transclude.innerHTML = this.getDefaultLabelText($attrs);
 				$label.appendChild($transclude);
 			}
 
@@ -105,7 +125,7 @@ export class InputService {
 			const $slot = h.createSlot('contain');
 			$template.appendChild($slot);
 
-			const $id = this.modelIdentifier($attrs);
+			const $id = this.getId($attrs);
 			let $html = $template.outerHTML.replace(/{{id}}/g, $id);
 
 			Object.keys(component.attrs || {}).forEach(prop => {

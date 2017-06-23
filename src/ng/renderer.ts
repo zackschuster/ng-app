@@ -34,13 +34,11 @@ export class NgRenderer implements Renderer {
 		// parens for syntax highlighting
 		const inputAttrs: [string, string][] = [...(this.baseInputAttrs), ...attrs, ['type', type]];
 
-		if ($isFormCheck) {
+		if ($isRadio) {
 			inputAttrs.shift();
-			if ($isRadio) {
-				inputAttrs.unshift(['id', '{{id}}{{$index}}']);
-				inputAttrs.push(this.nameAttr);
-			}
-		} else {
+			inputAttrs.unshift(['id', '{{id}}{{$index}}']);
+			inputAttrs.push(this.nameAttr);
+		} else if (!$isCheckbox) {
 			attrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
 		}
 

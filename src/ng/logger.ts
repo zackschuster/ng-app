@@ -1,7 +1,7 @@
 import { ILogCall, ILogService } from 'angular';
 import Noty, { NotyType } from 'noty';
 import { Callback, Indexed } from '@ledge/types';
-import { config } from '../../index';
+import { app } from '../../index';
 import { Logger } from '../../types';
 
 export class NgLogger implements Logger {
@@ -53,7 +53,7 @@ export class NgLogger implements Logger {
 
 	public devWarning(msg: string) {
 		// tslint:disable-next-line:curly
-		if (config.ENV === 'production') return;
+		if (app.config.ENV === 'production') return;
 
 		this.warning(`[DEV] ${msg}`);
 	}
