@@ -17,6 +17,8 @@ import 'angular-ui-bootstrap';
 import 'ui-select';
 
 export class NgApp {
+	public $injector = injector(['ng']);
+
 	private readonly $id: string = '$core';
 	private readonly $dependencies = [
 		'ngAnimate',
@@ -29,7 +31,6 @@ export class NgApp {
 	private $config: IConfig = { ENV: process.env.NODE_ENV };
 
 	private $module = module(this.$id, this.$dependencies);
-	private $injector = injector(['ng']);
 	private $bootstrap = bootstrap;
 
 	private $components: Map<string, IComponentOptions> = new Map();
@@ -91,6 +92,7 @@ export class NgApp {
 	}
 
 	public registerComponents(components: Map<string, IComponentOptions>) {
+		// tslint:disable-next-line:prefer-const
 		for (let [name, component] of components) {
 			if ((component as InputComponentOptions).type === 'input') {
 				component = InputService.defineInputComponent(component as InputComponentOptions);
@@ -105,10 +107,6 @@ export class NgApp {
 		return this.$injector.get('$compile');
 	}
 
-	public modal() {
-		return new NgModalService(this.$injector.get('$uibModal'));
-	}
-
 	public http() {
 		const $http = this.$injector.get('$http');
 		return new NgDataService($http, this.logger());
@@ -119,12 +117,16 @@ export class NgApp {
 		return new NgLogger($log);
 	}
 
-	public root() {
-		return this.$injector.get('$rootElement');
+	public modal() {
+		return new NgModalService(this.$injector.get('$uibModal'));
 	}
 
 	public renderer() {
 		return new NgRenderer();
+	}
+
+	public root() {
+		return this.$injector.get('$rootElement');
 	}
 
 	public scope() {
