@@ -111,8 +111,6 @@ interface RenderObjects {
 }
 
 export const app: IApp;
-export const config: IConfig;
-export const name: string;
 
 export abstract class NgController {
 	protected $scope: IScope;
