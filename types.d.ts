@@ -4,44 +4,42 @@ import { IModalInstanceService } from 'angular-ui-bootstrap';
 import { Callback, IConfig, Indexed } from '@ledge/types';
 import { CoreInputController } from './src/input/controller';
 
-export interface IApp {
+export class NgApp {
 	name: string;
 	config: IConfig;
 	bootstrap(): void;
-	http(): DataService;
-	logger(): Logger;
-	modal(): ModalService;
-	registerComponents(components: { [name: string]: IComponentOptions }): this;
-	compiler(): Compiler;
-	root(): RootElement;
-	renderer(): Renderer;
-	scope(): Scope;
-	timeout(): Timeout;
+	http(): NgDataService;
+	logger(): NgLogger;
+	modal(): NgModalService;
+	registerComponents(components: Map<string, IComponentOptions>): this;
+	registerRoutes(routes: Map<string, IComponentOptions>): this;
+	compiler(): ICompileService;
+	root(): IRootElementService;
+	renderer(): NgRenderer;
+	scope(): IScope;
+	timeout(): ITimeoutService;
 }
 
-export interface Compiler extends ICompileService {}
-export interface RootElement extends IRootElementService {}
-export interface Scope extends IScope {}
-export interface Timeout extends ITimeoutService {}
+export abstract class NgController {
+	protected $scope: IScope;
+	protected $element?: IRootElementService;
+	protected $timeout?: ITimeoutService;
+	protected $log?: NgLogger;
 
-export interface DataService {
+	constructor(
+		$scope?: IScope,
+		$element?: IRootElementService,
+		$timeout?: ITimeoutService,
+		$log?: NgLogger,
+	);
+}
+
+export class NgDataService {
 	Get<T = any>(url: string, defaultReturn?: T): PromiseLike<T>;
 	Post<T = any>(url: string, data?: T): PromiseLike<T>;
 }
 
-export interface ModalOptions {
-	template?: string;
-	appendTo?: Element;
-	size?: 'sm' | 'md' | 'lg';
-	controller?: any;
-	controllerAs?: string;
-}
-
-export interface ModalService {
-	open(options: ModalOptions): IModalInstanceService;
-}
-
-export interface Logger {
+export class NgLogger {
 	confirm(action: Callback): void;
 	error(msg: string): void;
 	info(msg: string): void;
@@ -50,7 +48,7 @@ export interface Logger {
 	devWarning(msg: string): void;
 }
 
-export interface Renderer {
+export class NgRenderer {
 	baseInputAttrs: [string, string][];
 	createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes?: string[], attrs?: [string, string][]): HTMLElementTagNameMap[T];
 	createInput(type?: string, attrs?: [string, string][]): HTMLInputElement;
@@ -59,6 +57,19 @@ export interface Renderer {
 	createLabel(classList: string[]): HTMLLabelElement;
 	createSlot(name: string): Element;
 }
+
+export class NgModalService {
+	open(options: NgModalOptions): IModalInstanceService;
+}
+
+export interface NgModalOptions {
+	template?: string;
+	appendTo?: Element;
+	size?: 'sm' | 'md' | 'lg';
+	controller?: any;
+	controllerAs?: string;
+}
+
 
 export interface InputComponentOptions extends IComponentOptions {
 	/**
@@ -91,47 +102,21 @@ export interface InputComponentOptions extends IComponentOptions {
 	/**
 	 * Run after container & label creation, before label manipulation
 	 */
-	render(this: RenderObjects, h: Renderer): Element;
+	render(this: {
+		/**
+		 * Input container
+		 */
+		$template: HTMLDivElement;
+		/**
+		 * Angular.js $attrs object
+		 */
+		$attrs: IAttributes;
+	}, h: NgRenderer): Element;
 
 	/**
 	 * Special hook to override how label text is generated
 	 */
-	renderLabel?(this: { $label: HTMLLabelElement }, h: Renderer): void;
+	renderLabel?(this: { $label: HTMLLabelElement }, h: NgRenderer): void;
 }
 
-interface RenderObjects {
-	/**
-	 * Input container
-	 */
-	$template: HTMLDivElement;
-	/**
-	 * Angular.js $attrs object
-	 */
-	$attrs: IAttributes;
-}
-
-export const app: IApp;
-
-export abstract class NgController {
-	protected $scope: IScope;
-	protected $element?: IRootElementService;
-	protected $timeout?: ITimeoutService;
-	protected $log?: Logger;
-
-	constructor(
-		$scope?: IScope,
-		$element?: IRootElementService,
-		$timeout?: ITimeoutService,
-		$log?: Logger,
-	);
-}
-
-export class NgRenderer implements Renderer {
-	baseInputAttrs: [string, string][];
-	createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes?: string[], attrs?: [string, string][]): HTMLElementTagNameMap[T];
-	createInput(type?: string, attrs?: [string, string][]): HTMLInputElement;
-	createTextArea(): HTMLTextAreaElement;
-	createIcon(icon: string): HTMLSpanElement;
-	createLabel(classList: string[]): HTMLLabelElement;
-	createSlot(name: string): Element;
-}
+export const app: NgApp;

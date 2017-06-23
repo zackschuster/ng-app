@@ -7,8 +7,8 @@ import { NgLogger } from './logger';
 import { NgModalService } from './modal';
 import { NgRenderer } from './renderer';
 
-import { IApp, InputComponentOptions } from '../../types';
-import { InputService } from '../input/service';
+import { InputComponentOptions } from '../types';
+import { InputService } from './input/service';
 
 import 'angular-animate';
 import 'angular-route';
@@ -16,7 +16,7 @@ import 'angular-elastic';
 import 'angular-ui-bootstrap';
 import 'ui-select';
 
-export class NgApp implements IApp {
+export class NgApp {
 	private readonly $id: string = '$core';
 	private readonly $dependencies = [
 		'ngAnimate',
@@ -63,6 +63,12 @@ export class NgApp implements IApp {
 	public set config(cfg: IConfig) {
 		this.$config = cfg;
 		this.$config.ENV = process.env.NODE_ENV;
+
+		if (this.$config.PREFIX == null) {
+			this.$config.PREFIX = { API: '' };
+		} else if (!this.$config.PREFIX.API) {
+			this.$config.PREFIX.API = '';
+		}
 	}
 
 	public bootstrap() {
@@ -79,26 +85,17 @@ export class NgApp implements IApp {
 		this.$bootstrap(document.body, [this.$id]);
 	}
 
-	public registerRoutes(routes: { [name: string]: route.IRoute }) {
-		const names = Object.keys(routes);
-
-		for (const name of names) {
-			this.route(name, routes[name]);
-		}
-
+	public registerRoutes(routes: Map<string, route.IRoute>) {
+		this.$routes = new Map([...this.$routes, ...routes]);
 		return this;
 	}
 
-	public registerComponents(components: { [name: string]: IComponentOptions }) {
-		const names = Object.keys(components);
-		const inputService = new InputService();
-
-		for (const name of names) {
-			let component = components[name];
+	public registerComponents(components: Map<string, IComponentOptions>) {
+		for (let [name, component] of components) {
 			if ((component as InputComponentOptions).type === 'input') {
-				component = inputService.defineInputComponent(component as InputComponentOptions);
+				component = InputService.defineInputComponent(component as InputComponentOptions);
 			}
-			this.component(name, component);
+			this.$components.set(name, component);
 		}
 
 		return this;
@@ -137,15 +134,5 @@ export class NgApp implements IApp {
 
 	public timeout() {
 		return this.$injector.get('$timeout');
-	}
-
-	private component(name: string, definition: IComponentOptions) {
-		this.$components.set(name, definition);
-		return this;
-	}
-
-	private route(name: string, definition: route.IRoute) {
-		this.$routes.set(name, definition);
-		return this;
 	}
 }

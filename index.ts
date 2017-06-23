@@ -1,10 +1,11 @@
-import * as $inputs from './src/input';
+import * as inputs from './src/input';
+import { NgApp } from './src/app';
 
-import { NgApp } from './src/ng/app';
-import { IApp } from './types';
+const $inputs = new Map(Object.entries(inputs));
+export const app = new NgApp()
+	.registerComponents($inputs);
 
-export const app: IApp = new NgApp().registerComponents($inputs as any);
-
-export { NgDataService } from './src/ng/http';
-export { NgController } from './src/ng/controller';
-export { NgRenderer } from './src/ng/renderer';
+export { NgDataService } from './src/http';
+export { NgLogger } from './src/logger';
+export { NgController } from './src/controller';
+export { NgRenderer } from './src/renderer';

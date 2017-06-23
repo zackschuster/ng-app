@@ -1,7 +1,4 @@
-import { Renderer } from '../..';
-
-/* @ngInject */
-export class NgRenderer implements Renderer {
+export class NgRenderer {
 	public baseInputAttrs: [string, string][] = [
 		['id', '{{id}}'],
 		['ng-model', '$ctrl.ngModel'],
@@ -31,8 +28,11 @@ export class NgRenderer implements Renderer {
 
 		const $class = $isFormCheck ? ['form-check-input'] : ['form-control'];
 
-		// parens for syntax highlighting
-		const inputAttrs: [string, string][] = [...(this.baseInputAttrs), ...attrs, ['type', type]];
+		const inputAttrs: [string, string][] = [
+			...(this.baseInputAttrs), // parens for syntax highlighting
+			...attrs,
+			['type', type],
+		];
 
 		if ($isRadio) {
 			inputAttrs.shift();

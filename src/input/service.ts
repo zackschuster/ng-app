@@ -1,12 +1,13 @@
+// tslint:disable:member-ordering
 import { IAttributes, IComponentOptions } from 'angular';
 
 import { CoreInputController } from './controller';
-import { NgRenderer } from '../ng/renderer';
+import { NgRenderer } from '../renderer';
 import { InputComponentOptions } from '../../types';
 
 export class InputService {
-	private $counter = 0;
-	private $baseDefinition: IComponentOptions = {
+	private static $counter = 0;
+	private static readonly $baseDefinition: IComponentOptions = {
 		transclude: {
 			contain: '?contain',
 		},
@@ -21,18 +22,18 @@ export class InputService {
 	/**
 	 * Retrieves the identifying name for an ngModel
 	 */
-	public modelIdentifier($attrs: IAttributes) {
+	public static modelIdentifier($attrs: IAttributes) {
 		return ($attrs.ngModel as string).split('.').pop();
 	}
 
 	/**
 	 * Get an optionally unique input id
 	 */
-	public getId($attrs: IAttributes, { unique } = { unique: true }) {
+	public static getId($attrs: IAttributes, { unique } = { unique: true }) {
 		return this.modelIdentifier($attrs) + (unique ? '_' + this.$counter++ : '');
 	}
 
-	public getDefaultLabelText($attrs: IAttributes) {
+	public static getDefaultLabelText($attrs: IAttributes) {
 		return this.modelIdentifier($attrs).split(/(?=[A-Z])/).join(' ');
 	}
 
@@ -40,14 +41,14 @@ export class InputService {
 	/**
 	 * Determines if an element's label text should be screen-reader only
 	 */
-	public isSrOnly($attrs: IAttributes) {
+	public static isSrOnly($attrs: IAttributes) {
 		return $attrs.hasOwnProperty('srOnly');
 	}
 
 	/**
 	 * Determines if an element has been marked as inline
 	 */
-	public isInline($attrs: IAttributes) {
+	public static isInline($attrs: IAttributes) {
 		return $attrs.hasOwnProperty('inline');
 	}
 
@@ -57,7 +58,7 @@ export class InputService {
 	 * @param $input - The input to set attributes on
 	 * @param $attrs - The Angular.js $attrs object
 	 */
-	public setInteractivityAttributes($input: Element, $attrs: IAttributes) {
+	public static setInteractivityAttributes($input: Element, $attrs: IAttributes) {
 		['required', 'ngRequired', 'disabled', 'ngDisabled', 'readonly', 'ngReadonly']
 			.filter(x => $attrs.hasOwnProperty(x))
 			.forEach(x => {
@@ -69,7 +70,7 @@ export class InputService {
 	 * Transform an input component definition into an ng component definition
 	 * @param component An object representing the requested component definition
 	 */
-	public defineInputComponent(component: InputComponentOptions) {
+	public static defineInputComponent(component: InputComponentOptions) {
 		const $definition = Object.assign({}, this.$baseDefinition);
 
 		// assign child objects

@@ -1,34 +1,33 @@
 import { element } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-
-import { ModalOptions } from '../..';
+import { NgModalOptions } from '../types';
 
 export class NgModalService {
 	constructor(private $uibModal: IModalService) {}
 
-	public open(options: ModalOptions) {
+	public open(options: NgModalOptions) {
 		const defaults = { appendTo: document.body, template: '', size: 'lg', controllerAs: '$ctrl' };
 		const { template, size, controller, controllerAs, appendTo } = Object.assign(defaults, options);
 
 		controller.prototype.$onInit = async () => {
-				await $modal.opened;
+			await $modal.opened;
 
-				const modal = document.querySelector('.modal') as HTMLDivElement;
-				modal.classList.add('show');
-				modal.style.zIndex = '1050';
+			const modal = document.querySelector('.modal') as HTMLDivElement;
+			modal.classList.add('show');
+			modal.style.zIndex = '1050';
 
-				appendTo.appendChild(backdrop);
+			appendTo.appendChild(backdrop);
 
-				controller.prototype.close = () => {
-					modal.classList.remove('show');
+			controller.prototype.close = () => {
+				modal.classList.remove('show');
 
-					setTimeout(() => {
-						backdrop.classList.remove('modal-backdrop');
-						appendTo.removeChild(backdrop);
-						$modal.close();
-					}, 100);
-				};
+				setTimeout(() => {
+					backdrop.classList.remove('modal-backdrop');
+					appendTo.removeChild(backdrop);
+					$modal.close();
+				}, 100);
 			};
+		};
 
 		const backdrop = document.createElement('div');
 
@@ -37,7 +36,7 @@ export class NgModalService {
 		backdrop.style.opacity = '0.5';
 
 		const $modal = this.$uibModal.open({
-			animation: !false,
+			animation: true,
 			backdrop: false,
 
 			ariaLabelledBy: 'modal-title',
