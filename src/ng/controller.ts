@@ -1,4 +1,4 @@
-import { app } from '../..';
+import { app } from '../../index';
 
 export abstract class NgController {
 	constructor(

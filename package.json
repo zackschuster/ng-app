@@ -11,12 +11,11 @@
   "license": "GPL-3.0",
   "files": [
     "LICENSE.md",
-    "main.js",
-    "module.js",
-    "types.d.ts"
+    "index.ts",
+    "types.d.ts",
+    "src"
   ],
-  "main": "main.js",
-  "module": "module.js",
+  "main": "index.ts",
   "types": "types.d.ts",
   "scripts": {
     "build": "rollup -c rollup.config.ts",

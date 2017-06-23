@@ -1,7 +1,8 @@
 import { ILogCall, ILogService } from 'angular';
 import Noty, { NotyType } from 'noty';
 import { Callback, Indexed } from '@ledge/types';
-import { Logger, config } from '../..';
+import { config } from '../../index';
+import { Logger } from '../../types';
 
 export class NgLogger implements Logger {
 	public log: ILogCall;

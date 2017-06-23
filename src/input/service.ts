@@ -2,6 +2,7 @@ import { IAttributes, IComponentOptions } from 'angular';
 
 import { CoreInputController } from './controller';
 import { NgRenderer } from '../ng/renderer';
+import { InputComponentOptions } from '../../types';
 
 export class InputService {
 	private $counter = 0;

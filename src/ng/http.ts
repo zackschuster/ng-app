@@ -1,12 +1,13 @@
 import { IHttpPromise, IHttpPromiseCallbackArg, IHttpService } from 'angular';
 import { NgLogger } from './logger';
-import { DataService, config } from '../..';
+import { app } from '../../index';
+import { DataService } from '../../types';
 
 import isIE11 from '@ledge/is-ie-11';
 
 export class NgDataService implements DataService {
-	private prefix = (config.PREFIX as { API: string }).API;
-	private baseOptions = { timeout: config.ENV === 'production' ? 10000 : null, withCredentials: true };
+	private prefix = (app.config.PREFIX as { API: string }).API;
+	private baseOptions = { timeout: app.config.ENV === 'production' ? 10000 : null, withCredentials: true };
 
 	/* @ngInject */
 	constructor(private $http: IHttpService, private logger: NgLogger) {}

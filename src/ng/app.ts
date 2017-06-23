@@ -7,9 +7,8 @@ import { NgLogger } from './logger';
 import { NgModalService } from './modal';
 import { NgRenderer } from './renderer';
 
-import { IApp } from '../models';
+import { IApp, InputComponentOptions } from '../../types';
 import { InputService } from '../input/service';
-import { InputComponentOptions } from '../models';
 
 import 'angular-animate';
 import 'angular-route';
