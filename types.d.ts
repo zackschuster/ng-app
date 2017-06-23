@@ -116,13 +116,13 @@ export const name: string;
 
 export abstract class NgController {
 	protected $scope: IScope;
-	protected $element?: JQuery;
+	protected $element?: IRootElementService;
 	protected $timeout?: ITimeoutService;
 	protected $log?: Logger;
 
 	constructor(
 		$scope?: IScope,
-		$element?: JQuery,
+		$element?: IRootElementService,
 		$timeout?: ITimeoutService,
 		$log?: Logger,
 	);
