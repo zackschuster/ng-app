@@ -15,6 +15,7 @@ export class NgModalService {
 			const modal = document.querySelector('.modal') as HTMLDivElement;
 			modal.classList.add('show');
 			modal.style.zIndex = '1050';
+			modal.style.color = 'black';
 
 			appendTo.appendChild(backdrop);
 
