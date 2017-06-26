@@ -6,7 +6,7 @@ export class CoreInputController extends NgController {
 	public $postLink() {
 		this.$timeout(() => {
 			const contain = this.$element.closest('[ng-transclude="contain"]');
-			if (contain) {
+			if (contain.length > 0) {
 				this.$element.find('label').addClass('sr-only');
 			}
 
