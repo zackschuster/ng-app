@@ -12,11 +12,9 @@
   "files": [
     "LICENSE.md",
     "index.ts",
-    "types.d.ts",
     "src"
   ],
   "main": "index.ts",
-  "types": "types.d.ts",
   "scripts": {
     "build": "rollup -c rollup.config.ts",
     "ava": "tsc -m commonjs && ava test/*.js",
