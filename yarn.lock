@@ -109,6 +109,12 @@
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.4.tgz#d0ca03fa4a3d7ab66c1f4e78a0fd06e30e46a7a9"
 
+"@uirouter/angularjs@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.4.tgz#c89efe2d071573d92c2fd486e35a22effc8dc017"
+  dependencies:
+    "@uirouter/core" "5.0.3"
+
 "@uirouter/core@5.0.3":
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.3.tgz#e2b5b1e45190e20c67ba4e15c013de5d4e0ccab3"
@@ -137,12 +143,6 @@ angular-elastic@^2.5.1:
 angular-ui-bootstrap@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.0.tgz#2facefb915386655dc5f44150258032517236d01"
-
-angular-ui-router@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-1.0.3.tgz#bf2494caae95c37cf01af3761d89747cfed2db45"
-  dependencies:
-    "@uirouter/core" "5.0.3"
 
 angular@>=1.0.6, angular@^1.6.4:
   version "1.6.4"

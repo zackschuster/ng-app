@@ -16,6 +16,8 @@ import 'angular-elastic';
 import 'angular-ui-bootstrap';
 import 'ui-select';
 
+import '@uirouter/angularjs';
+
 export class NgApp {
 	public $injector = injector(['ng']);
 

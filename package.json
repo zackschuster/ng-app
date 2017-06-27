@@ -31,11 +31,11 @@
     "@types/angular-animate": "^1.5.7",
     "@types/angular-ui-bootstrap": "^0.13.43",
     "@types/angular-ui-router": "^1.1.37",
+    "@uirouter/angularjs": "^1.0.4",
     "angular": "^1.6.4",
     "angular-animate": "^1.6.4",
     "angular-elastic": "^2.5.1",
     "angular-ui-bootstrap": "^2.5.0",
-    "angular-ui-router": "^1.0.3",
     "element-closest": "^2.0.2",
     "noty": "^3.1.0",
     "ui-select": "^0.19.8"
