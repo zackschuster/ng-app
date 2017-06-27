@@ -10,7 +10,7 @@ import { myComponent } from './my-component';
 import * as myRoutes from './my-routes';
 
 app
-  .registerRoutes(myRoutes) // using angular-route
+  .registerRoutes(myRoutes) // using ui-router
   .registerComponents({ myComponent })
   .bootstrap();
 ```
