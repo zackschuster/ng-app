@@ -36,7 +36,7 @@ export class NgApp {
 	private $bootstrap = bootstrap;
 
 	private $components: Map<string, IComponentOptions> = new Map();
-	private $routes: Map<string, IState> = new Map();
+	private $routes: IState[] = [];
 
 	constructor() {
 		this.$module
@@ -80,8 +80,8 @@ export class NgApp {
 		}
 
 		this.$module.config(['$stateProvider', ($stateProvider: IStateProvider) => {
-			for (const [name, definition] of this.$routes) {
-				$stateProvider.state(name, definition);
+			for (const definition of this.$routes) {
+				$stateProvider.state(definition);
 			}
 		}]);
 
@@ -89,7 +89,10 @@ export class NgApp {
 	}
 
 	public registerRoutes(routes: Map<string, IState>) {
-		this.$routes = new Map([...this.$routes, ...routes]);
+		this.$routes = [
+			...(this.$routes), /*parens for syntax highlighting*/
+			...routes,
+		];
 		return this;
 	}
 
