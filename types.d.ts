@@ -14,7 +14,7 @@ export class NgApp {
 	logger(): NgLogger;
 	modal(): NgModalService;
 	registerComponents(components: Map<string, IComponentOptions>): this;
-	registerRoutes(routes: Map<string, IState>): this;
+	registerRoutes(routes: IState[]): this;
 	compiler(): ICompileService;
 	renderer(): NgRenderer;
 	root(): IRootElementService;
