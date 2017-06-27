@@ -1,6 +1,7 @@
 // tslint:disable:no-empty-interface max-line-length
-import { IAttributes, ICompileService, IComponentOptions, IRootElementService, IScope, ITimeoutService, route, auto } from 'angular';
+import { IAttributes, ICompileService, IComponentOptions, IRootElementService, IScope, ITimeoutService, auto } from 'angular';
 import { IModalInstanceService } from 'angular-ui-bootstrap';
+import { IState } from 'angular-ui-router';
 import { Callback, IConfig, Indexed } from '@ledge/types';
 import { CoreInputController } from './src/input/controller';
 
@@ -13,7 +14,7 @@ export class NgApp {
 	logger(): NgLogger;
 	modal(): NgModalService;
 	registerComponents(components: Map<string, IComponentOptions>): this;
-	registerRoutes(routes: Map<string, route.IRoute>): this;
+	registerRoutes(routes: Map<string, IState>): this;
 	compiler(): ICompileService;
 	renderer(): NgRenderer;
 	root(): IRootElementService;
