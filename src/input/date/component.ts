@@ -16,7 +16,7 @@ class DateInputController extends CoreInputController {
 	}
 
 	public toggleDatepicker() {
-		const input = this.$element.find('input');
+		const input = (this.$element.find('input') as any)[0] as HTMLInputElement;
 		const method = (this.hasFocus = !this.hasFocus) ? 'focus' : 'blur';
 
 		input[method]();
