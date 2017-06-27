@@ -1,5 +1,6 @@
 // tslint:disable-next-line:max-line-length
-import { ICompileProvider, IComponentOptions, ILocationProvider, animate, auto, bootstrap, injector, module, route } from 'angular';
+import { ICompileProvider, IComponentOptions, ILocationProvider, animate, auto, bootstrap, injector, module } from 'angular';
+import { IState, IStateProvider } from 'angular-ui-router';
 import { IConfig } from '@ledge/types';
 
 import { NgDataService } from './http';
@@ -11,7 +12,6 @@ import { InputComponentOptions } from '../types';
 import { InputService } from './input/service';
 
 import 'angular-animate';
-import 'angular-route';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
 import 'ui-select';
@@ -22,8 +22,8 @@ export class NgApp {
 	private readonly $id: string = '$core';
 	private readonly $dependencies = [
 		'ngAnimate',
-		'ngRoute',
 		'ui.bootstrap',
+		'ui.router',
 		'ui.select',
 		'monospaced.elastic',
 	];
@@ -34,7 +34,7 @@ export class NgApp {
 	private $bootstrap = bootstrap;
 
 	private $components: Map<string, IComponentOptions> = new Map();
-	private $routes: Map<string, route.IRoute> = new Map();
+	private $routes: Map<string, IState> = new Map();
 
 	constructor() {
 		this.$module
@@ -77,16 +77,16 @@ export class NgApp {
 			this.$module.component(name, definition);
 		}
 
-		this.$module.config(['$routeProvider', ($routeProvider: route.IRouteProvider) => {
+		this.$module.config(['$stateProvider', ($stateProvider: IStateProvider) => {
 			for (const [name, definition] of this.$routes) {
-				$routeProvider.when(name, definition);
+				$stateProvider.state(name, definition);
 			}
 		}]);
 
 		this.$bootstrap(document.body, [this.$id]);
 	}
 
-	public registerRoutes(routes: Map<string, route.IRoute>) {
+	public registerRoutes(routes: Map<string, IState>) {
 		this.$routes = new Map([...this.$routes, ...routes]);
 		return this;
 	}
