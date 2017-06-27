@@ -1,3 +1,5 @@
+import 'element-closest';
+
 import { NgController } from '../controller';
 
 export class CoreInputController extends NgController {
@@ -5,7 +7,7 @@ export class CoreInputController extends NgController {
 
 	public $postLink() {
 		this.$timeout(() => {
-			const contain = this.$element.closest('[ng-transclude="contain"]');
+			const contain = (this.$element as any)[0].closest('[ng-transclude="contain"]');
 			if (contain.length > 0) {
 				this.$element.find('label').addClass('sr-only');
 			}
