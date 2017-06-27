@@ -101,9 +101,9 @@
   dependencies:
     "@types/angular" "*"
 
-"@types/angular@*", "@types/angular@^1.6.19":
-  version "1.6.22"
-  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.22.tgz#9c080420d2c44030ffe6dfccf553f2ed878bfc5d"
+"@types/angular@*", "@types/angular@^1.6.23":
+  version "1.6.23"
+  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.23.tgz#e313e23b2458a8c7e8fd29da421ca5d8ae1975c6"
 
 "@types/node@*":
   version "8.0.3"
@@ -996,24 +996,23 @@ deep-extend@~0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.2.tgz#48b699c27e334bf89f10892be432f6e4c7d34a7f"
 
-del-cli@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/del-cli/-/del-cli-1.0.0.tgz#3cffc1d508b25b532c703b9c450e43967899162d"
+del-cli@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/del-cli/-/del-cli-1.1.0.tgz#27557d69a0b7df99dcbaa1e34a09e6ac6591d2c4"
   dependencies:
-    del "^2.2.0"
+    del "^3.0.0"
     meow "^3.6.0"
     update-notifier "^2.1.0"
 
-del@^2.2.0:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/del/-/del-2.2.2.tgz#c12c981d067846c84bcaf862cff930d907ffd1a8"
+del@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/del/-/del-3.0.0.tgz#53ecf699ffcbcb39637691ab13baf160819766e5"
   dependencies:
-    globby "^5.0.0"
+    globby "^6.1.0"
     is-path-cwd "^1.0.0"
     is-path-in-cwd "^1.0.0"
-    object-assign "^4.0.1"
-    pify "^2.0.0"
-    pinkie-promise "^2.0.0"
+    p-map "^1.1.1"
+    pify "^3.0.0"
     rimraf "^2.2.8"
 
 delayed-stream@~1.0.0:
@@ -1324,18 +1323,7 @@ globals@^9.0.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
 
-globby@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/globby/-/globby-5.0.0.tgz#ebd84667ca0dbb330b99bcfc68eac2bc54370e0d"
-  dependencies:
-    array-union "^1.0.1"
-    arrify "^1.0.0"
-    glob "^7.0.3"
-    object-assign "^4.0.1"
-    pify "^2.0.0"
-    pinkie-promise "^2.0.0"
-
-globby@^6.0.0:
+globby@^6.0.0, globby@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/globby/-/globby-6.1.0.tgz#f5a6d70e8395e21c858fb0489d64df02424d506c"
   dependencies:
@@ -2169,6 +2157,10 @@ p-locate@^2.0.0:
   dependencies:
     p-limit "^1.1.0"
 
+p-map@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/p-map/-/p-map-1.1.1.tgz#05f5e4ae97a068371bc2a5cc86bfbdbc19c4ae7a"
+
 package-hash@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/package-hash/-/package-hash-1.2.0.tgz#003e56cd57b736a6ed6114cc2b81542672770e44"
@@ -2267,6 +2259,10 @@ performance-now@^0.2.0:
 pify@^2.0.0, pify@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
+
+pify@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/pify/-/pify-3.0.0.tgz#e5a4acd2c101fdf3d9a4d07f0dbc4db49dd28176"
 
 pinkie-promise@^1.0.0:
   version "1.0.0"
@@ -2885,9 +2881,9 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-typescript@^2.2.1, typescript@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.0.tgz#aef5a8d404beba36ad339abf079ddddfffba86dd"
+typescript@^2.2.1, typescript@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.1.tgz#c3ccb16ddaa0b2314de031e7e6fee89e5ba346bc"
 
 ui-select@^0.19.8:
   version "0.19.8"
