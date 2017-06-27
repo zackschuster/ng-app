@@ -88,7 +88,7 @@ export class NgApp {
 		this.$bootstrap(document.body, [this.$id]);
 	}
 
-	public registerRoutes(routes: Map<string, IState>) {
+	public registerRoutes(routes: IState[]) {
 		this.$routes = [
 			...(this.$routes), /*parens for syntax highlighting*/
 			...routes,
