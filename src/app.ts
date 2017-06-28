@@ -14,7 +14,6 @@ import { InputService } from './input/service';
 import 'angular-animate';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
-import 'ui-select';
 
 import '@uirouter/angularjs';
 
@@ -26,7 +25,6 @@ export class NgApp {
 		'ngAnimate',
 		'ui.bootstrap',
 		'ui.router',
-		'ui.select',
 		'monospaced.elastic',
 	];
 

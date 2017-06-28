@@ -36,9 +36,9 @@
     "angular-animate": "^1.6.4",
     "angular-elastic": "^2.5.1",
     "angular-ui-bootstrap": "^2.5.0",
+    "choices.js": "^2.8.5",
     "element-closest": "^2.0.2",
-    "noty": "^3.1.0",
-    "ui-select": "^0.19.8"
+    "noty": "^3.1.0"
   },
   "devDependencies": {
     "ava": "^0.20.0",
