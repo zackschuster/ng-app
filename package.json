@@ -12,7 +12,6 @@
   "files": [
     "LICENSE.md",
     "index.ts",
-    "types.d.ts",
     "src"
   ],
   "main": "index.ts",
