@@ -3,7 +3,6 @@ import { IAttributes, ICompileService, IComponentOptions, IRootElementService, I
 import { IModalInstanceService } from 'angular-ui-bootstrap';
 import { IState } from 'angular-ui-router';
 import { Callback, IConfig, Indexed } from '@ledge/types';
-import { CoreInputController } from './src/input/controller';
 
 export class NgApp {
 	$injector: auto.IInjectorService
@@ -23,17 +22,11 @@ export class NgApp {
 }
 
 export abstract class NgController {
-	protected $scope: IScope;
-	protected $element?: IRootElementService;
-	protected $timeout?: ITimeoutService;
-	protected $log?: NgLogger;
-
-	constructor(
-		$scope?: IScope,
-		$element?: IRootElementService,
-		$timeout?: ITimeoutService,
-		$log?: NgLogger,
-	);
+	public $element: JQuery;
+	public $scope: IScope;
+	public $timeout: ITimeoutService;
+	public $log: NgLogger;
+	public ngModel: any;
 }
 
 export class NgDataService {
@@ -74,11 +67,14 @@ export interface NgModalOptions {
 
 export interface InputComponentOptions extends IComponentOptions {
 	/**
-	 * Set this so the app knows how to register your $definition
+	 * Set this so the app knows how to register your definition
 	 */
 	type: 'input';
 
-	ctrl?: typeof CoreInputController;
+	/**
+	* Use this instead of controller (the app will disregard the controller prop for type safety reasons)
+	*/
+	ctrl?: new(...args: any[]) => NgController;
 
 	/**
 	 * Special attributes to set on the input

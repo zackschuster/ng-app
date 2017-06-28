@@ -1,8 +1,8 @@
 // tslint:disable:no-invalid-this
-import { CoreInputController } from '../controller';
+import { NgController } from '../../controller';
 import { InputComponentOptions } from '../../../types';
 
-class RadioListController extends CoreInputController {
+class RadioListController extends NgController {
 	public toggle(value: any) {
 		// tslint:disable-next-line:triple-equals
 		if (this.ngModel == value) {

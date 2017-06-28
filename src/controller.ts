@@ -1,10 +1,13 @@
-import { app } from '../index';
+import { IAttributes, IScope, ITimeoutService } from 'angular';
+import { NgLogger } from './logger';
+import { NgDataService } from './http';
 
-export abstract class NgController {
-	constructor(
-		protected $element = app.root() as JQuery,
-		protected $scope = app.scope(),
-		protected $timeout = app.timeout(),
-		protected $log = app.logger(),
-	) {}
+export class NgController {
+	public $scope: IScope;
+	public $element: JQuery;
+	public $attrs: IAttributes;
+	public $timeout: ITimeoutService;
+	public $log: NgLogger;
+	public $http: NgDataService;
+	public ngModel: any;
 }
