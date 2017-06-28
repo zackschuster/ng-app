@@ -1,7 +1,7 @@
 // tslint:disable:member-ordering
-import { IAttributes, IComponentOptions } from 'angular';
+import { IAttributes, IComponentOptions, IController } from 'angular';
 
-import { CoreInputController } from './controller';
+import { NgController } from '../controller';
 import { NgRenderer } from '../renderer';
 import { InputComponentOptions } from '../../types';
 
@@ -77,9 +77,27 @@ export class InputService {
 		Object.assign($definition.bindings, component.bindings);
 		Object.assign($definition.transclude, component.transclude);
 
+		const $controller = component.ctrl || NgController as new(...args: any[]) => IController;
+
 		// assign controller
-		$definition.controller = component.ctrl || CoreInputController;
-		$definition.controller.$inject = ['$element'];
+		// tslint:disable-next-line:max-classes-per-file
+		$definition.controller = class InputController extends $controller {
+			constructor() {
+				super();
+
+				setTimeout(() => {
+					const contain = (this.$element as any)[0].closest('[ng-transclude="contain"]') as HTMLElement;
+					if (contain == null) {
+						this.$element.find('label').addClass('sr-only');
+					}
+
+					const el = this.$element.find('[ng-transclude="contain"]');
+					if (el.empty()) {
+						el.detach();
+					}
+				});
+			}
+		};
 
 		// assign template
 		$definition.template = ['$attrs', ($attrs: IAttributes) => {

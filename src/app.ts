@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { ICompileProvider, IComponentOptions, ILocationProvider, animate, auto, bootstrap, injector, module } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IRootElementService, IScope, ITimeoutService, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider } from 'angular-ui-router';
 import { IConfig } from '@ledge/types';
 
@@ -97,11 +97,38 @@ export class NgApp {
 	}
 
 	public registerComponents(components: Map<string, IComponentOptions>) {
+		const logger = this.logger();
+
 		// tslint:disable-next-line:prefer-const
 		for (let [name, component] of components) {
 			if ((component as InputComponentOptions).type === 'input') {
 				component = InputService.defineInputComponent(component as InputComponentOptions);
 			}
+
+			const $controller = component.controller as new(...args: any[]) => IController;
+
+			// tslint:disable-next-line:max-classes-per-file
+			class InternalController extends $controller {
+				public $log = logger;
+				public $http: NgDataService;
+
+				constructor(
+					public $scope: IScope,
+					public $element: IRootElementService,
+					public $attrs: IAttributes,
+					public $timeout: ITimeoutService,
+					public $injector: auto.IInjectorService,
+				) {
+					super();
+
+					const $http = this.$injector.get('$http');
+					this.$http = new NgDataService($http, this.logger());
+				}
+			}
+
+			// tslint:disable-next-line:only-arrow-functions
+			component.controller = ['$scope', '$element', '$attrs', '$timeout', '$injector', InternalController];
+
 			this.$components.set(name, component);
 		}
 
