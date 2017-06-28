@@ -1,6 +1,6 @@
 import Choices from 'choices.js';
 import { NgController } from '../../controller';
-import { InputComponentOptions } from '../../../types';
+import { InputComponentOptions } from '../../..';
 
 class SelectController extends NgController {
 	public list: any[];

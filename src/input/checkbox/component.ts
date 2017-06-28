@@ -1,5 +1,5 @@
 // tslint:disable:no-invalid-this
-import { InputComponentOptions } from '../../../types';
+import { InputComponentOptions } from '../../..';
 
 export const checkBox: InputComponentOptions = {
 	type: 'input',

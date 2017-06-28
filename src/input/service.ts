@@ -3,7 +3,7 @@ import { IAttributes, IComponentOptions, IController } from 'angular';
 
 import { NgController } from '../controller';
 import { NgRenderer } from '../renderer';
-import { InputComponentOptions } from '../../types';
+import { InputComponentOptions } from '../..';
 
 export class InputService {
 	private static $counter = 0;

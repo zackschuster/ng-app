@@ -1,6 +1,6 @@
 import { element } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { NgModalOptions } from '../types';
+import { NgModalOptions } from '..';
 
 export class NgModalService {
 	constructor(private $uibModal: IModalService) {}

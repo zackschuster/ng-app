@@ -8,7 +8,7 @@ import { NgLogger } from './logger';
 import { NgModalService } from './modal';
 import { NgRenderer } from './renderer';
 
-import { InputComponentOptions } from '../types';
+import { InputComponentOptions } from '..';
 import { InputService } from './input/service';
 
 import 'angular-animate';
@@ -103,29 +103,33 @@ export class NgApp {
 				component = InputService.defineInputComponent(component as InputComponentOptions);
 			}
 
-			const $controller = component.controller as new(...args: any[]) => IController;
+			if (component.controller != null) {
+				const $controller = component.controller as new(...args: any[]) => IController;
 
-			// tslint:disable-next-line:max-classes-per-file
-			class InternalController extends $controller {
-				public $log = logger;
-				public $http: NgDataService;
+				// tslint:disable-next-line:max-classes-per-file
+				class InternalController extends $controller {
+					public $log = logger;
+					public $http: NgDataService;
 
-				constructor(
-					public $scope: IScope,
-					public $element: IRootElementService,
-					public $attrs: IAttributes,
-					public $timeout: ITimeoutService,
-					public $injector: auto.IInjectorService,
-				) {
-					super();
+					constructor(
+						public $scope: IScope,
+						public $element: IRootElementService,
+						public $attrs: IAttributes,
+						public $timeout: ITimeoutService,
+						public $injector: auto.IInjectorService,
+					) {
+						super();
 
-					const $http = this.$injector.get('$http');
-					this.$http = new NgDataService($http, this.logger());
+						this.$http = new NgDataService(
+							this.$injector.get('$http'),
+							this.$log,
+						);
+					}
 				}
-			}
 
-			// tslint:disable-next-line:only-arrow-functions
-			component.controller = ['$scope', '$element', '$attrs', '$timeout', '$injector', InternalController];
+				// tslint:disable-next-line:only-arrow-functions
+				component.controller = ['$scope', '$element', '$attrs', '$timeout', '$injector', InternalController];
+			}
 
 			this.$components.set(name, component);
 		}

@@ -16,7 +16,7 @@
     "src"
   ],
   "main": "index.ts",
-  "types": "types.d.ts",
+  "types": "index.ts",
   "scripts": {
     "build": "rollup -c rollup.config.ts",
     "ava": "tsc -m commonjs && ava test/*.js",

@@ -1,6 +1,6 @@
 // tslint:disable:no-invalid-this
 import { NgController } from '../../controller';
-import { InputComponentOptions } from '../../../types';
+import { InputComponentOptions } from '../../..';
 
 class RadioListController extends NgController {
 	public toggle(value: any) {
