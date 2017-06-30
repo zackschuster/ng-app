@@ -1,5 +1,3 @@
-
-
 declare module "choices.js" {
 	export default class Choices {
 		constructor(element?: string | HTMLElement | HTMLCollectionOf<HTMLElement> | NodeList, userConfig?: ChoicesOptions);
@@ -266,6 +264,10 @@ declare module "choices.js" {
 			flippedState?: string,
 			loadingState?: string,
 		},
+		/**
+		 * Choices uses the great Fuse library for searching.
+		 * You can find the options list here: https://github.com/krisk/Fuse#options
+		 */
 		fuseOptions?: {
 			include?: string,
 		},
