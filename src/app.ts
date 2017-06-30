@@ -137,37 +137,33 @@ export class NgApp {
 		return this;
 	}
 
-	public compiler() {
-		return this.$injector.get('$compile');
+	public renderer() {
+		return new NgRenderer(document);
 	}
 
 	public http() {
-		const $http = this.$injector.get('$http');
-		return new NgDataService($http, this.logger());
+		return new NgDataService(this.$injector.get('$http'), this.logger());
 	}
 
 	public logger() {
-		const $log = this.$injector.get('$log');
-		return new NgLogger($log);
+		return new NgLogger(this.$injector.get('$log'));
 	}
 
 	public modal() {
 		return new NgModalService(this.$injector.get('$uibModal'));
 	}
 
-	public renderer() {
-		return new NgRenderer(document);
+	public scope() {
+		return this.$injector.get('$rootScope').$new();
+	}
+
+	public compiler() {
+		return this.$injector.get('$compile');
 	}
 
 	public root() {
 		return this.$injector.get('$rootElement');
 	}
-
-	public scope() {
-		const $rootScope = this.$injector.get('$rootScope');
-		return $rootScope.$new();
-	}
-
 	public timeout() {
 		return this.$injector.get('$timeout');
 	}
