@@ -156,7 +156,7 @@ export class NgApp {
 	}
 
 	public renderer() {
-		return new NgRenderer();
+		return new NgRenderer(document);
 	}
 
 	public root() {

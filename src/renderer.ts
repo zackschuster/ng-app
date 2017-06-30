@@ -6,9 +6,11 @@ export class NgRenderer {
 
 	public nameAttr: [string, string] = ['name', '{{id}}'];
 
+	constructor(private document: Document) {}
+
 	// tslint:disable-next-line:max-line-length
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes: string[] = [], attrs: [string, string][] = null) {
-		const $el = document.createElement(tagName);
+		const $el = this.document.createElement(tagName);
 
 		$el.classList.add(...classes);
 
