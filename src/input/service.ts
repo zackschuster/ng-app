@@ -112,7 +112,7 @@ export class InputService {
 		// assign template
 		$definition.template = ['$attrs', ($attrs: IAttributes) => {
 			// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
-			const h = new NgRenderer();
+			const h = new NgRenderer(document);
 
 			// as it's an input, we'll put it inside a form-group container.
 			// this can be modified by a consumer through configuration.

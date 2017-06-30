@@ -19,7 +19,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.ts",
     "ava": "tsc -m commonjs && ava test/*.js",
-    "trash": "del-cli index.js test/*.js",
+    "trash": "del-cli index.js src/**/*.js test/*.js",
     "test": "yarn ava && yarn trash"
   },
   "dependencies": {
@@ -43,6 +43,7 @@
     "del-cli": "^1.1.0",
     "rollup": "^0.43.0",
     "tslint": "^5.4.3",
-    "typescript": "^2.4.1"
+    "typescript": "^2.4.1",
+    "window": "^4.0.1"
   }
 }

@@ -9,15 +9,13 @@ export class NgRenderer {
 	constructor(private document: Document) {}
 
 	// tslint:disable-next-line:max-line-length
-	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes: string[] = [], attrs: [string, string][] = null) {
+	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes: string[] = [], attrs: [string, string][] = []) {
 		const $el = this.document.createElement(tagName);
 
 		$el.classList.add(...classes);
 
-		if (attrs != null) {
-			for (const [key, value] of attrs) {
-				$el.setAttribute(key, value);
-			}
+		for (const [key, value] of attrs) {
+			$el.setAttribute(key, value);
 		}
 
 		return $el;
