@@ -108,23 +108,27 @@
   dependencies:
     "@types/angular" "*"
 
-"@types/angular@*", "@types/angular@^1.6.24":
+"@types/angular@*":
   version "1.6.24"
   resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.24.tgz#f19510cf4efa5816158fa01b1aa2df94eb7bcde8"
+
+"@types/angular@^1.6.25":
+  version "1.6.25"
+  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.25.tgz#d403e94b40e06af3d9b76da5031795a9b929d08a"
 
 "@types/node@*":
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.4.tgz#d0ca03fa4a3d7ab66c1f4e78a0fd06e30e46a7a9"
 
-"@uirouter/angularjs@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.4.tgz#c89efe2d071573d92c2fd486e35a22effc8dc017"
+"@uirouter/angularjs@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.5.tgz#ba559378ac981255f9a96212b7ef51fb82ec49b8"
   dependencies:
-    "@uirouter/core" "5.0.3"
+    "@uirouter/core" "5.0.5"
 
-"@uirouter/core@5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.3.tgz#e2b5b1e45190e20c67ba4e15c013de5d4e0ccab3"
+"@uirouter/core@5.0.5":
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.5.tgz#4fafae8b89e1bee321b0ed32e69ab66547c055c6"
 
 abbrev@1:
   version "1.1.0"
@@ -800,9 +804,9 @@ chalk@^1.0.0, chalk@^1.1.0, chalk@^1.1.1:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-choices.js@^2.8.5:
-  version "2.8.5"
-  resolved "https://registry.yarnpkg.com/choices.js/-/choices.js-2.8.5.tgz#5df8d5408af3ef307b89b9d915096281064f3f9c"
+choices.js@^2.8.6:
+  version "2.8.6"
+  resolved "https://registry.yarnpkg.com/choices.js/-/choices.js-2.8.6.tgz#b04f7fabd0b4490f31abffc579867e54cf441b1b"
   dependencies:
     classnames "^2.2.5"
     fuse.js "^2.2.2"
