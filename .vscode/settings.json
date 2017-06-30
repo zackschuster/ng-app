@@ -1,4 +1,7 @@
 {
+	"files.exclude": {
+		"**/*.js": true
+	},
 	"tslint.enable": true,
 	"tslint.autoFixOnSave": true,
 	"tslint.configFile": "node_modules/@ledge/tslint-config/tslint.json"
