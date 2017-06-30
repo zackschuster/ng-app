@@ -25,18 +25,6 @@ class SelectController extends NgController {
 			},
 			true,
 		);
-
-		this.$timeout(() => {
-			const contain = $el.closest('[ng-transclude="contain"]');
-			if (contain == null) {
-				this.$element.find('label').addClass('sr-only');
-			}
-
-			const el = this.$element.find('[ng-transclude="contain"]');
-			if (el.empty()) {
-				el.detach();
-			}
-		});
 	}
 }
 
