@@ -112,10 +112,6 @@
   version "1.6.24"
   resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.24.tgz#f19510cf4efa5816158fa01b1aa2df94eb7bcde8"
 
-"@types/angular@^1.6.25":
-  version "1.6.25"
-  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.25.tgz#d403e94b40e06af3d9b76da5031795a9b929d08a"
-
 "@types/node@*":
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.4.tgz#d0ca03fa4a3d7ab66c1f4e78a0fd06e30e46a7a9"
