@@ -35,6 +35,11 @@ export interface InputComponentOptions extends IComponentOptions {
 	ctrl?: new(...args: any[]) => NgController;
 
 	/**
+	 * Allow input group icons to be defined by users on the input
+	 */
+	enableInputGroup?: true;
+
+	/**
 	 * Special attributes to set on the input
 	 */
 	attrs?: Indexed;

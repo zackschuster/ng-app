@@ -37,12 +37,19 @@ export class InputService {
 		return this.modelIdentifier($attrs).split(/(?=[A-Z])/).join(' ');
 	}
 
-	// these next two are fairly silly, but it beats having to remember strings
+	// these next three are fairly silly, but it beats having to remember strings
 	/**
 	 * Determines if an element's label text should be screen-reader only
 	 */
 	public static isSrOnly($attrs: IAttributes) {
 		return $attrs.hasOwnProperty('srOnly');
+	}
+
+	/**
+	 * Determines if an element's label text should be screen-reader only
+	 */
+	public static isInputGroup($attrs: IAttributes) {
+		return $attrs.hasOwnProperty('icon');
 	}
 
 	/**
@@ -86,14 +93,17 @@ export class InputService {
 				super();
 
 				setTimeout(() => {
-					const contain = (this.$element as any)[0].closest('[ng-transclude="contain"]') as HTMLElement;
-					if (contain == null) {
+					const $contain = '[ng-transclude="contain"]';
+					const $el = (this.$element as any)[0] as HTMLElement;
+					const contain = $el.closest($contain);
+					if (contain != null) {
 						this.$element.find('label').addClass('sr-only');
 					}
 
-					const el = this.$element.find('[ng-transclude="contain"]');
-					if (el.empty()) {
-						el.detach();
+					// const el = this.$element.find($contain);
+					const el = $el.querySelector($contain);
+					if (el.children.length > 0) {
+						el.remove();
 					}
 				});
 			}
@@ -121,6 +131,15 @@ export class InputService {
 
 			if (component.nestInputInLabel === true) {
 				$label.appendChild($input);
+			} else if (component.enableInputGroup === true && this.isInputGroup($attrs)) {
+				const $inputGroup = h.createElement('div', ['input-group']);
+				const $inputGroupAddon = h.createElement('div', ['input-group-addon']);
+				const $icon = h.createIcon($attrs.icon, $attrs.icon.startsWith('fw!'));
+
+				$inputGroupAddon.appendChild($icon);
+				$inputGroup.appendChild($inputGroupAddon);
+				$inputGroup.appendChild($input);
+				$template.appendChild($inputGroup);
 			} else {
 				$template.appendChild($input);
 			}
@@ -136,7 +155,12 @@ export class InputService {
 			} else {
 				// TODO: figure out how consumers can pass in label text without requiring two transclusion slots
 				const $transclude = document.createElement('ng-transclude');
-				$transclude.innerHTML = this.getDefaultLabelText($attrs);
+				$transclude.textContent = this.getDefaultLabelText($attrs);
+				if ($attrs.hasOwnProperty('required')) {
+					const $span = h.createElement('span', ['text-danger']);
+					$span.textContent = ' *';
+					$transclude.appendChild($span);
+				}
 				$label.appendChild($transclude);
 			}
 
