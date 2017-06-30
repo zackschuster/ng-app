@@ -25,6 +25,7 @@ export const radioList: InputComponentOptions = {
 		radio.setAttribute('ng-value', '{{item.Value}}');
 		radio.setAttribute('ng-checked', '$ctrl.ngModel == item.Value');
 		radio.setAttribute('ng-click', '$ctrl.toggle(item.Value)');
+		radio.style.cursor = 'pointer';
 
 		if (this.$attrs.hasOwnProperty('inline')) {
 			this.$template.classList.remove('form-check');
