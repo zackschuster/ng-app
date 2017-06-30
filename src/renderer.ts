@@ -55,8 +55,12 @@ export class NgRenderer {
 		]);
 	}
 
-	public createIcon(icon: string, prefix: string = 'fa') {
-		return this.createElement('span', [prefix, prefix + '-' + icon], [['aria-hidden', 'true']]);
+	public createIcon(icon: string, isFixedWidth = false) {
+		const $iconClasses = ['fa', 'fa-' + icon.replace(/^fw!/, '')];
+		if (isFixedWidth) {
+			$iconClasses.push('fa-fw');
+		}
+		return this.createElement('span', $iconClasses, [['aria-hidden', 'true']]);
 	}
 
 	public createLabel(classList: string[]) {
