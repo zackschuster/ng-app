@@ -38,10 +38,14 @@ export class NgDataService {
 				this.logger.devWarning(`Route '${err.config.url}' not found`);
 				break;
 			case 500:
-				this.logger.error('Internal server error. Please try again.');
+				const { data, statusText } = err;
+				this.logger.error(typeof data === 'string' && data.length > 0 ? data : statusText);
 				break;
 			case 401:
 				this.logger.warning('You must be logged in to access this page');
+				break;
+			case -1:
+				this.logger.warning('Server is inaccessible.');
 				break;
 			default:
 				this.logger.devWarning(`An unregistered error occurred for '${err.config.url}' (code: ${err.status})`);
