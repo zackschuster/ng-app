@@ -1,5 +1,7 @@
 declare module "choices.js" {
 	export default class Choices {
+		passedElement: Element;
+
 		constructor(element?: string | HTMLElement | HTMLCollectionOf<HTMLElement> | NodeList, userConfig?: ChoicesOptions);
 		new(element?: string | HTMLElement | HTMLCollectionOf<HTMLElement> | NodeList, userConfig?: ChoicesOptions): this;
 
@@ -228,7 +230,7 @@ declare module "choices.js" {
 		shouldSort?: boolean,
 		sortFilter?: (current: any, next: any) => -1 | 0 | 1,
 		placeholder?: boolean,
-		placeholderValue?: null,
+		placeholderValue?: string,
 		prependValue?: null,
 		appendValue?: null,
 		loadingText?: string,
@@ -264,10 +266,6 @@ declare module "choices.js" {
 			flippedState?: string,
 			loadingState?: string,
 		},
-		/**
-		 * Choices uses the great Fuse library for searching.
-		 * You can find the options list here: https://github.com/krisk/Fuse#options
-		 */
 		fuseOptions?: {
 			include?: string,
 		},
