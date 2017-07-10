@@ -94,11 +94,15 @@ export class NgApp {
 		return this;
 	}
 
-	public registerComponents(components: Map<string, IComponentOptions>) {
+	public registerComponents(components: Map<string, IComponentOptions> | { [index: string]: IComponentOptions }) {
 		const logger = this.logger();
 
+		const componentIterable = components instanceof Map
+			? Array.from(components)
+			: Object.entries(components);
+
 		// tslint:disable-next-line:prefer-const
-		for (let [name, component] of components) {
+		for (let [name, component] of componentIterable) {
 			if ((component as InputComponentOptions).type === 'input') {
 				component = InputService.defineInputComponent(component as InputComponentOptions);
 			}
