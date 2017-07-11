@@ -43,7 +43,9 @@ export const selectList: InputComponentOptions = {
 	type: 'input',
 	render(h) {
 		// tslint:disable-next-line:no-invalid-this
-		return this.$attrs.type === 'multiple' ? h.createInput() : h.createElement('select');
+		return this.$attrs.hasOwnProperty('multiple') || this.$attrs.type === 'multiple'
+			? h.createInput('select-multiple')
+			: h.createElement('select');
 	},
 	ctrl: SelectController,
 	bindings: {
