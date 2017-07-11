@@ -41,7 +41,6 @@ class SelectController extends NgController {
 
 		this.choices = new Choices(el, {
 			removeItemButton: true,
-			searchFields: [text],
 			itemSelectText: '',
 			placeholderValue: this.$attrs.placeholder,
 		});
