@@ -9,7 +9,7 @@ class SelectController extends NgController {
 
 	public $postLink() {
 		const $el = (this.$element as any)[0] as HTMLElement;
-		const $select = $el.querySelector('select');
+		const $select = $el.querySelector('select,input') as HTMLElement;
 
 		this.makeSelectList($select, this.list);
 
@@ -24,13 +24,13 @@ class SelectController extends NgController {
 		);
 	}
 
-	public makeSelectList(el: HTMLSelectElement, list: any[]) {
+	public makeSelectList(el: HTMLElement, list: any[]) {
 		if (this.choices != null) {
 			this.choices.destroy();
 		}
 
-		this.choices = new Choices(el);
-		this.choices.setChoices(list, 'Id', 'Description');
+		this.choices = new Choices(el, { removeItemButton: true });
+		this.choices.setChoices(list, this.$attrs.value || 'Value', this.$attrs.text || 'Text');
 		this.choices.passedElement.addEventListener('change', this.changeEvent);
 	}
 
@@ -42,14 +42,8 @@ class SelectController extends NgController {
 export const selectList: InputComponentOptions = {
 	type: 'input',
 	render(h) {
-		const select = h.createElement('select');
-		const option = h.createElement('option');
-
-		option.setAttribute('disabled', 'true');
-		option.setAttribute('selected', 'true');
-		option.setAttribute('value', '0');
-
-		return select;
+		// tslint:disable-next-line:no-invalid-this
+		return this.$attrs.type === 'multiple' ? h.createInput() : h.createElement('select');
 	},
 	ctrl: SelectController,
 	bindings: {
