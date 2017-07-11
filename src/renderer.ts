@@ -28,21 +28,21 @@ export class NgRenderer {
 
 		const $class = $isFormCheck ? ['form-check-input'] : ['form-control'];
 
-		const inputAttrs: [string, string][] = [
+		const $inputAttrs: [string, string][] = [
 			...(this.baseInputAttrs), // parens for syntax highlighting
 			...attrs,
 			['type', type],
 		];
 
 		if ($isRadio) {
-			inputAttrs.shift();
-			inputAttrs.unshift(['id', '{{id}}{{$index}}']);
-			inputAttrs.push(this.nameAttr);
+			$inputAttrs.shift();
+			$inputAttrs.unshift(['id', '{{id}}{{$index}}']);
+			$inputAttrs.push(this.nameAttr);
 		} else if (!$isCheckbox) {
-			attrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
+			$inputAttrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
 		}
 
-		return this.createElement('input', $class, inputAttrs);
+		return this.createElement('input', $class, $inputAttrs);
 	}
 
 	public createTextArea() {
