@@ -28,7 +28,7 @@ export class NgDataService {
 			return rsp == null ? defaultReturn : rsp.data as T;
 		} catch (err) {
 			this.onError(err);
-			return defaultReturn;
+			throw err;
 		}
 	}
 
@@ -51,6 +51,5 @@ export class NgDataService {
 				this.logger.devWarning(`An unregistered error occurred for '${err.config.url}' (code: ${err.status})`);
 				break;
 		}
-		return err;
 	}
 }
