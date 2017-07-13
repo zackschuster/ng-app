@@ -25,13 +25,13 @@ export class NgModalService {
 
 			appendTo.appendChild(backdrop);
 
-			controller.prototype.close = () => {
+			this.close = (...args: any[]) => {
 				modal.classList.remove('show');
 
 				setTimeout(() => {
 					backdrop.classList.remove('modal-backdrop');
 					appendTo.removeChild(backdrop);
-					$modal.close();
+					$modal.close(...args);
 				}, 100);
 			};
 		};
