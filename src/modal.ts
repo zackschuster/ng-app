@@ -1,5 +1,5 @@
 // tslint:disable:no-invalid-this only-arrow-functions
-import { element } from 'angular';
+import { IScope, element } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { NgModalOptions } from '..';
 import { NgApp } from './app';
@@ -12,29 +12,39 @@ export class NgModalService {
 		const { template, size, controller, controllerAs, appendTo } = Object.assign(defaults, options);
 
 		const app = this.app;
-		controller.prototype.$onInit = async function() {
-			this.$http = app.http();
-			this.$timeout = app.timeout();
+		function extendClass() {
+			// tslint:disable-next-line:max-classes-per-file
+			return class extends controller {
+				public close: (...args: any[]) => void;
+				public $http = app.http();
+				public $timeout = app.timeout();
 
-			await $modal.opened;
+				constructor(public $scope: IScope) {
+					super();
+				}
 
-			const modal = document.querySelector('.modal') as HTMLDivElement;
-			modal.classList.add('show');
-			modal.style.zIndex = '1050';
-			modal.style.color = 'black';
+				public async $onInit() {
+					await $modal.opened;
 
-			appendTo.appendChild(backdrop);
+					const modal = document.querySelector('.modal') as HTMLDivElement;
+					modal.classList.add('show');
+					modal.style.zIndex = '1050';
+					modal.style.color = 'black';
 
-			this.close = (...args: any[]) => {
-				modal.classList.remove('show');
+					appendTo.appendChild(backdrop);
 
-				setTimeout(() => {
-					backdrop.classList.remove('modal-backdrop');
-					appendTo.removeChild(backdrop);
-					$modal.close(...args);
-				}, 100);
+					this.close = (...args: any[]) => {
+						modal.classList.remove('show');
+
+						setTimeout(() => {
+							backdrop.classList.remove('modal-backdrop');
+							appendTo.removeChild(backdrop);
+							$modal.close(...args);
+						}, 100);
+					};
+				}
 			};
-		};
+		}
 
 		const backdrop = document.createElement('div');
 
@@ -52,7 +62,7 @@ export class NgModalService {
 			appendTo: element(appendTo),
 			template,
 			size,
-			controller,
+			controller: ['$scope', extendClass()],
 			controllerAs,
 		});
 

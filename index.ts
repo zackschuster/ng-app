@@ -19,7 +19,7 @@ export interface NgModalOptions {
 	template?: string;
 	appendTo?: Element;
 	size?: 'sm' | 'md' | 'lg';
-	controller?: any;
+	controller?: new() => any;
 	controllerAs?: string;
 }
 
