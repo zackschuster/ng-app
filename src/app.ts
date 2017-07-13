@@ -154,7 +154,7 @@ export class NgApp {
 	}
 
 	public modal() {
-		return new NgModalService(this.$injector.get('$uibModal'));
+		return new NgModalService(this.$injector.get('$uibModal'), this);
 	}
 
 	public scope() {

@@ -1,15 +1,21 @@
+// tslint:disable:no-invalid-this only-arrow-functions
 import { element } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { NgModalOptions } from '..';
+import { NgApp } from './app';
 
 export class NgModalService {
-	constructor(private $uibModal: IModalService) {}
+	constructor(private $uibModal: IModalService, private app: NgApp) {}
 
 	public open(options: NgModalOptions) {
 		const defaults = { appendTo: document.body, template: '', size: 'lg', controllerAs: '$ctrl' };
 		const { template, size, controller, controllerAs, appendTo } = Object.assign(defaults, options);
 
-		controller.prototype.$onInit = async () => {
+		const app = this.app;
+		controller.prototype.$onInit = async function() {
+			this.$http = app.http();
+			this.$timeout = app.timeout();
+
 			await $modal.opened;
 
 			const modal = document.querySelector('.modal') as HTMLDivElement;
