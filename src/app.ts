@@ -1,6 +1,6 @@
 // tslint:disable-next-line:max-line-length
 import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IRootElementService, IScope, ITimeoutService, animate, auto, bootstrap, injector, module } from 'angular';
-import { IState, IStateProvider } from 'angular-ui-router';
+import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { IConfig } from '@ledge/types';
 
 import { NgDataService } from './http';
@@ -121,6 +121,7 @@ export class NgApp {
 						public $attrs: IAttributes,
 						public $timeout: ITimeoutService,
 						public $injector: auto.IInjectorService,
+						public $state: IStateService,
 					) {
 						super();
 
@@ -132,7 +133,7 @@ export class NgApp {
 				}
 
 				// tslint:disable-next-line:only-arrow-functions
-				component.controller = ['$scope', '$element', '$attrs', '$timeout', '$injector', InternalController];
+				component.controller = ['$scope', '$element', '$attrs', '$timeout', '$injector', '$state', InternalController];
 			}
 
 			this.$components.set(name, component);
