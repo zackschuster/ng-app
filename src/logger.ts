@@ -1,5 +1,5 @@
 import { ILogCall, ILogService } from 'angular';
-import Noty, { NotyType } from 'noty';
+import * as Noty from 'noty';
 import { Callback, Indexed } from '@ledge/types';
 import { app } from '..';
 
@@ -56,7 +56,7 @@ export class NgLogger {
 		this.warning(`[DEV] ${msg}`);
 	}
 
-	private showNotification(text: string, type: NotyType, timeout: false | number = 1000) {
+	private showNotification(text: string, type: Noty.Type, timeout: false | number = 1000) {
 		new Noty({ type, text, theme: 'metroui', progressBar: false, timeout, closeWith: ['click'] }).show();
 
 		const logType = this.typeMap[type];

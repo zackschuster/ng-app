@@ -1,5 +1,5 @@
 import 'element-closest';
-import Choices from 'choices.js';
+import * as Choices from 'choices.js';
 import { IAttributes } from 'angular';
 import { NgController } from '../../controller';
 import { InputComponentOptions } from '../../..';
