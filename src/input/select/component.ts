@@ -46,8 +46,12 @@ class SelectController extends NgController {
 		});
 
 		this.choices.setChoices(list, value, text);
-		this.choices.setValueByChoice(this.ngModel);
 		this.choices.passedElement.addEventListener('change', this.changeEvent.bind(this));
+
+		// tslint:disable-next-line:triple-equals
+		if (list.includes(this.ngModel) || list.find(x => x[value] == this.ngModel) != null) {
+			this.choices.setValueByChoice(this.ngModel);
+		}
 	}
 
 	public changeEvent(event: any) {
