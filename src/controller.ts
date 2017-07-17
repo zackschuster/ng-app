@@ -1,4 +1,4 @@
-import { IAttributes, IScope, ITimeoutService, auto } from 'angular';
+import { IAttributes, IPromise, IQService, IScope, ITimeoutService, auto } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import { NgLogger } from './logger';
 import { NgDataService } from './http';
@@ -12,5 +12,7 @@ export class NgController {
 	public $http: NgDataService;
 	public $injector: auto.IInjectorService;
 	public $state: IStateService;
+	public $promise: IQService;
+	public $resolve: <T>(value: T | IPromise<T>) => IPromise<T>;
 	public ngModel: any;
 }

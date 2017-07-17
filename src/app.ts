@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IRootElementService, IScope, ITimeoutService, animate, auto, bootstrap, injector, module } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQService, IRootElementService, IScope, ITimeoutService, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { IConfig } from '@ledge/types';
 
@@ -114,6 +114,8 @@ export class NgApp {
 				class InternalController extends $controller {
 					public $log = logger;
 					public $http: NgDataService;
+					public $promise: IQService;
+					public $resolve: <T>(value: T | IPromise<T>) => IPromise<T>;
 
 					constructor(
 						public $scope: IScope,
@@ -122,6 +124,8 @@ export class NgApp {
 						public $timeout: ITimeoutService,
 						public $injector: auto.IInjectorService,
 						public $state: IStateService,
+
+						$q: IQService,
 					) {
 						super();
 
@@ -129,11 +133,17 @@ export class NgApp {
 							this.$injector.get('$http'),
 							this.$log,
 						);
+
+						this.$promise = $q;
+						this.$resolve = $q.resolve;
 					}
 				}
 
 				// tslint:disable-next-line:only-arrow-functions
-				component.controller = ['$scope', '$element', '$attrs', '$timeout', '$injector', '$state', InternalController];
+				component.controller = [
+					'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$q',
+					InternalController,
+				];
 			}
 
 			this.$components.set(name, component);
