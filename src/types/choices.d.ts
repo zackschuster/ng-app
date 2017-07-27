@@ -3,21 +3,21 @@ declare module "choices.js" {
 		passedElement: Element;
 
 		constructor(element?: string | HTMLElement | HTMLCollectionOf<HTMLElement> | NodeList, userConfig?: Choices.Options);
-		new(element?: string | HTMLElement | HTMLCollectionOf<HTMLElement> | NodeList, userConfig?: Choices.Options): this;
+		new(element?: string | HTMLElement | HTMLCollectionOf<HTMLElement> | NodeList, userConfig?: Choices.Options): this;;
 
 		/**
 		* Initialise Choices
 		* @return
 		* @public
 		*/
-	 init(): void
+	 init(): void;
 
 	 /**
 		* Destroy Choices and nullify values
 		* @return
 		* @public
 		*/
-	 destroy(): void
+	 destroy(): void;
 
 	 /**
 		* Render group choices into a DOM fragment and append to choice list
@@ -27,7 +27,7 @@ declare module "choices.js" {
 		* @return {DocumentFragment} Populated options fragment
 		* @private
 		*/
-	 renderGroups(groups: any[], choices: any[], fragment?: DocumentFragment): DocumentFragment
+	 renderGroups(groups: any[], choices: any[], fragment?: DocumentFragment): DocumentFragment;
 
 	 /**
 		* Render choices into a DOM fragment and append to choice list
@@ -36,7 +36,7 @@ declare module "choices.js" {
 		* @return {DocumentFragment} Populated choices fragment
 		* @private
 		*/
-		renderChoices(choices: any[], fragment?: DocumentFragment): DocumentFragment
+		renderChoices(choices: any[], fragment?: DocumentFragment): DocumentFragment;
 
 	 /**
 		* Render items into a DOM fragment and append to items list
@@ -45,14 +45,14 @@ declare module "choices.js" {
 		* @return
 		* @private
 		*/
-	 renderItems(items: any[], fragment?: DocumentFragment): void
+	 renderItems(items: any[], fragment?: DocumentFragment): void;
 
 	 /**
 		* Render DOM with values
 		* @return
 		* @private
 		*/
-	 render(): void
+	 render(): void;
 
 	 /**
 		* Select item (a selected item can be deleted)
@@ -61,7 +61,7 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 highlightItem(item: Element, runEvent?: boolean): this
+	 highlightItem(item: Element, runEvent?: boolean): this;
 
 	 /**
 		* Deselect item
@@ -69,21 +69,21 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-		unhighlightItem(item: Element): this
+		unhighlightItem(item: Element): this;
 
 	 /**
 		* Highlight items within store
 		* @return {Object} Class instance
 		* @public
 		*/
-	 highlightAll(): this
+	 highlightAll(): this;
 
 	 /**
 		* Deselect items within store
 		* @return {Object} Class instance
 		* @public
 		*/
-	 unhighlightAll(): this
+	 unhighlightAll(): this;
 
 	 /**
 		* Remove an item from the store by its value
@@ -91,7 +91,7 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 removeItemsByValue(value: string): this
+	 removeItemsByValue(value: string): this;
 
 	 /**
 		* Remove all items from store array
@@ -100,7 +100,7 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 removeActiveItems(excludedId?: number): this
+	 removeActiveItems(excludedId?: number): this;
 
 	 /**
 		* Remove all selected items from store
@@ -109,7 +109,7 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 removeHighlightedItems(runEvent?: boolean): this
+	 removeHighlightedItems(runEvent?: boolean): this;
 
 	 /**
 		* Show dropdown to user by adding active state class
@@ -117,7 +117,7 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 showDropdown(focusInput?: boolean): this
+	 showDropdown(focusInput?: boolean): this;
 
 	 /**
 		* Hide dropdown from user
@@ -125,14 +125,14 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 hideDropdown(blurInput?: boolean): this
+	 hideDropdown(blurInput?: boolean): this;
 
 	 /**
 		* Determine whether to hide or show dropdown based on its current state
 		* @return {Object} Class instance
 		* @public
 		*/
-	 toggleDropdown(): this
+	 toggleDropdown(): this;
 
 	 /**
 		* Get value(s) of input (i.e. inputted items (text) or selected choices (select))
@@ -140,7 +140,7 @@ declare module "choices.js" {
 		* @return {Array/String} selected value (select-one) or array of selected items (inputs & select-multiple)
 		* @public
 		*/
-	 getValue(valueOnly?: boolean): string | string[]
+	 getValue(valueOnly?: boolean): string | string[];
 
 	 /**
 		* Set value of input. If the input is a select box, a choice will be created and selected otherwise
@@ -149,7 +149,7 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 setValue(args: any[]): this
+	 setValue(args: any[]): this;
 
 	 /**
 		* Select value of select box via the value of an existing choice
@@ -157,7 +157,7 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 setValueByChoice(value: string | string[]): this
+	 setValueByChoice(value: string | string[]): this;
 
 	 /**
 		* Direct populate choices
@@ -168,7 +168,7 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 setChoices(choices: any[], value: string, label: string, replaceChoices?: boolean): this
+	 setChoices(choices: any[], value: string, label: string, replaceChoices?: boolean): this;
 
 	 /**
 		* Clear items,choices and groups
@@ -176,27 +176,27 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 clearStore(): this
+	 clearStore(): this;
 
 	 /**
 		* Set value of input to blank
 		* @return {Object} Class instance
 		* @public
 		*/
-	 clearInput(): this
+	 clearInput(): this;
 
 	 /**
 		* Enable interaction with Choices
 		* @return {Object} Class instance
 		*/
-	enable(): this
+	enable(): this;
 
 	 /**
 		* Disable interaction with Choices
 		* @return {Object} Class instance
 		* @public
 		*/
-	disable(): this
+	disable(): this;
 
 	 /**
 		* Populate options via ajax callback
@@ -204,74 +204,479 @@ declare module "choices.js" {
 		* @return {Object} Class instance
 		* @public
 		*/
-	 ajax(fn: (values: any) => any): this
+	 ajax(fn: (values: any) => any): this;
 	}
 
 	namespace Choices {
 		interface Options {
-			silent?: boolean,
-			items?: any[],
-			choices?: any[],
-			maxItemCount?: -1,
-			addItems?: boolean,
-			removeItems?: boolean,
-			removeItemButton?: boolean,
-			editItems?: boolean,
-			duplicateItems?: boolean,
-			delimiter?: string,
-			paste?: boolean,
-			searchEnabled?: boolean,
-			searchChoices?: boolean,
-			searchFloor?: number,
-			searchResultLimit?: number,
-			searchFields?: string[],
-			position?: string,
-			resetScrollPosition?: boolean,
-			regexFilter?: null,
-			shouldSort?: boolean,
-			sortFilter?: (current: any, next: any) => -1 | 0 | 1,
-			placeholder?: boolean,
-			placeholderValue?: string,
-			prependValue?: null,
-			appendValue?: null,
-			loadingText?: string,
-			noResultsText?: string,
-			noChoicesText?: string,
-			itemSelectText?: string,
-			addItemText?: (value: any) => string,
+      /**
+       * Optionally suppress console errors and warnings.
+			 *
+			 * Input types affected: text, select-single, select-multiple
+       * @default false
+       */
+			silent?: boolean;
+
+			/**
+			 * Add pre-selected items (see terminology) to text input.
+			 *
+			 * Pass an array of strings:
+			 *
+			 * ['value 1', 'value 2', 'value 3']
+			 *
+			 * Pass an array of objects:
+			 *
+			 * [{
+			 *		value: 'Value 1',
+			 *		label: 'Label 1',
+			 *		id: 1
+			 *	},
+			 *	{
+			 *		value: 'Value 2',
+			 *		label: 'Label 2',
+			 *		id: 2,
+			 *		customProperties: {
+			 *			random: 'I am a custom property'
+			 *		}
+			 * }]
+			 *
+			 * Input types affected: text
+			 * @default []
+			 */
+			items?: any[];
+
+			/**
+			 * Add choices (see terminology) to select input.
+			 *
+			 * Pass an array of objects:
+			 *
+			 * [{
+			 *		value: 'Option 1',
+			 *		label: 'Option 1',
+			 *		selected: true,
+			 *		disabled: false,
+			 *	},
+			 *	{
+			 *		value: 'Option 2',
+			 *		label: 'Option 2',
+			 *		selected: false,
+			 *		disabled: true,
+			 *		customProperties: {
+			 *			description: 'Custom description about Option 2',
+			 *			random: 'Another random custom property'
+			 *		},
+			 * }]
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default []
+			 */
+			choices?: any[];
+
+			/**
+			 * The amount of items a user can input/select ("-1" indicates no limit).
+			 *
+			 * Input types affected: text, select-multiple
+			 * @default -1
+			 */
+			maxItemCount?: number;
+
+			/**
+			 * Whether a user can add items.
+			 *
+			 * Input types affected: text
+			 * @default true
+			 */
+			addItems?: boolean;
+
+			/**
+			 * Whether a user can remove items.
+			 *
+			 * Input types affected: text, select-multiple
+			 * @default true
+			 */
+			removeItems?: boolean;
+
+			/**
+			 * Whether each item should have a remove button.
+			 *
+			 * Input types affected: text, select-one, select-multiple
+			 * @default false
+			 */
+			removeItemButton?: boolean;
+
+			/**
+			 * Whether a user can edit items. An item's value can be edited by pressing the backspace.
+			 *
+			 * Input types affected: text
+			 * @default false
+			 */
+			editItems?: boolean;
+
+			/**
+			 * Whether each inputted/chosen item should be unique.
+			 *
+			 * Input types affected: text, select-multiple
+			 * @default true
+			 */
+			duplicateItems?: boolean;
+
+			/**
+			 * What divides each value. The default delimiter seperates each value with a comma: "Value 1, Value 2, Value 3".
+			 *
+			 * Input types affected: text, select-multiple
+			 * @default true
+			 */
+			delimiter?: string;
+
+			/**
+			 * Whether a user can paste into the input.
+			 *
+			 * Input types affected: text, select-multiple
+			 * @default true
+			 */
+			paste?: boolean;
+
+			/**
+			 * Whether a search area should be shown. *Note:* Multiple select boxes will _always_ show search areas.
+			 *
+			 * Input types affected: select-one
+			 * @default true
+			 */
+			searchEnabled?: boolean;
+
+			/**
+			 * Whether choices should be filtered by input or not. If false, the search event will still emit, but choices will not be filtered.
+			 *
+			 * Input types affected: select-one
+			 * @default true
+			 */
+			searchChoices?: boolean;
+
+			/**
+			 * Specify which fields should be used when a user is searching. If you have added custom properties to your choices, you can add these values thus: ['label', 'value', 'customProperties.example'].
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default ['label', 'value']
+			 */
+			searchFields?: string[];
+
+			/**
+			 * The minimum length a search value should be before choices are searched.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default 1
+			 */
+			searchFloor?: number;
+
+			/**
+			 * The maximum amount of search results to show.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default 4
+			 */
+			searchResultLimit?: number;
+
+			/**
+			 * Whether the dropdown should appear above (top) or below (bottom) the input. By default, if there is not enough space within the window the dropdown will appear above the input, otherwise below it.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default 'auto'
+			 */
+			position?: string;
+
+			/**
+			 * Whether the scroll position should reset after adding an item.
+			 *
+			 * Input types affected: select-multiple
+			 * @default true
+			 */
+			resetScrollPosition?: boolean;
+
+			/**
+			 * A filter that will need to pass for a user to successfully add an item.
+			 *
+			 * Input types affected: text
+			 * @default null
+			 */
+			regexFilter?: RegExp;
+
+			/**
+			 * Whether choices and groups should be sorted. If false, choices/groups will appear in the order they were given.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default true
+			 */
+			shouldSort?: boolean;
+
+			/**
+			 * Whether items should be sorted. If false, items will appear in the order they were selected.
+			 *
+			 * Input types affected: text, select-multiple
+			 * @default false
+			 */
+			shouldSortItems?: boolean;
+
+			/**
+			 * The function that will sort choices and items before they are displayed (unless a user is searching). By default choices and items are sorted by alphabetical order.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 *
+			 * @example
+			 *	// Sorting via length of label from largest to smallest
+			 *	const example = new Choices(element, {
+			 * 		sortFilter: function(a, b) {
+			 * 			return b.label.length - a.label.length;
+			 * 		},
+			 *	};
+			 *
+			 * @default sortByAlpha
+			 */
+			sortFilter?: (current: any, next: any) => number;
+
+			/**
+			 * Whether the input should show a placeholder. Used in conjunction with placeholderValue. If placeholder is set to true and no value is passed to placeholderValue, the passed input's placeholder attribute will be used as the placeholder value.
+			 *
+			 * Input types affected: text, select-one, select-multiple
+			 * @default true
+			 */
+			placeholder?: boolean;
+
+			/**
+			 * The value of the inputs placeholder.
+			 *
+			 * Input types affected: text, select-one, select-multiple
+			 * @default null
+			 */
+			placeholderValue?: string;
+
+			/**
+			 * Prepend a value to each item added/selected.
+			 *
+			 * Input types affected: text, select-one, select-multiple
+			 * @default null
+			 */
+			prependValue?: string;
+
+			/**
+			 * Append a value to each item added/selected.
+			 *
+			 * Input types affected: text, select-one, select-multiple
+			 * @default null
+			 */
+			appendValue?: string;
+
+			/**
+			 * Whether selected choices should be removed from the list. By default choices are removed when they are selected in multiple select box. To always render choices pass always.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default 'auto'
+			 */
+			renderSelectedChoices?: string;
+
+			/**
+			 * The text that is shown whilst choices are being populated via AJAX.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default 'Loading...'
+			 */
+			loadingText?: string;
+
+			/**
+			 * The text that is shown when a user's search has returned no results. Optionally pass a function returning a string.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default 'No results found'
+			 */
+			noResultsText?: string | (() => string);
+
+			/**
+			 * The text that is shown when a user has selected all possible choices. Optionally pass a function returning a string.
+			 *
+			 * Input types affected: select-multiple
+			 * @default 'No choices to choose from'
+			 */
+			noChoicesText?: string | (() => string);
+
+			/**
+			 * The text that is shown when a user hovers over a selectable choice.
+			 *
+			 * Input types affected: select-one, select-multiple
+			 * @default 'Press to select'
+			 */
+			itemSelectText?: string;
+
+			/**
+			 * The text that is shown when a user has inputted a new item but has not pressed the enter key. To access the current input value, pass a function with a value argument (see the [default config](https://github.com/jshjohnson/Choices#setup) for an example), otherwise pass a string.
+			 *
+			 * Input types affected: text
+			 * @default 'Press Enter to add "${value}"'
+			 */
+			addItemText?: ((value: string) => string) | string;
+
+			/**
+			 * The text that is shown when a user has focus on the input but has already reached the max item count. To access the max item count, pass a function with a maxItemCount argument (see the [default config](https://github.com/jshjohnson/Choices#setup) for an example), otherwise pass a string.
+			 *
+			 * Input types affected: text
+			 * @default 'Only ${maxItemCount} values can be added.'
+			 */
 			maxItemText?: (maxItemCount: number) => string,
-			uniqueItemText?: string,
+
+			/**
+			 * The text that is shown when a user has submitted a new item that is already present in the selected list. To access the current input value, pass a function with a value argument, otherwise pass a string.
+			 *
+			 * @default 'Only unique values can be added.'
+			 */
+			uniqueItemText?: ((value: string) => string) | string;
+
+			/**
+			 * Classes added to HTML generated by Choices. By default classnames follow the BEM notation.
+			 */
 			classNames?: {
-				containerOuter?: string,
-				containerInner?: string,
-				input?: string,
-				inputCloned?: string,
-				list?: string,
-				listItems?: string,
-				listSingle?: string,
-				listDropdown?: string,
-				item?: string,
-				itemSelectable?: string,
-				itemDisabled?: string,
-				itemChoice?: string,
-				placeholder?: string,
-				group?: string,
-				groupHeading?: string,
-				button?: string,
-				activeState?: string,
-				focusState?: string,
-				openState?: string,
-				disabledState?: string,
-				highlightedState?: string,
-				hiddenState?: string,
-				flippedState?: string,
-				loadingState?: string,
-			},
+
+				/**
+				 * @default 'choices'
+				 */
+				containerOuter?: string;
+
+				/**
+				 * @default 'choices__inner'
+				 */
+				containerInner?: string;
+
+				/**
+				 * @default 'choices__input'
+				 */
+				input?: string;
+
+				/**
+				 * @default 'choices__input--cloned'
+				 */
+				inputCloned?: string;
+
+				/**
+				 * @default 'choices__list'
+				 */
+				list?: string;
+
+				/**
+				 * @default 'choices__list--multiple'
+				 */
+				listItems?: string;
+
+				/**
+				 * @default 'choices__list--single'
+				 */
+				listSingle?: string;
+
+				/**
+				 * @default 'choices__list--dropdown'
+				 */
+				listDropdown?: string;
+
+				/**
+				 * @default 'choices__item'
+				 */
+				item?: string;
+
+				/**
+				 * @default 'choices__item--selectable'
+				 */
+				itemSelectable?: string;
+
+				/**
+				 * @default 'choices__item--disabled'
+				 */
+				itemDisabled?: string;
+
+				/**
+				 * @default 'choices__item--choice'
+				 */
+				itemOption?: string;
+
+				/**
+				 * @default 'choices__group'
+				 */
+				group?: string;
+
+				/**
+				 * @default 'choices__heading'
+				 */
+				groupHeading?: string;
+
+				/**
+				 * @default 'choices__button'
+				 */
+				button?: string;
+
+				/**
+				 * @default 'is-active'
+				 */
+				activeState?: string;
+
+				/**
+				 * @default 'is-focused'
+				 */
+				focusState?: string;
+
+				/**
+				 * @default 'is-open'
+				 */
+				openState?: string;
+
+				/**
+				 * @default 'is-disabled'
+				 */
+				disabledState?: string;
+
+				/**
+				 * @default 'is-highlighted'
+				 */
+				highlightedState?: string;
+
+				/**
+				 * @default 'is-hidden'
+				 */
+				hiddenState?: string;
+
+				/**
+				 * @default 'is-flipped'
+				 */
+				flippedState?: string;
+
+				/**
+				 * @default 'is-loading'
+				 */
+				loadingState?: string;
+			};
+
+			/**
+			 * Choices uses the great Fuse library for searching. You can find more options here: https://github.com/krisk/Fuse#options
+			 */
 			fuseOptions?: {
-				include?: string,
-			},
-			callbackOnInit?: () => any,
-			callbackOnCreateTemplates?: () => any,
+				[index: string]: any;
+				/**
+				 * @default 'score'
+				 */
+				include?: string;
+			};
+
+			/**
+			 * Function to run once Choices initialises.
+			 *
+			 * Input types affected: text, select-one, select-multiple
+			 *
+			 * @default null
+			 */
+			callbackOnInit?: () => any;
+
+			/**
+			 * Function to run on template creation. Through this callback it is possible to provide custom templates for the various components of Choices (see terminology). For Choices to work with custom templates, it is important you maintain the various data attributes defined [here](https://github.com/jshjohnson/Choices/blob/67f29c286aa21d88847adfcd6304dc7d068dc01f/assets/scripts/src/choices.js#L1993-L2067).
+			 *
+			 * Input types affected: text, select-one, select-multiple
+			 *
+			 * @default null
+			 */
+			callbackOnCreateTemplates?: (template: string) => string;
 		}
 	}
 
