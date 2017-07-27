@@ -25,7 +25,7 @@
   "dependencies": {
     "@ledge/configs": "^1.0.0",
     "@ledge/is-ie-11": "^1.0.0",
-    "@ledge/types": "^2.0.0",
+    "@ledge/types": "^2.1.0",
     "@types/angular-animate": "^1.5.7",
     "@types/angular-ui-bootstrap": "^0.13.43",
     "@types/angular-ui-router": "^1.1.37",
@@ -34,16 +34,16 @@
     "angular-animate": "^1.6.5",
     "angular-elastic": "^2.5.1",
     "angular-ui-bootstrap": "^2.5.0",
-    "choices.js": "^2.8.7",
+    "choices.js": "^2.8.10",
     "element-closest": "^2.0.2",
-    "noty": "^3.1.0"
+    "noty": "^3.1.2"
   },
   "devDependencies": {
-    "ava": "^0.20.0",
+    "ava": "^0.21.0",
     "del-cli": "^1.1.0",
-    "rollup": "^0.45.0",
+    "rollup": "^0.45.2",
     "tslint": "^5.5.0",
-    "typescript": "^2.4.1",
+    "typescript": "^2.4.2",
     "window": "^4.1.0"
   }
 }
