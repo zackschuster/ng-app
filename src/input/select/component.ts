@@ -60,6 +60,7 @@ class SelectController extends NgController {
 			return;
 		}
 		this.ngModel = this.isMultiple ? [value].concat(this.ngModel || []) : value;
+		this.$timeout();
 	}
 }
 
