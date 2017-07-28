@@ -26,7 +26,7 @@
     "@ledge/configs": "^1.0.0",
     "@ledge/is-ie-11": "^1.0.0",
     "@ledge/types": "^2.1.0",
-    "@types/angular-animate": "^1.5.7",
+    "@types/angular-animate": "^1.5.8",
     "@types/angular-cookies": "^1.4.4",
     "@types/angular-ui-bootstrap": "^0.13.43",
     "@types/angular-ui-router": "^1.1.37",

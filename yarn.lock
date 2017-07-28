@@ -90,7 +90,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/angular-animate@^1.5.7":
+"@types/angular-animate@^1.5.8":
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/@types/angular-animate/-/angular-animate-1.5.8.tgz#578e058ee0ca5539e1795421a91ae2f52581dc8f"
   dependencies:
