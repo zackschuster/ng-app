@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQService, IRootElementService, IScope, ITimeoutService, animate, auto, bootstrap, injector, module } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQService, IRootElementService, IScope, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { IConfig } from '@ledge/types';
 
@@ -12,6 +12,7 @@ import { InputComponentOptions } from '..';
 import { InputService } from './input/service';
 
 import 'angular-animate';
+import 'angular-cookies';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
@@ -23,6 +24,7 @@ export class NgApp {
 	private readonly $id: string = '$core';
 	private readonly $dependencies = [
 		'ngAnimate',
+		'ngCookies',
 		'ui.bootstrap',
 		'ui.router',
 		'monospaced.elastic',
@@ -84,6 +86,12 @@ export class NgApp {
 		}]);
 
 		this.$bootstrap(document.body, [this.$id]);
+	}
+
+	// tslint:disable-next-line:ban-types
+	public run(block: Injectable<Function>) {
+		this.$module.run(block);
+		return this;
 	}
 
 	public registerRoutes(routes: IState[]) {
@@ -154,6 +162,10 @@ export class NgApp {
 
 	public renderer() {
 		return new NgRenderer(document);
+	}
+
+	public cookies() {
+		return this.$injector.get('$cookies');
 	}
 
 	public http() {

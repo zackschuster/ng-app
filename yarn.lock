@@ -96,6 +96,12 @@
   dependencies:
     "@types/angular" "*"
 
+"@types/angular-cookies@^1.4.4":
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/@types/angular-cookies/-/angular-cookies-1.4.4.tgz#ec0d7ca9ee658290f51e7d73c20ff0a92c5b2a26"
+  dependencies:
+    "@types/angular" "*"
+
 "@types/angular-ui-bootstrap@^0.13.43":
   version "0.13.43"
   resolved "https://registry.yarnpkg.com/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-0.13.43.tgz#99a09fb9aa722afbb157fd74b7b021595184c287"
@@ -162,6 +168,10 @@ amdefine@>=0.0.4:
 angular-animate@^1.6.5:
   version "1.6.5"
   resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.6.5.tgz#3817c75880d05fc899a6c8d4b09d1cc62a71e93a"
+
+angular-cookies@^1.6.5:
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.6.5.tgz#13949dadef19012ae5a1e7522212cb6408e6444e"
 
 angular-elastic@^2.5.1:
   version "2.5.1"
