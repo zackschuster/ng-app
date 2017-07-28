@@ -21,12 +21,8 @@ class SelectController extends NgController {
 		this.makeSelectList($select, this.list);
 
 		this.$scope.$watch(
-			(_: any) => this.list,
-			(_: any) => {
-				if (Array.isArray(this.list)) {
-					this.makeSelectList($select, this.list);
-				}
-			},
+			_ => this.list,
+			_ => this.makeSelectList($select, this.list),
 			true,
 		);
 	}
@@ -36,21 +32,24 @@ class SelectController extends NgController {
 			this.choices.destroy();
 		}
 
-		const value = this.$attrs.value || 'Value';
-		const text = this.$attrs.text || 'Text';
-
 		this.choices = new Choices(el, {
 			removeItemButton: true,
 			itemSelectText: '',
 			placeholderValue: this.$attrs.placeholder,
 		});
 
-		this.choices.setChoices(list, value, text);
 		this.choices.passedElement.addEventListener('change', this.changeEvent.bind(this));
 
-		// tslint:disable-next-line:triple-equals
-		if (list.includes(this.ngModel) || list.find(x => x[value] == this.ngModel) != null) {
-			this.choices.setValueByChoice(this.ngModel);
+		if (Array.isArray(list)) {
+			const value = this.$attrs.value || 'Value';
+			const text = this.$attrs.text || 'Text';
+
+			this.choices.setChoices(list, value, text);
+
+			// tslint:disable-next-line:triple-equals
+			if (list.includes(this.ngModel) || list.find(x => x[value] == this.ngModel) != null) {
+				this.choices.setValueByChoice(this.ngModel);
+			}
 		}
 	}
 
