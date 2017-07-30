@@ -70,4 +70,16 @@ export class NgRenderer {
 	public createSlot(name: string) {
 		return this.createElement('div', [], [['ng-transclude', name]]);
 	}
+
+	public createIconInput($input: HTMLInputElement, icon: string, inputGroupAttrs: [string, string][] = []) {
+		const $inputGroup = this.createElement('div', ['input-group']);
+		const $inputGroupAddon = this.createElement('div', ['input-group-addon'], inputGroupAttrs);
+		const $icon = this.createIcon(icon, icon.startsWith('fw!'));
+
+		$inputGroupAddon.appendChild($icon);
+		$inputGroup.appendChild($inputGroupAddon);
+		$inputGroup.appendChild($input);
+
+		return $inputGroup;
+	}
 }

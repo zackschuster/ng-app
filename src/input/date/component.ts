@@ -32,12 +32,6 @@ class DateInputController extends NgController {
 export const dateInput: InputComponentOptions = {
 	type: 'input',
 	render(h) {
-		const inputGroup = h.createElement('div', ['input-group']);
-		const inputGroupAddon = h.createElement('span', ['input-group-addon'], [
-			['ng-click', '$ctrl.toggleDatepicker()'],
-			['style', 'cursor:pointer'],
-		]);
-
 		const input = h.createInput('text', [
 			['uib-datepicker-popup', 'MM/dd/yyyy'],
 			['datepicker-append-to-body', 'true'],
@@ -46,13 +40,10 @@ export const dateInput: InputComponentOptions = {
 			['ng-change', '$ctrl.handleDateEvent()'],
 		]);
 
-		const icon = h.createIcon('calendar');
-
-		inputGroupAddon.appendChild(icon);
-		inputGroup.appendChild(inputGroupAddon);
-		inputGroup.appendChild(input);
-
-		return inputGroup;
+		return h.createIconInput(input, 'calendar', [
+			['ng-click', '$ctrl.toggleDatepicker()'],
+			['style', 'cursor:pointer'],
+		]);
 	},
 	ctrl: DateInputController,
 };

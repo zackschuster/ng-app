@@ -37,7 +37,7 @@ export interface InputComponentOptions extends IComponentOptions {
 	/**
 	 * Allow input group icons to be defined by users on the input
 	 */
-	enableInputGroup?: true;
+	canHaveIcon?: true;
 
 	/**
 	 * Special attributes to set on the input

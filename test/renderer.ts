@@ -95,3 +95,10 @@ test('renderer creates slot', t => {
 	t.true(label.attributes.length === 2);
 	t.true(label.getAttribute('ng-transclude') === 'test');
 });
+
+test('renderer creates icon input', t => {
+	const input = h.createInput();
+	const iconInput = h.createIconInput(input, 'calendar');
+	t.true(iconInput.querySelectorAll('.fa-calendar').length > 0);
+	t.true(iconInput.querySelector('input').isEqualNode(input));
+});

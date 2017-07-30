@@ -48,7 +48,7 @@ export class InputService {
 	/**
 	 * Determines if an element's label text should be screen-reader only
 	 */
-	public static isInputGroup($attrs: IAttributes) {
+	public static hasIcon($attrs: IAttributes) {
 		return $attrs.hasOwnProperty('icon');
 	}
 
@@ -131,15 +131,9 @@ export class InputService {
 
 			if (component.nestInputInLabel === true) {
 				$label.appendChild($input);
-			} else if (component.enableInputGroup === true && this.isInputGroup($attrs)) {
-				const $inputGroup = h.createElement('div', ['input-group']);
-				const $inputGroupAddon = h.createElement('div', ['input-group-addon']);
-				const $icon = h.createIcon($attrs.icon, $attrs.icon.startsWith('fw!'));
-
-				$inputGroupAddon.appendChild($icon);
-				$inputGroup.appendChild($inputGroupAddon);
-				$inputGroup.appendChild($input);
-				$template.appendChild($inputGroup);
+			} else if (component.canHaveIcon === true && this.hasIcon($attrs)) {
+				const $iconInput = h.createIconInput($input, $attrs.icon);
+				$template.appendChild($iconInput);
 			} else {
 				$template.appendChild($input);
 			}
