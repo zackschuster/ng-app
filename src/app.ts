@@ -12,7 +12,6 @@ import { InputComponentOptions } from '..';
 import { InputService } from './input/service';
 
 import 'angular-animate';
-import 'angular-cookies';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
@@ -24,7 +23,6 @@ export class NgApp {
 	private readonly $id: string = '$core';
 	private readonly $dependencies = [
 		'ngAnimate',
-		'ngCookies',
 		'ui.bootstrap',
 		'ui.router',
 		'monospaced.elastic',
@@ -163,10 +161,6 @@ export class NgApp {
 
 	public renderer() {
 		return new NgRenderer(document);
-	}
-
-	public cookies() {
-		return this.$injector.get('$cookies');
 	}
 
 	public http() {
