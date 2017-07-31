@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQService, IRootElementService, IScope, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { IConfig } from '@ledge/types';
 
@@ -41,13 +41,14 @@ export class NgApp {
 	constructor() {
 		this.$module
 			.config([
-				'$compileProvider', '$locationProvider',
-				($compileProvider: ICompileProvider, $locationProvider: ILocationProvider) => {
+				'$compileProvider', '$locationProvider', '$qProvider',
+				($compileProvider: ICompileProvider, $locationProvider: ILocationProvider, $qProvider: IQProvider) => {
 					$compileProvider
 						.commentDirectivesEnabled(false)
 						.cssClassDirectivesEnabled(false);
 
 					$locationProvider.html5Mode(true);
+					$qProvider.errorOnUnhandledRejections(false);
 			}])
 			.run(['$injector', '$animate', ($injector: auto.IInjectorService, $animate: animate.IAnimateService) => {
 				this.$injector = $injector;
