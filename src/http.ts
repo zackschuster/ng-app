@@ -13,26 +13,26 @@ export class NgDataService {
 	public async Get<T = any>(url: string, defaultReturn: T = null) {
 		const baseGetOptions = { params: { timestamp: (isIE11() ? Date.now() : null) } };
 		const options = Object.assign(baseGetOptions, this.baseOptions);
-		const promise: IHttpPromise<T> = this.$http.get(this.prefix + url, options);
-		return this.safeAwait<T>(promise, defaultReturn);
+		const promise = this.$http.get<T>(this.prefix + url, options);
+		return this.safeAwait(promise, defaultReturn);
 	}
 
-	public async Post<T = any>(url: string, data: T = null) {
-		const promise: IHttpPromise<T> = this.$http.post(this.prefix + url, data, this.baseOptions);
-		return this.safeAwait<T>(promise);
+	public async Post<T = any>(url: string, data: any = null) {
+		const promise = this.$http.post<T>(this.prefix + url, data, this.baseOptions);
+		return this.safeAwait(promise);
 	}
 
-	private async safeAwait<T = any>(promise: IHttpPromise<T>, defaultReturn: T = null) {
+	private async safeAwait<T>(promise: IHttpPromise<T>, defaultReturn: T = null) {
 		try {
-			const rsp = await promise as IHttpPromiseCallbackArg<{}>;
-			return rsp == null ? defaultReturn : rsp.data as T;
+			const rsp = await promise;
+			return rsp == null ? defaultReturn : rsp.data;
 		} catch (err) {
 			this.onError(err);
 			throw err;
 		}
 	}
 
-	private onError(err: IHttpPromiseCallbackArg<{}>) {
+	private onError(err: IHttpPromiseCallbackArg<any>) {
 		switch (err.status) {
 			case 404:
 				this.logger.devWarning(`Route '${err.config.url}' not found`);
