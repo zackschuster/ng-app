@@ -34,7 +34,7 @@
     "angular-animate": "^1.6.5",
     "angular-elastic": "^2.5.1",
     "angular-ui-bootstrap": "^2.5.0",
-    "choices.js": "^2.8.10",
+    "choices.js": "^3.0.2",
     "element-closest": "^2.0.2",
     "noty": "^3.1.2"
   },
