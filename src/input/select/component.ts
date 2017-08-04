@@ -9,6 +9,7 @@ function isMultiple($attrs: IAttributes) {
 }
 
 class SelectController extends NgController {
+	public static Placeholder = '----Select One----';
 	public list: any[];
 	public choices: Choices;
 	private isMultiple: boolean;
@@ -35,7 +36,7 @@ class SelectController extends NgController {
 		this.choices = new Choices(el, {
 			removeItemButton: true,
 			itemSelectText: '',
-			placeholderValue: this.$attrs.placeholder,
+			placeholderValue: this.isMultiple ? this.$attrs.placeholder || SelectController.Placeholder : '',
 		});
 
 		this.choices.passedElement.addEventListener('change', this.changeEvent.bind(this));
@@ -71,6 +72,10 @@ export const selectList: InputComponentOptions = {
 		// tslint:disable-next-line:no-invalid-this
 		if (isMultiple(this.$attrs)) {
 			input.setAttribute('multiple', 'true');
+		} else {
+			const placeholder = h.createElement('option', [], [['placeholder', 'true']]);
+			placeholder.innerText = SelectController.Placeholder;
+			input.appendChild(placeholder);
 		}
 
 		return input;
