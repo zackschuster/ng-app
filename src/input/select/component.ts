@@ -47,8 +47,7 @@ class SelectController extends NgController {
 
 			this.choices.setChoices(list, value, text);
 
-			// tslint:disable-next-line:triple-equals
-			if (list.includes(this.ngModel) || list.find(x => x[value] == this.ngModel) != null) {
+			if (list.includes(this.ngModel) || list.find(x => x[value] === this.ngModel) != null) {
 				this.choices.setValueByChoice(this.ngModel);
 			}
 		}
