@@ -4,12 +4,12 @@ import { IAttributes } from 'angular';
 import { NgController } from '../../controller';
 import { InputComponentOptions } from '../../..';
 
-function isMultiple($attrs: IAttributes) {
-	return $attrs.hasOwnProperty('multiple') || $attrs.type === 'multiple';
-}
-
 class SelectController extends NgController {
 	public static Placeholder = '----Select One----';
+	public static IsMultiple($attrs: IAttributes) {
+		return $attrs.hasOwnProperty('multiple') || $attrs.type === 'multiple';
+	}
+
 	public list: any[];
 	public choices: Choices;
 	private isMultiple: boolean;
@@ -18,7 +18,6 @@ class SelectController extends NgController {
 		const $el = (this.$element as any)[0] as HTMLElement;
 		const $select = $el.querySelector('select');
 
-		this.isMultiple = isMultiple(this.$attrs);
 		this.makeSelectList($select, this.list);
 
 		this.$scope.$watch(
@@ -36,7 +35,9 @@ class SelectController extends NgController {
 		this.choices = new Choices(el, {
 			removeItemButton: true,
 			itemSelectText: '',
-			placeholderValue: this.isMultiple ? this.$attrs.placeholder || SelectController.Placeholder : '',
+			placeholderValue: SelectController.IsMultiple(this.$attrs)
+				? this.$attrs.placeholder || SelectController.Placeholder
+				: '',
 		});
 
 		this.choices.passedElement.addEventListener('change', this.changeEvent.bind(this));
@@ -69,7 +70,7 @@ export const selectList: InputComponentOptions = {
 		const input = h.createElement('select');
 
 		// tslint:disable-next-line:no-invalid-this
-		if (isMultiple(this.$attrs)) {
+		if (SelectController.IsMultiple(this.$attrs)) {
 			input.setAttribute('multiple', 'true');
 		} else {
 			const placeholder = h.createElement('option', [], [['placeholder', 'true']]);
