@@ -20,11 +20,12 @@ export const radioList: InputComponentOptions = {
 	nestInputInLabel: true,
 	render(h) {
 		const radio = h.createInput('radio');
+		const value = this.$attrs.value || 'Value';
 
 		radio.removeAttribute('ng-model');
-		radio.setAttribute('ng-value', '{{item.Value}}');
-		radio.setAttribute('ng-checked', '$ctrl.ngModel == item.Value');
-		radio.setAttribute('ng-click', '$ctrl.toggle(item.Value)');
+		radio.setAttribute('ng-value', `{{item.${value}}}`);
+		radio.setAttribute('ng-checked', `$ctrl.ngModel == item.${value}`);
+		radio.setAttribute('ng-click', `$ctrl.toggle(item.${value}`);
 		radio.style.cursor = 'pointer';
 
 		if (this.$attrs.hasOwnProperty('inline')) {
@@ -37,7 +38,9 @@ export const radioList: InputComponentOptions = {
 		return radio;
 	},
 	renderLabel() {
-		const labelText = document.createTextNode('{{item.Text}}');
+		const text = this.$attrs.text || 'Text';
+
+		const labelText = document.createTextNode(`{{item.${text}}}`);
 		const spanTag = document.createElement('span');
 
 		spanTag.appendChild(labelText);

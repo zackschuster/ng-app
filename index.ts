@@ -76,5 +76,14 @@ export interface InputComponentOptions extends IComponentOptions {
 	/**
 	 * Special hook to override how label text is generated
 	 */
-	renderLabel?(this: { $label: HTMLLabelElement }, h: NgRenderer): void;
+	renderLabel?(this: {
+		/**
+		 * Input label
+		 */
+		$label: HTMLLabelElement;
+		/**
+		 * Angular.js $attrs object
+		 */
+		$attrs: IAttributes;
+	},           h: NgRenderer): void;
 }
