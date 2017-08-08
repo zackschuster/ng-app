@@ -16,7 +16,7 @@ class SelectController extends NgController {
 
 	public $postLink() {
 		const $el = (this.$element as any)[0] as HTMLElement;
-		const $select = $el.querySelector('select') as HTMLElement;
+		const $select = $el.querySelector('select');
 
 		this.isMultiple = isMultiple(this.$attrs);
 		this.makeSelectList($select, this.list);
