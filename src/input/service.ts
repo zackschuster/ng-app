@@ -6,6 +6,19 @@ import { NgRenderer } from '../renderer';
 import { InputComponentOptions } from '../..';
 
 export class InputService {
+	private static $validationAttrs = [
+		'required', 'ngRequired',
+		'disabled', 'ngDisabled',
+		'readonly', 'ngReadonly',
+	];
+
+	private static $validationMessages = new Map<string, string>([
+		['email', 'Email address must be in the following form: email@address.com'],
+		['required', 'This field is required'],
+		['minlength', 'Input is not long enough'],
+		['maxlength', 'Input is too long'],
+	]);
+
 	private static $counter = 0;
 	private static readonly $baseDefinition: IComponentOptions = {
 		transclude: {
@@ -66,7 +79,7 @@ export class InputService {
 	 * @param $attrs - The Angular.js $attrs object
 	 */
 	public static setInteractivityAttributes($input: Element, $attrs: IAttributes) {
-		['required', 'ngRequired', 'disabled', 'ngDisabled', 'readonly', 'ngReadonly']
+		this.$validationAttrs
 			.filter(x => $attrs.hasOwnProperty(x))
 			.forEach(x => {
 				$input.setAttribute(x, x.startsWith('ng') ? '$ctrl.' + x : 'true');
@@ -88,29 +101,32 @@ export class InputService {
 
 		// assign controller
 		// tslint:disable-next-line:max-classes-per-file
-		$definition.controller = class InputController extends $controller {
+		$definition.controller = class extends $controller {
 			constructor() {
 				super();
-
 				setTimeout(() => {
-					const $contain = '[ng-transclude="contain"]';
-					const $el = (this.$element as any)[0] as HTMLElement;
-					const contain = $el.closest($contain);
-					if (contain != null) {
-						this.$element.find('label').addClass('sr-only');
-					}
-
-					// const el = this.$element.find($contain);
-					const el = $el.querySelector($contain);
-					if (el.children.length > 0) {
-						el.remove();
-					}
+					this.verifyContainSlot();
 				});
+			}
+
+			private verifyContainSlot() {
+				const $contain = '[ng-transclude="contain"]';
+				const $el = this.$element[0] as HTMLElement;
+				const contain = $el.closest($contain);
+				if (contain != null) {
+					this.$element.find('label').addClass('sr-only');
+				}
+
+				const el = $el.querySelector($contain);
+				if (el.children.length === 0) {
+					el.remove();
+				}
 			}
 		};
 
 		// assign template
-		$definition.template = ['$attrs', ($attrs: IAttributes) => {
+		// tslint:disable-next-line:cyclomatic-complexity
+		$definition.template = ['$element', '$attrs', ($element: JQuery, $attrs: IAttributes) => {
 			// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 			const h = new NgRenderer(document);
 
@@ -162,10 +178,40 @@ export class InputService {
 			const $slot = h.createSlot('contain');
 			$template.appendChild($slot);
 
+			const $formName = ($element as any)[0].closest('form').getAttribute('name');
+			const $validationErrorExp = `$parent.${$formName}.{{id}}.$error`;
+			const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
+			const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
+			const $validationExp = `${$validationTouchedExp} && ${$validationErrorExp} && ${$validationInvalidExp}`;
+
+			$template.setAttribute('ng-class', `{ 'has-danger': ${$validationExp} }`);
+
+			const $validationBlock = h.createElement('div', [], [
+				['ng-messages', $validationExp],
+				['role', 'alert'],
+			]);
+
+			const attrs = Object.keys(component.attrs || {});
+
+			if ($input.type === 'email') {
+				attrs.push('email');
+			}
+
+			this.$validationAttrs
+				.concat(attrs)
+				.filter(x => x.startsWith('ng') === false && this.$validationMessages.has(x))
+				.forEach(x => {
+					const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
+					$message.innerText = this.$validationMessages.get(x);
+					$validationBlock.appendChild($message);
+				});
+
+			$template.appendChild($validationBlock);
+
 			const $id = this.getId($attrs);
 			let $html = $template.outerHTML.replace(/{{id}}/g, $id);
 
-			Object.keys(component.attrs || {}).forEach(prop => {
+			attrs.forEach(prop => {
 				$html = $html.replace(new RegExp('{{' + prop + '}}', 'g'), $attrs[prop] || component.attrs[prop]);
 			});
 

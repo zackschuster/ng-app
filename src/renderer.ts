@@ -1,10 +1,9 @@
 export class NgRenderer {
 	public baseInputAttrs: [string, string][] = [
 		['id', '{{id}}'],
+		['name', '{{id}}'],
 		['ng-model', '$ctrl.ngModel'],
 	];
-
-	public nameAttr: [string, string] = ['name', '{{id}}'];
 
 	constructor(private document: Document) {}
 
@@ -37,7 +36,6 @@ export class NgRenderer {
 		if ($isRadio) {
 			$inputAttrs.shift();
 			$inputAttrs.unshift(['id', '{{id}}{{$index}}']);
-			$inputAttrs.push(this.nameAttr);
 		} else if (!$isCheckbox) {
 			$inputAttrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
 		}
@@ -47,8 +45,7 @@ export class NgRenderer {
 
 	public createTextArea() {
 		return this.createElement('textarea', ['form-control'], [
-			...this.baseInputAttrs,
-			this.nameAttr,
+			...(this.baseInputAttrs),
 			['msd-elastic', ''],
 			['maxlength', '{{maxlength}}'],
 			['placeholder', '{{placeholder}}'],

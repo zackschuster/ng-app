@@ -67,7 +67,7 @@ class SelectController extends NgController {
 export const selectList: InputComponentOptions = {
 	type: 'input',
 	render(h) {
-		const input = h.createElement('select');
+		const input = h.createElement('select', [], [['name', '{{id}}'], ['id', '{{id}}']]);
 
 		// tslint:disable-next-line:no-invalid-this
 		if (SelectController.IsMultiple(this.$attrs)) {
