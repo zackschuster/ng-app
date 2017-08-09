@@ -169,6 +169,10 @@ angular-elastic@^2.5.1:
   dependencies:
     angular ">=1.0.6"
 
+angular-messages@^1.6.5:
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/angular-messages/-/angular-messages-1.6.5.tgz#cc8127c48dfc47e69fedd0b0eadd5a97d18983a8"
+
 angular-ui-bootstrap@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.0.tgz#2facefb915386655dc5f44150258032517236d01"

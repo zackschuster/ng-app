@@ -12,6 +12,7 @@ import { InputComponentOptions } from '..';
 import { InputService } from './input/service';
 
 import 'angular-animate';
+import 'angular-messages';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
@@ -23,6 +24,7 @@ export class NgApp {
 	private readonly $id: string = '$core';
 	private readonly $dependencies = [
 		'ngAnimate',
+		'ngMessages',
 		'ui.bootstrap',
 		'ui.router',
 		'monospaced.elastic',
