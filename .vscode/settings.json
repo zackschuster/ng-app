@@ -1,6 +1,8 @@
 {
 	"files.exclude": {
-		"**/*.js": true
+		"**/*.js": {
+			"when": "$(basename).ts"
+		}
 	},
 	"tslint.enable": true,
 	"tslint.autoFixOnSave": true,
