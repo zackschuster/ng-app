@@ -12,7 +12,6 @@ class SelectController extends NgComponentController {
 
 	public list: any[];
 	public choices: Choices;
-	private isMultiple: boolean;
 
 	public $postLink() {
 		const $el = (this.$element as any)[0] as HTMLElement;
@@ -40,7 +39,8 @@ class SelectController extends NgComponentController {
 				: undefined,
 		});
 
-		this.choices.passedElement.addEventListener('change', this.changeEvent.bind(this));
+		this.choices.passedElement.addEventListener('addItem', this.addItem.bind(this));
+		this.choices.passedElement.addEventListener('removeItem', this.removeItem.bind(this));
 
 		if (Array.isArray(list)) {
 			const value = this.$attrs.value || 'Value';
@@ -54,12 +54,25 @@ class SelectController extends NgComponentController {
 		}
 	}
 
-	public changeEvent(event: any) {
+	public addItem(event: any) {
 		const { value } = event.detail;
-		if (this.ngModel != null && this.isMultiple ? this.ngModel.includes(value) : this.ngModel === value) {
+		const isMultiple = SelectController.IsMultiple(this.$attrs);
+		if (this.ngModel != null && isMultiple ? this.ngModel.includes(value) : this.ngModel === value) {
 			return;
 		}
-		this.ngModel = this.isMultiple ? [value].concat(this.ngModel || []) : value;
+		this.ngModel = isMultiple ? [value].concat(this.ngModel || []) : value;
+		this.$timeout();
+	}
+
+	public removeItem(event: any) {
+		if (SelectController.IsMultiple(this.$attrs)) {
+			if (this.ngModel.length === 0) return;
+
+			const { value } = event.detail;
+			this.ngModel = this.ngModel.filter((x: any) => x !== value);
+		} else {
+			this.ngModel = undefined;
+		}
 		this.$timeout();
 	}
 }
