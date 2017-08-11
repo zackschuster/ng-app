@@ -49,11 +49,13 @@ export class InputService {
 		return this.modelIdentifier($attrs) + (unique ? '_' + this.$counter++ : '');
 	}
 
+	/**
+	 * Gets text -- intended for a label -- from the ngModel property text
+	 */
 	public static getDefaultLabelText($attrs: IAttributes) {
 		return this.modelIdentifier($attrs).split(/(?=[A-Z])/).join(' ');
 	}
 
-	// these next three are fairly silly, but it beats having to remember strings
 	/**
 	 * Determines if an element's label text should be screen-reader only
 	 */
@@ -205,11 +207,13 @@ export class InputService {
 				// TODO: figure out how consumers can pass in label text without requiring two transclusion slots
 				const $transclude = document.createElement('ng-transclude');
 				$transclude.textContent = this.getDefaultLabelText($attrs);
+
 				if ($attrs.hasOwnProperty('required')) {
 					const $span = h.createElement('span', ['text-danger']);
 					$span.textContent = ' *';
 					$transclude.appendChild($span);
 				}
+
 				$label.appendChild($transclude);
 			}
 
