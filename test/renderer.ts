@@ -33,7 +33,7 @@ test('renderer creates text input by default', t => {
 	t.true(input.type === 'text');
 	t.true(input.classList.length === 1);
 	t.true(input.classList.contains('form-control'));
-	t.true(input.attributes.length === 6);
+	t.true(input.attributes.length === 7);
 });
 
 test('renderer creates radio and checkbox inputs', t => {
@@ -47,7 +47,7 @@ test('renderer creates radio and checkbox inputs', t => {
 	t.true(checkbox.type === 'checkbox');
 	t.true(checkbox.classList.length === 1);
 	t.true(checkbox.classList.contains('form-check-input'));
-	t.true(checkbox.attributes.length === 4);
+	t.true(checkbox.attributes.length === 5);
 });
 
 test('renderer creates textarea', t => {
