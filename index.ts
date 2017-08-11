@@ -3,7 +3,7 @@ import { Indexed } from '@ledge/types';
 
 import * as inputs from './src/input';
 import { NgApp } from './src/app';
-import { NgController } from './src/controller';
+import { NgComponentController, NgController } from './src/controller';
 import { NgRenderer } from './src/renderer';
 
 const $inputs = new Map(Object.entries(inputs));
@@ -13,7 +13,7 @@ export const app = new NgApp()
 export { NgDataService } from './src/http';
 export { NgLogger } from './src/logger';
 export { NgModalService } from './src/modal';
-export { NgController, NgRenderer };
+export { NgController, NgComponentController, NgRenderer };
 
 export interface NgModalOptions {
 	template?: string;
@@ -30,9 +30,9 @@ export interface InputComponentOptions extends IComponentOptions {
 	type: 'input';
 
 	/**
-	 * Use this instead of controller (the app will disregard the controller prop for type safety reasons)
+	 * Use this instead of controller, as ng-app will disregard the controller prop for type safety reasons.
 	 */
-	ctrl?: new(...args: any[]) => NgController;
+	ctrl?: new(...args: any[]) => NgComponentController;
 
 	/**
 	 * Allow input group icons to be defined by users on the input

@@ -1,10 +1,10 @@
 import 'element-closest';
 import * as Choices from 'choices.js';
 import { IAttributes } from 'angular';
-import { NgController } from '../../controller';
+import { NgComponentController } from '../../controller';
 import { InputComponentOptions } from '../../..';
 
-class SelectController extends NgController {
+class SelectController extends NgComponentController {
 	public static Placeholder = '----Select One----';
 	public static IsMultiple($attrs: IAttributes) {
 		return $attrs.hasOwnProperty('multiple') || $attrs.type === 'multiple';
@@ -37,7 +37,7 @@ class SelectController extends NgController {
 			itemSelectText: '',
 			placeholderValue: SelectController.IsMultiple(this.$attrs)
 				? this.$attrs.placeholder || SelectController.Placeholder
-				: '',
+				: undefined,
 		});
 
 		this.choices.passedElement.addEventListener('change', this.changeEvent.bind(this));

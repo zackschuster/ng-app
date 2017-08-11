@@ -1,17 +1,5 @@
 // tslint:disable:no-invalid-this
-import { NgController } from '../../controller';
 import { InputComponentOptions } from '../../..';
-
-class RadioListController extends NgController {
-	public toggle(value: any) {
-		// tslint:disable-next-line:triple-equals
-		if (this.ngModel == value) {
-			this.ngModel = null;
-		} else {
-			this.ngModel = value;
-		}
-	}
-}
 
 export const radioList: InputComponentOptions = {
 	type: 'input',
@@ -52,5 +40,4 @@ export const radioList: InputComponentOptions = {
 		list: '<',
 		ngChecked: '<',
 	},
-	ctrl: RadioListController,
 };

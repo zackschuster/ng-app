@@ -1,7 +1,7 @@
 // tslint:disable:member-ordering
 import { IAttributes, IComponentOptions, IController } from 'angular';
 
-import { NgController } from '../controller';
+import { NgComponentController } from '../controller';
 import { NgRenderer } from '../renderer';
 import { InputComponentOptions } from '../..';
 
@@ -23,6 +23,9 @@ export class InputService {
 	private static readonly $baseDefinition: IComponentOptions = {
 		transclude: {
 			contain: '?contain',
+		},
+		require: {
+			ngModelCtrl: 'ngModel',
 		},
 		bindings: {
 			ngModel: '=',
@@ -82,8 +85,62 @@ export class InputService {
 		this.$validationAttrs
 			.filter(x => $attrs.hasOwnProperty(x))
 			.forEach(x => {
-				$input.setAttribute(x, x.startsWith('ng') ? '$ctrl.' + x : 'true');
+				$input.setAttribute(
+					x.replace(/[A-Z]/, s => '-' + s.toLowerCase()),
+					x.startsWith('ng') ? '$ctrl.' + x : 'true',
+				);
 			});
+	}
+
+	public static wrapComponentCtrl($ctrl: new(...args: any[]) => IController) {
+		// tslint:disable-next-line:max-classes-per-file
+		return class extends $ctrl {
+			constructor() {
+				super();
+				setTimeout(() => {
+					const $el = this.$element[0] as HTMLElement;
+					const $contain = $el.querySelector('[ng-transclude="contain"]');
+					if ($contain != null && $contain.children.length === 0) {
+						$contain.remove();
+					}
+					const $fieldset = $el.closest('fieldset');
+					if ($fieldset != null) {
+						const $legend = $fieldset.querySelector('legend');
+						const $observer = new MutationObserver($mutations => {
+							const $shouldRemoveDanger = $mutations.some(m => m.oldValue.includes('has-danger-remove'));
+							$legend.classList[$shouldRemoveDanger ? 'remove' : 'add']('text-danger');
+						});
+
+						$observer.observe(
+							$el.querySelector('.form-group'),
+							{ attributes: true, attributeOldValue: true, attributeFilter: ['class'] },
+						);
+
+						this.$scope.$on('$destroy', () => $observer.disconnect());
+					}
+				});
+			}
+		};
+	}
+
+	/**
+	 * Get the appropriate form for a given element
+	 * @param $element {Element} The element to find a form for
+	 */
+	public static getForm($element: Element) {
+		let form = $element.closest('form');
+
+		if (form == null) {
+			if (document.forms.length === 1) {
+				form = document.forms.item(0);
+			} else {
+				// this will fail if the element has ng-repeat on it
+				const formList = Array.from(document.forms);
+				form = formList.find(x => x.contains($element));
+			}
+		}
+
+		return form;
 	}
 
 	/**
@@ -97,42 +154,21 @@ export class InputService {
 		Object.assign($definition.bindings, component.bindings);
 		Object.assign($definition.transclude, component.transclude);
 
-		const $controller = component.ctrl || NgController as new(...args: any[]) => IController;
-
 		// assign controller
-		// tslint:disable-next-line:max-classes-per-file
-		$definition.controller = class extends $controller {
-			constructor() {
-				super();
-				setTimeout(() => {
-					this.verifyContainSlot();
-				});
-			}
+		$definition.controller = this.wrapComponentCtrl(
+			component.ctrl || NgComponentController as new(...args: any[]) => IController);
 
-			private verifyContainSlot() {
-				const $contain = '[ng-transclude="contain"]';
-				const $el = this.$element[0] as HTMLElement;
-				const contain = $el.closest($contain);
-				if (contain != null) {
-					this.$element.find('label').addClass('sr-only');
-				}
-
-				const el = $el.querySelector($contain);
-				if (el.children.length === 0) {
-					el.remove();
-				}
-			}
-		};
-
-		// assign template
+		// assign template - this thing's nasty :(
 		// tslint:disable-next-line:cyclomatic-complexity
 		$definition.template = ['$element', '$attrs', ($element: JQuery, $attrs: IAttributes) => {
+			const $el = ($element as any)[0] as Element;
+
 			// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 			const h = new NgRenderer(document);
 
 			// as it's an input, we'll put it inside a form-group container.
 			// this can be modified by a consumer through configuration.
-			const $template = h.createElement('div', [component.templateClass || 'form-group']);
+			let $template = h.createElement('div', [component.templateClass || 'form-group']);
 
 			// see above: all inputs must have labels
 			const $label = h.createLabel([component.labelClass || 'form-control-label']);
@@ -145,23 +181,26 @@ export class InputService {
 			// required, disabled, readonly, and their ng-equivalents
 			this.setInteractivityAttributes($input, $attrs);
 
-			if (component.nestInputInLabel === true) {
+			if (component.nestInputInLabel) {
 				$label.appendChild($input);
-			} else if (component.canHaveIcon === true && this.hasIcon($attrs)) {
+			} else if (component.canHaveIcon && this.hasIcon($attrs)) {
 				const $iconInput = h.createIconInput($input, $attrs.icon);
 				$template.appendChild($iconInput);
 			} else {
 				$template.appendChild($input);
 			}
 
-			if (this.isSrOnly($attrs)) {
+			if ($el.closest('contain') != null) {
+				$input.style.marginTop = '8px';
+				$label.classList.add('sr-only');
+			} else if (this.isSrOnly($attrs)) {
 				$label.classList.add('sr-only');
 			}
 
-			// check if consumer wishes to render label; if not, add a default label
-			// based on $attrs.ngModel which a consumer can override through anonymous transclusion.
+			// check if consumer wishes to render label; if not, add a default label based on
+			// $attrs.ngModel which a consumer can override through anonymous transclusion.
 			if (component.renderLabel != null) {
-				component.renderLabel.call({ $label }, h);
+				component.renderLabel.call({ $label, $attrs }, h);
 			} else {
 				// TODO: figure out how consumers can pass in label text without requiring two transclusion slots
 				const $transclude = document.createElement('ng-transclude');
@@ -175,19 +214,20 @@ export class InputService {
 			}
 
 			// add a transclusion slot for e.g. nesting inputs
-			const $slot = h.createSlot('contain');
-			$template.appendChild($slot);
+			$template.appendChild(
+				h.createSlot('contain'),
+			);
 
-			const $formName = ($element as any)[0].closest('form').getAttribute('name');
-			const $validationErrorExp = `$parent.${$formName}.{{id}}.$error`;
+			const $formName = this.getForm($el).getAttribute('name');
+			const $formNameExp = `$parent.${$formName}.`;
+			const $validationErrorExp = `${$formNameExp}{{id}}.$error`;
 			const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
 			const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
-			const $validationExp = `${$validationTouchedExp} && ${$validationErrorExp} && ${$validationInvalidExp}`;
-
-			$template.setAttribute('ng-class', `{ 'has-danger': ${$validationExp} }`);
+			const $validationExp = `(${$validationTouchedExp} || ${$formNameExp}$submitted) && ${$validationInvalidExp}`;
 
 			const $validationBlock = h.createElement('div', [], [
-				['ng-messages', $validationExp],
+				['ng-messages', $validationErrorExp],
+				['ng-show', $validationExp],
 				['role', 'alert'],
 			]);
 
@@ -195,6 +235,10 @@ export class InputService {
 
 			if ($input.type === 'email') {
 				attrs.push('email');
+			} else if ($input.type === 'radio') {
+				const $newTpl = h.createElement('div', ['form-group']);
+				$newTpl.appendChild($template);
+				$template = $newTpl;
 			}
 
 			this.$validationAttrs
@@ -207,13 +251,16 @@ export class InputService {
 				});
 
 			$template.appendChild($validationBlock);
+			$template.setAttribute('ng-class', `{ 'has-danger': ${$validationExp} }`);
 
 			const $id = this.getId($attrs);
 			let $html = $template.outerHTML.replace(/{{id}}/g, $id);
 
-			attrs.forEach(prop => {
-				$html = $html.replace(new RegExp('{{' + prop + '}}', 'g'), $attrs[prop] || component.attrs[prop]);
-			});
+			attrs
+				.filter(x => x !== 'email')
+				.forEach(prop => {
+					$html = $html.replace(new RegExp('{{' + prop + '}}', 'g'), $attrs[prop] || component.attrs[prop]);
+				});
 
 			return $html;
 		}];
