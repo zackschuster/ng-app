@@ -10,10 +10,7 @@ export const radioList: InputComponentOptions = {
 		const radio = h.createInput('radio');
 		const value = this.$attrs.value || 'Value';
 
-		radio.removeAttribute('ng-model');
 		radio.setAttribute('ng-value', `{{item.${value}}}`);
-		radio.setAttribute('ng-checked', `$ctrl.ngModel == item.${value}`);
-		radio.setAttribute('ng-click', `$ctrl.toggle(item.${value}`);
 		radio.style.cursor = 'pointer';
 
 		if (this.$attrs.hasOwnProperty('inline')) {
