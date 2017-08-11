@@ -26,7 +26,7 @@ class SelectController extends NgComponentController {
 		);
 	}
 
-	public makeSelectList(el: HTMLElement, list: any[]) {
+	public makeSelectList(el: HTMLSelectElement, list: any[]) {
 		if (this.choices != null) {
 			this.choices.destroy();
 		}
