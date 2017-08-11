@@ -23,7 +23,6 @@
     "test": "yarn ava && yarn trash"
   },
   "dependencies": {
-    "@ledge/configs": "^1.0.0",
     "@ledge/is-ie-11": "^1.0.0",
     "@ledge/types": "^2.1.0",
     "@types/angular-animate": "^1.5.8",
@@ -40,6 +39,7 @@
     "noty": "^3.1.2"
   },
   "devDependencies": {
+    "@ledge/configs": "^1.0.0",
     "ava": "^0.21.0",
     "del-cli": "^1.1.0",
     "rollup": "^0.45.2",
