@@ -1,6 +1,6 @@
 {
   "name": "@ledge/ng-app",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "An easier way to use Angular.js",
   "homepage": "https://github.com/zackschuster/ng-app",
   "author": "Zack Schuster (https://github.com/zackschuster)",
