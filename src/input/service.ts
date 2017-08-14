@@ -105,21 +105,6 @@ export class InputService {
 					if ($contain != null && $contain.children.length === 0) {
 						$contain.remove();
 					}
-					const $fieldset = $el.closest('fieldset');
-					if ($fieldset != null) {
-						const $legend = $fieldset.querySelector('legend');
-						const $observer = new MutationObserver($mutations => {
-							const $shouldRemoveDanger = $mutations.some(m => m.oldValue.includes('has-danger-remove'));
-							$legend.classList[$shouldRemoveDanger ? 'remove' : 'add']('text-danger');
-						});
-
-						$observer.observe(
-							$el.querySelector('.form-group'),
-							{ attributes: true, attributeOldValue: true, attributeFilter: ['class'] },
-						);
-
-						this.$scope.$on('$destroy', () => $observer.disconnect());
-					}
 				});
 			}
 		};
@@ -255,7 +240,6 @@ export class InputService {
 				});
 
 			$template.appendChild($validationBlock);
-			$template.setAttribute('ng-class', `{ 'has-danger': ${$validationExp} }`);
 
 			const $id = this.getId($attrs);
 			let $html = $template.outerHTML.replace(/{{id}}/g, $id);
