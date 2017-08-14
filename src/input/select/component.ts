@@ -1,3 +1,4 @@
+// tslint:disable:no-invalid-this
 import 'element-closest';
 import * as Choices from 'choices.js';
 import { IAttributes } from 'angular';
@@ -26,45 +27,47 @@ class SelectController extends NgComponentController {
 		);
 	}
 
-	public makeSelectList(el: HTMLSelectElement, list: any[]) {
+	public async makeSelectList(el: HTMLSelectElement, list: any[]) {
 		if (this.choices != null) {
 			this.choices.destroy();
 		}
 
-		this.choices = new Choices(el, {
-			removeItemButton: true,
-			itemSelectText: '',
-			placeholderValue: SelectController.IsMultiple(this.$attrs)
-				? this.$attrs.placeholder || SelectController.Placeholder
-				: undefined,
-		});
+		const value = this.$attrs.value || 'Value';
+		const text = this.$attrs.text || 'Text';
 
-		this.choices.passedElement.addEventListener('addItem', this.addItem.bind(this));
-		this.choices.passedElement.addEventListener('removeItem', this.removeItem.bind(this));
+		if (SelectController.IsMultiple(this.$attrs)) {
+			this.choices = this.makeChoices(el);
 
-		if (Array.isArray(list)) {
-			const value = this.$attrs.value || 'Value';
-			const text = this.$attrs.text || 'Text';
+			if (Array.isArray(list)) {
+				this.choices.setChoices(list, value, text);
 
-			this.choices.setChoices(list, value, text);
-
-			if (list.includes(this.ngModel) || list.find(x => x[value] === this.ngModel) != null) {
-				this.choices.setValueByChoice(this.ngModel);
+				if (list.includes(this.ngModel) || list.find(x => x[value] === this.ngModel) != null) {
+					this.choices.setValueByChoice(this.ngModel);
+				}
 			}
+		} else if (Array.isArray(list)) {
+			this.$timeout()
+				.finally(() => {
+					this.choices = this.makeChoices(el);
+
+					if (list.includes(this.ngModel) || list.find(x => x[value] === this.ngModel) != null) {
+						this.choices.setValueByChoice(this.ngModel);
+					}
+				});
 		}
 	}
 
-	public addItem(event: any) {
+	private addItem(event: any) {
 		const { value } = event.detail;
 		const isMultiple = SelectController.IsMultiple(this.$attrs);
-		if (this.ngModel != null && isMultiple ? this.ngModel.includes(value) : this.ngModel === value) {
+		if (this.ngModel != null && (isMultiple ? this.ngModel.includes(value) : this.ngModel === value)) {
 			return;
 		}
 		this.ngModel = isMultiple ? [value].concat(this.ngModel || []) : value;
 		this.$timeout();
 	}
 
-	public removeItem(event: any) {
+	private removeItem(event: any) {
 		if (SelectController.IsMultiple(this.$attrs)) {
 			if (this.ngModel.length === 0) return;
 
@@ -75,6 +78,21 @@ class SelectController extends NgComponentController {
 		}
 		this.$timeout();
 	}
+
+	private makeChoices(el: HTMLSelectElement, isMultiple: boolean = SelectController.IsMultiple(this.$attrs)) {
+		const opts: Choices.Options = { removeItemButton: true, itemSelectText: '' };
+
+		if (isMultiple) {
+			opts.placeholderValue = this.$attrs.placeholder || SelectController.Placeholder;
+		}
+
+		const choices = new Choices(el, opts);
+
+		choices.passedElement.addEventListener('addItem', this.addItem.bind(this));
+		choices.passedElement.addEventListener('removeItem', this.removeItem.bind(this));
+
+		return choices;
+	}
 }
 
 export const selectList: InputComponentOptions = {
@@ -82,13 +100,22 @@ export const selectList: InputComponentOptions = {
 	render(h) {
 		const input = h.createElement('select', [], [['name', '{{id}}'], ['id', '{{id}}']]);
 
-		// tslint:disable-next-line:no-invalid-this
 		if (SelectController.IsMultiple(this.$attrs)) {
 			input.setAttribute('multiple', 'true');
 		} else {
 			const placeholder = h.createElement('option', [], [['placeholder', 'true']]);
 			placeholder.innerText = SelectController.Placeholder;
+			placeholder.value = '';
 			input.appendChild(placeholder);
+
+			const repeaterOption = h.createElement('option', [], [
+				['ng-repeat', 'item in $ctrl.list'],
+				['ng-value', `{{item.${this.$attrs.value || 'Value'}}}`],
+			]);
+			repeaterOption.innerText = `{{item.${this.$attrs.text || 'Text'}}}`;
+			input.appendChild(repeaterOption);
+
+			input.classList.add('form-control', 'choices__input');
 		}
 
 		return input;
