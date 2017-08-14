@@ -11,7 +11,7 @@ export class NgRenderer {
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes: string[] = [], attrs: [string, string][] = []) {
 		const $el = this.document.createElement(tagName);
 
-		$el.classList.add(...classes);
+		classes.forEach(c => $el.classList.add(c));
 
 		for (const [key, value] of attrs) {
 			$el.setAttribute(key, value);

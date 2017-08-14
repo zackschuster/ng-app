@@ -1,4 +1,5 @@
 // tslint:disable:member-ordering
+import isIE11 from '@ledge/is-ie-11';
 import { IAttributes, IComponentOptions, IController } from 'angular';
 
 import { NgComponentController } from '../controller';
@@ -103,7 +104,11 @@ export class InputService {
 					const $el = this.$element[0] as HTMLElement;
 					const $contain = $el.querySelector('[ng-transclude="contain"]');
 					if ($contain != null && $contain.children.length === 0) {
-						$contain.remove();
+						if (isIE11()) {
+							($contain as any).removeNode(true);
+						} else {
+							$contain.remove();
+						}
 					}
 				});
 			}
