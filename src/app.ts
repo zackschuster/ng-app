@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { IConfig } from '@ledge/types';
 
@@ -50,7 +50,15 @@ export class NgApp {
 					$locationProvider.html5Mode(true);
 					$qProvider.errorOnUnhandledRejections(false);
 			}])
-			.run(['$injector', '$animate', ($injector: auto.IInjectorService, $animate: animate.IAnimateService) => {
+			.run([
+				'$injector', '$animate', '$templateCache',
+				($injector: auto.IInjectorService, $animate: animate.IAnimateService, $templateCache: ITemplateCacheService) => {
+				['day', 'month', 'year'].forEach(x => {
+					const tplName = `uib/template/datepicker/${x}.html`;
+					const tpl = $templateCache.get<string>(tplName).replace(/glyphicon/g, 'fa');
+					$templateCache.put(tplName, tpl);
+				});
+
 				this.$injector = $injector;
 				$animate.enabled(true);
 			}]);
