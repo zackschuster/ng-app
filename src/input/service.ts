@@ -132,7 +132,7 @@ export class InputService {
 			}
 		}
 
-		return form;
+		return form as HTMLFormElement;
 	}
 
 	/**
@@ -212,39 +212,46 @@ export class InputService {
 				h.createSlot('contain'),
 			);
 
-			const $formName = this.getForm($el).getAttribute('name');
-			const $formNameExp = `$parent.${$formName}.`;
-			const $validationErrorExp = `${$formNameExp}{{id}}.$error`;
-			const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
-			const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
-			const $validationExp = `(${$validationTouchedExp} || ${$formNameExp}$submitted) && ${$validationInvalidExp}`;
-
-			const $validationBlock = h.createElement('div', [], [
-				['ng-messages', $validationErrorExp],
-				['ng-show', $validationExp],
-				['role', 'alert'],
-			]);
-
 			const attrs = Object.keys(component.attrs || {});
+			const $form = this.getForm($el);
 
-			if ($input.type === 'email') {
-				attrs.push('email');
-			} else if ($input.type === 'radio') {
+			if ($form != null) {
+				const $formName = $form.getAttribute('name');
+
+				const $formNameExp = `$parent.${$formName}.`;
+				const $validationErrorExp = `${$formNameExp}{{id}}.$error`;
+				const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
+				const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
+				const $validationExp = `(${$validationTouchedExp} || ${$formNameExp}$submitted) && ${$validationInvalidExp}`;
+
+				const $validationBlock = h.createElement('div', [], [
+					['ng-messages', $validationErrorExp],
+					['ng-show', $validationExp],
+					['role', 'alert'],
+				]);
+
+
+				if ($input.type === 'email') {
+					attrs.push('email');
+				}
+
+				this.$validationAttrs
+					.concat(attrs)
+					.filter(x => x.startsWith('ng') === false && this.$validationMessages.has(x))
+					.forEach(x => {
+						const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
+						$message.innerText = this.$validationMessages.get(x);
+						$validationBlock.appendChild($message);
+					});
+
+				$template.appendChild($validationBlock);
+			}
+
+			if ($input.type === 'radio') {
 				const $newTpl = h.createElement('div', ['form-group']);
 				$newTpl.appendChild($template);
 				$template = $newTpl;
 			}
-
-			this.$validationAttrs
-				.concat(attrs)
-				.filter(x => x.startsWith('ng') === false && this.$validationMessages.has(x))
-				.forEach(x => {
-					const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
-					$message.innerText = this.$validationMessages.get(x);
-					$validationBlock.appendChild($message);
-				});
-
-			$template.appendChild($validationBlock);
 
 			const $id = this.getId($attrs);
 			let $html = $template.outerHTML.replace(/{{id}}/g, $id);
