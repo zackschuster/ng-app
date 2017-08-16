@@ -8,10 +8,12 @@ class DateInputController extends NgComponentController {
 	private hasFocus: boolean = false;
 	private onChange: Callback;
 
-	constructor() {
-		super();
-
-		this.ngModel = new Date();
+	public $onInit() {
+		if (typeof this.ngModel !== 'object') {
+			this.ngModel = new Date(this.ngModel);
+		} else if (this.ngModel == null) {
+			this.ngModel = new Date(Date.now());
+		}
 		this.$timeout();
 	}
 
