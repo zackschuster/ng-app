@@ -35,26 +35,31 @@ class SelectController extends NgComponentController {
 		const value = this.$attrs.value || 'Value';
 		const text = this.$attrs.text || 'Text';
 
-		if (SelectController.IsMultiple(this.$attrs)) {
-			this.choices = this.makeChoices(el);
+		const isMultiple = SelectController.IsMultiple(this.$attrs);
+
+		this.$timeout().finally(() => {
+			this.choices = this.makeChoices(el, isMultiple);
 
 			if (Array.isArray(list)) {
-				this.choices.setChoices(list, value, text);
+				if (isMultiple) {
+					this.choices.setChoices(list, value, text);
+				}
 
-				if (list.includes(this.ngModel) || list.find(x => x[value] === this.ngModel) != null) {
-					this.choices.setValueByChoice(this.ngModel);
+				const item = list[0];
+				const isObjectArray = item != null && item.toString() === '[object Object]';
+				const isValueNumber = isObjectArray ? Number.isInteger(item[value]) : Number.isInteger(item);
+				const ngModel = isValueNumber ? Number(this.ngModel) : this.ngModel.toString();
+
+				const choice = list.find(x => {
+					const val = isObjectArray ? x[value] : x;
+					return val === ngModel;
+				});
+
+				if (choice != null) {
+					this.choices.setValueByChoice(ngModel.toString());
 				}
 			}
-		} else if (Array.isArray(list)) {
-			this.$timeout()
-				.finally(() => {
-					this.choices = this.makeChoices(el);
-
-					if (list.includes(this.ngModel) || list.find(x => x[value] === this.ngModel) != null) {
-						this.choices.setValueByChoice(this.ngModel);
-					}
-				});
-		}
+		});
 	}
 
 	private addItem(event: any) {
@@ -79,7 +84,7 @@ class SelectController extends NgComponentController {
 		this.$timeout();
 	}
 
-	private makeChoices(el: HTMLSelectElement, isMultiple: boolean = SelectController.IsMultiple(this.$attrs)) {
+	private makeChoices(el: HTMLSelectElement, isMultiple: boolean) {
 		const opts: Choices.Options = { removeItemButton: true, itemSelectText: '' };
 
 		if (isMultiple) {
