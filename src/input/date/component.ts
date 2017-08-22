@@ -36,7 +36,8 @@ export const dateInput: InputComponentOptions = {
 	render(h) {
 		const input = h.createInput('text', [
 			['uib-datepicker-popup', 'MM/dd/yyyy'],
-			['datepicker-append-to-body', 'true'],
+			// tslint:disable-next-line:no-invalid-this
+			['datepicker-append-to-body', this.$attrs.appendToBody || 'false'],
 			['is-open', '$ctrl.hasFocus'],
 			['ng-click', '$ctrl.hasFocus = true'],
 			['ng-change', '$ctrl.handleDateEvent()'],
