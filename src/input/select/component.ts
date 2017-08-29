@@ -13,12 +13,11 @@ class SelectController extends NgComponentController {
 
 	public list: any[];
 	public choices: Choices;
+	private showChoices: boolean;
 
 	public $postLink() {
 		const $el = (this.$element as any)[0] as HTMLElement;
 		const $select = $el.querySelector('select');
-
-		this.makeSelectList($select, this.list);
 
 		this.$scope.$watch(
 			_ => this.list,
@@ -35,12 +34,11 @@ class SelectController extends NgComponentController {
 		const value = this.$attrs.value || 'Value';
 		const text = this.$attrs.text || 'Text';
 
-		const isMultiple = SelectController.IsMultiple(this.$attrs);
+		if (Array.isArray(list)) {
+			this.$timeout().finally(() => {
+				const isMultiple = SelectController.IsMultiple(this.$attrs);
+				this.choices = this.makeChoices(el, isMultiple);
 
-		this.$timeout().finally(() => {
-			this.choices = this.makeChoices(el, isMultiple);
-
-			if (Array.isArray(list)) {
 				if (isMultiple) {
 					this.choices.setChoices(list, value, text);
 				}
@@ -58,8 +56,10 @@ class SelectController extends NgComponentController {
 				if (choice != null) {
 					this.choices.setValueByChoice(ngModel.toString());
 				}
-			}
-		});
+
+				this.showChoices = true;
+			});
+		}
 	}
 
 	private addItem(event: any) {
@@ -103,7 +103,10 @@ class SelectController extends NgComponentController {
 export const selectList: InputComponentOptions = {
 	type: 'input',
 	render(h) {
-		const input = h.createElement('select', [], [['name', '{{id}}'], ['id', '{{id}}']]);
+		const input = h.createElement('select', [], [
+			['name', '{{id}}'], ['id', '{{id}}'],
+			['ng-show', '$ctrl.showChoices === true'],
+		]);
 
 		if (SelectController.IsMultiple(this.$attrs)) {
 			input.setAttribute('multiple', 'true');
