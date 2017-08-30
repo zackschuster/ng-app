@@ -68,13 +68,12 @@
   resolved "https://registry.yarnpkg.com/@ledge/node-modules/-/node-modules-1.1.0.tgz#43aac60436f0af97d4f13d6f2081b6e3b056583f"
 
 "@ledge/rollup-config@*":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@ledge/rollup-config/-/rollup-config-1.0.0.tgz#72d6e56683d17edbc75f044212aea32bb8afbc68"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@ledge/rollup-config/-/rollup-config-1.1.0.tgz#1f348fca892accbf028cf1790bef033d61a33559"
   dependencies:
     "@alexlur/rollup-plugin-typescript" "*"
     "@ledge/node-modules" "*"
-    rollup-plugin-node-resolve "^2.0.0"
-    typescript "^2.2.1"
+    rollup-plugin-node-resolve "^3.0.0"
 
 "@ledge/ts-config@*":
   version "2.0.0"
@@ -1721,6 +1720,10 @@ is-glob@^2.0.0, is-glob@^2.0.1:
   dependencies:
     is-extglob "^1.0.0"
 
+is-module@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/is-module/-/is-module-1.0.0.tgz#3258fb69f78c14d5b815d664336b4cffb6441591"
+
 is-npm@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-npm/-/is-npm-1.0.0.tgz#f2fb63a65e4905b406c86072765a1a4dc793b9f4"
@@ -2736,12 +2739,13 @@ rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.6.1:
   dependencies:
     glob "^7.0.5"
 
-rollup-plugin-node-resolve@^2.0.0:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-2.1.1.tgz#cbb783b0d15b02794d58915350b2f0d902b8ddc8"
+rollup-plugin-node-resolve@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-3.0.0.tgz#8b897c4c3030d5001277b0514b25d2ca09683ee0"
   dependencies:
     browser-resolve "^1.11.0"
     builtin-modules "^1.1.0"
+    is-module "^1.0.0"
     resolve "^1.1.6"
 
 rollup-pluginutils@^2.0.1:
@@ -3080,7 +3084,7 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^2.2.1, typescript@^2.4.2:
+typescript@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.2.tgz#f8395f85d459276067c988aa41837a8f82870844"
 
