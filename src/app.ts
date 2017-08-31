@@ -1,6 +1,7 @@
 // tslint:disable-next-line:max-line-length
 import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
+import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { IConfig } from '@ledge/types';
 
 import { NgDataService } from './http';
@@ -17,6 +18,9 @@ import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
 import '@uirouter/angularjs';
+
+// tslint:disable-next-line:max-line-length
+type TransitionHooks = 'onBefore' | 'onEnter' | 'onError' | 'onExit' | 'onFinish' | 'onRetain' | 'onStart' | 'onSuccess';
 
 export class NgApp {
 	public $injector = injector(['ng']);
@@ -108,6 +112,17 @@ export class NgApp {
 			...(this.$routes), /*parens for syntax highlighting*/
 			...routes,
 		];
+		return this;
+	}
+
+	public registerTransitionHook(
+		hook: TransitionHooks,
+		criteria: HookMatchCriteria,
+		cb: (trans: Transition) => boolean | TargetState | Promise<boolean | TargetState>,
+	) {
+		this.$module.run(['$transitions', (transitions: TransitionService) => {
+			(transitions as any)[hook](criteria, cb);
+		}]);
 		return this;
 	}
 
