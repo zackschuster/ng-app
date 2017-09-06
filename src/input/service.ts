@@ -198,13 +198,13 @@ export class InputService {
 				const $transclude = document.createElement('ng-transclude');
 				$transclude.textContent = this.getDefaultLabelText($attrs);
 
-				if ($attrs.hasOwnProperty('required')) {
-					const $span = h.createElement('span', ['text-danger']);
-					$span.textContent = ' *';
-					$transclude.appendChild($span);
-				}
-
 				$label.appendChild($transclude);
+			}
+
+			if ($attrs.hasOwnProperty('required')) {
+				const $span = h.createElement('span', ['text-danger']);
+				$span.textContent = ' *';
+				$label.appendChild($span);
 			}
 
 			// add a transclusion slot for e.g. nesting inputs
