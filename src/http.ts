@@ -42,7 +42,7 @@ export class NgDataService {
 				this.logger.error(typeof data === 'string' && data.length > 0 ? data : statusText);
 				break;
 			case 401:
-				this.logger.warning('You must be logged in to access this page');
+				this.logger.warning(err.statusText);
 				break;
 			case -1:
 				this.logger.warning('Server is inaccessible.');
