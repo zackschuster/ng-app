@@ -26,8 +26,8 @@
     "@ledge/is-ie-11": "^1.0.0",
     "@ledge/types": "^2.1.0",
     "@types/angular-animate": "^1.5.8",
-    "@types/angular-ui-bootstrap": "^0.13.44",
-    "@types/angular-ui-router": "^1.1.37",
+    "@types/angular-ui-bootstrap": "^0.13.45",
+    "@types/angular-ui-router": "^1.1.39",
     "@uirouter/angularjs": "^1.0.6",
     "angular": "^1.6.6",
     "angular-animate": "^1.6.6",
@@ -42,9 +42,9 @@
     "@ledge/configs": "^1.0.0",
     "ava": "^0.22.0",
     "del-cli": "^1.1.0",
-    "rollup": "^0.49.2",
+    "rollup": "^0.49.3",
     "tslint": "^5.7.0",
-    "typescript": "^2.4.2",
+    "typescript": "^2.5.2",
     "window": "^4.2.0"
   }
 }

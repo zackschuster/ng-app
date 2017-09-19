@@ -96,14 +96,14 @@
     "@types/angular" "*"
 
 "@types/angular-ui-bootstrap@^0.13.44":
-  version "0.13.44"
-  resolved "https://registry.yarnpkg.com/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-0.13.44.tgz#dedc80a8e8badc12ef87a8e5f0ebef625939ec47"
+  version "0.13.45"
+  resolved "https://registry.yarnpkg.com/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-0.13.45.tgz#57c1ba7d38b1f61c317e86f20de505e1525656ca"
   dependencies:
     "@types/angular" "*"
 
 "@types/angular-ui-router@^1.1.37":
-  version "1.1.37"
-  resolved "https://registry.yarnpkg.com/@types/angular-ui-router/-/angular-ui-router-1.1.37.tgz#1e67926083f5e78d28d7c7e83d01c9929e70b6cb"
+  version "1.1.39"
+  resolved "https://registry.yarnpkg.com/@types/angular-ui-router/-/angular-ui-router-1.1.39.tgz#dffe4083e8a59b287981cb41896447f32b3663c4"
   dependencies:
     "@types/angular" "*"
 
@@ -2756,8 +2756,8 @@ rollup-pluginutils@^2.0.1:
     micromatch "^2.3.11"
 
 rollup@^0.49.2:
-  version "0.49.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.49.2.tgz#a18f07595cde3b11875c9fece45b25ad3b220d1a"
+  version "0.49.3"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.49.3.tgz#4cce32643dd8cf2154c69ff0e43470067db0adbf"
 
 safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@~5.1.0:
   version "5.1.1"
@@ -3085,8 +3085,8 @@ type-check@~0.3.2:
     prelude-ls "~1.1.2"
 
 typescript@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.2.tgz#f8395f85d459276067c988aa41837a8f82870844"
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.5.2.tgz#038a95f7d9bbb420b1bf35ba31d4c5c1dd3ffe34"
 
 uid-number@^0.0.6:
   version "0.0.6"
