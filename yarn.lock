@@ -95,13 +95,13 @@
   dependencies:
     "@types/angular" "*"
 
-"@types/angular-ui-bootstrap@^0.13.44":
+"@types/angular-ui-bootstrap@^0.13.45":
   version "0.13.45"
   resolved "https://registry.yarnpkg.com/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-0.13.45.tgz#57c1ba7d38b1f61c317e86f20de505e1525656ca"
   dependencies:
     "@types/angular" "*"
 
-"@types/angular-ui-router@^1.1.37":
+"@types/angular-ui-router@^1.1.39":
   version "1.1.39"
   resolved "https://registry.yarnpkg.com/@types/angular-ui-router/-/angular-ui-router-1.1.39.tgz#dffe4083e8a59b287981cb41896447f32b3663c4"
   dependencies:
@@ -2185,9 +2185,9 @@ normalize-path@^2.0.1:
   dependencies:
     remove-trailing-separator "^1.0.1"
 
-noty@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/noty/-/noty-3.1.2.tgz#301903fd8f9dd292ba61a35e15629302f745e4b3"
+noty@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/noty/-/noty-3.1.3.tgz#4fbc8068b9b6b29386f73c902a9ff84ad612ab14"
 
 npm-run-path@^1.0.0:
   version "1.0.0"
@@ -2755,9 +2755,9 @@ rollup-pluginutils@^2.0.1:
     estree-walker "^0.3.0"
     micromatch "^2.3.11"
 
-rollup@^0.49.2:
-  version "0.49.3"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.49.3.tgz#4cce32643dd8cf2154c69ff0e43470067db0adbf"
+rollup@^0.50.0:
+  version "0.50.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.50.0.tgz#4c158f4e780e6cb33ff0dbfc184a52cc58cd5f3b"
 
 safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@~5.1.0:
   version "5.1.1"
@@ -3084,7 +3084,7 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^2.4.2:
+typescript@^2.5.2:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.5.2.tgz#038a95f7d9bbb420b1bf35ba31d4c5c1dd3ffe34"
 
