@@ -14,8 +14,15 @@ class SelectController extends NgComponentController {
 	public list: any[];
 	public choices: Choices;
 	private showChoices: boolean;
+	private isMultiple: boolean;
+	private text: string;
+	private value: string;
 
 	public $postLink() {
+		this.isMultiple = SelectController.IsMultiple(this.$attrs);
+		this.value = this.$attrs.value || 'Value';
+		this.text = this.$attrs.text || 'Text';
+
 		const $el = (this.$element as any)[0] as HTMLElement;
 		const $select = $el.querySelector('select');
 
@@ -24,6 +31,24 @@ class SelectController extends NgComponentController {
 			_ => this.makeSelectList($select, this.list),
 			true,
 		);
+
+		this.$scope.$watch(
+			_ => this.ngModel,
+			_ => {
+				const isReset = this.ngModel == null ||
+												Array.isArray(this.ngModel)
+													? this.ngModel.length === 0
+													: this.ngModel === 0;
+
+				if (this.choices != null && isReset) {
+					if (this.isMultiple) {
+						this.choices.removeActiveItems();
+					} else {
+						this.choices.setValueByChoice('');
+					}
+				}
+			},
+		);
 	}
 
 	public async makeSelectList(el: HTMLSelectElement, list: any[]) {
@@ -31,25 +56,21 @@ class SelectController extends NgComponentController {
 			this.choices.destroy();
 		}
 
-		const value = this.$attrs.value || 'Value';
-		const text = this.$attrs.text || 'Text';
-
 		if (Array.isArray(list)) {
 			this.$timeout().finally(() => {
-				const isMultiple = SelectController.IsMultiple(this.$attrs);
-				this.choices = this.makeChoices(el, isMultiple);
+				this.choices = this.makeChoices(el);
 
-				if (isMultiple) {
-					this.choices.setChoices(list, value, text);
+				if (this.isMultiple) {
+					this.choices.setChoices(list, this.value, this.text);
 				}
 
 				const item = list[0];
 				const isObjectArray = item != null && item.toString() === '[object Object]';
-				const isValueNumber = isObjectArray ? Number.isInteger(item[value]) : Number.isInteger(item);
+				const isValueNumber = isObjectArray ? Number.isInteger(item[this.value]) : Number.isInteger(item);
 				const ngModel = isValueNumber ? Number(this.ngModel) : this.ngModel.toString();
 
 				const choice = list.find(x => {
-					const val = isObjectArray ? x[value] : x;
+					const val = isObjectArray ? x[this.value] : x;
 					return val === ngModel;
 				});
 
@@ -84,7 +105,7 @@ class SelectController extends NgComponentController {
 		this.$timeout();
 	}
 
-	private makeChoices(el: HTMLSelectElement, isMultiple: boolean) {
+	private makeChoices(el: HTMLSelectElement, isMultiple: boolean = this.isMultiple) {
 		const opts: Choices.Options = { removeItemButton: true, itemSelectText: '' };
 
 		if (isMultiple) {
