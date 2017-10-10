@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module, IHttpProvider, IHttpInterceptorFactory } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { IConfig } from '@ledge/types';
@@ -122,6 +122,13 @@ export class NgApp {
 	) {
 		this.$module.run(['$transitions', (transitions: TransitionService) => {
 			(transitions as any)[hook](criteria, cb);
+		}]);
+		return this;
+	}
+
+	public registerHttpInterceptor(interceptor: Injectable<IHttpInterceptorFactory>) {
+		this.$module.config(['$httpProvider', ($httpProvider: IHttpProvider) => {
+			$httpProvider.interceptors.push(interceptor);
 		}]);
 		return this;
 	}
