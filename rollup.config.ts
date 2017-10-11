@@ -16,7 +16,7 @@ export default {
 	],
 	external: [
 		...nodeModules,
-		...(Object.keys(require('./package').peerDependencies)),
+		...Object.keys(require('./package').peerDependencies),
 	],
 	plugins: [
 		typescript(compilerOptions),

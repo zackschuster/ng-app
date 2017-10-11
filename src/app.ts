@@ -109,7 +109,7 @@ export class NgApp {
 
 	public registerRoutes(routes: IState[]) {
 		this.$routes = [
-			...(this.$routes), /*parens for syntax highlighting*/
+			...this.$routes,
 			...routes,
 		];
 		return this;

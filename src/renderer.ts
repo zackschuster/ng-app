@@ -28,7 +28,7 @@ export class NgRenderer {
 		const $class = $isFormCheck ? ['form-check-input'] : ['form-control'];
 
 		const $inputAttrs: [string, string][] = [
-			...(this.baseInputAttrs), // parens for syntax highlighting
+			...this.baseInputAttrs,
 			...attrs,
 			['type', type],
 		];
@@ -45,7 +45,7 @@ export class NgRenderer {
 
 	public createTextArea() {
 		return this.createElement('textarea', ['form-control'], [
-			...(this.baseInputAttrs),
+			...this.baseInputAttrs,
 			['msd-elastic', ''],
 			['maxlength', '{{maxlength}}'],
 			['placeholder', '{{placeholder}}'],
