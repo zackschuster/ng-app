@@ -1,4 +1,5 @@
-import { IAttributes, INgModelController, IPromise, IQService, IScope, ITimeoutService, auto } from 'angular';
+// tslint:disable-next-line:max-line-length
+import { IAttributes, IFilterService, INgModelController, IPromise, IQService, IScope, ITimeoutService, auto } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import { NgLogger } from './logger';
 import { NgDataService } from './http';
@@ -14,6 +15,7 @@ export class NgController {
 	public $state: IStateService;
 	public $promise: IQService;
 	public $resolve: <T = any>(value: T | IPromise<T>) => IPromise<T>;
+	public $filter: IFilterService;
 }
 
 // tslint:disable-next-line:max-classes-per-file

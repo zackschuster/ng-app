@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module, IHttpProvider, IHttpInterceptorFactory } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, IFilterService, IHttpInterceptorFactory, IHttpProvider, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { IConfig } from '@ledge/types';
@@ -163,6 +163,7 @@ export class NgApp {
 						public $timeout: ITimeoutService,
 						public $injector: auto.IInjectorService,
 						public $state: IStateService,
+						public $filter: IFilterService,
 
 						$q: IQService,
 					) {
@@ -180,7 +181,7 @@ export class NgApp {
 
 				// tslint:disable-next-line:only-arrow-functions
 				component.controller = [
-					'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$q',
+					'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$filter', '$q',
 					InternalController,
 				];
 			}
