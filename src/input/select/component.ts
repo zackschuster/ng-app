@@ -35,10 +35,9 @@ class SelectController extends NgComponentController {
 		this.$scope.$watch(
 			_ => this.ngModel,
 			_ => {
-				const isReset = this.ngModel == null ||
-												Array.isArray(this.ngModel)
-													? this.ngModel.length === 0
-													: this.ngModel === 0;
+				const isReset = Array.isArray(this.ngModel)
+					? this.ngModel.length === 0
+					: this.ngModel == null || !this.ngModel;
 
 				if (this.choices != null && isReset) {
 					if (this.isMultiple) {
@@ -51,7 +50,7 @@ class SelectController extends NgComponentController {
 		);
 	}
 
-	public async makeSelectList(el: HTMLSelectElement, list: any[]) {
+	public makeSelectList(el: HTMLSelectElement, list: any[]) {
 		if (this.choices != null) {
 			this.choices.destroy();
 		}
