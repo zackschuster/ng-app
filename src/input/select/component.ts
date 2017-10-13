@@ -12,8 +12,9 @@ class SelectController extends NgComponentController {
 	}
 
 	public list: any[];
+	public showChoices: boolean;
 	public choices: Choices;
-	private showChoices: boolean;
+
 	private isMultiple: boolean;
 	private text: string;
 	private value: string;
