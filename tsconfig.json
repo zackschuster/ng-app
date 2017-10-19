@@ -1,3 +1,6 @@
 {
-	"extends": "./node_modules/@ledge/ts-config/tsconfig.browser.json"
+	"extends": "./node_modules/@ledge/ts-config/tsconfig.browser.json",
+	"compilerOptions": {
+		"experimentalDecorators": true
+	}
 }

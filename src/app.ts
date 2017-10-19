@@ -3,6 +3,7 @@ import { IAttributes, ICompileProvider, IComponentOptions, IController, IFilterS
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { IConfig } from '@ledge/types';
+import { autobind } from 'core-decorators';
 
 import { NgDataService } from './http';
 import { NgLogger } from './logger';
@@ -148,6 +149,9 @@ export class NgApp {
 
 			if (component.controller != null) {
 				const $controller = component.controller as new(...args: any[]) => IController;
+
+				// Force `this` to always refer to the class instance, no matter what
+				autobind($controller);
 
 				// tslint:disable-next-line:max-classes-per-file
 				class InternalController extends $controller {
