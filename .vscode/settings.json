@@ -6,5 +6,5 @@
 	},
 	"tslint.enable": true,
 	"tslint.autoFixOnSave": true,
-	"tslint.configFile": "node_modules/@ledge/tslint-config/tslint.json"
+	"tslint.configFile": "node_modules/@ledge/configs/tslint.json"
 }
