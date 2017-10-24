@@ -33,20 +33,20 @@ export class NgLogger {
 		n.show();
 	}
 
-	public error(msg: string) {
-		this.showNotification(msg, 'error');
+	public error(msg: string, isTemporary = true) {
+		this.showNotification(msg, 'error', isTemporary && null);
 	}
 
-	public info(msg: string) {
-		this.showNotification(msg, 'info');
+	public info(msg: string, isTemporary = true) {
+		this.showNotification(msg, 'info', isTemporary && null);
 	}
 
-	public success(msg: string) {
-		this.showNotification(msg, 'success');
+	public success(msg: string, isTemporary = true) {
+		this.showNotification(msg, 'success', isTemporary && null);
 	}
 
-	public warning(msg: string) {
-		this.showNotification(msg, 'warning', false);
+	public warning(msg: string, isTemporary = true) {
+		this.showNotification(msg, 'warning', isTemporary && null);
 	}
 
 	public devWarning(msg: string) {
