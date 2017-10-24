@@ -50,10 +50,9 @@ export class NgLogger {
 	}
 
 	public devWarning(msg: string) {
-		// tslint:disable-next-line:curly
-		if (app.config.ENV === 'production') return;
-
-		this.warning(`[DEV] ${msg}`);
+		if (app.config.ENV !== 'production') {
+			this.warning(`[DEV] ${msg}`, false);
+		}
 	}
 
 	private showNotification(text: string, type: Noty.Type, timeout: false | number = 3000) {
