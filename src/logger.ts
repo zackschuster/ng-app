@@ -16,6 +16,10 @@ export class NgLogger {
 		this.log = this.$log.log;
 	}
 
+	public clear() {
+		Noty.closeAll();
+	}
+
 	public confirm(action: Callback) {
 		const n = new Noty({
 			type: 'alert',
