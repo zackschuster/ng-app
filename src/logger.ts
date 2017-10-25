@@ -38,19 +38,19 @@ export class NgLogger {
 	}
 
 	public error(msg: string, isTemporary = true) {
-		this.showNotification(msg, 'error', isTemporary && null);
+		this.showNotification(msg, 'error', isTemporary && undefined);
 	}
 
 	public info(msg: string, isTemporary = true) {
-		this.showNotification(msg, 'info', isTemporary && null);
+		this.showNotification(msg, 'info', isTemporary && undefined);
 	}
 
 	public success(msg: string, isTemporary = true) {
-		this.showNotification(msg, 'success', isTemporary && null);
+		this.showNotification(msg, 'success', isTemporary && undefined);
 	}
 
 	public warning(msg: string, isTemporary = true) {
-		this.showNotification(msg, 'warning', isTemporary && null);
+		this.showNotification(msg, 'warning', isTemporary && undefined);
 	}
 
 	public devWarning(msg: string) {
@@ -59,7 +59,7 @@ export class NgLogger {
 		}
 	}
 
-	private showNotification(text: string, type: Noty.Type, timeout: false | number = 3000) {
+	private showNotification(text: string, type: Noty.Type, timeout: false | number = 1000) {
 		new Noty({ type, text, theme: 'metroui', progressBar: false, timeout, closeWith: ['click'] }).show();
 
 		const logType = this.typeMap[type];
