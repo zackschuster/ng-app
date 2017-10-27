@@ -32,6 +32,7 @@ export class NgDataService {
 		}
 	}
 
+	// tslint:disable-next-line:cyclomatic-complexity
 	private onError(err: IHttpPromiseCallbackArg<any>) {
 		switch (err.status) {
 			case 404:
@@ -41,11 +42,23 @@ export class NgDataService {
 				const { data, statusText } = err;
 				this.logger.error(typeof data === 'string' && data.length > 0 ? data : statusText);
 				break;
+			case 400:
+				const msg = err.data;
+				if (typeof msg === 'string') {
+					this.logger.error(msg);
+				} else if (msg != null && !Array.isArray(msg)) {
+					let message = '';
+					Object.keys(msg).forEach(x => {
+						message += `${x}: ${msg[x]}\n`;
+					});
+					this.logger.error(message);
+				}
+				break;
 			case 401:
 				this.logger.warning(err.statusText);
 				break;
 			case -1:
-				this.logger.warning('Server is inaccessible.');
+				this.logger.warning('Server timed out.');
 				break;
 			default:
 				this.logger.devWarning(`An unregistered error occurred for '${err.config.url}' (code: ${err.status})`);
