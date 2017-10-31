@@ -19,7 +19,8 @@ class DateInputController extends NgComponentController {
 
 	public toggleDatepicker() {
 		const input = (this.$element.find('input') as any)[0] as HTMLInputElement;
-		const method = (this.hasFocus = !this.hasFocus) ? 'focus' : 'blur';
+		const hasFocus = this.hasFocus = !this.hasFocus;
+		const method = hasFocus ? 'focus' : 'blur';
 
 		input[method]();
 	}

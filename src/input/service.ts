@@ -117,7 +117,7 @@ export class InputService {
 
 	/**
 	 * Get the appropriate form for a given element
-	 * @param $element {Element} The element to find a form for
+	 * @param $element The element to find a form for
 	 */
 	public static getForm($element: Element) {
 		let form = $element.closest('form');
@@ -229,7 +229,6 @@ export class InputService {
 					['ng-show', $validationExp],
 					['role', 'alert'],
 				]);
-
 
 				if ($input.type === 'email') {
 					attrs.push('email');
