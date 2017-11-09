@@ -15,12 +15,12 @@ export class NgDataService {
 		const baseGetOptions = { params: { timestamp: (isIE11() ? Date.now() : null) } };
 		const options = Object.assign(baseGetOptions, this.baseOptions);
 		const promise = this.$http.get<T>(this.prefix + url, options);
-		return this.safeAwait(promise, defaultReturn);
+		return this.safeAwait(promise, defaultReturn) as Promise<T>;
 	}
 
 	public async Post<T = any>(url: string, data: any = null) {
 		const promise = this.$http.post<T>(this.prefix + url, data, this.baseOptions);
-		return this.safeAwait(promise);
+		return this.safeAwait(promise) as Promise<T>;
 	}
 
 	private async safeAwait<T>(promise: IHttpPromise<T>, defaultReturn?: T) {
