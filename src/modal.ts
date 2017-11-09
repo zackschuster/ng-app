@@ -13,8 +13,8 @@ export class NgModalService {
 
 		const app = this.app;
 		function extendClass() {
-			// tslint:disable-next-line:max-classes-per-file
-			return class extends controller {
+			// tslint:disable-next-line:max-classes-per-file no-non-null-assertion
+			return class extends controller! {
 				public close: (...args: any[]) => void;
 				public $http = app.http();
 				public $timeout = app.timeout();

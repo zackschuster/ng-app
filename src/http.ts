@@ -5,12 +5,13 @@ import { app } from '../index';
 import isIE11 from '@ledge/is-ie-11';
 
 export class NgDataService {
-	private prefix = app.config.PREFIX.API;
-	private baseOptions = { timeout: app.config.ENV === 'production' ? 10000 : null, withCredentials: true };
+	// tslint:disable-next-line:no-non-null-assertion
+	private prefix = app.config.PREFIX!.API;
+	private baseOptions = { timeout: app.config.ENV === 'production' ? 10000 : undefined, withCredentials: true };
 
 	constructor(private $http: IHttpService, private logger: NgLogger) {}
 
-	public async Get<T = any>(url: string, defaultReturn: T = null) {
+	public async Get<T = any>(url: string, defaultReturn?: T) {
 		const baseGetOptions = { params: { timestamp: (isIE11() ? Date.now() : null) } };
 		const options = Object.assign(baseGetOptions, this.baseOptions);
 		const promise = this.$http.get<T>(this.prefix + url, options);
@@ -22,7 +23,7 @@ export class NgDataService {
 		return this.safeAwait(promise);
 	}
 
-	private async safeAwait<T>(promise: IHttpPromise<T>, defaultReturn: T = null) {
+	private async safeAwait<T>(promise: IHttpPromise<T>, defaultReturn?: T) {
 		try {
 			const rsp = await promise;
 			return rsp == null ? defaultReturn : rsp.data;

@@ -54,7 +54,8 @@ export class InputService {
 	 * Gets text -- intended for a label -- from the ngModel property text
 	 */
 	public static getDefaultLabelText($attrs: IAttributes) {
-		return this.modelIdentifier($attrs).split(/(?=[A-Z])/).join(' ');
+		// tslint:disable-next-line:no-non-null-assertion
+		return this.modelIdentifier($attrs)!.split(/(?=[A-Z])/).join(' ');
 	}
 
 	/**
@@ -126,9 +127,10 @@ export class InputService {
 			if (document.forms.length === 1) {
 				form = document.forms.item(0);
 			} else {
-				// this will fail if the element has ng-repeat on it
+				// this block will error if the element has ng-repeat on it
 				const formList = Array.from(document.forms);
-				form = formList.find(x => x.contains($element));
+				// tslint:disable-next-line:no-non-null-assertion
+				form = formList.find(x => x.contains($element))!;
 			}
 		}
 
@@ -239,7 +241,8 @@ export class InputService {
 					.filter(x => x.startsWith('ng') === false && this.$validationMessages.has(x))
 					.forEach(x => {
 						const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
-						$message.innerText = this.$validationMessages.get(x);
+						// tslint:disable-next-line:no-non-null-assertion
+						$message.innerText = this.$validationMessages.get(x)!;
 						$validationBlock.appendChild($message);
 					});
 
@@ -258,7 +261,8 @@ export class InputService {
 			attrs
 				.filter(x => x !== 'email')
 				.forEach(prop => {
-					$html = $html.replace(new RegExp('{{' + prop + '}}', 'g'), $attrs[prop] || component.attrs[prop]);
+					// tslint:disable-next-line:no-non-null-assertion
+					$html = $html.replace(new RegExp('{{' + prop + '}}', 'g'), $attrs[prop] || component.attrs![prop]);
 				});
 
 			return $html;
