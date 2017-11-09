@@ -25,7 +25,7 @@ class SelectController extends NgComponentController {
 		this.text = this.$attrs.text || 'Text';
 
 		const $el = (this.$element as any)[0] as HTMLElement;
-		const $select = $el.querySelector('select');
+		const $select = $el.getElementsByTagName('select').item(0);
 
 		this.$scope.$watch(
 			_ => this.list,
