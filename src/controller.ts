@@ -16,6 +16,16 @@ export class NgController {
 	public $promise: IQService;
 	public $resolve: <T = any>(value: T | IPromise<T>) => IPromise<T>;
 	public $filter: IFilterService;
+
+	public openWebAddress(address: string) {
+		this.$log.confirm(_ => {
+			window.open(`http://${address}`);
+		});
+	}
+
+	public splitByCapitalLetter(item: string) {
+		return item.split(/(?=[A-Z])/).map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(' ');
+	}
 }
 
 // tslint:disable-next-line:max-classes-per-file
