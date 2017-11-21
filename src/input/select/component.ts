@@ -2,6 +2,7 @@
 import 'element-closest';
 import * as Choices from 'choices.js';
 import { IAttributes } from 'angular';
+import { Callback } from '@ledge/types';
 import { NgComponentController } from '../../controller';
 import { InputComponentOptions } from '../../..';
 
@@ -18,6 +19,7 @@ class SelectController extends NgComponentController {
 	private isMultiple: boolean;
 	private text: string;
 	private value: string;
+	private onChange: Callback;
 
 	public $postLink() {
 		this.isMultiple = SelectController.IsMultiple(this.$attrs);
@@ -31,23 +33,6 @@ class SelectController extends NgComponentController {
 			_ => this.list,
 			_ => this.makeSelectList($select, this.list),
 			true,
-		);
-
-		this.$scope.$watch(
-			_ => this.ngModel,
-			_ => {
-				const isReset = Array.isArray(this.ngModel)
-					? this.ngModel.length === 0
-					: this.ngModel == null || !this.ngModel;
-
-				if (this.choices != null && isReset) {
-					if (this.isMultiple) {
-						this.choices.removeActiveItems();
-					} else {
-						this.choices.setValueByChoice('');
-					}
-				}
-			},
 		);
 	}
 
@@ -65,22 +50,59 @@ class SelectController extends NgComponentController {
 				}
 
 				const item = list[0];
-				const isObjectArray = item != null && item.toString() === '[object Object]';
-				const isValueNumber = isObjectArray ? Number.isInteger(item[this.value]) : Number.isInteger(item);
+				const { isValueNumber, isItemHash } = this.identifyItem(item);
 				const ngModel = isValueNumber ? Number(this.ngModel) : this.ngModel.toString();
 
 				const choice = list.find(x => {
-					const val = isObjectArray ? x[this.value] : x;
+					const val = isItemHash ? x[this.value] : x;
 					return val === ngModel;
 				});
 
 				if (choice != null) {
-					this.choices.setValueByChoice(ngModel.toString());
+					this.choices.setValueByChoice(ngModel);
 				}
 
 				this.showChoices = true;
+
+				this.$scope.$watch(
+					_ => this.ngModel,
+					_ => {
+						const isReset = Array.isArray(_)
+							? _.length === 0
+							: _ == null || !_;
+
+						const value = (this.choices.getValue() as any).value;
+						if (value !== '') {
+							if (isReset) {
+								if (this.isMultiple) {
+									this.choices.removeActiveItems();
+								} else {
+									this.choices.setValueByChoice('');
+								}
+							} else if (value !== _) {
+								this.choices.setValueByChoice(_);
+							}
+						}
+
+						if (this.onChange != null) {
+							this.onChange(_);
+						}
+					},
+				);
 			});
 		}
+	}
+
+	private identifyItem(item: any) {
+		const itemIsHash = item != null && item.toString() === '[object Object]';
+		const value = itemIsHash ? item[this.value] : item;
+		let isValueNumber = Number.isInteger(value);
+
+		if (isValueNumber && typeof value === 'string') {
+			isValueNumber = !value.startsWith('0'); // should be treated as string
+		}
+
+		return { isItemHash: itemIsHash, isValueNumber };
 	}
 
 	private addItem(event: any) {
@@ -152,5 +174,6 @@ export const selectList: InputComponentOptions = {
 	ctrl: SelectController,
 	bindings: {
 		list: '<',
+		onChange: '<',
 	},
 };
