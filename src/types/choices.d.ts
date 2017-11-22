@@ -136,11 +136,20 @@ declare module "choices.js" {
 
 		/**
 		 * Get value(s) of input (i.e. inputted items (text) or selected choices (select))
+		 * @return {string} selected value (select-one) or array of selected items (inputs & select-multiple)
+		 * @public
+		 */
+		getValue():
+			{ active: boolean, choiceId: number, highlighted: boolean, id: number, label: string, value: any } |
+			{ active: boolean, choiceId: number, highlighted: boolean, id: number, label: string, value: any }[];
+
+		/**
+		 * Get value(s) of input (i.e. inputted items (text) or selected choices (select))
 		 * @param {Boolean} valueOnly Get only values of selected items, otherwise return selected items
 		 * @return {Array/String} selected value (select-one) or array of selected items (inputs & select-multiple)
 		 * @public
 		 */
-		getValue(valueOnly?: boolean): string | string[];
+		getValue(valueOnly: true): any | any[];
 
 		/**
 		 * Set value of input. If the input is a select box, a choice will be created and selected otherwise

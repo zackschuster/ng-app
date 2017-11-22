@@ -26,7 +26,8 @@ class SelectController extends NgComponentController {
 		this.value = this.$attrs.value || 'Value';
 		this.text = this.$attrs.text || 'Text';
 
-		const $el = (this.$element as any)[0] as HTMLElement;
+		// @ts-ignore
+		const $el = this.$element[0] as HTMLElement;
 		const $select = $el.getElementsByTagName('select').item(0);
 
 		this.$scope.$watch(
@@ -44,44 +45,28 @@ class SelectController extends NgComponentController {
 		if (Array.isArray(list)) {
 			this.$timeout().finally(() => {
 				this.choices = this.makeChoices(el);
-
-				if (this.isMultiple) {
-					this.choices.setChoices(list, this.value, this.text);
-				}
-
-				const item = list[0];
-				const { isValueNumber, isItemHash } = this.identifyItem(item);
-				const ngModel = isValueNumber ? Number(this.ngModel) : this.ngModel.toString();
-
-				const choice = list.find(x => {
-					const val = isItemHash ? x[this.value] : x;
-					return val === ngModel;
-				});
-
-				if (choice != null) {
-					this.choices.setValueByChoice(ngModel);
-				}
+				this.choices.setChoices(list, this.value, this.text);
 
 				this.showChoices = true;
 
 				this.$scope.$watch(
 					_ => this.ngModel,
 					_ => {
-						const isReset = Array.isArray(_)
-							? _.length === 0
-							: _ == null || !_;
+						let current: any = this.choices.getValue();
+						if (!Array.isArray(current)) {
+							current = current.value;
+						}
 
-						const value = (this.choices.getValue() as any).value;
-						if (value !== '') {
-							if (isReset) {
-								if (this.isMultiple) {
-									this.choices.removeActiveItems();
-								} else {
-									this.choices.setValueByChoice('');
-								}
-							} else if (value !== _) {
-								this.choices.setValueByChoice(_);
+						const isReset = _ == null || (this.isMultiple ? _.length === 0 : !_);
+
+						if (isReset) {
+							if (this.isMultiple) {
+								this.choices.removeActiveItems();
+							} else if (current !== '') {
+								this.choices.setValueByChoice('');
 							}
+						} else if (current !== _ && this.list.find(x => (x[this.value] || x) === _) != null) {
+							this.choices.setValueByChoice(_);
 						}
 
 						if (this.onChange != null) {
@@ -91,18 +76,6 @@ class SelectController extends NgComponentController {
 				);
 			});
 		}
-	}
-
-	private identifyItem(item: any) {
-		const itemIsHash = item != null && item.toString() === '[object Object]';
-		const value = itemIsHash ? item[this.value] : item;
-		let isValueNumber = Number.isInteger(value);
-
-		if (isValueNumber && typeof value === 'string') {
-			isValueNumber = !value.startsWith('0'); // should be treated as string
-		}
-
-		return { isItemHash: itemIsHash, isValueNumber };
 	}
 
 	private addItem(event: any) {
@@ -158,15 +131,6 @@ export const selectList: InputComponentOptions = {
 			placeholder.innerText = SelectController.Placeholder;
 			placeholder.value = '';
 			input.appendChild(placeholder);
-
-			const repeaterOption = h.createElement('option', [], [
-				['ng-repeat', 'item in $ctrl.list'],
-				['ng-value', `{{item.${this.$attrs.value || 'Value'}}}`],
-			]);
-			repeaterOption.innerText = `{{item.${this.$attrs.text || 'Text'}}}`;
-			input.appendChild(repeaterOption);
-
-			input.classList.add('form-control', 'choices__input');
 		}
 
 		return input;
