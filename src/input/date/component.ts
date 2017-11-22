@@ -14,7 +14,17 @@ class DateInputController extends NgComponentController {
 		} else if (this.ngModel == null) {
 			this.ngModel = new Date(Date.now());
 		}
-		this.$timeout();
+
+		this.$scope.$watch(
+			_ => this.ngModel,
+			_ => {
+				if (typeof _ !== 'object') {
+					this.ngModel = new Date(_);
+				} else if (_ == null) {
+					this.ngModel = new Date(Date.now());
+				}
+			},
+		);
 	}
 
 	public toggleDatepicker() {
