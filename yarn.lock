@@ -44,9 +44,9 @@
   dependencies:
     arrify "^1.0.1"
 
-"@ledge/configs@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-2.0.1.tgz#928a951cdefbbe938b3e1f6eac3f7484a463448b"
+"@ledge/configs@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/@ledge/configs/-/configs-4.0.0.tgz#f12e1d464a85f2fec8cb0e2d3f12601b35f73109"
 
 "@ledge/is-ie-11@^1.0.0":
   version "1.0.0"

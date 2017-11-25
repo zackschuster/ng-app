@@ -39,7 +39,7 @@
     "noty": "^3.1.3"
   },
   "devDependencies": {
-    "@ledge/configs": "^2.0.1",
+    "@ledge/configs": "^4.0.0",
     "ava": "^0.23.0",
     "del-cli": "^1.1.0",
     "tslint": "^5.8.0",
