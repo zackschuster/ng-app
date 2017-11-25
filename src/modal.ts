@@ -1,4 +1,4 @@
-// tslint:disable:no-invalid-this only-arrow-functions
+// tslint:disable:no-invalid-this
 import { IScope, element } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
 import { NgModalOptions } from '..';

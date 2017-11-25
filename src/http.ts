@@ -37,11 +37,12 @@ export class NgDataService {
 	private onError(err: IHttpPromiseCallbackArg<any>) {
 		switch (err.status) {
 			case 404:
-				this.logger.devWarning(`Route '${err.config.url}' not found`);
+				// tslint:disable-next-line:no-non-null-assertion
+				this.logger.devWarning(`Route '${err.config!.url}' not found`);
 				break;
 			case 500:
 				const { data, statusText } = err;
-				this.logger.error(typeof data === 'string' && data.length > 0 ? data : statusText);
+				this.logger.error(typeof data === 'string' && data.length > 0 ? data : statusText as string);
 				break;
 			case 400:
 				const msg = err.data;
@@ -56,13 +57,14 @@ export class NgDataService {
 				}
 				break;
 			case 401:
-				this.logger.warning(err.statusText);
+				this.logger.warning(err.statusText as string);
 				break;
 			case -1:
 				this.logger.warning('Server timed out.');
 				break;
 			default:
-				this.logger.devWarning(`An unregistered error occurred for '${err.config.url}' (code: ${err.status})`);
+				// tslint:disable-next-line:no-non-null-assertion
+				this.logger.devWarning(`An unregistered error occurred for '${err.config!.url}' (code: ${err.status})`);
 				break;
 		}
 	}

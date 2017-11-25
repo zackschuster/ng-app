@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, IFilterService, IHttpInterceptorFactory, IHttpProvider, ILocationProvider, IPromise, IQProvider, IQService, IRootElementService, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, IHttpInterceptorFactory, IHttpProvider, ILocationProvider, IQProvider, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { IConfig } from '@ledge/types';
@@ -8,7 +8,6 @@ import { autobind } from 'core-decorators';
 import { NgDataService } from './http';
 import { NgLogger } from './logger';
 import { NgModalService } from './modal';
-import { NgRenderer } from './renderer';
 
 import { InputComponentOptions } from '..';
 import { InputService } from './input/service';
@@ -102,12 +101,6 @@ export class NgApp {
 		this.$bootstrap(document.body, [this.$id]);
 	}
 
-	// tslint:disable-next-line:ban-types
-	public run(block: Injectable<Function>) {
-		this.$module.run(block);
-		return this;
-	}
-
 	public registerRoutes(routes: IState[]) {
 		this.$routes = [
 			...this.$routes,
@@ -141,7 +134,6 @@ export class NgApp {
 			? Array.from(components)
 			: Object.entries(components);
 
-		// tslint:disable-next-line:prefer-const
 		for (let [name, component] of componentIterable) {
 			if ((component as InputComponentOptions).type === 'input') {
 				component = InputService.defineInputComponent(component as InputComponentOptions);
@@ -188,10 +180,6 @@ export class NgApp {
 		return this;
 	}
 
-	public renderer() {
-		return new NgRenderer(document);
-	}
-
 	public http() {
 		return new NgDataService(this.$injector.get('$http'), this.logger());
 	}
@@ -204,17 +192,6 @@ export class NgApp {
 		return new NgModalService(this.$injector.get('$uibModal'), this);
 	}
 
-	public scope() {
-		return this.$injector.get('$rootScope').$new();
-	}
-
-	public compiler() {
-		return this.$injector.get('$compile');
-	}
-
-	public root() {
-		return this.$injector.get('$rootElement');
-	}
 	public timeout() {
 		return this.$injector.get('$timeout');
 	}

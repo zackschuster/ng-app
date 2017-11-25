@@ -59,27 +59,6 @@ export class InputService {
 	}
 
 	/**
-	 * Determines if an element's label text should be screen-reader only
-	 */
-	public static isSrOnly($attrs: IAttributes) {
-		return $attrs.hasOwnProperty('srOnly');
-	}
-
-	/**
-	 * Determines if an element's label text should be screen-reader only
-	 */
-	public static hasIcon($attrs: IAttributes) {
-		return $attrs.hasOwnProperty('icon');
-	}
-
-	/**
-	 * Determines if an element has been marked as inline
-	 */
-	public static isInline($attrs: IAttributes) {
-		return $attrs.hasOwnProperty('inline');
-	}
-
-	/**
 	 * Sets required, disabled, readonly, as well as their ng-equivalents
 	 *
 	 * @param $input - The input to set attributes on
@@ -176,7 +155,7 @@ export class InputService {
 
 			if (component.nestInputInLabel) {
 				$label.appendChild($input);
-			} else if (component.canHaveIcon && this.hasIcon($attrs)) {
+			} else if (component.canHaveIcon && $attrs.hasOwnProperty('icon')) {
 				const $iconInput = h.createIconInput($input, $attrs.icon);
 				$template.appendChild($iconInput);
 			} else {
@@ -186,7 +165,7 @@ export class InputService {
 			if ($el.closest('contain') != null) {
 				$input.style.marginTop = '8px';
 				$label.classList.add('sr-only');
-			} else if (this.isSrOnly($attrs)) {
+			} else if ($attrs.hasOwnProperty('srOnly')) {
 				$label.classList.add('sr-only');
 			}
 
