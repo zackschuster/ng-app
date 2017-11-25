@@ -4,7 +4,5 @@
 			"when": "$(basename).ts"
 		}
 	},
-	"tslint.enable": true,
-	"tslint.autoFixOnSave": true,
 	"tslint.configFile": "node_modules/@ledge/configs/tslint.json"
 }
