@@ -102,11 +102,10 @@ export class InputService {
 			constructor() {
 				super();
 				setTimeout(() => {
-					const $el = this.$element[0] as HTMLElement;
-					const $contain = $el.querySelector('[ng-transclude="contain"]');
+					const $contain = this.$element.querySelector('[ng-transclude="contain"]');
 					if ($contain != null && $contain.children.length === 0) {
 						if (isIE11()) {
-							($contain as any).removeNode(true);
+							$contain.removeNode(true);
 						} else {
 							$contain.remove();
 						}

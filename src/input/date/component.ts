@@ -1,3 +1,4 @@
+// tslint:disable:no-invalid-this
 import { isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
@@ -28,7 +29,8 @@ class DateInputController extends NgComponentController {
 	}
 
 	public toggleDatepicker() {
-		const input = (this.$element.find('input') as any)[0] as HTMLInputElement;
+		// tslint:disable-next-line:no-non-null-assertion
+		const input = this.$element.querySelector('input')!;
 		const hasFocus = this.hasFocus = !this.hasFocus;
 		const method = hasFocus ? 'focus' : 'blur';
 
@@ -47,7 +49,6 @@ export const dateInput: InputComponentOptions = {
 	render(h) {
 		const input = h.createInput('text', [
 			['uib-datepicker-popup', 'MM/dd/yyyy'],
-			// tslint:disable-next-line:no-invalid-this
 			['datepicker-append-to-body', this.$attrs.appendToBody || 'false'],
 			['is-open', '$ctrl.hasFocus'],
 			['ng-click', '$ctrl.hasFocus = true'],

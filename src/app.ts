@@ -157,19 +157,14 @@ export class NgApp {
 				class InternalController extends $controller {
 					public $log = logger;
 					public $http: NgDataService;
-					public $promise: IQService;
-					public $resolve: <T>(value: T | IPromise<T>) => IPromise<T>;
 
 					constructor(
 						public $scope: IScope,
-						public $element: IRootElementService,
+						$element: JQuery,
 						public $attrs: IAttributes,
 						public $timeout: ITimeoutService,
 						public $injector: auto.IInjectorService,
 						public $state: IStateService,
-						public $filter: IFilterService,
-
-						$q: IQService,
 					) {
 						super();
 
@@ -177,15 +172,12 @@ export class NgApp {
 							this.$injector.get('$http'),
 							this.$log,
 						);
-
-						this.$promise = $q;
-						this.$resolve = $q.resolve;
+						this.$element = ($element as any)[0];
 					}
 				}
 
-				// tslint:disable-next-line:only-arrow-functions
 				component.controller = [
-					'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$filter', '$q',
+					'$scope', '$element', '$attrs', '$timeout', '$injector', '$state',
 					InternalController,
 				];
 			}
