@@ -4,5 +4,6 @@
 			"when": "$(basename).ts"
 		}
 	},
-	"tslint.configFile": "node_modules/@ledge/configs/tslint.json"
+	"tslint.configFile": "node_modules/@ledge/configs/tslint.json",
+	"typescript.tsdk": "node_modules/typescript/lib"
 }
