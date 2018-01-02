@@ -55,11 +55,6 @@ export interface InputComponentOptions extends IComponentOptions {
 	labelClass?: string;
 
 	/**
-	 * Whether the rendered input should be nested inside the label
-	 */
-	nestInputInLabel?: boolean;
-
-	/**
 	 * Run after container & label creation, before label manipulation
 	 */
 	render(this: {

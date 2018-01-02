@@ -5,7 +5,6 @@ export const checkBox: InputComponentOptions = {
 	type: 'input',
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',
-	nestInputInLabel: true,
 	render(h) {
 		const input = h.createInput('checkbox');
 

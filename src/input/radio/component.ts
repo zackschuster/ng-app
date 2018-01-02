@@ -5,7 +5,6 @@ export const radioList: InputComponentOptions = {
 	type: 'input',
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',
-	nestInputInLabel: true,
 	render(h) {
 		const radio = h.createInput('radio');
 		const value = this.$attrs.value || 'Value';

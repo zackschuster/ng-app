@@ -153,9 +153,7 @@ export class InputService {
 			// required, disabled, readonly, and their ng-equivalents
 			this.setInteractivityAttributes($input, $attrs);
 
-			if (component.nestInputInLabel) {
-				$label.appendChild($input);
-			} else if (component.canHaveIcon && $attrs.hasOwnProperty('icon')) {
+			if (component.canHaveIcon && $attrs.hasOwnProperty('icon')) {
 				const $iconInput = h.createIconInput($input, $attrs.icon);
 				$template.appendChild($iconInput);
 			} else {
