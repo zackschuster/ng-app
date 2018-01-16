@@ -144,7 +144,11 @@ export class InputService {
 
 			// see above: all inputs must have labels
 			const $label = h.createLabel([component.labelClass || 'form-control-label']);
-			$template.appendChild($label);
+			const $isRadioOrCheckbox = component.labelClass === 'form-check-label';
+
+			if ($isRadioOrCheckbox === false) {
+				$template.appendChild($label);
+			}
 
 			const $input = component.render.call(
 				{ $template, $attrs }, // allow consumer to access $template and $attrs attributes from `this`
@@ -189,6 +193,10 @@ export class InputService {
 			$template.appendChild(
 				h.createSlot('contain'),
 			);
+
+			if ($isRadioOrCheckbox === true) {
+				$template.appendChild($label);
+			}
 
 			const attrs = Object.keys(component.attrs || {});
 			const $form = this.getForm($el);
