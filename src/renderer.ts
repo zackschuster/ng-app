@@ -70,11 +70,14 @@ export class NgRenderer {
 
 	public createIconInput($input: HTMLInputElement, icon: string, inputGroupAttrs: [string, string][] = []) {
 		const $inputGroup = this.createElement('div', ['input-group']);
-		const $inputGroupAddon = this.createElement('div', ['input-group-addon'], inputGroupAttrs);
+		const $inputGroupPrepend = this.createElement('div', ['input-group-prepend'], inputGroupAttrs);
+		const $inputGroupText = this.createElement('span', ['input-group-text'], inputGroupAttrs);
 		const $icon = this.createIcon(icon, icon.startsWith('fw!'));
 
-		$inputGroupAddon.appendChild($icon);
-		$inputGroup.appendChild($inputGroupAddon);
+		$inputGroupText.appendChild($icon);
+		$inputGroupPrepend.appendChild($inputGroupText);
+
+		$inputGroup.appendChild($inputGroupPrepend);
 		$inputGroup.appendChild($input);
 
 		return $inputGroup;
