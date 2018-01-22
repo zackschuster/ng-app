@@ -63,7 +63,7 @@ class SelectController extends NgComponentController {
 							} else if (current !== '') {
 								this.choices.setValueByChoice('');
 							}
-						} else if (current !== _ && this.list.find(x => (x[this.value] || x) === _) != null) {
+						} else if (this.isMultiple || this.list.find(x => (x[this.value] || x) === _) != null) {
 							this.choices.setValueByChoice(_);
 						}
 
