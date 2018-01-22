@@ -24,13 +24,16 @@ export class NgLogger {
 		const n = new Noty({
 			type: 'alert',
 			theme: 'metroui',
-			text: 'Do you want to continue?',
+			text: '<p class="h5 mb-0 ml-0">\
+			<i class="fa fa-exclamation-triangle text-warning mr-1"></i>\
+			Please confirm your action\
+			</p>',
 			buttons: [
-				Noty.button('Yes', 'btn btn-success', (_: any) => {
+				Noty.button('No', 'btn btn-outline-danger mb-2 pull-right', (_: any) => n.close()),
+				Noty.button('Yes', 'btn btn-outline-success mr-1 pull-right', (_: any) => {
 					action();
 					n.close();
 				}),
-				Noty.button('No', 'btn btn-danger', (_: any) => n.close()),
 			],
 		});
 
