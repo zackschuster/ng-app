@@ -20,6 +20,7 @@ class SelectController extends NgComponentController {
 	private text: string;
 	private value: string;
 	private onChange: Callback;
+	private destroyCurrentWatcher: Callback;
 
 	public $postLink() {
 		this.isMultiple = SelectController.IsMultiple(this.$attrs);
@@ -38,42 +39,47 @@ class SelectController extends NgComponentController {
 	public makeSelectList(el: HTMLSelectElement, list: any[]) {
 		if (this.choices != null) {
 			this.choices.destroy();
+			this.destroyCurrentWatcher();
 		}
 
 		if (Array.isArray(list)) {
 			this.$timeout().finally(() => {
 				this.choices = this.makeChoices(el);
 				this.choices.setChoices(list, this.value, this.text);
-
+				this.destroyCurrentWatcher = this.createWatcher();
 				this.showChoices = true;
-
-				this.$scope.$watch(
-					_ => this.ngModel,
-					_ => {
-						let current: any = this.choices.getValue();
-						if (!Array.isArray(current)) {
-							current = current.value;
-						}
-
-						const isReset = _ == null || (this.isMultiple ? _.length === 0 : !_);
-
-						if (isReset) {
-							if (this.isMultiple) {
-								this.choices.removeActiveItems();
-							} else if (current !== '') {
-								this.choices.setValueByChoice('');
-							}
-						} else if (this.isMultiple || this.list.find(x => (x[this.value] || x) === _) != null) {
-							this.choices.setValueByChoice(_);
-						}
-
-						if (this.onChange != null) {
-							this.onChange(_);
-						}
-					},
-				);
 			});
 		}
+	}
+
+	private createWatcher() {
+		return this.$scope.$watch(
+			_ => this.ngModel,
+			(_, prev: number[]) => {
+				const isReset = _ == null || (this.isMultiple ? _.length === 0 : !_);
+
+				if (this.isMultiple) {
+					if (isReset) {
+						this.choices.removeActiveItems();
+					} else if (prev.filter(x => _.includes(x) === false).length > 0) {
+						this.destroyCurrentWatcher();
+						this.choices.removeActiveItems();
+						this.destroyCurrentWatcher = this.createWatcher();
+					}
+					this.choices.setValueByChoice(_);
+				} else {
+					if (isReset) {
+						this.choices.setValueByChoice('');
+					} else if (this.listHasValue(_)) {
+						this.choices.setValueByChoice(_);
+					}
+				}
+
+				if (this.onChange != null) {
+					this.onChange(_);
+				}
+			},
+		);
 	}
 
 	private addItem(event: any) {
@@ -111,6 +117,10 @@ class SelectController extends NgComponentController {
 		choices.passedElement.addEventListener('removeItem', this.removeItem.bind(this));
 
 		return choices;
+	}
+
+	private listHasValue(val: any) {
+		return this.list.find(x => (x[this.value] || x) === val) != null;
 	}
 }
 
