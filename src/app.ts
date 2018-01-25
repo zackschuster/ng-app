@@ -26,7 +26,7 @@ export class NgApp {
 	public $injector = injector(['ng']);
 
 	private readonly $id: string = '$core';
-	private readonly $dependencies = [
+	private $dependencies = [
 		'ngAnimate',
 		'ngMessages',
 		'ui.bootstrap',
@@ -99,6 +99,20 @@ export class NgApp {
 		}]);
 
 		this.$bootstrap(document.body, [this.$id]);
+	}
+
+	public registerDependency(moduleName: string) {
+		this.$dependencies.push(moduleName);
+		this.$module = module(this.$id, this.$dependencies);
+
+		return this;
+	}
+
+	public registerDependencies(moduleNames: string[]) {
+		this.$dependencies = [...this.$dependencies, ...moduleNames];
+		this.$module = module(this.$id, this.$dependencies);
+
+		return this;
 	}
 
 	public registerRoutes(routes: IState[]) {
