@@ -103,15 +103,11 @@ export class NgApp {
 
 	public registerDependency(moduleName: string) {
 		this.$dependencies.push(moduleName);
-		this.$module = module(this.$id, this.$dependencies);
-
 		return this;
 	}
 
 	public registerDependencies(moduleNames: string[]) {
 		this.$dependencies = [...this.$dependencies, ...moduleNames];
-		this.$module = module(this.$id, this.$dependencies);
-
 		return this;
 	}
 
