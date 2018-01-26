@@ -27,22 +27,22 @@
     "@types/angular-animate": "^1.5.9",
     "@types/angular-ui-bootstrap": "^0.13.46",
     "@types/angular-ui-router": "^1.1.40",
-    "@uirouter/angularjs": "^1.0.12",
+    "@uirouter/angularjs": "^1.0.13",
     "angular": "^1.6.8",
     "angular-animate": "^1.6.8",
     "angular-elastic": "^2.5.1",
     "angular-messages": "^1.6.8",
     "angular-ui-bootstrap": "^2.5.6",
-    "choices.js": "^3.0.2",
+    "choices.js": "^3.0.3",
     "core-decorators": "^0.20.0",
     "element-closest": "^2.0.2",
     "noty": "^3.1.4"
   },
   "devDependencies": {
     "@ledge/configs": "^5.0.0",
-    "ava": "^0.24.0",
+    "ava": "^0.25.0",
     "del-cli": "^1.1.0",
-    "tslint": "^5.8.0",
+    "tslint": "^5.9.1",
     "typescript": "^2.6.2",
     "window": "^4.2.4"
   }
