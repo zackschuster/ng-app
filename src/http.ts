@@ -1,8 +1,10 @@
 import { IHttpPromise, IHttpPromiseCallbackArg, IHttpService } from 'angular';
-import { NgLogger } from './logger';
-import { app } from '../index';
+import { PatchPayload } from '@ledge/types';
 
 import isIE11 from '@ledge/is-ie-11';
+
+import { NgLogger } from './logger';
+import { app } from '../index';
 
 export class NgDataService {
 	// tslint:disable-next-line:no-non-null-assertion
@@ -20,6 +22,11 @@ export class NgDataService {
 
 	public async Post<T = any>(url: string, data: any = null) {
 		const promise = this.$http.post<T>(this.prefix + url, data, this.baseOptions);
+		return this.safeAwait(promise) as Promise<T>;
+	}
+
+	public async Patch<T extends PatchPayload = PatchPayload>(url: string, data: T) {
+		const promise = this.$http.patch<T>(this.prefix + url, data, this.baseOptions);
 		return this.safeAwait(promise) as Promise<T>;
 	}
 
