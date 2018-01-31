@@ -53,17 +53,17 @@
     pretty-ms "^0.2.1"
     text-table "^0.2.0"
 
-"@ledge/configs@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-5.0.0.tgz#64d19ee7ea98b55a93ec1f3227c5ac66380a6625"
+"@ledge/configs@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-5.2.0.tgz#09db34c451c8545c5f0cd1c2d78b684d28bfdfa8"
 
 "@ledge/is-ie-11@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@ledge/is-ie-11/-/is-ie-11-1.0.0.tgz#cdffc8d0de1bedb871e0fc73e32a6ed78907cc8b"
 
-"@ledge/types@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@ledge/types/-/types-2.1.0.tgz#8db3bf9a4e64121331472ee306eb431d898aab4a"
+"@ledge/types@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@ledge/types/-/types-2.2.0.tgz#289fb8b9c7b1d5b6ec9def0e0aa9c11624b3ecef"
   dependencies:
     "@types/node" "*"
 
@@ -97,15 +97,15 @@
   version "6.0.79"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.79.tgz#5efe7d4a6d8c453c7e9eaf55d931f4a22fac5169"
 
-"@uirouter/angularjs@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.13.tgz#a63561d1177541f19b4231117d83ec49a5f19b90"
+"@uirouter/angularjs@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.14.tgz#00e6b4652d6df9a4fbdffff9c31e0d17b4841d78"
   dependencies:
-    "@uirouter/core" "5.0.14"
+    "@uirouter/core" "5.0.16"
 
-"@uirouter/core@5.0.14":
-  version "5.0.14"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.14.tgz#621477f779886c9287fcc606a4082157fc0ffa65"
+"@uirouter/core@5.0.16":
+  version "5.0.16"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.16.tgz#c6f9e2041df1b6ad3bc28b089e55241a1cb4610f"
 
 abab@^1.0.3:
   version "1.0.3"
