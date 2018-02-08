@@ -1,3 +1,6 @@
 {
-	"extends": "./node_modules/@ledge/configs/tsconfig.browser.json"
+	"extends": "./node_modules/@ledge/configs/tsconfig.browser.json",
+	"compilerOptions": {
+		"strictPropertyInitialization": false
+	}
 }
