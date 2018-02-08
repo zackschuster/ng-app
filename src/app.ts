@@ -2,7 +2,7 @@
 import { IAttributes, ICompileProvider, IComponentOptions, IController, IHttpInterceptorFactory, IHttpProvider, ILocationProvider, IQProvider, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
-import { IConfig } from '@ledge/types';
+import { Callback, IConfig } from '@ledge/types';
 import { autobind } from 'core-decorators';
 
 import { NgDataService } from './http';
@@ -99,6 +99,11 @@ export class NgApp {
 		}]);
 
 		this.$bootstrap(document.body, [this.$id]);
+	}
+
+	public registerConfigBlock(inlineAnnotatedFunction: (string | Callback)[]) {
+		this.$module.config(inlineAnnotatedFunction);
+		return this;
 	}
 
 	public registerDependency(moduleName: string) {
