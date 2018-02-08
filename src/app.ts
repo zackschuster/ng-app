@@ -107,7 +107,7 @@ export class NgApp {
 	}
 
 	public registerDependencies(moduleNames: string[]) {
-		this.$dependencies = [...this.$dependencies, ...moduleNames];
+		moduleNames.forEach(moduleName => this.registerDependency(moduleName));
 		return this;
 	}
 
