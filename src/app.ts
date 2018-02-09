@@ -106,6 +106,11 @@ export class NgApp {
 		return this;
 	}
 
+	public registerRunBlock(inlineAnnotatedFunction: (string | Callback)[]) {
+		this.$module.run(inlineAnnotatedFunction);
+		return this;
+	}
+
 	public registerDependency(moduleName: string) {
 		this.$dependencies.push(moduleName);
 		return this;
