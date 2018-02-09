@@ -1,5 +1,5 @@
 import { IHttpPromise, IHttpPromiseCallbackArg, IHttpService } from 'angular';
-import { PatchPayload } from '@ledge/types';
+import { PatchPayload } from '@ledge/types/patch';
 
 import isIE11 from '@ledge/is-ie-11';
 
