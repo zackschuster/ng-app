@@ -8,6 +8,7 @@ import { InputComponentOptions } from '../../..';
 class DateInputController extends NgComponentController {
 	private hasFocus: boolean = false;
 	private onChange: Callback;
+	private lastClick: number;
 
 	public $onInit() {
 		if (typeof this.ngModel !== 'object') {
@@ -28,7 +29,12 @@ class DateInputController extends NgComponentController {
 		);
 	}
 
-	public toggleDatepicker() {
+	public toggleDatepicker($event: any) {
+		if ($event.timeStamp - this.lastClick < 50) {
+			return;
+		}
+		this.lastClick = $event.timeStamp;
+
 		// tslint:disable-next-line:no-non-null-assertion
 		const input = this.$element.querySelector('input')!;
 		const hasFocus = this.hasFocus = !this.hasFocus;
@@ -56,7 +62,7 @@ export const dateInput: InputComponentOptions = {
 		]);
 
 		return h.createIconInput(input, 'calendar', [
-			['ng-click', '$ctrl.toggleDatepicker()'],
+			['ng-click', '$ctrl.toggleDatepicker($event)'],
 			['style', 'cursor:pointer'],
 		]);
 	},
