@@ -20,14 +20,12 @@ export class NgLogger {
 		Noty.closeAll();
 	}
 
-	public confirm(action: Callback) {
+	public confirm(action: Callback, msg = 'Please confirm your action') {
 		const n = new Noty({
 			type: 'alert',
 			theme: 'metroui',
 			text: '<p class="h5 mb-0 ml-0">\
-			<i class="fa fa-exclamation-triangle text-warning mr-1"></i>\
-			Please confirm your action\
-			</p>',
+			<i class="fa fa-exclamation-triangle text-warning mr-1"></i>' + msg + '</p>',
 			buttons: [
 				Noty.button('No', 'btn btn-outline-danger mb-2 pull-right', (_: any) => n.close()),
 				Noty.button('Yes', 'btn btn-outline-success mr-1 pull-right', (_: any) => {
