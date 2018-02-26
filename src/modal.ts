@@ -33,8 +33,15 @@ export class NgModalService {
 
 					appendTo.appendChild(backdrop);
 
+					const listener = (e: KeyboardEvent) => {
+						if (e.code === 'Escape') this.close();
+					};
+
+					window.addEventListener('keydown', listener);
+
 					this.close = (...args: any[]) => {
 						modal.classList.remove('show');
+						window.removeEventListener('keydown', listener);
 
 						setTimeout(() => {
 							backdrop.classList.remove('modal-backdrop');
