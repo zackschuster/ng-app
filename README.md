@@ -10,16 +10,49 @@ import { myComponent } from './my-component';
 import * as myRoutes from './my-routes';
 
 app
+	.registerDependency('ng1dependency')
+	.registerDependencies(['ng1dependency1', 'ng1dependency2'])
   .registerRoutes(myRoutes) // using ui-router
+	.registerTransitionHook('onBefore', { to: '**' }, ['serviceName', (serviceName) => {
+		/** ui-router transition hook code */
+	}])
   .registerComponents({ myComponent })
+  .registerRunBlock(['serviceName', (serviceName) => {
+		/** run block code */
+	}])
+	.registerConfigBlock(['serviceName', (serviceName) => {
+		/** config block code */
+	}])
+	.registerHttpInterceptor(['serviceName', (serviceName) => {
+		/** http interceptor code */
+	}])
   .bootstrap();
+```
+
+## Common dependencies included
+
+- [angular-animate](https://www.npmjs.com/package/angular-animate)
+- [angular-messages](https://www.npmjs.com/package/angular-messages)
+- [angular-ui-bootstrap](https://www.npmjs.com/package/angular-ui-bootstrap)
+- [angular-ui-router](https://www.npmjs.com/package/@uirouter/angularjs)
+- [angular-elastic](https://www.npmjs.com/package/angular-elastic)
+
+## Easily extractable service references
+
+```js
+import { app } from '@ledge/ng-app';
+
+const http = app.http(); // using $http service
+const modal = app.modal(); // using ui-bootstrap modal
+const logger = app.logger(); // using Noty.js + $log service
+const timeout = app.timeout(); // returns $timeout service
 ```
 
 ## Built-in, zero-config components
 
-- Based on Bootstrap 4 (alpha.6)
-- Supports disabled, required and readonly tags, as well as their ng-equivalents
-- Generates well-formed HTML structures with labels, ids, names, etc.
+- Built for Bootstrap 4
+- Supports disabled, required and readonly tags, as well as their `ng-`equivalents
+- Generates well-formed & accessible HTML structures with labels, ids, names, etc.
 
 ```html
 <text-input ng-model="model1">
@@ -49,5 +82,3 @@ app
 	<radio-list ng-model="model5" list="[{Text: 'Item 1', Value: 1}, {Text: 'Item 2', Value: 2}]"></radio-list>
 </fieldset>
 ```
-
-### _More to be documented; read the source for now_
