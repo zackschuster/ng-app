@@ -13,6 +13,10 @@ export class NgController {
 	public $injector: auto.IInjectorService;
 	public $state: IStateService;
 
+	public isProduction: boolean;
+	public isDevelopment: boolean;
+	public isStaging: boolean;
+
 	public openWebAddress(address: string) {
 		this.$log.confirm(_ => {
 			window.open(`http://${address}`);

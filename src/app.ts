@@ -170,6 +170,10 @@ export class NgApp {
 					public $log = logger;
 					public $http: NgDataService;
 
+					public isProduction: boolean;
+					public isDevelopment: boolean;
+					public isStaging: boolean;
+
 					constructor(
 						public $scope: IScope,
 						$element: JQuery,
@@ -185,6 +189,10 @@ export class NgApp {
 							this.$log,
 						);
 						this.$element = ($element as any)[0];
+
+						this.isProduction = process.env.NODE_ENV === 'production';
+						this.isDevelopment = process.env.NODE_ENV === 'development';
+						this.isStaging = process.env.NODE_ENV === 'staging';
 					}
 				}
 
