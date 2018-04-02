@@ -28,6 +28,14 @@ export class NgController {
 	public splitByCapitalLetter(item: string) {
 		return item.split(/(?=[A-Z])/).map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(' ');
 	}
+
+	public getApiPrefix() {
+		const prefixes = this.$config.PREFIX;
+		if (prefixes != null) {
+			return prefixes.API;
+		}
+		return '';
+	}
 }
 
 // tslint:disable-next-line:max-classes-per-file
