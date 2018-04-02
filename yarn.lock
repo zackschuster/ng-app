@@ -899,9 +899,9 @@ chalk@^2.3.0:
     escape-string-regexp "^1.0.5"
     supports-color "^4.0.0"
 
-choices.js@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/choices.js/-/choices.js-3.0.3.tgz#28aa0e96328c22ae074be5fe6e9eda5384e54b45"
+choices.js@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/choices.js/-/choices.js-3.0.4.tgz#c0f76bd795e7b36939e87891a0cf17402fb6a2d2"
   dependencies:
     classnames "^2.2.5"
     fuse.js "^2.2.2"
@@ -3341,9 +3341,9 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^2.7.2:
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
+typescript@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.1.tgz#6160e4f8f195d5ba81d4876f9c0cc1fbc0820624"
 
 uid-number@^0.0.6:
   version "0.0.6"
