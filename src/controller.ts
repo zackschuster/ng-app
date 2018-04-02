@@ -6,18 +6,18 @@ import { IConfig } from '@ledge/types';
 
 export class NgController {
 	protected readonly $config: IConfig;
-	protected $scope: IScope;
-	protected $element: HTMLElement;
-	protected $attrs: IAttributes;
-	protected $timeout: ITimeoutService;
-	protected $log: NgLogger;
-	protected $http: NgDataService;
-	protected $injector: auto.IInjectorService;
-	protected $state: IStateService;
+	protected readonly $scope: IScope;
+	protected readonly $element: HTMLElement;
+	protected readonly $attrs: IAttributes;
+	protected readonly $timeout: ITimeoutService;
+	protected readonly $log: NgLogger;
+	protected readonly $http: NgDataService;
+	protected readonly $injector: auto.IInjectorService;
+	protected readonly $state: IStateService;
 
-	protected isProduction: boolean;
-	protected isDevelopment: boolean;
-	protected isStaging: boolean;
+	protected readonly isProduction: boolean;
+	protected readonly isDevelopment: boolean;
+	protected readonly isStaging: boolean;
 
 	protected openWebAddress(address: string) {
 		this.$log.confirm(_ => {
