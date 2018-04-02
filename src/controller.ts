@@ -5,31 +5,31 @@ import { NgDataService } from './http';
 import { IConfig } from '@ledge/types';
 
 export class NgController {
-	public readonly $config: IConfig;
-	public $scope: IScope;
-	public $element: HTMLElement;
-	public $attrs: IAttributes;
-	public $timeout: ITimeoutService;
-	public $log: NgLogger;
-	public $http: NgDataService;
-	public $injector: auto.IInjectorService;
-	public $state: IStateService;
+	protected readonly $config: IConfig;
+	protected $scope: IScope;
+	protected $element: HTMLElement;
+	protected $attrs: IAttributes;
+	protected $timeout: ITimeoutService;
+	protected $log: NgLogger;
+	protected $http: NgDataService;
+	protected $injector: auto.IInjectorService;
+	protected $state: IStateService;
 
-	public isProduction: boolean;
-	public isDevelopment: boolean;
-	public isStaging: boolean;
+	protected isProduction: boolean;
+	protected isDevelopment: boolean;
+	protected isStaging: boolean;
 
-	public openWebAddress(address: string) {
+	protected openWebAddress(address: string) {
 		this.$log.confirm(_ => {
 			window.open(`http://${address}`);
 		});
 	}
 
-	public splitByCapitalLetter(item: string) {
+	protected splitByCapitalLetter(item: string) {
 		return item.split(/(?=[A-Z])/).map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(' ');
 	}
 
-	public getApiPrefix() {
+	protected getApiPrefix() {
 		const prefixes = this.$config.PREFIX;
 		if (prefixes != null) {
 			return prefixes.API;
