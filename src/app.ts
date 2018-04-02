@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, IHttpInterceptorFactory, IHttpProvider, ILocationProvider, IQProvider, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
+import { IAttributes, ICompileProvider, IComponentOptions, IController, IHttpInterceptorFactory, IHttpProvider, IHttpService, ILocationProvider, IQProvider, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { Callback, IConfig } from '@ledge/types';
@@ -149,6 +149,7 @@ export class NgApp {
 
 	public registerComponents(components: Map<string, IComponentOptions> | { [index: string]: IComponentOptions }) {
 		const logger = this.logger();
+		const config = this.$config;
 
 		const componentIterable = components instanceof Map
 			? Array.from(components)
@@ -181,18 +182,17 @@ export class NgApp {
 						public $timeout: ITimeoutService,
 						public $injector: auto.IInjectorService,
 						public $state: IStateService,
+						$http: IHttpService,
 					) {
 						super();
 
-						this.$http = new NgDataService(
-							this.$injector.get('$http'),
-							this.$log,
-						);
+						this.$http = new NgDataService($http, this.$log);
 						this.$element = ($element as any)[0];
 
-						this.isProduction = process.env.NODE_ENV === 'production';
-						this.isDevelopment = process.env.NODE_ENV === 'development';
-						this.isStaging = process.env.NODE_ENV === 'staging';
+						this.$config = config;
+						this.isProduction = this.$config.ENV === 'production';
+						this.isDevelopment = this.$config.ENV === 'development';
+						this.isStaging = this.$config.ENV === 'staging';
 					}
 				}
 

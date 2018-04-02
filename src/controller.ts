@@ -2,8 +2,10 @@ import { IAttributes, INgModelController, IScope, ITimeoutService, auto } from '
 import { IStateService } from 'angular-ui-router';
 import { NgLogger } from './logger';
 import { NgDataService } from './http';
+import { IConfig } from '@ledge/types';
 
 export class NgController {
+	public readonly $config: IConfig;
 	public $scope: IScope;
 	public $element: HTMLElement;
 	public $attrs: IAttributes;
