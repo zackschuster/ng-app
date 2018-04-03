@@ -197,7 +197,7 @@ export class NgApp {
 				}
 
 				component.controller = [
-					'$scope', '$element', '$attrs', '$timeout', '$injector', '$state',
+					'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$http',
 					InternalController,
 				];
 			}
