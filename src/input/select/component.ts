@@ -105,7 +105,7 @@ class SelectController extends NgComponentController {
 	}
 
 	private makeChoices(el: HTMLSelectElement, isMultiple: boolean = this.isMultiple) {
-		const opts: Choices.Options = { removeItemButton: true, itemSelectText: '' };
+		const opts: Choices.Options = { removeItemButton: true, itemSelectText: '', addItemText: '' };
 
 		if (isMultiple) {
 			opts.placeholderValue = this.$attrs.placeholder || SelectController.Placeholder;
