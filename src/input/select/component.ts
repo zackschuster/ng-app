@@ -55,7 +55,7 @@ class SelectController extends NgComponentController {
 	private createWatcher() {
 		return this.$scope.$watch(
 			_ => this.ngModel,
-			(_, prev: number[]) => {
+			(_, prev: number[] = []) => {
 				const isReset = _ == null || (this.isMultiple ? _.length === 0 : !_);
 
 				if (this.isMultiple) {
