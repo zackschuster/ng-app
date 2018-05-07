@@ -38,7 +38,7 @@ export class NgLogger {
 		n.show();
 	}
 
-	public error(msg: string, isTemporary = true) {
+	public error(msg: string, isTemporary = false) {
 		this.showNotification(msg, 'error', isTemporary && undefined);
 	}
 
