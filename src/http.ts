@@ -30,6 +30,21 @@ export class NgDataService {
 		return this.safeAwait(promise) as Promise<T>;
 	}
 
+	public async Put<T = any>(url: string, data: T) {
+		const promise = this.$http.put<T>(this.prefix + url, data, this.baseOptions);
+		return this.safeAwait(promise) as Promise<T>;
+	}
+
+	public async Delete<T = any>(url: string) {
+		const promise = this.$http.delete<T>(this.prefix + url, this.baseOptions);
+		return this.safeAwait(promise) as Promise<T>;
+	}
+
+	public async Jsonp<T = any>(url: string) {
+		const promise = this.$http.jsonp<T>(this.prefix + url, this.baseOptions);
+		return this.safeAwait(promise) as Promise<T>;
+	}
+
 	private async safeAwait<T>(promise: IHttpPromise<T>, defaultReturn?: T) {
 		try {
 			const rsp = await promise;
