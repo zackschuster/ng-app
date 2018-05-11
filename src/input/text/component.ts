@@ -1,4 +1,3 @@
-// tslint:disable:no-invalid-this
 import { InputComponentOptions } from '../../..';
 
 export const textInput: InputComponentOptions = {

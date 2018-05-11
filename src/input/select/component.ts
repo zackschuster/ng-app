@@ -1,4 +1,3 @@
-// tslint:disable:no-invalid-this
 import 'element-closest';
 import * as Choices from 'choices.js';
 import { IAttributes } from 'angular';

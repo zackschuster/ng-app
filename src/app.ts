@@ -1,5 +1,4 @@
-// tslint:disable-next-line:max-line-length
-import { IAttributes, ICompileProvider, IComponentOptions, IController, IHttpInterceptorFactory, IHttpProvider, IHttpService, ILocationProvider, IQProvider, IScope, ITemplateCacheService, ITimeoutService, Injectable, animate, auto, bootstrap, injector, module } from 'angular';
+import { IComponentOptions, IController, ITimeoutService, auto, bootstrap, injector, module } from 'angular';
 import { IState, IStateProvider, IStateService } from 'angular-ui-router';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { Callback, IConfig } from '@ledge/types';
@@ -19,8 +18,15 @@ import 'angular-ui-bootstrap';
 
 import '@uirouter/angularjs';
 
-// tslint:disable-next-line:max-line-length
-type TransitionHooks = 'onBefore' | 'onEnter' | 'onError' | 'onExit' | 'onFinish' | 'onRetain' | 'onStart' | 'onSuccess';
+type TransitionHooks =
+	'onBefore' |
+	'onEnter' |
+	'onError' |
+	'onExit' |
+	'onFinish' |
+	'onRetain' |
+	'onStart' |
+	'onSuccess';
 
 export class NgApp {
 	public $injector = injector(['ng']);
@@ -46,7 +52,11 @@ export class NgApp {
 		this.$module
 			.config([
 				'$compileProvider', '$locationProvider', '$qProvider',
-				($compileProvider: ICompileProvider, $locationProvider: ILocationProvider, $qProvider: IQProvider) => {
+				(
+					$compileProvider: angular.ICompileProvider,
+					$locationProvider: angular.ILocationProvider,
+					$qProvider: angular.IQProvider,
+				) => {
 					$compileProvider
 						.commentDirectivesEnabled(false)
 						.cssClassDirectivesEnabled(false);
@@ -56,16 +66,20 @@ export class NgApp {
 			}])
 			.run([
 				'$injector', '$animate', '$templateCache',
-				($injector: auto.IInjectorService, $animate: animate.IAnimateService, $templateCache: ITemplateCacheService) => {
-				['day', 'month', 'year'].forEach(x => {
-					const tplName = `uib/template/datepicker/${x}.html`;
-					const tpl = $templateCache.get<string>(tplName).replace(/glyphicon/g, 'fa');
-					$templateCache.put(tplName, tpl);
-				});
+				(
+					$injector: auto.IInjectorService,
+					$animate: angular.animate.IAnimateService,
+					$templateCache: angular.ITemplateCacheService,
+				) => {
+					['day', 'month', 'year'].forEach(x => {
+						const tplName = `uib/template/datepicker/${x}.html`;
+						const tpl = $templateCache.get<string>(tplName).replace(/glyphicon/g, 'fa');
+						$templateCache.put(tplName, tpl);
+					});
 
-				this.$injector = $injector;
-				$animate.enabled(true);
-			}]);
+					this.$injector = $injector;
+					$animate.enabled(true);
+				}]);
 	}
 
 	public get name() {
@@ -140,8 +154,8 @@ export class NgApp {
 		return this;
 	}
 
-	public registerHttpInterceptor(interceptor: Injectable<IHttpInterceptorFactory>) {
-		this.$module.config(['$httpProvider', ($httpProvider: IHttpProvider) => {
+	public registerHttpInterceptor(interceptor: angular.Injectable<angular.IHttpInterceptorFactory>) {
+		this.$module.config(['$httpProvider', ($httpProvider: angular.IHttpProvider) => {
 			$httpProvider.interceptors.push(interceptor);
 		}]);
 		return this;
@@ -176,13 +190,13 @@ export class NgApp {
 					public isStaging: boolean;
 
 					constructor(
-						public $scope: IScope,
+						public $scope: angular.IScope,
 						$element: JQuery,
-						public $attrs: IAttributes,
+						public $attrs: angular.IAttributes,
 						public $timeout: ITimeoutService,
 						public $injector: auto.IInjectorService,
 						public $state: IStateService,
-						$http: IHttpService,
+						$http: angular.IHttpService,
 					) {
 						super();
 

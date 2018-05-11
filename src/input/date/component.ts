@@ -1,4 +1,3 @@
-// tslint:disable:no-invalid-this
 import { isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
@@ -35,8 +34,7 @@ class DateInputController extends NgComponentController {
 		}
 		this.lastClick = $event.timeStamp;
 
-		// tslint:disable-next-line:no-non-null-assertion
-		const input = this.$element.querySelector('input')!;
+		const input = this.$element.querySelector('input') as HTMLInputElement;
 		const hasFocus = this.hasFocus = !this.hasFocus;
 		const method = hasFocus ? 'focus' : 'blur';
 

@@ -1,20 +1,26 @@
-// tslint:disable:no-invalid-this
 import { IScope, element } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { NgModalOptions } from '..';
+import { NgController, NgModalOptions } from '..';
 import { NgApp } from './app';
 
 export class NgModalService {
 	constructor(private $uibModal: IModalService, private app: NgApp) {}
 
 	public open(options: NgModalOptions) {
-		const defaults = { appendTo: document.body, template: '', size: 'lg', controllerAs: '$ctrl' };
+		const defaults = {
+			appendTo: document.body,
+			template: '',
+			size: 'lg',
+			controller: NgController,
+			controllerAs: '$ctrl',
+		};
+
 		const { template, size, controller, controllerAs, appendTo } = Object.assign(defaults, options);
 
 		const app = this.app;
 		function extendClass() {
-			// tslint:disable-next-line:max-classes-per-file no-non-null-assertion
-			return class extends controller! {
+			// tslint:disable-next-line:max-classes-per-file
+			return class extends (controller as (new() => any)) {
 				public close: (...args: any[]) => void;
 				public $http = app.http();
 				public $timeout = app.timeout();
