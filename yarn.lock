@@ -53,9 +53,9 @@
     pretty-ms "^0.2.1"
     text-table "^0.2.0"
 
-"@ledge/configs@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-6.0.0.tgz#f3cd6878bd378a7de0503643e0de0e9ada53fb2d"
+"@ledge/configs@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-7.0.1.tgz#c0ce740215127e3b49b19ef6dd88e96c074e7980"
 
 "@ledge/is-ie-11@^1.0.0":
   version "1.0.0"
@@ -93,15 +93,15 @@
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.4.tgz#d0ca03fa4a3d7ab66c1f4e78a0fd06e30e46a7a9"
 
-"@uirouter/angularjs@^1.0.16":
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.16.tgz#f374998d1166ae274a30569b97d63fcd72383ad9"
+"@uirouter/angularjs@^1.0.17":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.17.tgz#ec9818e9aa79f3a11d0657cb0e5f567d682fc450"
   dependencies:
-    "@uirouter/core" "5.0.18"
+    "@uirouter/core" "5.0.19"
 
-"@uirouter/core@5.0.18":
-  version "5.0.18"
-  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.18.tgz#6dd85654ebc7e25eba2c1b32f069829db351abab"
+"@uirouter/core@5.0.19":
+  version "5.0.19"
+  resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.19.tgz#fe2888190393a8c92584c354e65ab8322c1b0db4"
 
 abab@^1.0.4:
   version "1.0.4"
