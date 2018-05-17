@@ -3,6 +3,7 @@ export class NgRenderer {
 		['id', '{{id}}'],
 		['name', '{{id}}'],
 		['ng-model', '$ctrl.ngModel'],
+		['ng-model-options', '$ctrl.ngModelOptions'],
 	];
 
 	constructor(private document: Document) {}

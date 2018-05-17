@@ -30,6 +30,7 @@ export class InputService {
 		},
 		bindings: {
 			ngModel: '=',
+			ngModelOptions: '<',
 			ngDisabled: '<',
 			ngReadonly: '<',
 			ngRequired: '<',
