@@ -7,8 +7,7 @@ import { NgComponentController, NgController } from './src/controller';
 import { NgRenderer } from './src/renderer';
 
 const $inputs = new Map(Object.entries(inputs));
-export const app = new NgApp()
-	.registerComponents($inputs);
+export const app = new NgApp().registerComponents($inputs);
 
 export { NgDataService } from './src/http';
 export { NgLogger } from './src/logger';
@@ -19,8 +18,13 @@ export interface NgModalOptions {
 	template?: string;
 	appendTo?: Element;
 	size?: 'sm' | 'md' | 'lg';
-	controller?: new() => any;
+	controller?: new () => any;
 	controllerAs?: string;
+	onClose?(
+		this: NgController,
+		isDismiss?: boolean,
+		close?: (...args: any[]) => void,
+	): boolean;
 }
 
 export interface InputComponentOptions extends IComponentOptions {
@@ -32,7 +36,7 @@ export interface InputComponentOptions extends IComponentOptions {
 	/**
 	 * Use this instead of controller, as ng-app will disregard the controller prop for type safety reasons.
 	 */
-	ctrl?: new(...args: any[]) => NgComponentController;
+	ctrl?: new (...args: any[]) => NgComponentController;
 
 	/**
 	 * Allow input group icons to be defined by users on the input
@@ -57,28 +61,34 @@ export interface InputComponentOptions extends IComponentOptions {
 	/**
 	 * Run after container & label creation, before label manipulation
 	 */
-	render(this: {
-		/**
-		 * Input container
-		 */
-		$template: HTMLDivElement;
-		/**
-		 * Angular.js $attrs object
-		 */
-		$attrs: IAttributes;
-	},     h: NgRenderer): Element;
+	render(
+		this: {
+			/**
+			 * Input container
+			 */
+			$template: HTMLDivElement;
+			/**
+			 * Angular.js $attrs object
+			 */
+			$attrs: IAttributes;
+		},
+		h: NgRenderer,
+	): Element;
 
 	/**
 	 * Special hook to override how label text is generated
 	 */
-	renderLabel?(this: {
-		/**
-		 * Input label
-		 */
-		$label: HTMLLabelElement;
-		/**
-		 * Angular.js $attrs object
-		 */
-		$attrs: IAttributes;
-	},           h: NgRenderer): void;
+	renderLabel?(
+		this: {
+			/**
+			 * Input label
+			 */
+			$label: HTMLLabelElement;
+			/**
+			 * Angular.js $attrs object
+			 */
+			$attrs: IAttributes;
+		},
+		h: NgRenderer,
+	): void;
 }
