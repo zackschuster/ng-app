@@ -40,7 +40,9 @@ export class NgModalService {
 					appendTo.appendChild(backdrop);
 
 					const listener = (e: KeyboardEvent) => {
-						if (e.code === 'Escape') this.close();
+						if (e.key === 'Escape' || e.key === 'Esc') {
+							this.close();
+						}
 					};
 
 					window.addEventListener('keydown', listener);
@@ -49,9 +51,10 @@ export class NgModalService {
 						modal.classList.remove('show');
 						window.removeEventListener('keydown', listener);
 
+						backdrop.classList.remove('modal-backdrop');
+						appendTo.removeChild(backdrop);
+
 						setTimeout(() => {
-							backdrop.classList.remove('modal-backdrop');
-							appendTo.removeChild(backdrop);
 							$modal.close(...args);
 						}, 100);
 					};
@@ -68,6 +71,7 @@ export class NgModalService {
 		const $modal = this.$uibModal.open({
 			animation: true,
 			backdrop: false,
+			keyboard: false,
 
 			ariaLabelledBy: 'modal-title',
 			ariaDescribedBy: 'modal-body',
@@ -81,5 +85,4 @@ export class NgModalService {
 
 		return $modal;
 	}
-
 }
