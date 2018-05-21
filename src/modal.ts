@@ -52,7 +52,7 @@ export class NgModalService {
 
 					appendTo.appendChild(backdrop);
 
-					this.onclose = onClose.bind(this);
+					this.onclose = onClose.bind({ $log: this.$log });
 
 					const close = (...args: any[]) => {
 						modal.classList.remove('show');

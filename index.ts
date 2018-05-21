@@ -5,6 +5,7 @@ import * as inputs from './src/input';
 import { NgApp } from './src/app';
 import { NgComponentController, NgController } from './src/controller';
 import { NgRenderer } from './src/renderer';
+import { NgLogger } from '.';
 
 const $inputs = new Map(Object.entries(inputs));
 export const app = new NgApp().registerComponents($inputs);
@@ -21,7 +22,7 @@ export interface NgModalOptions {
 	controller?: new () => any;
 	controllerAs?: string;
 	onClose?(
-		this: NgController,
+		this: { $log: NgLogger },
 		isDismiss?: boolean,
 		close?: (...args: any[]) => void,
 	): boolean;
