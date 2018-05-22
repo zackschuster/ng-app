@@ -1,4 +1,10 @@
 import { InputComponentOptions } from '../../..';
+import { NgComponentController } from '../../controller';
+
+class RadioListController extends NgComponentController {
+	// tslint:disable-next-line:no-non-null-assertion
+	public nameId = crypto.getRandomValues(new Int8Array(1))!.toLocaleString();
+}
 
 export const radioList: InputComponentOptions = {
 	type: 'input',
@@ -8,7 +14,8 @@ export const radioList: InputComponentOptions = {
 		const radio = h.createInput('radio');
 		const value = this.$attrs.value || 'Value';
 
-		radio.setAttribute('ng-value', `{{item.${value}}}`);
+		radio.setAttribute('ng-value', `item.${value}`);
+		radio.setAttribute('ng-attr-name', 'RadioButton_{{$ctrl.nameId}}');
 		radio.style.cursor = 'pointer';
 
 		if (this.$attrs.hasOwnProperty('inline')) {
@@ -22,6 +29,7 @@ export const radioList: InputComponentOptions = {
 	},
 	renderLabel() {
 		const text = this.$attrs.text || 'Text';
+		const value = this.$attrs.value || 'Value';
 
 		const labelText = document.createTextNode(`{{item.${text}}}`);
 		const spanTag = document.createElement('span');
@@ -29,10 +37,13 @@ export const radioList: InputComponentOptions = {
 		spanTag.appendChild(labelText);
 
 		this.$label.setAttribute('for', '{{id}}{{$index}}');
+		this.$label.setAttribute('ng-click', `$ctrl.ngModel === item.${value}`);
 		this.$label.appendChild(spanTag);
+		this.$label.style.cursor = 'pointer';
 	},
 	bindings: {
 		list: '<',
 		ngChecked: '<',
 	},
+	ctrl: RadioListController,
 };
