@@ -1,4 +1,4 @@
-	// tslint:disable:member-ordering
+// tslint:disable:member-ordering
 import isIE11 from '@ledge/is-ie-11';
 import { IAttributes, IComponentOptions, IController } from 'angular';
 
@@ -94,27 +94,6 @@ export class InputService {
 	}
 
 	/**
-	 * Get the appropriate form for a given element
-	 * @param $element The element to find a form for
-	 */
-	public static hasForm($element: Element) {
-		let form = $element.closest('form');
-
-		if (form == null) {
-			if (document.forms.length === 1) {
-				form = document.forms.item(0);
-			} else {
-				// this block will error if the element has ng-repeat on it
-				const formList = Array.from(document.forms);
-				// tslint:disable-next-line:no-non-null-assertion
-				form = formList.find(x => x.contains($element))!;
-			}
-		}
-
-		return form != null;
-	}
-
-	/**
 	 * Transform an input component definition into an ng component definition
 	 * @param component An object representing the requested component definition
 	 */
@@ -199,49 +178,47 @@ export class InputService {
 
 			const attrs = Object.keys(component.attrs || {});
 
-			if (this.hasForm($el)) {
-				const $ngModelExp = `$ctrl.ngModelCtrl.`;
-				const $validationErrorExp = `${$ngModelExp}$error`;
-				const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
-				const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
-				const $validationExp = `(${$validationTouchedExp} || ${$ngModelExp}$submitted) && ${$validationInvalidExp}`;
+			const $ngModelCtrlExp = `$ctrl.ngModelCtrl.`;
+			const $validationErrorExp = `${$ngModelCtrlExp}$error`;
+			const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
+			const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
+			const $validationExp = `${$validationTouchedExp} && ${$validationInvalidExp}`;
 
-				const $validationBlock = h.createElement('div', [], [
-					['ng-messages', $validationErrorExp],
-					['ng-show', $validationExp],
-					['role', 'alert'],
-				]);
+			const $validationBlock = h.createElement('div', [], [
+				['ng-messages', $validationErrorExp],
+				['ng-show', $validationExp],
+				['role', 'alert'],
+			]);
 
-				if ($input.type === 'email') {
-					attrs.push('email');
-				}
-
-				// that's right, i named it after filterFilter. fight me.
-				const $inputInput = $input.querySelector('input');
-				if ($inputInput != null) {
-					$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationInvalidExp} }`);
-				}
-
-				$label.setAttribute('ng-class', `{ 'text-danger': ${$validationInvalidExp} }`);
-
-				if (component.validators != null) {
-					attrs.push(...Array.from(component.validators.keys()));
-					for (const [key, value] of component.validators) {
-						this.$validationMessages.set(key, value);
-					}
-				}
-
-				this.$validationAttrs
-					.concat(attrs)
-					.filter(x => x.startsWith('ng') === false && this.$validationMessages.has(x))
-					.forEach(x => {
-						const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
-						$message.innerText = this.$validationMessages.get(x) as string;
-						$validationBlock.appendChild($message);
-					});
-
-				$template.appendChild($validationBlock);
+			if ($input.type === 'email') {
+				attrs.push('email');
 			}
+
+			// that's right, i named it after filterFilter. fight me.
+			const $inputInput = $input.querySelector('input');
+			if ($inputInput != null) {
+				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationInvalidExp} }`);
+			}
+
+			$label.setAttribute('ng-class', `{ 'text-danger': ${$validationInvalidExp} }`);
+
+			if (component.validators != null) {
+				attrs.push(...Array.from(component.validators.keys()));
+				for (const [key, value] of component.validators) {
+					this.$validationMessages.set(key, value);
+				}
+			}
+
+			this.$validationAttrs
+				.concat(attrs)
+				.filter(x => x.startsWith('ng') === false && this.$validationMessages.has(x))
+				.forEach(x => {
+					const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
+					$message.innerText = this.$validationMessages.get(x) as string;
+					$validationBlock.appendChild($message);
+				});
+
+			$template.appendChild($validationBlock);
 
 			if ($input.type === 'radio') {
 				const $newTpl = h.createElement('div', ['form-group']);
