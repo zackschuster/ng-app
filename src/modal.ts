@@ -66,7 +66,7 @@ export class NgModalService {
 
 					const listener = (e: KeyboardEvent) => {
 						if (e.key === 'Escape' || e.key === 'Esc') {
-							if (this.onclose(true, close)) {
+							if (this.onclose({ isDismiss: true, close })) {
 								this.close();
 							}
 						}
@@ -75,13 +75,19 @@ export class NgModalService {
 					window.addEventListener('keydown', listener);
 
 					this.close = (...args: any[]) => {
-						// dismiss
-						if (args.length === 0) {
-							if (this.onclose(true, close)) {
-								close();
+						const param = {
+							isDismiss: args.length === 0,
+							close,
+							item: null,
+						};
+
+						if (param.isDismiss === false) {
+							param.item = args.length === 1 ? args[0] : args;
+							if (this.onclose(param)) {
+								close(...args);
 							}
-						} else if (this.onclose()) {
-							close(...args);
+						} else if (this.onclose(param)) {
+							close();
 						}
 					};
 				}

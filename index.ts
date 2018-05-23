@@ -23,8 +23,11 @@ export interface NgModalOptions {
 	controllerAs?: string;
 	onClose?(
 		this: { $log: NgLogger },
-		isDismiss?: boolean,
-		close?: (...args: any[]) => void,
+		args: {
+			item?: any,
+			isDismiss: boolean,
+			close(...args: any[]): void,
+		},
 	): boolean;
 }
 
