@@ -8,21 +8,69 @@ class DateInputController extends NgComponentController {
 	private hasFocus: boolean = false;
 	private onChange: Callback;
 	private lastClick: number;
+	private minDate: Date | number | string | null;
+	private maxDate: Date | number | string | null;
 
 	public $onInit() {
-		if (typeof this.ngModel !== 'object') {
-			this.ngModel = new Date(this.ngModel);
-		} else if (this.ngModel == null) {
-			this.ngModel = new Date(Date.now());
+		function isNumber(n: any): n is number {
+			return Number.isInteger(n);
 		}
+
+		this.ngModelCtrl.$validators.minDate = modelVal => {
+			if (modelVal != null && isNumber(this.minDate)) {
+				return this.minDate <= modelVal.valueOf();
+			}
+			return true;
+		};
+
+		this.ngModelCtrl.$validators.maxDate = modelVal => {
+			if (modelVal != null && isNumber(this.maxDate)) {
+				return this.maxDate >= modelVal.valueOf();
+			}
+			return true;
+		};
 
 		this.$scope.$watch(
 			_ => this.ngModel,
 			_ => {
-				if (typeof _ !== 'object') {
-					this.ngModel = new Date(_);
-				} else if (_ == null) {
-					this.ngModel = new Date(Date.now());
+				if (!(_ instanceof Date)) {
+					if (typeof _ !== 'object') {
+						this.ngModel = new Date(_);
+					} else if (_ == null) {
+						this.ngModel = new Date(Date.now());
+					}
+				}
+
+				this.ngModelCtrl.$setTouched();
+			},
+		);
+
+		this.$scope.$watch(
+			_ => this.minDate,
+			_ => {
+				if (_ instanceof Date) {
+					this.minDate = _.valueOf();
+				} else if (typeof _ === 'string') {
+					this.minDate = Date.parse(_);
+					if (Number.isNaN(this.minDate)) {
+						this.$log.devWarning('Min value cannot be parsed as a date. Setting to null.');
+						this.minDate = null;
+					}
+				}
+			},
+		);
+
+		this.$scope.$watch(
+			_ => this.maxDate,
+			_ => {
+				if (_ instanceof Date) {
+					this.maxDate = _.valueOf();
+				} else if (typeof _ === 'string') {
+					this.maxDate = Date.parse(_);
+					if (Number.isNaN(this.maxDate)) {
+						this.$log.devWarning('Max value cannot be parsed as a date. Setting to null.');
+						this.maxDate = null;
+					}
 				}
 			},
 		);
@@ -46,6 +94,14 @@ class DateInputController extends NgComponentController {
 			this.onChange(this.ngModel);
 		}
 	}
+
+	public getMinDate() {
+		return new Date(this.minDate as number).toLocaleDateString();
+	}
+
+	public getMaxDate() {
+		return new Date(this.maxDate as number).toLocaleDateString();
+	}
 }
 
 export const dateInput: InputComponentOptions = {
@@ -64,5 +120,13 @@ export const dateInput: InputComponentOptions = {
 			['style', 'cursor:pointer'],
 		]);
 	},
+	bindings: {
+		minDate: '<',
+		maxDate: '<',
+	},
+	validators: new Map<string, string>([
+		['minDate', 'Date must be on or after {{$ctrl.getMinDate()}}'],
+		['maxDate', 'Date must be on or before {{$ctrl.getMaxDate()}}'],
+	]),
 	ctrl: DateInputController,
 };

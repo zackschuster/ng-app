@@ -1,7 +1,7 @@
 export class NgRenderer {
 	public baseInputAttrs: [string, string][] = [
-		['id', '{{id}}'],
-		['name', '{{id}}'],
+		['ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}'],
+		['ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}'],
 		['ng-model', '$ctrl.ngModel'],
 		['ng-model-options', '$ctrl.ngModelOptions'],
 	];
@@ -61,7 +61,7 @@ export class NgRenderer {
 	}
 
 	public createLabel(classList: string[]) {
-		return this.createElement('label', classList, [['for', '{{id}}']]);
+		return this.createElement('label', classList, [['ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}']]);
 	}
 
 	public createSlot(name: string) {

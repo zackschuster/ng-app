@@ -1,4 +1,4 @@
-// tslint:disable:member-ordering
+	// tslint:disable:member-ordering
 import isIE11 from '@ledge/is-ie-11';
 import { IAttributes, IComponentOptions, IController } from 'angular';
 
@@ -20,7 +20,6 @@ export class InputService {
 		['maxlength', 'Input is too long'],
 	]);
 
-	private static $counter = 0;
 	private static readonly $baseDefinition: IComponentOptions = {
 		transclude: {
 			contain: '?contain',
@@ -41,22 +40,21 @@ export class InputService {
 	 * Retrieves the identifying name for an ngModel
 	 */
 	public static modelIdentifier($attrs: IAttributes) {
-		return ($attrs.ngModel as string).split('.').pop();
+		return ($attrs.ngModel as string).split('.').pop() as string;
 	}
 
 	/**
 	 * Get an optionally unique input id
 	 */
-	public static getId($attrs: IAttributes, { unique } = { unique: true }) {
-		return this.modelIdentifier($attrs) + (unique ? '_' + this.$counter++ : '');
+	public static getId($attrs: IAttributes) {
+		return this.modelIdentifier($attrs);
 	}
 
 	/**
 	 * Gets text -- intended for a label -- from the ngModel property text
 	 */
 	public static getDefaultLabelText($attrs: IAttributes) {
-		// tslint:disable-next-line:no-non-null-assertion
-		return this.modelIdentifier($attrs)!.split(/(?=[A-Z])/).join(' ');
+		return this.modelIdentifier($attrs).split(/(?=[A-Z])/).join(' ');
 	}
 
 	/**
@@ -99,7 +97,7 @@ export class InputService {
 	 * Get the appropriate form for a given element
 	 * @param $element The element to find a form for
 	 */
-	public static getForm($element: Element) {
+	public static hasForm($element: Element) {
 		let form = $element.closest('form');
 
 		if (form == null) {
@@ -113,7 +111,7 @@ export class InputService {
 			}
 		}
 
-		return form as HTMLFormElement;
+		return form != null;
 	}
 
 	/**
@@ -200,16 +198,13 @@ export class InputService {
 			}
 
 			const attrs = Object.keys(component.attrs || {});
-			const $form = this.getForm($el);
 
-			if ($form != null) {
-				const $formName = $form.getAttribute('name');
-
-				const $formNameExp = `$parent.${$formName}.`;
-				const $validationErrorExp = `${$formNameExp}{{id}}.$error`;
+			if (this.hasForm($el)) {
+				const $ngModelExp = `$ctrl.ngModelCtrl.`;
+				const $validationErrorExp = `${$ngModelExp}$error`;
 				const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
 				const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
-				const $validationExp = `(${$validationTouchedExp} || ${$formNameExp}$submitted) && ${$validationInvalidExp}`;
+				const $validationExp = `(${$validationTouchedExp} || ${$ngModelExp}$submitted) && ${$validationInvalidExp}`;
 
 				const $validationBlock = h.createElement('div', [], [
 					['ng-messages', $validationErrorExp],
@@ -221,13 +216,27 @@ export class InputService {
 					attrs.push('email');
 				}
 
+				// that's right, i named it after filterFilter. fight me.
+				const $inputInput = $input.querySelector('input');
+				if ($inputInput != null) {
+					$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationInvalidExp} }`);
+				}
+
+				$label.setAttribute('ng-class', `{ 'text-danger': ${$validationInvalidExp} }`);
+
+				if (component.validators != null) {
+					attrs.push(...Array.from(component.validators.keys()));
+					for (const [key, value] of component.validators) {
+						this.$validationMessages.set(key, value);
+					}
+				}
+
 				this.$validationAttrs
 					.concat(attrs)
 					.filter(x => x.startsWith('ng') === false && this.$validationMessages.has(x))
 					.forEach(x => {
 						const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
-						// tslint:disable-next-line:no-non-null-assertion
-						$message.innerText = this.$validationMessages.get(x)!;
+						$message.innerText = this.$validationMessages.get(x) as string;
 						$validationBlock.appendChild($message);
 					});
 
@@ -247,7 +256,10 @@ export class InputService {
 				.filter(x => x !== 'email')
 				.forEach(prop => {
 					// tslint:disable-next-line:no-non-null-assertion
-					$html = $html.replace(new RegExp('{{' + prop + '}}', 'g'), $attrs[prop] || component.attrs![prop]);
+					$html = $html.replace(
+						new RegExp('{{' + prop + '}}', 'g'),
+						$attrs[prop] || (component.attrs || {})[prop],
+					);
 				});
 
 			return $html;

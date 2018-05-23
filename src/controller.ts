@@ -42,4 +42,8 @@ export class NgController {
 export class NgComponentController extends NgController {
 	public ngModel: any;
 	public ngModelCtrl: INgModelController;
+
+	// tslint:disable-next-line:no-non-null-assertion
+	public uniqueId = crypto.getRandomValues(new Int8Array(2))!.toLocaleString().replace(/[-]|[,]/g, '');
+
 }

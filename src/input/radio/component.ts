@@ -1,10 +1,4 @@
 import { InputComponentOptions } from '../../..';
-import { NgComponentController } from '../../controller';
-
-class RadioListController extends NgComponentController {
-	// tslint:disable-next-line:no-non-null-assertion
-	public nameId = crypto.getRandomValues(new Int8Array(1))!.toLocaleString();
-}
 
 export const radioList: InputComponentOptions = {
 	type: 'input',
@@ -15,8 +9,7 @@ export const radioList: InputComponentOptions = {
 		const value = this.$attrs.value || 'Value';
 
 		radio.setAttribute('ng-value', `item.${value}`);
-		radio.setAttribute('ng-attr-name', `${this.$attrs.name || '{{id}}'}_{{$ctrl.nameId}}`);
-		radio.setAttribute('ng-attr-id', `${this.$attrs.name || '{{id}}'}{{$index}}_{{$ctrl.nameId}}`);
+		radio.setAttribute('ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}_{{$index}}');
 
 		radio.style.cursor = 'pointer';
 
@@ -38,7 +31,7 @@ export const radioList: InputComponentOptions = {
 
 		spanTag.appendChild(labelText);
 
-		this.$label.setAttribute('ng-attr-for', '{{id}}{{$index}}_{{$ctrl.nameId}}');
+		this.$label.setAttribute('ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}_{{$index}}');
 		this.$label.setAttribute('ng-click', `$ctrl.ngModel === item.${value}`);
 		this.$label.appendChild(spanTag);
 		this.$label.style.cursor = 'pointer';
@@ -47,5 +40,4 @@ export const radioList: InputComponentOptions = {
 		list: '<',
 		ngChecked: '<',
 	},
-	ctrl: RadioListController,
 };

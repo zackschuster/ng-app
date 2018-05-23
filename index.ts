@@ -60,6 +60,11 @@ export interface InputComponentOptions extends IComponentOptions {
 	labelClass?: string;
 
 	/**
+	 * Custom validator messages
+	 */
+	validators?: Map<string, string>;
+
+	/**
 	 * Run after container & label creation, before label manipulation
 	 */
 	render(
