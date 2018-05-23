@@ -15,7 +15,9 @@ export const radioList: InputComponentOptions = {
 		const value = this.$attrs.value || 'Value';
 
 		radio.setAttribute('ng-value', `item.${value}`);
-		radio.setAttribute('ng-attr-name', 'RadioButton_{{$ctrl.nameId}}');
+		radio.setAttribute('ng-attr-name', `${this.$attrs.name || '{{id}}'}_{{$ctrl.nameId}}`);
+		radio.setAttribute('ng-attr-id', `${this.$attrs.name || '{{id}}'}{{$index}}_{{$ctrl.nameId}}`);
+
 		radio.style.cursor = 'pointer';
 
 		if (this.$attrs.hasOwnProperty('inline')) {
@@ -36,7 +38,7 @@ export const radioList: InputComponentOptions = {
 
 		spanTag.appendChild(labelText);
 
-		this.$label.setAttribute('for', '{{id}}{{$index}}');
+		this.$label.setAttribute('ng-attr-for', '{{id}}{{$index}}_{{$ctrl.nameId}}');
 		this.$label.setAttribute('ng-click', `$ctrl.ngModel === item.${value}`);
 		this.$label.appendChild(spanTag);
 		this.$label.style.cursor = 'pointer';

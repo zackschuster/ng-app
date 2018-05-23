@@ -35,9 +35,8 @@ export class NgRenderer {
 		];
 
 		if ($isRadio) {
-			$inputAttrs.shift();
-			$inputAttrs.unshift(['id', '{{id}}{{$index}}']);
-		} else if (!$isCheckbox) {
+			$inputAttrs.shift(); // we'll set the id in render
+		} else if ($isCheckbox === false) {
 			$inputAttrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
 		}
 
