@@ -8,18 +8,10 @@ class TextInputController extends NgComponentController {
 	public $onInit() {
 		if (this.$attrs.type === 'number') {
 			this.ngModelCtrl.$validators.minVal = val => {
-				const valid = this.min == null || val >= this.min;
-				if (valid === false) {
-					this.ngModelCtrl.$setTouched();
-				}
-				return valid;
+				return this.min == null || val >= this.min;
 			};
 			this.ngModelCtrl.$validators.maxVal = val => {
-				const valid = this.max == null || val <= this.max;
-				if (valid === false) {
-					this.ngModelCtrl.$setTouched();
-				}
-				return valid;
+				return this.max == null || val <= this.max;
 			};
 		}
 	}

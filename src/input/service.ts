@@ -1,4 +1,4 @@
-// tslint:disable:member-ordering
+	// tslint:disable:member-ordering
 import isIE11 from '@ledge/is-ie-11';
 import { IAttributes, IComponentOptions, IController } from 'angular';
 
@@ -180,9 +180,10 @@ export class InputService {
 
 			const $ngModelCtrlExp = `$ctrl.ngModelCtrl.`;
 			const $validationErrorExp = `${$ngModelCtrlExp}$error`;
+			const $validationFormInvalidExp = `${$ngModelCtrlExp}$$parentForm.$submitted`;
 			const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
 			const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
-			const $validationExp = `${$validationTouchedExp} && ${$validationInvalidExp}`;
+			const $validationExp = `(${$validationTouchedExp} || ${$validationFormInvalidExp}) && ${$validationInvalidExp}`;
 
 			const $validationBlock = h.createElement('div', [], [
 				['ng-messages', $validationErrorExp],
@@ -195,12 +196,25 @@ export class InputService {
 			}
 
 			// that's right, i named it after filterFilter. fight me.
-			const $inputInput = $input.querySelector('input');
-			if ($inputInput != null) {
-				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationInvalidExp} }`);
-			}
+			const tagName = $input.tagName.toLowerCase();
+			const isTextArea = tagName === 'textarea';
+			const isRadio = $input.type === 'radio';
 
-			$label.setAttribute('ng-class', `{ 'text-danger': ${$validationInvalidExp} }`);
+			const $inputInput = tagName === 'input' || isTextArea
+				? $input
+				: $input.querySelector('input');
+
+			if ($inputInput != null) {
+				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationExp} }`);
+				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
+
+				// stupid hack to get rid of textarea autovalidation (only on ff)
+				// @ts-ignore
+				const isFirefox = typeof InstallTrigger !== 'undefined';
+				if ($attrs.hasOwnProperty('required') && (isTextArea || isRadio) && isFirefox) {
+					$inputInput.removeAttribute('required');
+				}
+			}
 
 			if (component.validators != null) {
 				attrs.push(...Array.from(component.validators.keys()));
@@ -211,7 +225,8 @@ export class InputService {
 
 			this.$validationAttrs
 				.concat(attrs)
-				.filter(x => x.startsWith('ng') === false && this.$validationMessages.has(x))
+				.filter(x => x.startsWith('ng') === false)
+				.filter(x => this.$validationMessages.has(x))
 				.forEach(x => {
 					const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
 					$message.innerText = this.$validationMessages.get(x) as string;
@@ -220,9 +235,23 @@ export class InputService {
 
 			$template.appendChild($validationBlock);
 
-			if ($input.type === 'radio') {
+			if (isRadio) {
 				const $newTpl = h.createElement('div', ['form-group']);
 				$newTpl.appendChild($template);
+
+				const $ngMessagesBlock = $template.querySelector('div[ng-messages]');
+				if ($ngMessagesBlock != null) {
+					$ngMessagesBlock.remove();
+					$newTpl.appendChild($ngMessagesBlock);
+				}
+
+				if ($attrs.hasOwnProperty('required')) {
+					const $requiredSpan = $label.querySelector('span.text-danger');
+					if ($requiredSpan != null) {
+						$requiredSpan.remove();
+					}
+				}
+
 				$template = $newTpl;
 			}
 

@@ -40,8 +40,6 @@ class DateInputController extends NgComponentController {
 						this.ngModel = new Date(Date.now());
 					}
 				}
-
-				this.ngModelCtrl.$setTouched();
 			},
 		);
 
