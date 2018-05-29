@@ -1,5 +1,5 @@
 import { IComponentOptions, IController, ITimeoutService, auto, bootstrap, injector, module } from 'angular';
-import { IState, IStateProvider, IStateService } from 'angular-ui-router';
+import { Ng1StateDeclaration, StateProvider, StateService } from '@uirouter/angularjs';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { Callback, IConfig } from '@ledge/types';
 import { autobind } from 'core-decorators';
@@ -46,7 +46,7 @@ export class NgApp {
 	private $bootstrap = bootstrap;
 
 	private $components: Map<string, IComponentOptions> = new Map();
-	private $routes: IState[] = [];
+	private $routes: Ng1StateDeclaration[] = [];
 
 	constructor() {
 		this.$module
@@ -106,7 +106,7 @@ export class NgApp {
 			this.$module.component(name, definition);
 		}
 
-		this.$module.config(['$stateProvider', ($stateProvider: IStateProvider) => {
+		this.$module.config(['$stateProvider', ($stateProvider: StateProvider) => {
 			for (const definition of this.$routes) {
 				$stateProvider.state(definition);
 			}
@@ -135,7 +135,7 @@ export class NgApp {
 		return this;
 	}
 
-	public registerRoutes(routes: IState[]) {
+	public registerRoutes(routes: Ng1StateDeclaration[]) {
 		this.$routes = [
 			...this.$routes,
 			...routes,
@@ -195,7 +195,7 @@ export class NgApp {
 						public $attrs: angular.IAttributes,
 						public $timeout: ITimeoutService,
 						public $injector: auto.IInjectorService,
-						public $state: IStateService,
+						public $state: StateService,
 						$http: angular.IHttpService,
 					) {
 						super();

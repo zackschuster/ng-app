@@ -1,8 +1,8 @@
 import { IAttributes, INgModelController, IScope, ITimeoutService, auto } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import { NgLogger } from './logger';
 import { NgDataService } from './http';
 import { IConfig } from '@ledge/types';
+import { StateService } from '@uirouter/angularjs';
 
 export class NgController {
 	protected readonly $config: IConfig;
@@ -13,7 +13,7 @@ export class NgController {
 	protected readonly $log: NgLogger;
 	protected readonly $http: NgDataService;
 	protected readonly $injector: auto.IInjectorService;
-	protected readonly $state: IStateService;
+	protected readonly $state: StateService;
 
 	protected readonly isProduction: boolean;
 	protected readonly isDevelopment: boolean;
