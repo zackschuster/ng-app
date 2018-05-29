@@ -6,9 +6,13 @@ import { NgComponentController } from '../../controller';
 import { InputComponentOptions } from '../../..';
 
 class SelectController extends NgComponentController {
-	public static Placeholder = '----Select One----';
+	public static SinglePlaceholder = '----Select One----';
+	public static MultiplePlaceholder = '----Select All That Apply----';
 	public static IsMultiple($attrs: IAttributes) {
 		return $attrs.hasOwnProperty('multiple') || $attrs.type === 'multiple';
+	}
+	public static GetPlaceholder($attrs: IAttributes) {
+		return this.IsMultiple($attrs) ? this.MultiplePlaceholder : this.SinglePlaceholder;
 	}
 
 	public list: any[];
@@ -107,7 +111,7 @@ class SelectController extends NgComponentController {
 		const opts: Choices.Options = { removeItemButton: true, itemSelectText: '', addItemText: '' };
 
 		if (isMultiple) {
-			opts.placeholderValue = this.$attrs.placeholder || SelectController.Placeholder;
+			opts.placeholderValue = this.$attrs.placeholder || SelectController.GetPlaceholder(this.$attrs);
 		}
 
 		const choices = new Choices(el, opts);
@@ -135,7 +139,7 @@ export const selectList: InputComponentOptions = {
 			input.setAttribute('multiple', 'true');
 		} else {
 			const placeholder = h.createElement('option', [], [['placeholder', 'true']]);
-			placeholder.innerText = SelectController.Placeholder;
+			placeholder.innerText = SelectController.GetPlaceholder(this.$attrs);
 			placeholder.value = '';
 			input.appendChild(placeholder);
 		}
