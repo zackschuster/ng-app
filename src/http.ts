@@ -25,7 +25,7 @@ export class NgDataService {
 		return this.safeAwait(promise) as Promise<T>;
 	}
 
-	public async Patch<T extends PatchPayload = PatchPayload>(url: string, data: T) {
+	public async Patch<T = any>(url: string, data: PatchPayload) {
 		const promise = this.$http.patch<T>(this.prefix + url, data, this.baseOptions);
 		return this.safeAwait(promise) as Promise<T>;
 	}
