@@ -12,12 +12,12 @@ import * as myRoutes from './my-routes';
 app
 	.registerDependency('ng1dependency')
 	.registerDependencies(['ng1dependency1', 'ng1dependency2'])
-  .registerRoutes(myRoutes) // using ui-router
+	.registerRoutes(myRoutes) // using ui-router
 	.registerTransitionHook('onBefore', { to: '**' }, ['serviceName', (serviceName) => {
 		/** ui-router transition hook code */
 	}])
-  .registerComponents({ myComponent })
-  .registerRunBlock(['serviceName', (serviceName) => {
+	.registerComponents({ myComponent })
+	.registerRunBlock(['serviceName', (serviceName) => {
 		/** run block code */
 	}])
 	.registerConfigBlock(['serviceName', (serviceName) => {
@@ -26,7 +26,7 @@ app
 	.registerHttpInterceptor(['serviceName', (serviceName) => {
 		/** http interceptor code */
 	}])
-  .bootstrap();
+.bootstrap();
 ```
 
 ## Common dependencies included
