@@ -27,10 +27,10 @@
     "@types/angular-animate": "^1.5.10",
     "@types/angular-ui-bootstrap": "^0.13.46",
     "@uirouter/angularjs": "^1.0.18",
-    "angular": "1.7.0",
-    "angular-animate": "1.7.0",
+    "angular": "^1.7.2",
+    "angular-animate": "^1.7.2",
     "angular-elastic": "^2.5.1",
-    "angular-messages": "1.7.0",
+    "angular-messages": "^1.7.2",
     "angular-ui-bootstrap": "^2.5.6",
     "choices.js": "^3.0.4",
     "core-decorators": "^0.20.0",
@@ -38,7 +38,7 @@
     "noty": "^3.1.4"
   },
   "devDependencies": {
-    "@ledge/configs": "^7.1.1",
+    "@ledge/configs": "^7.1.2",
     "ava": "^0.25.0",
     "del-cli": "^1.1.0",
     "tslint": "^5.10.0",

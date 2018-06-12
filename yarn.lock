@@ -53,9 +53,9 @@
     pretty-ms "^0.2.1"
     text-table "^0.2.0"
 
-"@ledge/configs@^7.1.1":
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-7.1.1.tgz#ec90c3e46ad85d5cfd0c2022b9730c1661a810f0"
+"@ledge/configs@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-7.1.2.tgz#860ae3c515d0884b23204a0c1a0c76d9816d4040"
 
 "@ledge/is-ie-11@^1.0.0":
   version "1.0.0"
@@ -124,9 +124,9 @@ ajv@^5.1.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-angular-animate@1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.7.0.tgz#c04293068ee0986dc00ba154626d74bf51f25576"
+angular-animate@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.7.2.tgz#48d1d22caf0057b57b50f882b68d51c297aa7747"
 
 angular-elastic@^2.5.1:
   version "2.5.1"
@@ -134,17 +134,21 @@ angular-elastic@^2.5.1:
   dependencies:
     angular ">=1.0.6"
 
-angular-messages@1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/angular-messages/-/angular-messages-1.7.0.tgz#ae0ec5fec710898dbbe9f0146ca87e0649f6c3d6"
+angular-messages@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/angular-messages/-/angular-messages-1.7.2.tgz#77116d83a72a00234d8177de9837bc867321f25e"
 
 angular-ui-bootstrap@^2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
 
-angular@1.7.0, angular@>=1.0.6:
+angular@>=1.0.6:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.0.tgz#e45d679fc8d81040a4894c7ccc16a4e1ad0a9ca6"
+
+angular@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.2.tgz#687b955dbe5c533f8d73460461707af00360251f"
 
 ansi-align@^2.0.0:
   version "2.0.0"
