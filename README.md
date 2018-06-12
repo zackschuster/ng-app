@@ -1,6 +1,6 @@
 # @ledge/ng-app
 
-> Keep Angular.js in a corner.
+> An ESM-friendly shim layer for Angular.js, written & distributed in TypeScript
 
 ## ESM-friendly api
 
@@ -9,14 +9,13 @@ import { app } from '@ledge/ng-app';
 import { myComponent } from './my-component';
 import * as myRoutes from './my-routes';
 
+// simple DI
 app
 	.registerDependency('ng1dependency')
-	.registerDependencies(['ng1dependency1', 'ng1dependency2'])
-	.registerRoutes(myRoutes) // using ui-router
-	.registerTransitionHook('onBefore', { to: '**' }, ['serviceName', (serviceName) => {
-		/** ui-router transition hook code */
-	}])
-	.registerComponents({ myComponent })
+	.registerDependencies(['ng1dependency1', 'ng1dependency2']);
+
+// configuration
+app
 	.registerRunBlock(['serviceName', (serviceName) => {
 		/** run block code */
 	}])
@@ -25,8 +24,21 @@ app
 	}])
 	.registerHttpInterceptor(['serviceName', (serviceName) => {
 		/** http interceptor code */
-	}])
-.bootstrap();
+	}]);
+
+// component-based, no directives
+app
+	.registerComponents({ myComponent });
+
+// ui-router
+app
+	.registerRoutes(myRoutes)
+	.registerTransitionHook('onBefore', { to: '**' }, ['serviceName', (serviceName) => {
+		/** ui-router transition hook code */
+	}]);
+
+// registration closes when bootstrap is called
+app.bootstrap();
 ```
 
 ## Common dependencies included
@@ -50,7 +62,7 @@ const timeout = app.timeout(); // returns $timeout service
 
 ## Built-in, zero-config components
 
-- Built for Bootstrap 4
+- Built for Bootstrap 4+
 - Supports disabled, required and readonly tags, as well as their `ng-`equivalents
 - Generates well-formed & accessible HTML structures with labels, ids, names, etc.
 
