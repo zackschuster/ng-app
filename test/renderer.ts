@@ -3,7 +3,6 @@ import { NgRenderer } from '../src/renderer';
 
 const h = new NgRenderer(new (require('window'))().document);
 
-// Attribute tests have minlength of 1 to accomodate [Symbol(NamedNodeMap internal)] attribute
 test('renderer creates bare element', t => {
 	const div = h.createElement('div');
 	t.true(div.classList.length === 0);
