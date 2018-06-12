@@ -1,6 +1,6 @@
 	// tslint:disable:member-ordering
 import isIE11 from '@ledge/is-ie-11';
-import { IAttributes, IComponentOptions, IController } from 'angular';
+import { IAttributes } from 'angular';
 
 import { NgComponentController } from '../controller';
 import { NgRenderer } from '../renderer';
@@ -20,7 +20,7 @@ export class InputService {
 		['maxlength', 'Input is too long'],
 	]);
 
-	private static readonly $baseDefinition: IComponentOptions = {
+	private static readonly $baseDefinition: angular.IComponentOptions = {
 		transclude: {
 			contain: '?contain',
 		},
@@ -74,7 +74,7 @@ export class InputService {
 			});
 	}
 
-	public static wrapComponentCtrl($ctrl: new(...args: any[]) => IController) {
+	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
 		// tslint:disable-next-line:max-classes-per-file
 		return class extends $ctrl {
 			constructor() {
@@ -98,44 +98,52 @@ export class InputService {
 	 * @param component An object representing the requested component definition
 	 */
 	public static defineInputComponent(component: InputComponentOptions) {
+		const $component = Object.assign({
+			isRadioOrCheckbox: false,
+			labelClass: 'form-control-label',
+			templateClass: 'form-group',
+			attrs: {},
+			ctrl: NgComponentController,
+		}, component);
+
+		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
+
 		const $definition = Object.assign({}, this.$baseDefinition);
 
 		// assign child objects
-		Object.assign($definition.bindings, component.bindings);
-		Object.assign($definition.transclude, component.transclude);
+		Object.assign($definition.bindings, $component.bindings);
+		Object.assign($definition.transclude, $component.transclude);
 
 		// assign controller
-		$definition.controller = this.wrapComponentCtrl(
-			component.ctrl || NgComponentController as new(...args: any[]) => IController);
+		$definition.controller = this.wrapComponentCtrl($component.ctrl);
 
 		// assign template - this thing's nasty :(
 		// tslint:disable-next-line:cyclomatic-complexity
-		$definition.template = ['$element', '$attrs', ($element: JQuery, $attrs: IAttributes) => {
-			const $el = ($element as any)[0] as Element;
+		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
+			const $el = $element[0];
 
 			// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 			const h = new NgRenderer(document);
 
 			// as it's an input, we'll put it inside a form-group container.
 			// this can be modified by a consumer through configuration.
-			let $template = h.createElement('div', [component.templateClass || 'form-group']);
+			let $template = h.createElement('div', [$component.templateClass]);
 
 			// see above: all inputs must have labels
-			const $label = h.createLabel([component.labelClass || 'form-control-label']);
-			const $isRadioOrCheckbox = component.labelClass === 'form-check-label';
+			const $label = h.createLabel([$component.labelClass]);
 
-			if ($isRadioOrCheckbox === false) {
+			if ($component.isRadioOrCheckbox === false) {
 				$template.appendChild($label);
 			}
 
-			const $input = component.render.call(
+			const $input = $component.render.call(
 				{ $template, $attrs }, // allow consumer to access $template and $attrs attributes from `this`
 				h);
 
 			// required, disabled, readonly, and their ng-equivalents
 			this.setInteractivityAttributes($input, $attrs);
 
-			if (component.canHaveIcon && $attrs.hasOwnProperty('icon')) {
+			if ($component.canHaveIcon && $attrs.hasOwnProperty('icon')) {
 				const $iconInput = h.createIconInput($input, $attrs.icon);
 				$template.appendChild($iconInput);
 			} else {
@@ -151,17 +159,17 @@ export class InputService {
 
 			// check if consumer wishes to render label; if not, add a default label based on
 			// $attrs.ngModel which a consumer can override through anonymous transclusion.
-			if (component.renderLabel != null) {
-				component.renderLabel.call({ $label, $attrs }, h);
+			if ($component.renderLabel != null) {
+				$component.renderLabel.call({ $label, $attrs }, h);
 			} else {
 				// TODO: figure out how consumers can pass in label text without requiring two transclusion slots
 				const $transclude = document.createElement('ng-transclude');
 				$transclude.textContent = this.getDefaultLabelText($attrs);
-
 				$label.appendChild($transclude);
 			}
 
-			if ($attrs.hasOwnProperty('required')) {
+			const isRadio = $input.type === 'radio';
+			if ($attrs.hasOwnProperty('required') && isRadio === false) {
 				const $span = h.createElement('span', ['text-danger']);
 				$span.textContent = ' *';
 				$label.appendChild($span);
@@ -172,11 +180,11 @@ export class InputService {
 				h.createSlot('contain'),
 			);
 
-			if ($isRadioOrCheckbox === true) {
+			if ($component.isRadioOrCheckbox === true) {
 				$template.appendChild($label);
 			}
 
-			const attrs = Object.keys(component.attrs || {});
+			const attrs = Object.keys($component.attrs);
 
 			const $ngModelCtrlExp = `$ctrl.ngModelCtrl.`;
 			const $validationErrorExp = `${$ngModelCtrlExp}$error`;
@@ -195,11 +203,10 @@ export class InputService {
 				attrs.push('email');
 			}
 
-			// that's right, i named it after filterFilter. fight me.
 			const tagName = $input.tagName.toLowerCase();
 			const isTextArea = tagName === 'textarea';
-			const isRadio = $input.type === 'radio';
 
+			// that's right, i named it after filterFilter. fight me.
 			const $inputInput = tagName === 'input' || isTextArea
 				? $input
 				: $input.querySelector('input');
@@ -211,15 +218,15 @@ export class InputService {
 				// stupid hack to get rid of textarea autovalidation (only on ff)
 				// @ts-ignore
 				const isFirefox = typeof InstallTrigger !== 'undefined';
-				if ($attrs.hasOwnProperty('required') && (isTextArea || isRadio) && isFirefox) {
+				if ($attrs.hasOwnProperty('required') && isTextArea && isFirefox) {
 					$inputInput.removeAttribute('required');
 				}
 			}
 
-			if (component.validators != null) {
-				attrs.push(...Array.from(component.validators.keys()));
-				for (const [key, value] of component.validators) {
+			if ($component.validators != null) {
+				for (const [key, value] of $component.validators) {
 					this.$validationMessages.set(key, value);
+					attrs.push(key);
 				}
 			}
 
@@ -245,13 +252,6 @@ export class InputService {
 					$newTpl.appendChild($ngMessagesBlock);
 				}
 
-				if ($attrs.hasOwnProperty('required')) {
-					const $requiredSpan = $label.querySelector('span.text-danger');
-					if ($requiredSpan != null) {
-						$requiredSpan.remove();
-					}
-				}
-
 				$template = $newTpl;
 			}
 
@@ -261,10 +261,9 @@ export class InputService {
 			attrs
 				.filter(x => x !== 'email')
 				.forEach(prop => {
-					// tslint:disable-next-line:no-non-null-assertion
 					$html = $html.replace(
 						new RegExp('{{' + prop + '}}', 'g'),
-						$attrs[prop] || (component.attrs || {})[prop],
+						$attrs[prop] || $component.attrs[prop],
 					);
 				});
 
