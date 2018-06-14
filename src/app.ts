@@ -161,10 +161,9 @@ export class NgApp {
 		return this;
 	}
 
-	public registerComponents(components: Map<string, IComponentOptions> | { [index: string]: IComponentOptions }) {
-		const logger = this.logger();
-		const config = this.$config;
-
+	public registerComponents(
+		components: Map<string, IComponentOptions> | { [index: string]: IComponentOptions },
+	) {
 		const componentIterable = components instanceof Map
 			? Array.from(components)
 			: Object.entries(components);
@@ -174,46 +173,12 @@ export class NgApp {
 				component = InputService.defineInputComponent(component as InputComponentOptions);
 			}
 
+			if (typeof component.controller === 'string') {
+				throw new Error('String controller references not supported');
+			}
+
 			if (component.controller != null) {
-				const $controller = component.controller as new(...args: any[]) => IController;
-
-				// Force `this` to always refer to the class instance, no matter what
-				autobind($controller);
-
-				// tslint:disable-next-line:max-classes-per-file
-				class InternalController extends $controller {
-					public $log = logger;
-					public $http: NgDataService;
-
-					public isProduction: boolean;
-					public isDevelopment: boolean;
-					public isStaging: boolean;
-
-					constructor(
-						public $scope: angular.IScope,
-						$element: JQuery,
-						public $attrs: angular.IAttributes,
-						public $timeout: ITimeoutService,
-						public $injector: auto.IInjectorService,
-						public $state: StateService,
-						$http: angular.IHttpService,
-					) {
-						super();
-
-						this.$http = new NgDataService($http, this.$log);
-						this.$element = ($element as any)[0];
-
-						this.$config = config;
-						this.isProduction = this.$config.ENV === 'production';
-						this.isDevelopment = this.$config.ENV === 'development';
-						this.isStaging = this.$config.ENV === 'staging';
-					}
-				}
-
-				component.controller = [
-					'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$http',
-					InternalController,
-				];
+				component.controller = this._wrapComponentController(component.controller as new() => any);
 			}
 
 			this.$components.set(name, component);
@@ -236,5 +201,48 @@ export class NgApp {
 
 	public timeout() {
 		return this.$injector.get('$timeout');
+	}
+
+	public _wrapComponentController($controller: new(...args: any[]) => IController) {
+		const config = this.$config;
+		const logger = this.logger();
+
+		// Force `this` to always refer to the class instance, no matter what
+		autobind($controller);
+
+		// tslint:disable-next-line:max-classes-per-file
+		class InternalController extends $controller {
+			public $log = logger;
+			public $http: NgDataService;
+
+			public isProduction: boolean;
+			public isDevelopment: boolean;
+			public isStaging: boolean;
+
+			constructor(
+				public $scope: angular.IScope,
+				$element: JQuery,
+				public $attrs: angular.IAttributes,
+				public $timeout: ITimeoutService,
+				public $injector: auto.IInjectorService,
+				public $state: StateService,
+				$http: angular.IHttpService,
+			) {
+				super();
+
+				this.$http = new NgDataService($http, this.$log);
+				this.$element = ($element as any)[0];
+
+				this.$config = config;
+				this.isProduction = this.$config.ENV === 'production';
+				this.isDevelopment = this.$config.ENV === 'development';
+				this.isStaging = this.$config.ENV === 'staging';
+			}
+		}
+
+		return [
+			'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$http',
+			InternalController,
+		];
 	}
 }
