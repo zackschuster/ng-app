@@ -42,7 +42,7 @@ test('renderer creates radio and checkbox inputs', t => {
 	t.true(radio.type === 'radio');
 	t.true(radio.classList.length === 1);
 	t.true(radio.classList.contains('form-check-input'));
-	t.true(radio.attributes.length === 6);
+	t.true(radio.attributes.length === 5);
 
 	const checkbox = h.createInput('checkbox');
 	t.true(checkbox.type === 'checkbox');
@@ -86,7 +86,7 @@ test('renderer creates label', t => {
 	t.true(label.classList.length === 1);
 	t.true(label.classList.contains('test'));
 	t.true(label.attributes.length === 2);
-	t.true(label.hasAttribute('for'));
+	t.true(label.hasAttribute('ng-attr-for'));
 });
 
 test('renderer creates slot', t => {
