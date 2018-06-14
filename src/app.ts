@@ -221,7 +221,7 @@ export class NgApp {
 
 			constructor(
 				public $scope: angular.IScope,
-				$element: JQuery,
+				$element: JQLite,
 				public $attrs: angular.IAttributes,
 				public $timeout: ITimeoutService,
 				public $injector: auto.IInjectorService,
@@ -231,7 +231,7 @@ export class NgApp {
 				super();
 
 				this.$http = new NgDataService($http, this.$log);
-				this.$element = ($element as any)[0];
+				this.$element = $element[0];
 
 				this.$config = config;
 				this.isProduction = this.$config.ENV === 'production';
