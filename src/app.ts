@@ -1,4 +1,4 @@
-import { IComponentOptions, IController, ITimeoutService, auto, bootstrap, injector, module } from 'angular';
+import { bootstrap, injector, module } from 'angular';
 import { Ng1StateDeclaration, StateProvider, StateService } from '@uirouter/angularjs';
 import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { Callback, IConfig } from '@ledge/types';
@@ -45,7 +45,7 @@ export class NgApp {
 	private $module = module(this.$id, this.$dependencies);
 	private $bootstrap = bootstrap;
 
-	private $components: Map<string, IComponentOptions> = new Map();
+	private $components: Map<string, angular.IComponentOptions> = new Map();
 	private $routes: Ng1StateDeclaration[] = [];
 
 	constructor() {
@@ -67,7 +67,7 @@ export class NgApp {
 			.run([
 				'$injector', '$animate', '$templateCache',
 				(
-					$injector: auto.IInjectorService,
+					$injector: angular.auto.IInjectorService,
 					$animate: angular.animate.IAnimateService,
 					$templateCache: angular.ITemplateCacheService,
 				) => {
@@ -162,7 +162,7 @@ export class NgApp {
 	}
 
 	public registerComponents(
-		components: Map<string, IComponentOptions> | { [index: string]: IComponentOptions },
+		components: Map<string, angular.IComponentOptions> | { [index: string]: angular.IComponentOptions },
 	) {
 		const componentIterable = components instanceof Map
 			? Array.from(components)
@@ -203,7 +203,7 @@ export class NgApp {
 		return this.$injector.get('$timeout');
 	}
 
-	public _wrapComponentController($controller: new(...args: any[]) => IController) {
+	public _wrapComponentController($controller: new(...args: any[]) => angular.IController) {
 		const config = this.$config;
 		const logger = this.logger();
 
@@ -223,8 +223,8 @@ export class NgApp {
 				public $scope: angular.IScope,
 				$element: JQLite,
 				public $attrs: angular.IAttributes,
-				public $timeout: ITimeoutService,
-				public $injector: auto.IInjectorService,
+				public $timeout: angular.ITimeoutService,
+				public $injector: angular.auto.IInjectorService,
 				public $state: StateService,
 				$http: angular.IHttpService,
 			) {
