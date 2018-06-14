@@ -8,8 +8,10 @@ export class NgRenderer {
 
 	constructor(private document: Document) {}
 
-	// tslint:disable-next-line:max-line-length
-	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T, classes: string[] = [], attrs: [string, string][] = []) {
+	public createElement<T extends keyof HTMLElementTagNameMap>(
+		tagName: T, classes: string[] = [],
+		attrs: [string, string][] = [],
+	) {
 		const $el = this.document.createElement(tagName);
 
 		classes.forEach(c => $el.classList.add(c));
