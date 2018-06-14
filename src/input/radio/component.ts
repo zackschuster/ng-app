@@ -1,4 +1,4 @@
-import { InputComponentOptions } from '../../..';
+import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
 
 class RadioListController extends NgComponentController {

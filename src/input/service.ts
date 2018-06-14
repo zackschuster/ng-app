@@ -2,9 +2,9 @@
 import isIE11 from '@ledge/is-ie-11';
 import { IAttributes } from 'angular';
 
+import { InputComponentOptions } from './options';
 import { NgComponentController } from '../controller';
 import { NgRenderer } from '../renderer';
-import { InputComponentOptions } from '../..';
 
 export class InputService {
 	private static $validationAttrs = [

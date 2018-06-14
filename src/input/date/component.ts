@@ -1,8 +1,8 @@
 import { isFunction } from 'angular';
 import { Callback } from '@ledge/types';
 
+import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
-import { InputComponentOptions } from '../../..';
 
 class DateInputController extends NgComponentController {
 	private hasFocus: boolean = false;

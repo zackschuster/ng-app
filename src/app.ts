@@ -8,7 +8,7 @@ import { NgDataService } from './http';
 import { NgLogger } from './logger';
 import { NgModalService } from './modal';
 
-import { InputComponentOptions } from '..';
+import { InputComponentOptions } from './input/options';
 import { InputService } from './input/service';
 
 import 'angular-animate';

@@ -1,6 +1,6 @@
 import { IScope, element } from 'angular';
 import { IModalService } from 'angular-ui-bootstrap';
-import { NgController, NgModalOptions } from '..';
+import { NgController, NgLogger } from '..';
 import { NgApp } from './app';
 
 export class NgModalService {
@@ -117,4 +117,20 @@ export class NgModalService {
 
 		return $modal;
 	}
+}
+
+export interface NgModalOptions {
+	template?: string;
+	appendTo?: Element;
+	size?: 'sm' | 'md' | 'lg';
+	controller?: new () => any;
+	controllerAs?: string;
+	onClose?(
+		this: { $log: NgLogger },
+		args: {
+			item?: any,
+			isDismiss: boolean,
+			close(...args: any[]): void,
+		},
+	): boolean;
 }

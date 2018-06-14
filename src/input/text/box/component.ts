@@ -1,4 +1,4 @@
-import { InputComponentOptions } from '../../../..';
+import { InputComponentOptions } from '../../options';
 
 export const textBox: InputComponentOptions = {
 	type: 'input',
