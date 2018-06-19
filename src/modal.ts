@@ -108,7 +108,7 @@ export class NgModalService {
 			ariaLabelledBy: 'modal-title',
 			ariaDescribedBy: 'modal-body',
 
-			appendTo: element(appendTo),
+			appendTo: element(appendTo) as angular.IAugmentedJQuery,
 			template,
 			size,
 			controller: ['$scope', extendClass()],
