@@ -68,23 +68,23 @@ const timeout = app.timeout(); // returns $timeout service
 
 ```html
 <text-input ng-model="model1">
-  Label Text
+	Label Text
 </text-input>
 <text-box ng-model="model2" required>
-  Other Label Text
+	Other Label Text
 </text-box>
 <date-input ng-model="dateInput" min-date="minDateValue" max-date="maxDateValue">
-  Date Label Text
+	Date Label Text
 </date-input>
 
 <check-box ng-model="model3">
-  <!-- "Model 3" will be generated as the label text  -->
-  <contain>
-    <text-input type="number" ng-model="model4" ng-disabled="!model3" min="1" max="2">
-      <!-- This label text will be used for screen readers -->
-      Description for the Model 3 checkbox
-    </text-input>
-  </contain>
+	<!-- "Model 3" will be generated as the label text  -->
+	<contain>
+		<text-input type="number" ng-model="model4" ng-disabled="!model3" min="1" max="2">
+			<!-- This label text will be used for screen readers -->
+			Description for the Model 3 checkbox
+		</text-input>
+	</contain>
 </check-box>
 
 <fieldset class="form-group">
