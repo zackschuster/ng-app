@@ -1,5 +1,5 @@
 import test from 'ava';
-import { mockLogger as $log } from './mocks';
+import { $log } from './mocks';
 
 test('logger has appropriate methods', t => {
 	t.is(typeof $log.clear, 'function');
