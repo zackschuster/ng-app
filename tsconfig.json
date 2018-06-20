@@ -3,5 +3,10 @@
 	"compilerOptions": {
 		"module": "commonjs",
 		"strictPropertyInitialization": false
-	}
+	},
+	"include": [
+		"index.ts",
+		"src/**/*.ts",
+		"test/**/*.ts"
+	]
 }
