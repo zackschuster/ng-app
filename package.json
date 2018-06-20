@@ -25,6 +25,7 @@
       "ts"
     ],
     "require": [
+			"./test/_setup.js",
       "ts-node/register"
     ]
   },
@@ -50,6 +51,6 @@
     "ts-node": "^6.1.1",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2",
-    "window": "^4.2.5"
+    "browser-env": "^3.2.5"
   }
 }
