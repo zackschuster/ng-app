@@ -1,10 +1,10 @@
-import { IScope, element } from 'angular';
-import { IModalService } from 'angular-ui-bootstrap';
-import { NgController, NgLogger } from '..';
+import { element } from 'angular';
 import { NgApp } from './app';
+import { NgController } from './controller';
+import { NgLogger } from './logger';
 
 export class NgModalService {
-	constructor(private $uibModal: IModalService, private app: NgApp) {}
+	constructor(private $uibModal: angular.ui.bootstrap.IModalService, private app: NgApp) {}
 
 	public open(options: NgModalOptions) {
 		const defaults: NgModalOptions = {
@@ -38,7 +38,7 @@ export class NgModalService {
 
 				protected onclose: typeof onClose;
 
-				constructor(public $scope: IScope) {
+				constructor(public $scope: angular.IScope) {
 					super();
 				}
 
