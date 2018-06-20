@@ -55,22 +55,25 @@ export class NgDataService {
 		}
 	}
 
-	// tslint:disable-next-line:cyclomatic-complexity
 	private onError(err: angular.IHttpPromiseCallbackArg<any>) {
+		let url = '';
+		if (err.config != null) {
+			({ url } = err.config);
+		}
+
 		switch (err.status) {
 			case 404:
-				// tslint:disable-next-line:no-non-null-assertion
-				this.$log.devWarning(`Route '${err.config!.url}' not found`);
+				this.$log.devWarning(`Route '${url}' not found`);
 				break;
 			case 500:
 				const { data, statusText } = err;
-				this.$log.error(typeof data === 'string' && data.length > 0 ? data : statusText as string);
+				this.$log.error(this.isValidString(data) ? data : statusText as string);
 				break;
 			case 400:
 				const msg = err.data;
 				if (typeof msg === 'string') {
 					this.$log.error(msg);
-				} else if (msg != null && !Array.isArray(msg)) {
+				} else if (this.isValidObject(msg)) {
 					let message = '';
 					Object.keys(msg).forEach(x => {
 						message += `${x}: ${msg[x]}\n`;
@@ -85,9 +88,16 @@ export class NgDataService {
 				this.$log.warning('Server timed out.');
 				break;
 			default:
-				// tslint:disable-next-line:no-non-null-assertion
-				this.$log.devWarning(`An unregistered error occurred for '${err.config!.url}' (code: ${err.status})`);
+				this.$log.devWarning(`An unregistered error occurred for '${url}' (code: ${err.status})`);
 				break;
 		}
+	}
+
+	private isValidString(data: any): data is string {
+		return typeof data === 'string' && data.length > 0;
+	}
+
+	private isValidObject(obj: any): obj is { [key: string]: any } {
+		return obj != null && obj.toString() === '[object Object]';
 	}
 }
