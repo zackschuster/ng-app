@@ -15,37 +15,40 @@ export class NgDataService {
 	public async Get<T = any>(url: string, defaultReturn?: T) {
 		const baseGetOptions = { params: { timestamp: (this.isIE11 ? Date.now() : null) } };
 
-		const options = Object.assign(baseGetOptions, this.baseOptions);
-		const promise = this.$http.get<T>(this.prefix + url, options);
-		return this.safeAwait(promise, defaultReturn) as Promise<T>;
+		const promise = this.$http.get<T>(
+			this.prefix + url,
+			Object.assign(baseGetOptions, this.baseOptions),
+		);
+
+		return this.safeAwait(promise, defaultReturn);
 	}
 
 	public async Post<T = any>(url: string, data: any = null) {
 		const promise = this.$http.post<T>(this.prefix + url, data, this.baseOptions);
-		return this.safeAwait(promise) as Promise<T>;
+		return this.safeAwait(promise);
 	}
 
 	public async Patch<T = any>(url: string, data: PatchPayload) {
 		const promise = this.$http.patch<T>(this.prefix + url, data, this.baseOptions);
-		return this.safeAwait(promise) as Promise<T>;
+		return this.safeAwait(promise);
 	}
 
 	public async Put<T = any>(url: string, data: T) {
 		const promise = this.$http.put<T>(this.prefix + url, data, this.baseOptions);
-		return this.safeAwait(promise) as Promise<T>;
+		return this.safeAwait(promise);
 	}
 
 	public async Delete<T = any>(url: string) {
 		const promise = this.$http.delete<T>(this.prefix + url, this.baseOptions);
-		return this.safeAwait(promise) as Promise<T>;
+		return this.safeAwait(promise);
 	}
 
 	public async Jsonp<T = any>(url: string) {
 		const promise = this.$http.jsonp<T>(this.prefix + url, this.baseOptions);
-		return this.safeAwait(promise) as Promise<T>;
+		return this.safeAwait(promise);
 	}
 
-	private async safeAwait<T>(promise: angular.IHttpPromise<T>, defaultReturn?: T) {
+	private async safeAwait<T>(promise: angular.IHttpPromise<T>, defaultReturn: T = null as any) {
 		try {
 			const rsp = await promise;
 			return rsp == null ? defaultReturn : rsp.data;
