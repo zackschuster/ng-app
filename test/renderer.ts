@@ -1,7 +1,5 @@
 import test from 'ava';
-import { NgRenderer } from '../src/renderer';
-
-const h = new NgRenderer(new (require('window'))().document);
+import { h } from './mocks';
 
 test('renderer creates bare element', t => {
 	const div = h.createElement('div');
