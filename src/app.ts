@@ -1,6 +1,6 @@
 import { bootstrap, injector, module } from 'angular';
-import { Ng1StateDeclaration, StateProvider, StateService } from '@uirouter/angularjs';
-import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
+import { Ng1StateDeclaration, StateProvider } from '@uirouter/angularjs';
+import { HookMatchCriteria, StateService, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { Callback, IConfig } from '@ledge/types';
 import { autobind } from 'core-decorators';
 
