@@ -1,3 +1,4 @@
+// tslint:disable:max-classes-per-file
 import { bootstrap, injector, module } from 'angular';
 import { Ng1StateDeclaration, StateProvider } from '@uirouter/angularjs';
 import { HookMatchCriteria, StateService, TargetState, Transition, TransitionService } from '@uirouter/core';
@@ -215,7 +216,6 @@ export class NgApp {
 		// Force `this` to always refer to the class instance, no matter what
 		autobind($controller);
 
-		// tslint:disable-next-line:max-classes-per-file
 		class InternalController extends $controller {
 			public $log = logger;
 			public $http = http;

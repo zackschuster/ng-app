@@ -1,4 +1,4 @@
-	// tslint:disable:member-ordering
+// tslint:disable:member-ordering max-classes-per-file
 import isIE11 from '@ledge/is-ie-11';
 import { IAttributes } from 'angular';
 
@@ -75,7 +75,6 @@ export class InputService {
 	}
 
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
-		// tslint:disable-next-line:max-classes-per-file
 		return class extends $ctrl {
 			constructor() {
 				super();

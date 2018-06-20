@@ -1,3 +1,4 @@
+// tslint:disable:max-classes-per-file
 import { element } from 'angular';
 import { NgApp } from './app';
 import { NgController } from './controller';
@@ -29,7 +30,6 @@ export class NgModalService {
 
 		const app = this.app;
 		function extendClass() {
-			// tslint:disable-next-line:max-classes-per-file
 			return class extends (controller as typeof NgController) {
 				public close: (...args: any[]) => void;
 				public $http = app.http();
