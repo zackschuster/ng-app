@@ -1,18 +1,25 @@
-import { ILogCall, ILogService } from 'angular';
 import * as Noty from 'noty';
 import { Callback, Indexed } from '@ledge/types';
-import { app } from '..';
 
 export class NgLogger {
-	public log: ILogCall;
-	private typeMap: Indexed<string> = {
+	public log: angular.ILogCall;
+	private typeMap: {
 		warning: 'warn',
 		success: 'log',
+		information: 'info',
 		info: 'info',
 		error: 'error',
+		alert: 'error',
+	} = {
+		warning: 'warn',
+		success: 'log',
+		information: 'info',
+		info: 'info',
+		error: 'error',
+		alert: 'error',
 	};
 
-	constructor(private $log: ILogService) {
+	constructor(private $log: angular.ILogService, private isProd = false) {
 		this.log = this.$log.log;
 	}
 
@@ -55,7 +62,7 @@ export class NgLogger {
 	}
 
 	public devWarning(msg: string) {
-		if (app.config.ENV !== 'production') {
+		if (this.isProd === false) {
 			this.warning(`[DEV] ${msg}`, false);
 		}
 	}
@@ -64,6 +71,6 @@ export class NgLogger {
 		new Noty({ type, text, theme: 'metroui', progressBar: false, timeout, closeWith: ['click'] }).show();
 
 		const logType = this.typeMap[type];
-		(this.$log as ILogService & Indexed<Callback>)[logType](`${type}: ${text}`);
+		(this.$log as angular.ILogService & Indexed<Callback>)[logType](`${type}: ${text}`);
 	}
 }

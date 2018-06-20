@@ -31,7 +31,7 @@ type TransitionHooks =
 export class NgApp {
 	public $injector = injector(['ng']);
 
-	private readonly $id: string = '$core';
+	private readonly $id = '$core';
 	private $dependencies = [
 		'ngAnimate',
 		'ngMessages',
@@ -72,9 +72,9 @@ export class NgApp {
 					$templateCache: angular.ITemplateCacheService,
 				) => {
 					['day', 'month', 'year'].forEach(x => {
-						const tplName = `uib/template/datepicker/${x}.html`;
-						const tpl = $templateCache.get<string>(tplName).replace(/glyphicon/g, 'fa');
-						$templateCache.put(tplName, tpl);
+						const templateUrl = `uib/template/datepicker/${x}.html`;
+						const template = $templateCache.get<string>(templateUrl).replace(/glyphicon/g, 'fa');
+						$templateCache.put(templateUrl, template);
 					});
 
 					this.$injector = $injector;
@@ -93,12 +93,6 @@ export class NgApp {
 	public set config(cfg: IConfig) {
 		this.$config = cfg;
 		this.$config.ENV = process.env.NODE_ENV;
-
-		if (this.$config.PREFIX == null) {
-			this.$config.PREFIX = { API: '' };
-		} else if (!this.$config.PREFIX.API) {
-			this.$config.PREFIX.API = '';
-		}
 	}
 
 	public bootstrap() {
@@ -187,12 +181,20 @@ export class NgApp {
 		return this;
 	}
 
-	public http() {
-		return new NgDataService(this.$injector.get('$http'), this.logger());
+	public http(options: angular.IRequestShortcutConfig = {
+		timeout: this.$config.ENV === 'production' ? 10000 : undefined,
+		withCredentials: true,
+	}) {
+		return new NgDataService(
+			this.$injector.get('$http'),
+			this.logger(),
+			this._verifyApiPrefix(),
+			options,
+		);
 	}
 
 	public logger() {
-		return new NgLogger(this.$injector.get('$log'));
+		return new NgLogger(this.$injector.get('$log'), this.$config.ENV === 'production');
 	}
 
 	public modal() {
@@ -205,7 +207,10 @@ export class NgApp {
 
 	public _wrapComponentController($controller: new(...args: any[]) => angular.IController) {
 		const config = this.$config;
+
 		const logger = this.logger();
+		const http = this.http();
+		const apiPrefix = this._verifyApiPrefix(config);
 
 		// Force `this` to always refer to the class instance, no matter what
 		autobind($controller);
@@ -213,11 +218,14 @@ export class NgApp {
 		// tslint:disable-next-line:max-classes-per-file
 		class InternalController extends $controller {
 			public $log = logger;
-			public $http: NgDataService;
+			public $http = http;
+			public $config = config;
+			public $element: HTMLElement;
 
-			public isProduction: boolean;
-			public isDevelopment: boolean;
-			public isStaging: boolean;
+			public isProduction = config.ENV === 'production';
+			public isDevelopment = config.ENV === 'development';
+			public isStaging = config.ENV === 'staging';
+			public apiPrefix = apiPrefix;
 
 			constructor(
 				public $scope: angular.IScope,
@@ -226,17 +234,10 @@ export class NgApp {
 				public $timeout: angular.ITimeoutService,
 				public $injector: angular.auto.IInjectorService,
 				public $state: StateService,
-				$http: angular.IHttpService,
 			) {
 				super();
 
-				this.$http = new NgDataService($http, this.$log);
 				this.$element = $element[0];
-
-				this.$config = config;
-				this.isProduction = this.$config.ENV === 'production';
-				this.isDevelopment = this.$config.ENV === 'development';
-				this.isStaging = this.$config.ENV === 'staging';
 			}
 		}
 
@@ -244,5 +245,17 @@ export class NgApp {
 			'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$http',
 			InternalController,
 		];
+	}
+
+	protected _verifyApiPrefix(config = this.$config) {
+		if (config.PREFIX == null || config.PREFIX.toString() !== '[object Object]') {
+			throw new Error('Error creating http service: PREFIX config not properly set');
+		}
+
+		if (typeof config.PREFIX.API !== 'string') {
+			throw new Error('Error creating http service: API prefix must be a string');
+		}
+
+		return config.PREFIX.API;
 	}
 }

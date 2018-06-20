@@ -18,6 +18,7 @@ export class NgController {
 	protected readonly isProduction: boolean;
 	protected readonly isDevelopment: boolean;
 	protected readonly isStaging: boolean;
+	protected readonly apiPrefix: boolean;
 
 	protected openWebAddress(address: string) {
 		this.$log.confirm(_ => {
@@ -30,11 +31,7 @@ export class NgController {
 	}
 
 	protected getApiPrefix() {
-		const prefixes = this.$config.PREFIX;
-		if (prefixes != null) {
-			return prefixes.API;
-		}
-		return '';
+		return this.apiPrefix;
 	}
 }
 
