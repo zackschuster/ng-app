@@ -1,18 +1,18 @@
-import { IAttributes, INgModelController, IScope, ITimeoutService, auto } from 'angular';
-import { NgLogger } from './logger';
-import { NgDataService } from './http';
+// tslint:disable:max-classes-per-file
 import { IConfig } from '@ledge/types';
 import { StateService } from '@uirouter/angularjs';
+import { NgLogger } from './logger';
+import { NgDataService } from './http';
 
 export class NgController {
 	protected readonly $config: IConfig;
-	protected readonly $scope: IScope;
+	protected readonly $scope: angular.IScope;
 	protected readonly $element: HTMLElement;
-	protected readonly $attrs: IAttributes;
-	protected readonly $timeout: ITimeoutService;
+	protected readonly $attrs: angular.IAttributes;
+	protected readonly $timeout: angular.ITimeoutService;
 	protected readonly $log: NgLogger;
 	protected readonly $http: NgDataService;
-	protected readonly $injector: auto.IInjectorService;
+	protected readonly $injector: angular.auto.IInjectorService;
 	protected readonly $state: StateService;
 
 	protected readonly isProduction: boolean;
@@ -35,10 +35,9 @@ export class NgController {
 	}
 }
 
-// tslint:disable-next-line:max-classes-per-file
 export class NgComponentController extends NgController {
 	public ngModel: any;
-	public ngModelCtrl: INgModelController;
+	public ngModelCtrl: angular.INgModelController;
 
 	// tslint:disable-next-line:no-non-null-assertion
 	public uniqueId = crypto.getRandomValues(new Int8Array(2))!.toLocaleString().replace(/[-]|[,]/g, '');
