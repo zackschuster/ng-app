@@ -12,6 +12,9 @@
 			"program": "${workspaceRoot}/node_modules/ava/profile.js",
 			"args": [
 				"${file}"
+			],
+			"skipFiles": [
+				"<node_internals>/**/*.js"
 			]
 		}
 	]
