@@ -1,5 +1,6 @@
 if (typeof module !== 'undefined' && module.exports) {
-	require('browser-env')();
+	require('browser-env')({ resources: 'usable' });
 	require('angular/angular.js');
+	require('angular-mocks');
 	global.angular = window.angular;
 }
