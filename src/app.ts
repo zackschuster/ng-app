@@ -29,6 +29,7 @@ type TransitionHooks =
 	'onStart' |
 	'onSuccess';
 
+@autobind
 export class NgApp {
 	public $injector = injector(['ng']);
 
@@ -218,26 +219,22 @@ export class NgApp {
 	}
 
 	public _wrapComponentController($controller: new(...args: any[]) => angular.IController) {
-		const config = this.$config;
+		const { config, http, logger, _verifyApiPrefix: getApiPrefix } = this;
 		const { IS_PROD, IS_DEV, IS_STAGING } = this.$flags;
-
-		const logger = this.logger();
-		const http = this.http();
-		const apiPrefix = this._verifyApiPrefix(config);
 
 		// Force `this` to always refer to the class instance, no matter what
 		autobind($controller);
 
 		class InternalController extends $controller {
-			public $log = logger;
-			public $http = http;
+			public $log = logger();
+			public $http = http();
 			public $config = config;
 			public $element: HTMLElement;
 
 			public isProduction = IS_PROD;
 			public isDevelopment = IS_DEV;
 			public isStaging = IS_STAGING;
-			public apiPrefix = apiPrefix;
+			public apiPrefix = getApiPrefix();
 
 			constructor(
 				public $scope: angular.IScope,
