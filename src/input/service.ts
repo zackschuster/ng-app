@@ -68,9 +68,11 @@ export class InputService {
 
 	/**
 	 * Sets required, disabled, readonly, as well as their ng-equivalents
+	 * Also handles ng-class and ng-blur
 	 *
 	 * @param $input - The input to set attributes on
 	 * @param $attrs - The Angular.js $attrs object
+	 * @returns $validationMessages - Angular.js expressions for when to show ngMessage blocks
 	 */
 	public static setInteractivityAttributes($input: Element, $attrs: IAttributes) {
 		this.$validationAttrs
@@ -81,28 +83,37 @@ export class InputService {
 					x.startsWith('ng') ? '$ctrl.' + x : 'true',
 				);
 			});
-	}
 
-	public static setMiscInputValidationAttributes($input: Element, $validationExp: string) {
+		const $ngModelCtrlExp = `$ctrl.ngModelCtrl.`;
+		const $validationErrorExp = `${$ngModelCtrlExp}$error`;
+		const $validationFormInvalidExp = `${$ngModelCtrlExp}$$parentForm.$submitted`;
+		const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
+		const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
+		const $validationExp = `(${$validationTouchedExp} || ${$validationFormInvalidExp}) && ${$validationInvalidExp}`;
+
 		const tagName = $input.tagName.toLowerCase();
 		const isTextArea = tagName === 'textarea';
 
 		// that's right, i named it after filterFilter. fight me.
 		const $inputInput = tagName === 'input' || isTextArea
 			? $input
-			: $input.querySelector('input') as HTMLInputElement;
+			: $input.querySelector('input');
 
-		$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationExp} }`);
-		$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
+		if ($inputInput != null) {
+			$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationExp} }`);
+			$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 
-		// stupid hack to get rid of textarea autovalidation (only on ff)
-		if (isTextArea) {
-			// @ts-ignore
-			const isFirefox = typeof InstallTrigger !== 'undefined';
-			if (isFirefox) {
-				$inputInput.removeAttribute('required');
+			// stupid hack to get rid of textarea autovalidation (only on ff)
+			if (isTextArea) {
+				// @ts-ignore
+				const isFirefox = typeof InstallTrigger !== 'undefined';
+				if (isFirefox) {
+					$inputInput.removeAttribute('required');
+				}
 			}
 		}
+
+		return { $validationErrorExp, $validationExp };
 	}
 
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
@@ -168,9 +179,6 @@ export class InputService {
 				$template.appendChild($label);
 			}
 
-			// required, disabled, readonly, and their ng-equivalents
-			this.setInteractivityAttributes($input, $attrs);
-
 			const shouldHaveIcon = $component.canHaveIcon && $attrs.hasOwnProperty('icon');
 			if (shouldHaveIcon) {
 				const $iconInput = h.createIconInput($input, $attrs.icon);
@@ -202,26 +210,20 @@ export class InputService {
 				$template.appendChild($label);
 			}
 
-			const $ngModelCtrlExp = `$ctrl.ngModelCtrl.`;
-			const $validationErrorExp = `${$ngModelCtrlExp}$error`;
-			const $validationFormInvalidExp = `${$ngModelCtrlExp}$$parentForm.$submitted`;
-			const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
-			const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
-			const $validationExp = `(${$validationTouchedExp} || ${$validationFormInvalidExp}) && ${$validationInvalidExp}`;
+			const attrs = Object.keys($component.attrs);
+			for (const [key, value] of $component.validators) {
+				this.$validationMessages.set(key, value);
+				attrs.push(key);
+			}
+
+			// required, disabled, readonly, and their ng-equivalents
+			const { $validationErrorExp, $validationExp } = this.setInteractivityAttributes($input, $attrs);
 
 			const $validationBlock = h.createElement('div', [], [
 				['ng-messages', $validationErrorExp],
 				['ng-show', $validationExp],
 				['role', 'alert'],
 			]);
-
-			this.setMiscInputValidationAttributes($input, $validationExp);
-
-			const attrs = Object.keys($component.attrs);
-			for (const [key, value] of $component.validators) {
-				this.$validationMessages.set(key, value);
-				attrs.push(key);
-			}
 
 			this.$validationAttrs
 				.concat(...attrs, 'email')
