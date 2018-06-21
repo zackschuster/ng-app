@@ -59,6 +59,7 @@ export class NgApp {
 					$qProvider: angular.IQProvider,
 				) => {
 					$compileProvider
+						.debugInfoEnabled(this.$config.ENV !== 'production')
 						.commentDirectivesEnabled(false)
 						.cssClassDirectivesEnabled(false);
 
