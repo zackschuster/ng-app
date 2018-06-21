@@ -41,7 +41,8 @@ export class NgApp {
 		'monospaced.elastic',
 	];
 
-	private $config: IConfig = { ENV: process.env.NODE_ENV };
+	private $config: IConfig;
+	private $flags: { IS_PROD: boolean; IS_DEV: boolean; IS_STAGING: boolean };
 
 	private $module = module(this.$id, this.$dependencies);
 	private $bootstrap = bootstrap;
@@ -50,6 +51,8 @@ export class NgApp {
 	private $routes: Ng1StateDeclaration[] = [];
 
 	constructor() {
+		this.config = {};
+
 		this.$module
 			.config([
 				'$compileProvider', '$locationProvider', '$qProvider',
@@ -58,8 +61,10 @@ export class NgApp {
 					$locationProvider: angular.ILocationProvider,
 					$qProvider: angular.IQProvider,
 				) => {
+					const { IS_DEV, IS_STAGING } = this.$flags;
+
 					$compileProvider
-						.debugInfoEnabled(this.$config.ENV !== 'production')
+						.debugInfoEnabled(IS_DEV || IS_STAGING)
 						.commentDirectivesEnabled(false)
 						.cssClassDirectivesEnabled(false);
 
@@ -95,6 +100,11 @@ export class NgApp {
 	public set config(cfg: IConfig) {
 		this.$config = cfg;
 		this.$config.ENV = process.env.NODE_ENV;
+		this.$flags = {
+			IS_PROD: this.$config.ENV === 'production',
+			IS_DEV: this.$config.ENV === 'development',
+			IS_STAGING: this.$config.ENV === 'staging',
+		};
 	}
 
 	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
@@ -184,7 +194,7 @@ export class NgApp {
 	}
 
 	public http(options: angular.IRequestShortcutConfig = {
-		timeout: this.$config.ENV === 'production' ? 10000 : undefined,
+		timeout: this.$flags.IS_PROD ? 10000 : undefined,
 		withCredentials: true,
 	}) {
 		return new NgDataService(
@@ -196,7 +206,7 @@ export class NgApp {
 	}
 
 	public logger() {
-		return new NgLogger(this.$injector.get('$log'), this.$config.ENV === 'production');
+		return new NgLogger(this.$injector.get('$log'), this.$flags.IS_PROD);
 	}
 
 	public modal() {
@@ -209,6 +219,7 @@ export class NgApp {
 
 	public _wrapComponentController($controller: new(...args: any[]) => angular.IController) {
 		const config = this.$config;
+		const { IS_PROD, IS_DEV, IS_STAGING } = this.$flags;
 
 		const logger = this.logger();
 		const http = this.http();
@@ -223,9 +234,9 @@ export class NgApp {
 			public $config = config;
 			public $element: HTMLElement;
 
-			public isProduction = config.ENV === 'production';
-			public isDevelopment = config.ENV === 'development';
-			public isStaging = config.ENV === 'staging';
+			public isProduction = IS_PROD;
+			public isDevelopment = IS_DEV;
+			public isStaging = IS_STAGING;
 			public apiPrefix = apiPrefix;
 
 			constructor(
