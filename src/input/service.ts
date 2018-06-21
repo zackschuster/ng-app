@@ -36,6 +36,15 @@ export class InputService {
 		},
 	};
 
+	private static readonly $baseComponent = {
+		isRadioOrCheckbox: false,
+		labelClass: 'form-control-label',
+		templateClass: 'form-group',
+		attrs: {},
+		ctrl: NgComponentController,
+		validators: new Map(),
+	};
+
 	/**
 	 * Retrieves the identifying name for an ngModel
 	 */
@@ -74,6 +83,28 @@ export class InputService {
 			});
 	}
 
+	public static setMiscInputValidationAttributes($input: Element, $validationExp: string) {
+		const tagName = $input.tagName.toLowerCase();
+		const isTextArea = tagName === 'textarea';
+
+		// that's right, i named it after filterFilter. fight me.
+		const $inputInput = tagName === 'input' || isTextArea
+			? $input
+			: $input.querySelector('input') as HTMLInputElement;
+
+		$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationExp} }`);
+		$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
+
+		// stupid hack to get rid of textarea autovalidation (only on ff)
+		if (isTextArea) {
+			// @ts-ignore
+			const isFirefox = typeof InstallTrigger !== 'undefined';
+			if (isFirefox) {
+				$inputInput.removeAttribute('required');
+			}
+		}
+	}
+
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
 		return class extends $ctrl {
 			constructor() {
@@ -96,18 +127,14 @@ export class InputService {
 	 * Transform an input component definition into an ng component definition
 	 * @param component An object representing the requested component definition
 	 */
-	public static defineInputComponent(component: InputComponentOptions) {
-		const $component = Object.assign({
-			isRadioOrCheckbox: false,
-			labelClass: 'form-control-label',
-			templateClass: 'form-group',
-			attrs: {},
-			ctrl: NgComponentController,
-		}, component);
-
+	public static defineInputComponent(component: InputComponentOptions, doc = document) {
+		const $component = Object.assign({}, InputService.$baseComponent, component);
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
 		const $definition = Object.assign({}, this.$baseDefinition);
+
+		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
+		const h = new NgRenderer(doc);
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);
@@ -116,33 +143,36 @@ export class InputService {
 		// assign controller
 		$definition.controller = this.wrapComponentCtrl($component.ctrl);
 
-		// assign template - this thing's nasty :(
-		// tslint:disable-next-line:cyclomatic-complexity
+		// assign template
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
 			const $el = $element[0];
-
-			// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
-			const h = new NgRenderer(document);
 
 			// as it's an input, we'll put it inside a form-group container.
 			// this can be modified by a consumer through configuration.
 			let $template = h.createElement('div', [$component.templateClass]);
 
-			// see above: all inputs must have labels
-			const $label = h.createLabel([$component.labelClass]);
+			const $input: HTMLInputElement = $component.render.call(
+				{ $template, $attrs }, // allow consumer to access $template and $attrs attributes from `this`
+				h);
+
+			const isRadio = $input.type === 'radio';
+
+			// all inputs must have labels
+			const $label = h.createLabel([$component.labelClass], {
+				isRequired: $attrs.hasOwnProperty('required'),
+				isSrOnly: $attrs.hasOwnProperty('srOnly'),
+				isRadio,
+			});
 
 			if ($component.isRadioOrCheckbox === false) {
 				$template.appendChild($label);
 			}
 
-			const $input = $component.render.call(
-				{ $template, $attrs }, // allow consumer to access $template and $attrs attributes from `this`
-				h);
-
 			// required, disabled, readonly, and their ng-equivalents
 			this.setInteractivityAttributes($input, $attrs);
 
-			if ($component.canHaveIcon && $attrs.hasOwnProperty('icon')) {
+			const shouldHaveIcon = $component.canHaveIcon && $attrs.hasOwnProperty('icon');
+			if (shouldHaveIcon) {
 				const $iconInput = h.createIconInput($input, $attrs.icon);
 				$template.appendChild($iconInput);
 			} else {
@@ -152,8 +182,6 @@ export class InputService {
 			if ($el.closest('contain') != null) {
 				$input.style.marginTop = '8px';
 				$label.classList.add('sr-only');
-			} else if ($attrs.hasOwnProperty('srOnly')) {
-				$label.classList.add('sr-only');
 			}
 
 			// check if consumer wishes to render label; if not, add a default label based on
@@ -162,28 +190,17 @@ export class InputService {
 				$component.renderLabel.call({ $label, $attrs }, h);
 			} else {
 				// TODO: figure out how consumers can pass in label text without requiring two transclusion slots
-				const $transclude = document.createElement('ng-transclude');
+				const $transclude = h.createSlot();
 				$transclude.textContent = this.getDefaultLabelText($attrs);
 				$label.appendChild($transclude);
 			}
 
-			const isRadio = $input.type === 'radio';
-			if ($attrs.hasOwnProperty('required') && isRadio === false) {
-				const $span = h.createElement('span', ['text-danger']);
-				$span.textContent = ' *';
-				$label.appendChild($span);
-			}
-
 			// add a transclusion slot for e.g. nesting inputs
-			$template.appendChild(
-				h.createSlot('contain'),
-			);
+			$template.appendChild(h.createSlot('contain'));
 
 			if ($component.isRadioOrCheckbox === true) {
 				$template.appendChild($label);
 			}
-
-			const attrs = Object.keys($component.attrs);
 
 			const $ngModelCtrlExp = `$ctrl.ngModelCtrl.`;
 			const $validationErrorExp = `${$ngModelCtrlExp}$error`;
@@ -198,67 +215,38 @@ export class InputService {
 				['role', 'alert'],
 			]);
 
-			if ($input.type === 'email') {
-				attrs.push('email');
-			}
+			this.setMiscInputValidationAttributes($input, $validationExp);
 
-			const tagName = $input.tagName.toLowerCase();
-			const isTextArea = tagName === 'textarea';
-
-			// that's right, i named it after filterFilter. fight me.
-			const $inputInput = tagName === 'input' || isTextArea
-				? $input
-				: $input.querySelector('input');
-
-			if ($inputInput != null) {
-				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationExp} }`);
-				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
-
-				// stupid hack to get rid of textarea autovalidation (only on ff)
-				// @ts-ignore
-				const isFirefox = typeof InstallTrigger !== 'undefined';
-				if ($attrs.hasOwnProperty('required') && isTextArea && isFirefox) {
-					$inputInput.removeAttribute('required');
-				}
-			}
-
-			if ($component.validators != null) {
-				for (const [key, value] of $component.validators) {
-					this.$validationMessages.set(key, value);
-					attrs.push(key);
-				}
+			const attrs = Object.keys($component.attrs);
+			for (const [key, value] of $component.validators) {
+				this.$validationMessages.set(key, value);
+				attrs.push(key);
 			}
 
 			this.$validationAttrs
-				.concat(attrs)
+				.concat(...attrs, 'email')
 				.filter(x => x.startsWith('ng') === false)
-				.filter(x => this.$validationMessages.has(x))
+				.filter(x => this.$validationMessages.has(x) === true)
+				.filter(x => x !== 'email' || $input.type === x)
 				.forEach(x => {
 					const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
 					$message.innerText = this.$validationMessages.get(x) as string;
 					$validationBlock.appendChild($message);
 				});
 
-			$template.appendChild($validationBlock);
-
-			if (isRadio) {
+			if (isRadio === true) {
 				const $newTpl = h.createElement('div', ['form-group']);
 				$newTpl.appendChild($template);
-
-				const $ngMessagesBlock = $template.querySelector('div[ng-messages]');
-				if ($ngMessagesBlock != null) {
-					$ngMessagesBlock.remove();
-					$newTpl.appendChild($ngMessagesBlock);
-				}
-
+				$newTpl.appendChild($validationBlock);
 				$template = $newTpl;
+			} else {
+				$template.appendChild($validationBlock);
 			}
 
 			const $id = this.getId($attrs);
 			let $html = $template.outerHTML.replace(/{{id}}/g, $id);
 
 			attrs
-				.filter(x => x !== 'email')
 				.forEach(prop => {
 					$html = $html.replace(
 						new RegExp('{{' + prop + '}}', 'g'),

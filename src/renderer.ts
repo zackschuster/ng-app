@@ -64,12 +64,43 @@ export class NgRenderer {
 		return this.createElement('span', $iconClasses, [['aria-hidden', 'true']]);
 	}
 
-	public createLabel(classList: string[]) {
-		return this.createElement('label', classList, [['ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}']]);
+	public createLabel(classList: string[], {
+			isRequired,
+			isSrOnly,
+			isRadio,
+		}: {
+			isRequired?: boolean,
+			isSrOnly?: boolean,
+			isRadio?: boolean,
+		} = {
+			isRequired: false,
+			isSrOnly: false,
+			isRadio: false,
+		},
+	) {
+		const $label = this.createElement(
+			'label',
+			classList,
+			[['ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}']],
+		);
+
+		if (isRequired === true && isRadio === false) {
+			const $span = this.createElement('span', ['text-danger']);
+			$span.textContent = ' *';
+			$label.appendChild($span);
+		}
+
+		if (isSrOnly) {
+			$label.classList.add('sr-only');
+		}
+
+		return $label;
 	}
 
-	public createSlot(name: string) {
-		return this.createElement('div', [], [['ng-transclude', name]]);
+	public createSlot(name?: string) {
+		return name != null
+			? this.createElement('div', [], [['ng-transclude', name]])
+			: this.createElement('ng-transclude') as HTMLDivElement;
 	}
 
 	public createIconInput($input: HTMLInputElement, icon: string, inputGroupAttrs: [string, string][] = []) {
