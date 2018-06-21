@@ -128,13 +128,47 @@ test('renderer creates label', t => {
 	t.is(label.getAttribute('ng-attr-for'), '{{id}}_{{$ctrl.uniqueId}}');
 });
 
-test('renderer creates slot', t => {
-	const label = h.createSlot('test');
-	t.is(label.tagName.toLowerCase(), 'div');
+test('renderer creates label with sr-only class', t => {
+	const label = h.createLabel([], { isSrOnly: true });
+	t.is(label.classList.length, 1);
+	t.true(label.classList.contains('sr-only'));
 
+	t.is(label.attributes.length, 2); // includes "class" attribute
+});
+
+test('renderer creates label with required asterisk', t => {
+	const label = h.createLabel([], { isRequired: true });
 	t.is(label.classList.length, 0);
-	t.is(label.attributes.length, 1);
-	t.is(label.getAttribute('ng-transclude'), 'test');
+
+	const span = label.querySelector('span') as HTMLSpanElement;
+	t.truthy(span);
+	t.is(span.classList.length, 1);
+	t.true(span.classList.contains('text-danger'));
+	t.is(span.textContent, ' *');
+});
+
+test('renderer creates radio label without required asterisk', t => {
+	const label = h.createLabel([], { isRequired: true, isRadio: true });
+	t.is(label.classList.length, 0);
+
+	const span = label.querySelector('span') as HTMLSpanElement;
+	t.falsy(span);
+});
+
+test('renderer creates anonymous transclusion slot', t => {
+	const slot = h.createSlot();
+	t.is(slot.tagName.toLowerCase(), 'ng-transclude');
+	t.is(slot.classList.length, 0);
+	t.is(slot.attributes.length, 0);
+});
+
+test('renderer creates named transclusion slot', t => {
+	const slot = h.createSlot('test');
+	t.is(slot.tagName.toLowerCase(), 'div');
+
+	t.is(slot.classList.length, 0);
+	t.is(slot.attributes.length, 1);
+	t.is(slot.getAttribute('ng-transclude'), 'test');
 });
 
 test('renderer creates icon input', t => {

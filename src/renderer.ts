@@ -84,7 +84,7 @@ export class NgRenderer {
 			[['ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}']],
 		);
 
-		if (isRequired === true && isRadio === false) {
+		if (isRequired === true && !isRadio) {
 			const $span = this.createElement('span', ['text-danger']);
 			$span.textContent = ' *';
 			$label.appendChild($span);
