@@ -1,6 +1,6 @@
 import test from 'ava';
 import { $http, $prefix } from './mocks';
-// import { $backend, $http } from './mocks';
+// import { $backend } from './mocks';
 
 test('http has appropriate methods', t => {
 	t.is(typeof $http.Get, 'function');

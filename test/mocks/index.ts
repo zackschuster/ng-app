@@ -1,3 +1,3 @@
-export { logger as $log } from './_logger';
-export { http as $http, backend as $backend, prefix as $prefix } from './_http';
-export { h } from './_renderer';
+export * from './_logger';
+export * from './_http';
+export * from './_renderer';
