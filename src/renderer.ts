@@ -90,7 +90,7 @@ export class NgRenderer {
 			$label.appendChild($span);
 		}
 
-		if (isSrOnly) {
+		if (isSrOnly === true) {
 			$label.classList.add('sr-only');
 		}
 
