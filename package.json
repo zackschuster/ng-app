@@ -51,7 +51,7 @@
     "angular-mocks": "^1.7.2",
     "ava": "^1.0.0-beta.6",
     "browser-env": "^3.2.5",
-    "ts-node": "^6.1.1",
+    "ts-node": "^6.1.2",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2"
   }
