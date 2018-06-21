@@ -82,10 +82,7 @@ export class NgDataService {
 				if (typeof msg === 'string') {
 					this.$log.error(msg);
 				} else if (this.isValidObject(msg)) {
-					let message = '';
-					Object.keys(msg).forEach(x => {
-						message += `${x}: ${msg[x]}\n`;
-					});
+					const message = Object.keys(msg).map(x => `${x}: ${msg[x]}`).join('\n');
 					this.$log.error(message);
 				}
 				break;
