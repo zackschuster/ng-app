@@ -1,6 +1,6 @@
 import test from 'ava';
 import { $http } from './mocks';
-// import { $backend, $http, $prefix } from './mocks';
+// import { $backend, $http } from './mocks';
 
 test('http has appropriate methods', t => {
 	t.is(typeof $http.Get, 'function');
@@ -13,6 +13,6 @@ test('http has appropriate methods', t => {
 
 // fails with "promise not resolved" error
 // test('http get', async t => {
-// 	$backend.whenGET(`${$prefix}/test`).respond('success');
-// 	t.is(await $http.Get('test'), 'success');
+// 	$backend.whenGET($http.getFullUrl('test')).respond('success');
+// 	t.is(await $http.Get<string>('test'), 'success');
 // });
