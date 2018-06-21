@@ -97,7 +97,7 @@ export class NgApp {
 		this.$config.ENV = process.env.NODE_ENV;
 	}
 
-	public bootstrap() {
+	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
 		for (const [name, definition] of this.$components) {
 			this.$module.component(name, definition);
 		}
@@ -108,7 +108,7 @@ export class NgApp {
 			}
 		}]);
 
-		this.$bootstrap(document.body, [this.$id]);
+		this.$bootstrap(document.body, [this.$id], { strictDi });
 	}
 
 	public registerConfigBlock(inlineAnnotatedFunction: (string | Callback)[]) {
