@@ -16,7 +16,7 @@ export class NgDataService {
 		const baseGetOptions = { params: { timestamp: (this.isIE11 ? Date.now() : null) } };
 
 		const promise = this.$http.get<T>(
-			this.prefix + url,
+			this.getFullUrl(url),
 			Object.assign(baseGetOptions, this.baseOptions),
 		);
 
@@ -24,28 +24,33 @@ export class NgDataService {
 	}
 
 	public async Post<T = any>(url: string, data: any = null) {
-		const promise = this.$http.post<T>(this.prefix + url, data, this.baseOptions);
+		const promise = this.$http.post<T>(this.getFullUrl(url), data, this.baseOptions);
 		return this.safeAwait(promise);
 	}
 
 	public async Patch<T = any>(url: string, data: PatchPayload) {
-		const promise = this.$http.patch<T>(this.prefix + url, data, this.baseOptions);
+		const promise = this.$http.patch<T>(this.getFullUrl(url), data, this.baseOptions);
 		return this.safeAwait(promise);
 	}
 
 	public async Put<T = any>(url: string, data: T) {
-		const promise = this.$http.put<T>(this.prefix + url, data, this.baseOptions);
+		const promise = this.$http.put<T>(this.getFullUrl(url), data, this.baseOptions);
 		return this.safeAwait(promise);
 	}
 
 	public async Delete<T = any>(url: string) {
-		const promise = this.$http.delete<T>(this.prefix + url, this.baseOptions);
+		const promise = this.$http.delete<T>(this.getFullUrl(url), this.baseOptions);
 		return this.safeAwait(promise);
 	}
 
 	public async Jsonp<T = any>(url: string) {
-		const promise = this.$http.jsonp<T>(this.prefix + url, this.baseOptions);
+		const promise = this.$http.jsonp<T>(this.getFullUrl(url), this.baseOptions);
 		return this.safeAwait(promise);
+	}
+
+	public getFullUrl(endpoint: string) {
+		const hasSlash = this.prefix.endsWith('/') || endpoint.startsWith('/');
+		return `${this.prefix}${hasSlash ? '' : '/'}${endpoint}`;
 	}
 
 	private async safeAwait<T>(promise: angular.IHttpPromise<T>, defaultReturn: T = null as any) {
