@@ -27,7 +27,9 @@ export class NgController {
 	}
 
 	protected splitByCapitalLetter(item: string) {
-		return item.split(/(?=[A-Z])/).map(x => x.charAt(0).toUpperCase() + x.substring(1)).join(' ');
+		return item.split(/(?=[A-Z])/)
+			.map(x => x.charAt(0).toUpperCase() + x.substring(1))
+			.join(' ');
 	}
 
 	protected getApiPrefix() {
