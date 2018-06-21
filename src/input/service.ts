@@ -139,13 +139,13 @@ export class InputService {
 	 * @param component An object representing the requested component definition
 	 */
 	public static defineInputComponent(component: InputComponentOptions, doc = document) {
+		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
+		const h = new NgRenderer(doc);
+
 		const $component = Object.assign({}, InputService.$baseComponent, component);
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
 		const $definition = Object.assign({}, this.$baseDefinition);
-
-		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
-		const h = new NgRenderer(doc);
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);
@@ -158,8 +158,6 @@ export class InputService {
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
 			const $el = $element[0];
 
-			// as it's an input, we'll put it inside a form-group container.
-			// this can be modified by a consumer through configuration.
 			let $template = h.createElement('div', [$component.templateClass]);
 
 			const $input: HTMLInputElement = $component.render.call(
@@ -197,7 +195,6 @@ export class InputService {
 			if ($component.renderLabel != null) {
 				$component.renderLabel.call({ $label, $attrs }, h);
 			} else {
-				// TODO: figure out how consumers can pass in label text without requiring two transclusion slots
 				const $transclude = h.createSlot();
 				$transclude.textContent = this.getDefaultLabelText($attrs);
 				$label.appendChild($transclude);
@@ -210,12 +207,6 @@ export class InputService {
 				$template.appendChild($label);
 			}
 
-			const attrs = Object.keys($component.attrs);
-			for (const [key, value] of $component.validators) {
-				this.$validationMessages.set(key, value);
-				attrs.push(key);
-			}
-
 			const { $validationErrorExp, $validationExp } = this.setValidationAttributes($input, $attrs);
 
 			const $validationBlock = h.createElement('div', [], [
@@ -223,6 +214,12 @@ export class InputService {
 				['ng-show', $validationExp],
 				['role', 'alert'],
 			]);
+
+			const attrs = Object.keys($component.attrs);
+			for (const [key, value] of $component.validators) {
+				this.$validationMessages.set(key, value);
+				attrs.push(key);
+			}
 
 			this.$validationAttrs
 				.concat(...attrs, 'email')
@@ -244,13 +241,12 @@ export class InputService {
 				$template.appendChild($validationBlock);
 			}
 
-			const $id = this.getId($attrs);
-			let $html = $template.outerHTML.replace(/{{id}}/g, $id);
+			let $html = $template.outerHTML.replace(/{{id}}/g, this.getId($attrs));
 
 			attrs
 				.forEach(prop => {
 					$html = $html.replace(
-						new RegExp('{{' + prop + '}}', 'g'),
+						new RegExp(`{{${prop}}}`, 'g'),
 						$attrs[prop] || $component.attrs[prop],
 					);
 				});
