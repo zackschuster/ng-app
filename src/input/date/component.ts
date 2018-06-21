@@ -88,7 +88,7 @@ class DateInputController extends NgComponentController {
 	}
 
 	public handleDateEvent() {
-		if (this.onChange != null && isFunction(this.onChange)) {
+		if (isFunction(this.onChange)) {
 			this.onChange(this.ngModel);
 		}
 	}
