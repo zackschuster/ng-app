@@ -1,5 +1,5 @@
 import test from 'ava';
-import { $http } from './mocks';
+import { $http, $prefix } from './mocks';
 // import { $backend, $http } from './mocks';
 
 test('http has appropriate methods', t => {
@@ -11,8 +11,12 @@ test('http has appropriate methods', t => {
 	t.is(typeof $http.Jsonp, 'function');
 });
 
+test('getFullUrl returns prefixed url', t => {
+	t.is($http.getFullUrl('test'), `${$prefix}/test`);
+});
+
 // fails with "promise not resolved" error
 // test('http get', async t => {
-// 	$backend.whenGET($http.getFullUrl('test')).respond('success');
+// 	$backend.whenGET($http.getFullUrl('test')).respond(200, 'success');
 // 	t.is(await $http.Get<string>('test'), 'success');
 // });
