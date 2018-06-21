@@ -8,19 +8,21 @@ export class NgRenderer {
 
 	constructor(private document: Document) {}
 
-	public createElement<T extends keyof HTMLElementTagNameMap>(
-		tagName: T, classes: string[] = [],
+	public createElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(
+		tagName: T,
+		classes: string[] = [],
 		attrs: [string, string][] = [],
 	) {
 		const $el = this.document.createElement(tagName);
-
-		classes.forEach(c => $el.classList.add(c));
+		$el.classList.add(...classes);
 
 		for (const [key, value] of attrs) {
 			$el.setAttribute(key, value);
 		}
 
-		return $el;
+		return $el as T extends keyof HTMLElementTagNameMap
+			? HTMLElementTagNameMap[T]
+			: HTMLUnknownElement;
 	}
 
 	public createInput(type: string = 'text', attrs: [string, string][] = []) {
