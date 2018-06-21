@@ -74,7 +74,7 @@ export class InputService {
 	 * @param $attrs - The Angular.js $attrs object
 	 * @returns $validationMessages - Angular.js expressions for when to show ngMessage blocks
 	 */
-	public static setInteractivityAttributes($input: Element, $attrs: IAttributes) {
+	public static setValidationAttributes($input: Element, $attrs: IAttributes) {
 		this.$validationAttrs
 			.filter(x => $attrs.hasOwnProperty(x))
 			.forEach(x => {
@@ -216,8 +216,7 @@ export class InputService {
 				attrs.push(key);
 			}
 
-			// required, disabled, readonly, and their ng-equivalents
-			const { $validationErrorExp, $validationExp } = this.setInteractivityAttributes($input, $attrs);
+			const { $validationErrorExp, $validationExp } = this.setValidationAttributes($input, $attrs);
 
 			const $validationBlock = h.createElement('div', [], [
 				['ng-messages', $validationErrorExp],
