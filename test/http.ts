@@ -1,23 +1,26 @@
 import test from 'ava';
-import { $http, $prefix } from './mocks';
-// import { $backend, $rootScope } from './mocks';
-
-test('http has appropriate methods', t => {
-	t.is(typeof $http.Get, 'function');
-	t.is(typeof $http.Post, 'function');
-	t.is(typeof $http.Put, 'function');
-	t.is(typeof $http.Patch, 'function');
-	t.is(typeof $http.Delete, 'function');
-	t.is(typeof $http.Jsonp, 'function');
-});
+import { $http, $prefix, pingTestUrl } from './mocks';
 
 test('getFullUrl returns prefixed url', t => {
 	t.is($http.getFullUrl('test'), `${$prefix}/test`);
 });
 
-// fails with "promise not resolved" error
-// test('http get', async t => {
-// 	$backend.whenGET($http.getFullUrl('test')).respond(200, 'success');
-// 	$rootScope.$apply();
-// 	t.is(await $http.Get<string>('test'), 'success');
+test('http get', async t => {
+	t.is(await pingTestUrl('GET', 'get'), 'get');
+});
+test('http post', async t => {
+	t.is(await pingTestUrl('POST', 'post'), 'post');
+});
+test('http put', async t => {
+	t.is(await pingTestUrl('PUT', 'put'), 'put');
+});
+test('http patch', async t => {
+	t.is(await pingTestUrl('PATCH', 'patch'), 'patch');
+});
+test('http delete', async t => {
+	t.is(await pingTestUrl('DELETE', 'delete'), 'delete');
+});
+// $sceDelegate blocks jsonp; see ./mocks/_http.ts
+// test('http jsonp', async t => {
+// 	t.is(await pingTestUrl('JSONP', 'test', 'success'), 'success');
 // });
