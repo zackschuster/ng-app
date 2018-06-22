@@ -45,6 +45,16 @@ export class InputService {
 		validators: new Map(),
 	};
 
+	public static readonly $validationExps = {
+		$error: '$ctrl.ngModelCtrl.$error',
+		$invalid: '$ctrl.ngModelCtrl.$invalid',
+		$touched: '$ctrl.ngModelCtrl.$touched',
+		$formInvalid: `$ctrl.ngModelCtrl.$$parentForm.$submitted`,
+		get $isInvalid() {
+			return `(${this.$touched} || ${this.$formInvalid}) && ${this.$invalid}`;
+		},
+	};
+
 	/**
 	 * Retrieves the identifying name for an ngModel
 	 */
@@ -63,30 +73,9 @@ export class InputService {
 	}
 
 	/**
-	 * Sets required, disabled, readonly, as well as their ng-equivalents
-	 * Also handles ng-class and ng-blur
-	 *
 	 * @param $input - The input to set attributes on
-	 * @param $attrs - The Angular.js $attrs object
-	 * @returns $validationMessages - Angular.js expressions for when to show ngMessage blocks
 	 */
-	public static setValidationAttributes($input: Element, $attrs: IAttributes) {
-		this.$validationAttrs
-			.filter(x => $attrs.hasOwnProperty(x))
-			.forEach(x => {
-				$input.setAttribute(
-					x.replace(/[A-Z]/, s => '-' + s.toLowerCase()),
-					x.startsWith('ng') ? '$ctrl.' + x : 'true',
-				);
-			});
-
-		const $ngModelCtrlExp = `$ctrl.ngModelCtrl.`;
-		const $validationErrorExp = `${$ngModelCtrlExp}$error`;
-		const $validationFormInvalidExp = `${$ngModelCtrlExp}$$parentForm.$submitted`;
-		const $validationTouchedExp = $validationErrorExp.replace('error', 'touched');
-		const $validationInvalidExp = $validationErrorExp.replace('error', 'invalid');
-		const $validationExp = `(${$validationTouchedExp} || ${$validationFormInvalidExp}) && ${$validationInvalidExp}`;
-
+	public static setValidationAttributes($input: Element) {
 		const tagName = $input.tagName.toLowerCase();
 		const isTextArea = tagName === 'textarea';
 
@@ -96,7 +85,7 @@ export class InputService {
 			: $input.querySelector('input');
 
 		if ($inputInput != null) {
-			$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${$validationExp} }`);
+			$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${this.$validationExps.$isInvalid} }`);
 			$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 
 			// stupid hack to get rid of textarea autovalidation (only on ff)
@@ -108,8 +97,6 @@ export class InputService {
 				}
 			}
 		}
-
-		return { $validationErrorExp, $validationExp };
 	}
 
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
@@ -203,11 +190,21 @@ export class InputService {
 				$template.appendChild($label);
 			}
 
-			const { $validationErrorExp, $validationExp } = this.setValidationAttributes($input, $attrs);
+			this.$validationAttrs
+				.filter(x => $attrs.hasOwnProperty(x))
+				.forEach(x => {
+					$input.setAttribute(
+						x.replace(/[A-Z]/, s => '-' + s.toLowerCase()),
+						x.startsWith('ng') ? '$ctrl.' + x : 'true',
+					);
+				});
+
+			// last big blocker to keeping things pure and low cyclomatic complexity
+			this.setValidationAttributes($input);
 
 			const $validationBlock = h.createElement('div', [], [
-				['ng-messages', $validationErrorExp],
-				['ng-show', $validationExp],
+				['ng-messages', this.$validationExps.$error],
+				['ng-show', this.$validationExps.$isInvalid],
 				['role', 'alert'],
 			]);
 
