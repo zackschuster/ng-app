@@ -211,7 +211,12 @@ export class NgApp {
 	}
 
 	public modal() {
-		return new NgModalService(this.$injector.get('$uibModal'), this);
+		return new NgModalService(
+			this.$injector.get('$uibModal'),
+			this.timeout(),
+			this.http(),
+			this.logger(),
+		);
 	}
 
 	public timeout() {
