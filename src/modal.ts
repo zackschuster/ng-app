@@ -15,7 +15,7 @@ export class NgModalService {
 	public open(options: NgModalOptions) {
 		const defaults: NgModalOptions = {
 			appendTo: document.body,
-			template: '',
+			template: '<div></div>',
 			size: 'lg',
 			controller: NgController,
 			controllerAs: '$ctrl',
@@ -47,54 +47,57 @@ export class NgModalService {
 					super();
 				}
 
-				public async $onInit() {
-					await $modal.opened;
+				public $onInit() {
+					require('fs').appendFileSync('onInit.txt', '$onInit1');
+					$modal.opened.then(() => {
+						require('fs').appendFileSync('onInit.txt', '$onInit2');
 
-					const modal = document.querySelector('.modal') as HTMLDivElement;
-					modal.classList.add('show');
-					modal.style.zIndex = '1050';
-					modal.style.color = 'black';
+						const modal = document.querySelector('.modal') as HTMLDivElement;
+						modal.classList.add('show');
+						modal.style.zIndex = '1050';
+						modal.style.color = 'black';
 
-					appendTo.appendChild(backdrop);
+						appendTo.appendChild(backdrop);
 
-					this.onclose = onClose.bind({ $log: this.$log });
+						this.onclose = onClose.bind({ $log: this.$log });
 
-					const close = (...args: any[]) => {
-						modal.classList.remove('show');
-						window.removeEventListener('keydown', listener);
+						const close = (...args: any[]) => {
+							modal.classList.remove('show');
+							window.removeEventListener('keydown', listener);
 
-						backdrop.classList.remove('modal-backdrop');
-						appendTo.removeChild(backdrop);
+							backdrop.classList.remove('modal-backdrop');
+							appendTo.removeChild(backdrop);
 
-						setTimeout(() => $modal.close(...args), 100);
-					};
-
-					const listener = (e: KeyboardEvent) => {
-						if (e.key === 'Escape' || e.key === 'Esc') {
-							if (this.onclose({ isDismiss: true, close })) {
-								this.close();
-							}
-						}
-					};
-
-					window.addEventListener('keydown', listener);
-
-					this.close = (...args: any[]) => {
-						const param = {
-							isDismiss: args.length === 0,
-							close,
-							item: null,
+							setTimeout(() => $modal.close(...args), 100);
 						};
 
-						if (param.isDismiss === false) {
-							param.item = args.length === 1 ? args[0] : args;
-							if (this.onclose(param)) {
-								close(...args);
+						const listener = (e: KeyboardEvent) => {
+							if (e.key === 'Escape' || e.key === 'Esc') {
+								if (this.onclose({ isDismiss: true, close })) {
+									this.close();
+								}
 							}
-						} else if (this.onclose(param)) {
-							close();
-						}
-					};
+						};
+
+						window.addEventListener('keydown', listener);
+
+						this.close = (...args: any[]) => {
+							const param = {
+								isDismiss: args.length === 0,
+								close,
+								item: null,
+							};
+
+							if (param.isDismiss === false) {
+								param.item = args.length === 1 ? args[0] : args;
+								if (this.onclose(param)) {
+									close(...args);
+								}
+							} else if (this.onclose(param)) {
+								close();
+							}
+						};
+					});
 				}
 			};
 		}

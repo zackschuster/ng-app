@@ -3,4 +3,5 @@ if (typeof module !== 'undefined' && module.exports) {
 	require('angular/angular.js');
 	require('angular-mocks');
 	global.angular = window.angular;
+	require('angular-ui-bootstrap');
 }
