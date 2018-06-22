@@ -55,8 +55,11 @@ export class NgDataService {
 
 	private async safeAwait<T>(promise: angular.IHttpPromise<T>, defaultReturn: T = null as any) {
 		try {
-			const rsp = await promise;
-			return rsp == null ? defaultReturn : rsp.data;
+			return await new Promise<T>((resolve, reject) => {
+				promise
+					.then(({ data }) => resolve(data == null ? defaultReturn : data))
+					.catch(err => reject(err));
+			});
 		} catch (err) {
 			this.onError(err);
 			throw err;
