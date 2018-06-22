@@ -18,21 +18,21 @@ export class NgController {
 	protected readonly isProduction: boolean;
 	protected readonly isDevelopment: boolean;
 	protected readonly isStaging: boolean;
-	protected readonly apiPrefix: boolean;
+	protected readonly apiPrefix: string;
 
-	protected openWebAddress(address: string) {
+	public openWebAddress(address: string) {
 		this.$log.confirm(_ => {
 			window.open(`http://${address}`);
 		});
 	}
 
-	protected splitByCapitalLetter(item: string) {
+	public splitByCapitalLetter(item: string) {
 		return item.split(/(?=[A-Z])/)
 			.map(x => x.charAt(0).toUpperCase() + x.substring(1))
 			.join(' ');
 	}
 
-	protected getApiPrefix() {
+	public getApiPrefix() {
 		return this.apiPrefix;
 	}
 }
