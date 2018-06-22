@@ -34,7 +34,7 @@ export class NgModalService {
 		} = Object.assign(defaults, options) as Required<NgModalOptions>;
 
 		const { $http, $timeout, $log } = this;
-		function extendClass() {
+		function makeModalCtrl() {
 			return class extends (controller as typeof NgController) {
 				public close: (...args: any[]) => void;
 				public $http = $http;
@@ -116,7 +116,7 @@ export class NgModalService {
 			appendTo: element(appendTo) as angular.IAugmentedJQuery,
 			template,
 			size,
-			controller: ['$scope', extendClass()],
+			controller: ['$scope', makeModalCtrl()],
 			controllerAs,
 		});
 
