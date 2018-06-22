@@ -7,14 +7,14 @@ if (typeof module !== 'undefined' && module.exports) {
 	global.crypto = {
 		getRandomValues(array) {
 			if (array) {
-					if (array.byteLength > 65536) {
-							const error = new Error(`ERR_RANDOM_VALUE_LENGTH ${array.byteLength}`);
-							error.code = 22;
-							throw error;
-					}
-					const bytes = require('crypto').randomBytes(array.byteLength);
-					array.set(new (array.constructor)(bytes.buffer));
-					return array;
+				if (array.byteLength > 65536) {
+					const error = new Error(`ERR_RANDOM_VALUE_LENGTH ${array.byteLength}`);
+					error.code = 22;
+					throw error;
+				}
+				const bytes = require('crypto').randomBytes(array.byteLength);
+				array.set(new (array.constructor)(bytes.buffer));
+				return array;
 			}
 			return null;
 		}
