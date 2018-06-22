@@ -7,20 +7,20 @@ import { NgComponentController } from '../controller';
 import { NgRenderer } from '../renderer';
 
 export class InputService {
-	private static $validationAttrs = [
+	public static readonly $validationAttrs = [
 		'required', 'ngRequired',
 		'disabled', 'ngDisabled',
 		'readonly', 'ngReadonly',
 	];
 
-	private static $validationMessages = new Map<string, string>([
+	public static readonly $validationMessages = new Map<string, string>([
 		['email', 'Email address must be in the following form: email@address.com'],
 		['required', 'This field is required'],
 		['minlength', 'Input is not long enough'],
 		['maxlength', 'Input is too long'],
 	]);
 
-	private static readonly $baseDefinition: angular.IComponentOptions = {
+	public static readonly $baseDefinition: angular.IComponentOptions = {
 		transclude: {
 			contain: '?contain',
 		},
@@ -36,7 +36,7 @@ export class InputService {
 		},
 	};
 
-	private static readonly $baseComponent = {
+	public static readonly $baseComponent = {
 		isRadioOrCheckbox: false,
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
@@ -53,17 +53,13 @@ export class InputService {
 	}
 
 	/**
-	 * Get an optionally unique input id
-	 */
-	public static getId($attrs: IAttributes) {
-		return this.modelIdentifier($attrs);
-	}
-
-	/**
 	 * Gets text -- intended for a label -- from the ngModel property text
 	 */
 	public static getDefaultLabelText($attrs: IAttributes) {
-		return this.modelIdentifier($attrs).split(/(?=[A-Z])/).join(' ');
+		return this.modelIdentifier($attrs)
+			.split(/(?=[A-Z0-9])/)
+			.map(x => isNaN(Number(x)) ? x.charAt(0).toUpperCase() + x.substring(1) : x)
+			.join(' ');
 	}
 
 	/**
@@ -241,7 +237,7 @@ export class InputService {
 				$template.appendChild($validationBlock);
 			}
 
-			let $html = $template.outerHTML.replace(/{{id}}/g, this.getId($attrs));
+			let $html = $template.outerHTML.replace(/{{id}}/g, this.modelIdentifier($attrs));
 
 			attrs
 				.forEach(prop => {
