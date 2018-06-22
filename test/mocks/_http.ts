@@ -14,38 +14,37 @@ export const $http = new NgDataService($injector.get('$http'), $log, $prefix);
 
 const $backend = $injector.get('$httpBackend');
 export async function pingTestUrl(
-	// tslint:disable-next-line:jsdoc-format
-	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' /**| 'JSONP'*/,
+	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'JSONP',
 	endpoint: string,
 ) {
 	const url = $http.getFullUrl(endpoint);
 	$backend.when(method, url).respond(200, endpoint);
 
-	let p: Promise<string>;
+	// flush requests at end of event loop
+	// skips an assignment dance in switch/case
+	setTimeout(() => {
+		try {
+			$backend.verifyNoOutstandingRequest();
+		} catch {
+			$backend.flush();
+		}
+	});
 
 	switch (method) {
 		case 'GET':
-			p = $http.Get<string>(endpoint);
-			break;
+			return $http.Get<string>(endpoint);
 		case 'POST':
-			p = $http.Post<string>(endpoint, endpoint);
-			break;
+			return $http.Post<string>(endpoint, endpoint);
 		case 'PUT':
-			p = $http.Put<string>(endpoint, endpoint);
-			break;
+			return $http.Put<string>(endpoint, endpoint);
 		case 'PATCH':
-			p = $http.Patch<string>(endpoint, [{ op: 'add', path: '/path', value: endpoint }]);
-			break;
+			return $http.Patch<string>(endpoint, [{ op: 'add', path: '/path', value: endpoint }]);
 		case 'DELETE':
-			p = $http.Delete<string>(endpoint);
-			break;
-		// case 'JSONP':
-		// 	p = $http.Jsonp<string>(endpoint);
-		// 	break;
+			return $http.Delete<string>(endpoint);
+		case 'JSONP':
+			throw new Error('Currently unable to test JSONP');
+		// 	return $http.Jsonp<string>(endpoint);
 		default:
 			throw new Error('Bad method');
 	}
-
-	$backend.flush();
-	return p;
 }
