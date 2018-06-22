@@ -1,7 +1,7 @@
 import test from 'ava';
 import { $http, $prefix, pingTestUrl } from './mocks';
 
-test('getFullUrl returns prefixed url', t => {
+test('getFullUrl returns prefixed url', async t => {
 	t.is($http.getFullUrl('test'), `${$prefix}/test`);
 });
 

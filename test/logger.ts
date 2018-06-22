@@ -1,7 +1,7 @@
 import test from 'ava';
 import { $log } from './mocks';
 
-test('logger has appropriate methods', t => {
+test('logger has appropriate methods', async t => {
 	t.is(typeof $log.clear, 'function');
 	t.is(typeof $log.confirm, 'function');
 	t.is(typeof $log.devWarning, 'function');

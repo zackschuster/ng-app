@@ -1,7 +1,7 @@
 import test from 'ava';
 import { $modal } from './mocks';
 
-test('modal has appropriate methods', t => {
+test('modal has appropriate methods', async t => {
 	const modal = $modal.open({});
 
 	t.is(typeof modal.close, 'function');

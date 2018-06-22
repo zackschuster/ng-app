@@ -1,13 +1,13 @@
 import test from 'ava';
 import { h } from './mocks';
 
-test('renderer creates bare element', t => {
+test('renderer creates bare element', async t => {
 	const div = h.createElement('div');
 	t.is(div.classList.length, 0);
 	t.is(div.attributes.length, 0);
 });
 
-test('renderer creates element with classes', t => {
+test('renderer creates element with classes', async t => {
 	const div = h.createElement('div', ['test1', 'test2']);
 	t.is(div.classList.length, 2);
 	t.true(div.classList.contains('test1'));
@@ -16,7 +16,7 @@ test('renderer creates element with classes', t => {
 	t.is(div.attributes.length, 1); // includes "class" attribute
 });
 
-test('renderer creates element with attributes', t => {
+test('renderer creates element with attributes', async t => {
 	const div = h.createElement('div', [], [['test1', 'test1'], ['test2', 'test2']]);
 	t.is(div.classList.length, 0);
 
@@ -25,7 +25,7 @@ test('renderer creates element with attributes', t => {
 	t.is(div.getAttribute('test2'), 'test2');
 });
 
-test('renderer creates element with classes and attributes', t => {
+test('renderer creates element with classes and attributes', async t => {
 	const div = h.createElement('div', ['test1', 'test2'], [['test1', 'test1'], ['test2', 'test2']]);
 	t.is(div.classList.length, 2);
 	t.true(div.classList.contains('test1'));
@@ -36,7 +36,7 @@ test('renderer creates element with classes and attributes', t => {
 	t.is(div.getAttribute('test2'), 'test2');
 });
 
-test('renderer creates text input by default', t => {
+test('renderer creates text input by default', async t => {
 	const input = h.createInput();
 	t.is(input.classList.length, 1);
 	t.true(input.classList.contains('form-control'));
@@ -51,7 +51,7 @@ test('renderer creates text input by default', t => {
 	t.is(input.getAttribute('placeholder'), '{{placeholder}}');
 });
 
-test('renderer creates radio and checkbox inputs', t => {
+test('renderer creates radio and checkbox inputs', async t => {
 	const radio = h.createInput('radio');
 	t.is(radio.classList.length, 1);
 	t.true(radio.classList.contains('form-check-input'));
@@ -74,7 +74,7 @@ test('renderer creates radio and checkbox inputs', t => {
 	t.is(checkbox.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 });
 
-test('renderer creates textarea', t => {
+test('renderer creates textarea', async t => {
 	const input = h.createTextArea();
 
 	t.is(input.tagName.toLowerCase(), 'textarea');
@@ -92,7 +92,7 @@ test('renderer creates textarea', t => {
 	t.is(input.getAttribute('placeholder'), '{{placeholder}}');
 });
 
-test('renderer creates icon', t => {
+test('renderer creates icon', async t => {
 	const icon = h.createIcon('test');
 	t.is(icon.tagName.toLowerCase(), 'span');
 
@@ -104,7 +104,7 @@ test('renderer creates icon', t => {
 	t.is(icon.getAttribute('aria-hidden'), 'true');
 });
 
-test('renderer creates fixed-width icon', t => {
+test('renderer creates fixed-width icon', async t => {
 	const icon = h.createIcon('test', true);
 	t.is(icon.tagName.toLowerCase(), 'span');
 
@@ -117,7 +117,7 @@ test('renderer creates fixed-width icon', t => {
 	t.is(icon.getAttribute('aria-hidden'), 'true');
 });
 
-test('renderer creates label', t => {
+test('renderer creates label', async t => {
 	const label = h.createLabel(['test']);
 	t.is(label.tagName.toLowerCase(), 'label');
 
@@ -128,7 +128,7 @@ test('renderer creates label', t => {
 	t.is(label.getAttribute('ng-attr-for'), '{{id}}_{{$ctrl.uniqueId}}');
 });
 
-test('renderer creates label with sr-only class', t => {
+test('renderer creates label with sr-only class', async t => {
 	const label = h.createLabel([], { isSrOnly: true });
 	t.is(label.classList.length, 1);
 	t.true(label.classList.contains('sr-only'));
@@ -136,7 +136,7 @@ test('renderer creates label with sr-only class', t => {
 	t.is(label.attributes.length, 2); // includes "class" attribute
 });
 
-test('renderer creates label with required asterisk', t => {
+test('renderer creates label with required asterisk', async t => {
 	const label = h.createLabel([], { isRequired: true });
 	t.is(label.classList.length, 0);
 
@@ -147,7 +147,7 @@ test('renderer creates label with required asterisk', t => {
 	t.is(span.textContent, ' *');
 });
 
-test('renderer creates radio label without required asterisk', t => {
+test('renderer creates radio label without required asterisk', async t => {
 	const label = h.createLabel([], { isRequired: true, isRadio: true });
 	t.is(label.classList.length, 0);
 
@@ -155,14 +155,14 @@ test('renderer creates radio label without required asterisk', t => {
 	t.falsy(span);
 });
 
-test('renderer creates anonymous transclusion slot', t => {
+test('renderer creates anonymous transclusion slot', async t => {
 	const slot = h.createSlot();
 	t.is(slot.tagName.toLowerCase(), 'ng-transclude');
 	t.is(slot.classList.length, 0);
 	t.is(slot.attributes.length, 0);
 });
 
-test('renderer creates named transclusion slot', t => {
+test('renderer creates named transclusion slot', async t => {
 	const slot = h.createSlot('test');
 	t.is(slot.tagName.toLowerCase(), 'div');
 
@@ -171,7 +171,7 @@ test('renderer creates named transclusion slot', t => {
 	t.is(slot.getAttribute('ng-transclude'), 'test');
 });
 
-test('renderer creates icon input', t => {
+test('renderer creates icon input', async t => {
 	const input = h.createInput();
 	const iconInput = h.createIconInput(input, 'calendar');
 	t.truthy(iconInput.querySelector('.fa-calendar'));
