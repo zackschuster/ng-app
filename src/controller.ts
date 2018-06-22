@@ -28,6 +28,7 @@ export class NgController {
 
 	public splitByCapitalLetter(item: string) {
 		return item.split(/(?=[A-Z])/)
+			.map(x => x.trim())
 			.map(x => x.charAt(0).toUpperCase() + x.substring(1))
 			.join(' ');
 	}
