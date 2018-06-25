@@ -313,9 +313,9 @@
   dependencies:
     "@types/angular" "*"
 
-"@types/angular-mocks@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@types/angular-mocks/-/angular-mocks-1.6.0.tgz#bd32f55b678c239880d2d0d9a3a79b5cad45547e"
+"@types/angular-mocks@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@types/angular-mocks/-/angular-mocks-1.6.1.tgz#2501b54e6b76392b03cd38df650a3a021ef2773e"
   dependencies:
     "@types/angular" "*"
 
@@ -3188,9 +3188,9 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-ts-node@^6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-6.1.2.tgz#3221ca727a84bc66db1de8b647896621e38e8eaf"
+ts-node@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-7.0.0.tgz#a94a13c75e5e1aa6b82814b84c68deb339ba7bff"
   dependencies:
     arrify "^1.0.0"
     buffer-from "^1.1.0"
