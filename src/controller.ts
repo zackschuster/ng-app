@@ -26,6 +26,11 @@ export class NgController {
 		});
 	}
 
+	/**
+	 * Separates words in a string by capital letters. Also capitalizes the first letter.
+	 *
+	 * @param item - The string value to be split
+	 */
 	public splitByCapitalLetter(item: string) {
 		return item.split(/(?=[A-Z])/)
 			.map(x => x.trim())
