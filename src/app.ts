@@ -45,10 +45,10 @@ export class NgApp {
 	private $config: IConfig;
 	private $flags: { IS_PROD: boolean; IS_DEV: boolean; IS_STAGING: boolean };
 
-	private $module = module(this.$id, this.$dependencies);
-	private $bootstrap = bootstrap;
+	private readonly $module = module(this.$id, this.$dependencies);
+	private readonly $bootstrap = bootstrap;
 
-	private $components: Map<string, angular.IComponentOptions> = new Map();
+	private readonly $components: Map<string, angular.IComponentOptions> = new Map();
 	private $routes: Ng1StateDeclaration[] = [];
 
 	constructor() {
@@ -88,6 +88,10 @@ export class NgApp {
 					this.$injector = $injector;
 					$animate.enabled(true);
 				}]);
+	}
+
+	public get components() {
+		return Array.from(this.$components.keys());
 	}
 
 	public get name() {
