@@ -6,19 +6,19 @@ test('getFullUrl returns prefixed url', async t => {
 });
 
 test('http get', async t => {
-	t.is(await pingTestUrl('GET', 'get'), 'get');
+	t.is(await pingTestUrl('GET', 'got'), 'got');
 });
 test('http post', async t => {
-	t.is(await pingTestUrl('POST', 'post'), 'post');
+	t.is(await pingTestUrl('POST', 'posted'), 'posted');
 });
 test('http put', async t => {
-	t.is(await pingTestUrl('PUT', 'put'), 'put');
+	t.is(await pingTestUrl('PUT', 'set'), 'set');
 });
 test('http patch', async t => {
-	t.is(await pingTestUrl('PATCH', 'patch'), 'patch');
+	t.is(await pingTestUrl('PATCH', 'patched'), 'patched');
 });
 test('http delete', async t => {
-	t.is(await pingTestUrl('DELETE', 'delete'), 'delete');
+	t.is(await pingTestUrl('DELETE', 'deleted'), 'deleted');
 });
 // $sceDelegate blocks jsonp; see ./mocks/_http.ts
 // test('http jsonp', async t => {
