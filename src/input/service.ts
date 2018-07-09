@@ -75,28 +75,13 @@ export class InputService {
 	/**
 	 * @param $input - The input to set attributes on
 	 */
-	public static setValidationAttributes($input: Element) {
-		const tagName = $input.tagName.toLowerCase();
-		const isTextArea = tagName === 'textarea';
-
-		// that's right, i named it after filterFilter. fight me.
-		const $inputInput = tagName === 'input' || isTextArea
-			? $input
-			: $input.querySelector('input');
-
-		if ($inputInput != null) {
-			$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${this.$validationExps.$isInvalid} }`);
-			$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
-
-			// stupid hack to get rid of textarea autovalidation (only on ff)
-			if (isTextArea) {
-				// @ts-ignore
-				const isFirefox = typeof InstallTrigger !== 'undefined';
-				if (isFirefox) {
-					$inputInput.removeAttribute('required');
-				}
-			}
+	public static getInputInput($input: HTMLInputElement | HTMLTextAreaElement) {
+		if ($input.tagName === 'SELECT') {
+			throw new Error('Must be an input or text area');
 		}
+		return $input.tagName === 'INPUT' || $input.tagName === 'TEXTAREA'
+				? $input
+				: $input.querySelector('input') as HTMLInputElement;
 	}
 
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
@@ -199,8 +184,12 @@ export class InputService {
 					);
 				});
 
-			// last big blocker to keeping things pure and low cyclomatic complexity
-			this.setValidationAttributes($input);
+			if ($input.tagName !== 'SELECT') {
+				// that's right, i named it after filterFilter. fight me.
+				const $inputInput = this.getInputInput($input);
+				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${this.$validationExps.$isInvalid} }`);
+				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
+			}
 
 			const $validationBlock = h.createElement('div', [], [
 				['ng-messages', this.$validationExps.$error],
