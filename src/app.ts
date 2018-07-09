@@ -31,9 +31,9 @@ type TransitionHooks =
 
 @autobind
 export class NgApp {
+	public readonly $id = '$core';
 	public $injector = injector(['ng']);
 
-	private readonly $id = '$core';
 	private $dependencies = [
 		'ngAnimate',
 		'ngMessages',
@@ -94,8 +94,8 @@ export class NgApp {
 		return Array.from(this.$components.keys());
 	}
 
-	public get name() {
-		return this.$module.name;
+	public get module() {
+		return this.$module;
 	}
 
 	public get config() {
