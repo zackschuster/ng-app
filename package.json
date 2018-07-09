@@ -46,7 +46,7 @@
     "noty": "^3.1.4"
   },
   "devDependencies": {
-    "@ledge/configs": "^7.1.2",
+    "@ledge/configs": "^8.0.0",
     "@types/angular-mocks": "^1.6.1",
     "angular-mocks": "^1.7.2",
     "ava": "^1.0.0-beta.6",

@@ -293,9 +293,9 @@
   dependencies:
     arrify "^1.0.1"
 
-"@ledge/configs@^7.1.2":
-  version "7.1.2"
-  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-7.1.2.tgz#860ae3c515d0884b23204a0c1a0c76d9816d4040"
+"@ledge/configs@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-8.0.0.tgz#8557087a36bd081315cade9ad847dcaf2bb1dc46"
 
 "@ledge/is-ie-11@^1.0.0":
   version "1.0.0"
