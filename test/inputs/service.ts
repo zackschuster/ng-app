@@ -1,7 +1,7 @@
 import test from 'ava';
-import { InputService } from '../src/input/service';
-import { NgComponentController } from '../src/controller';
-import { makeAttrs } from './mocks';
+import { InputService } from '../../src/input/service';
+import { NgComponentController } from '../../src/controller';
+import { makeAttrs } from '../mocks';
 
 test('InputService.$validationAttrs', async t => {
 	t.deepEqual(InputService.$validationAttrs, [
@@ -45,7 +45,6 @@ test('InputService.$baseComponent', async t => {
 		templateClass: 'form-group',
 		attrs: {},
 		ctrl: NgComponentController,
-		validators: new Map(),
 	});
 });
 

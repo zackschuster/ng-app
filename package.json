@@ -17,9 +17,13 @@
   "main": "index.ts",
   "types": "index.ts",
   "scripts": {
-    "test": "ava test/*.ts"
+    "test": "ava"
   },
   "ava": {
+		"files": [
+			"test/*.ts",
+			"test/inputs/**/*.ts"
+		],
     "compileEnhancements": false,
     "extensions": [
       "ts"
