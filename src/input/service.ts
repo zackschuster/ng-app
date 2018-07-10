@@ -42,7 +42,6 @@ export class InputService {
 		templateClass: 'form-group',
 		attrs: {},
 		ctrl: NgComponentController,
-		validators: new Map(),
 	};
 
 	public static readonly $validationExps = {
@@ -109,6 +108,10 @@ export class InputService {
 	public static defineInputComponent(component: InputComponentOptions, doc = document) {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer(doc);
+
+		const validators = component.validators instanceof Map
+			? new Map(component.validators)
+			: new Map();
 
 		const $component = copy(Object.assign({}, this.$baseComponent, component));
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
@@ -198,7 +201,7 @@ export class InputService {
 			]);
 
 			const attrs = Object.keys($component.attrs);
-			for (const [key, value] of $component.validators) {
+			for (const [key, value] of validators) {
 				this.$validationMessages.set(key, value);
 				attrs.push(key);
 			}
