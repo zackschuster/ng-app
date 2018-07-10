@@ -117,10 +117,9 @@ export class InputService {
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
 		if ($component.renderLabel == null) {
-			const getDefaultLabelText = this.getDefaultLabelText.bind(this);
 			$component.renderLabel = function defaultRenderLabel(r) {
 				const $transclude = r.createSlot();
-				$transclude.textContent = getDefaultLabelText(this.$attrs);
+				$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
 				this.$label.appendChild($transclude);
 			};
 		}
@@ -156,10 +155,8 @@ export class InputService {
 				$template.appendChild($label);
 			}
 
-			const shouldHaveIcon = $component.canHaveIcon && $attrs.hasOwnProperty('icon');
-			if (shouldHaveIcon) {
-				const $iconInput = h.createIconInput($input, $attrs.icon);
-				$template.appendChild($iconInput);
+			if ($component.canHaveIcon) {
+				$template.appendChild(h.createIconInput($input, $attrs.icon));
 			} else {
 				$template.appendChild($input);
 			}
@@ -174,8 +171,6 @@ export class InputService {
 				$label.removeChild(requiredTag);
 			}
 
-			// check if consumer wishes to render label; if not, add a default label based on
-			// $attrs.ngModel which a consumer can override through anonymous transclusion.
 			renderLabel.call({ $label, $attrs }, h);
 
 			if (requiredTag != null) {
