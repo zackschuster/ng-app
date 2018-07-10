@@ -1,6 +1,6 @@
 // tslint:disable:member-ordering max-classes-per-file
 import isIE11 from '@ledge/is-ie-11';
-import { IAttributes } from 'angular';
+import { IAttributes, copy } from 'angular';
 
 import { InputComponentOptions } from './options';
 import { NgComponentController } from '../controller';
@@ -110,10 +110,10 @@ export class InputService {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer(doc);
 
-		const $component = Object.assign({}, InputService.$baseComponent, component);
+		const $component = copy(Object.assign({}, this.$baseComponent, component));
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
-		const $definition = Object.assign({}, this.$baseDefinition);
+		const $definition = copy(this.$baseDefinition);
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);
