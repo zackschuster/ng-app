@@ -116,6 +116,16 @@ export class InputService {
 		const $component = copy(Object.assign({}, this.$baseComponent, component));
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
+		if ($component.renderLabel == null) {
+			const getDefaultLabelText = this.getDefaultLabelText.bind(this);
+			$component.renderLabel = function defaultRenderLabel(r) {
+				const $transclude = r.createSlot();
+				$transclude.textContent = getDefaultLabelText(this.$attrs);
+				this.$label.appendChild($transclude);
+			};
+		}
+		const renderLabel = $component.renderLabel;
+
 		const $definition = copy(this.$baseDefinition);
 
 		// assign child objects
@@ -136,13 +146,11 @@ export class InputService {
 				h);
 
 			const isRadio = $input.type === 'radio';
+			const isRequired = $attrs.hasOwnProperty('required');
+			const isSrOnly = $attrs.hasOwnProperty('srOnly');
 
 			// all inputs must have labels
-			const $label = h.createLabel([$component.labelClass], {
-				isRequired: $attrs.hasOwnProperty('required'),
-				isSrOnly: $attrs.hasOwnProperty('srOnly'),
-				isRadio,
-			});
+			const $label = h.createLabel([$component.labelClass], { isRequired, isSrOnly, isRadio });
 
 			if ($component.isRadioOrCheckbox === false) {
 				$template.appendChild($label);
@@ -161,14 +169,17 @@ export class InputService {
 				$label.classList.add('sr-only');
 			}
 
+			const requiredTag = $label.firstElementChild;
+			if (requiredTag != null) {
+				$label.removeChild(requiredTag);
+			}
+
 			// check if consumer wishes to render label; if not, add a default label based on
 			// $attrs.ngModel which a consumer can override through anonymous transclusion.
-			if ($component.renderLabel != null) {
-				$component.renderLabel.call({ $label, $attrs }, h);
-			} else {
-				const $transclude = h.createSlot();
-				$transclude.textContent = this.getDefaultLabelText($attrs);
-				$label.appendChild($transclude);
+			renderLabel.call({ $label, $attrs }, h);
+
+			if (requiredTag != null) {
+				$label.appendChild(requiredTag);
 			}
 
 			// add a transclusion slot for e.g. nesting inputs
