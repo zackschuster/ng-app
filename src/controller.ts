@@ -49,5 +49,4 @@ export class NgComponentController extends NgController {
 
 	// tslint:disable-next-line:no-non-null-assertion
 	public uniqueId = crypto.getRandomValues(new Int8Array(2))!.toLocaleString().replace(/[-]|[,]/g, '');
-
 }

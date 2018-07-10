@@ -246,8 +246,8 @@ export class NgApp {
 			public apiPrefix = getApiPrefix();
 
 			constructor(
-				public $scope: angular.IScope,
 				$element: JQLite,
+				public $scope: angular.IScope,
 				public $attrs: angular.IAttributes,
 				public $timeout: angular.ITimeoutService,
 				public $injector: angular.auto.IInjectorService,
@@ -260,7 +260,7 @@ export class NgApp {
 		}
 
 		return [
-			'$scope', '$element', '$attrs', '$timeout', '$injector', '$state', '$http',
+			'$element', '$scope', '$attrs', '$timeout', '$injector', '$state',
 			InternalController,
 		];
 	}

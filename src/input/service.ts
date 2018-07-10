@@ -155,7 +155,7 @@ export class InputService {
 				$template.appendChild($label);
 			}
 
-			if ($component.canHaveIcon) {
+			if ($component.canHaveIcon === true) {
 				$template.appendChild(h.createIconInput($input, $attrs.icon));
 			} else {
 				$template.appendChild($input);
@@ -185,11 +185,11 @@ export class InputService {
 			}
 
 			this.$validationAttrs
-				.filter(x => $attrs.hasOwnProperty(x))
+				.filter(x => $attrs.hasOwnProperty(x) === true)
 				.forEach(x => {
 					$input.setAttribute(
-						x.replace(/[A-Z]/, s => '-' + s.toLowerCase()),
-						x.startsWith('ng') ? '$ctrl.' + x : 'true',
+						x.replace(/[A-Z]/, s => `-${s.toLowerCase()}`),
+						x.startsWith('ng') ? `$ctrl.${x}` : 'true',
 					);
 				});
 

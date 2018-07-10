@@ -10,7 +10,7 @@ export class NgModalService {
 		private $timeout: angular.ITimeoutService,
 		private $http: NgDataService,
 		private $log: NgLogger,
-	) {}
+	) { }
 
 	public open(options: NgModalOptions) {
 		const defaults: NgModalOptions = {

@@ -6,7 +6,7 @@ export class NgRenderer {
 		['ng-model-options', '$ctrl.ngModelOptions'],
 	];
 
-	constructor(private document: Document) {}
+	constructor(private document: Document) { }
 
 	public createElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(
 		tagName: T,
