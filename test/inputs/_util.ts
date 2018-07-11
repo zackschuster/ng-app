@@ -63,7 +63,11 @@ export function makeTpl(
 	return el.firstElementChild as Element;
 }
 
-export function testInput(tpl: Element, t: ExecutionContext, tagName = 'INPUT') {
+export function testInput(
+	tpl: Element,
+	t: ExecutionContext,
+	tagName: 'INPUT' | 'TEXTAREA' | 'SELECT' = 'INPUT',
+) {
 	const input = tpl.querySelector(tagName.toLowerCase()) as HTMLInputElement;
 
 	t.is(input.tagName, tagName);
@@ -75,13 +79,15 @@ export function testInput(tpl: Element, t: ExecutionContext, tagName = 'INPUT') 
 	t.is(input.getAttribute('readonly'), 'true');
 	t.is(input.getAttribute('ng-readonly'), '$ctrl.ngReadonly');
 
-	t.is(input.getAttribute('ng-model'), '$ctrl.ngModel');
-	t.is(input.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
-	t.is(input.getAttribute('ng-blur'), '$ctrl.ngModelCtrl.$setTouched()');
+	if (tagName !== 'SELECT') {
+		t.is(input.getAttribute('ng-model'), '$ctrl.ngModel');
+		t.is(input.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
+		t.is(input.getAttribute('ng-blur'), '$ctrl.ngModelCtrl.$setTouched()');
+		t.is(input.getAttribute('ng-class'), `{ 'is-invalid': ${InputService.$validationExps.$isInvalid} }`);
+	}
 
 	t.regex(input.getAttribute('ng-attr-id') as string, idRe);
 	t.regex(input.getAttribute('ng-attr-name') as string, idRe);
-	t.is(input.getAttribute('ng-class'), `{ 'is-invalid': ${InputService.$validationExps.$isInvalid} }`);
 
 	return input;
 }
