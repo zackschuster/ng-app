@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-if (fs.existsSync('snapshot.log') === false) {
-	fs.appendFileSync('snapshot.log', '');
-} else {
-	fs.truncateSync('snapshot.log', 0);
-}
-
 const inputsDir = path.join(process.cwd(), 'test', 'inputs');
+const snapshotLog = path.join(inputsDir, 'snapshot.log');
+
+if (fs.existsSync(snapshotLog)) {
+	fs.truncateSync(snapshotLog, 0);
+} else {
+	fs.appendFileSync(snapshotLog, '');
+}
 
 const dirs = fs.readdirSync(inputsDir)
 	.filter(x => fs.statSync(path.join(inputsDir, x)).isDirectory())
@@ -21,6 +22,6 @@ for (let dir of dirs) {
 
 	for (const file of htmlFiles) {
 		fs.unlinkSync(file);
-		fs.appendFileSync('snapshot.log', file + '\n');
+		fs.appendFileSync(snapshotLog, file + '\n');
 	}
 }
