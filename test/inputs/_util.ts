@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ExecutionContext } from 'ava';
 import { app, wrapCtrl } from '../..';
@@ -42,7 +42,16 @@ export function makeTpl(
 	const el = document.createElement('div');
 	el.innerHTML = $invokeTemplate(template, $attrs);
 
-	writeFileSync(join(__dirname, t.title.split(' ')[0], `snapshot.html`), el.innerHTML);
+	let path = join(__dirname, t.title.split(' ')[0], 'snapshot.html');
+	let exists = existsSync(path);
+	let i = 1;
+	while (exists) {
+		path = path.replace(/snapshot([-]\d)?/, `snapshot-${i}`);
+		exists = existsSync(path);
+		i++;
+	}
+
+	writeFileSync(path, el.innerHTML);
 
 	return el.firstElementChild as Element;
 }
