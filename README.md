@@ -1,4 +1,4 @@
-# @ledge/ng-app
+# @ledge/ng-app [![Build Status](https://travis-ci.org/zackschuster/ng-app.svg?branch=master)](https://travis-ci.org/zackschuster/ng-app)
 
 > An ESM-friendly shim layer for Angular.js, written & distributed in TypeScript
 
