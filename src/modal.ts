@@ -48,10 +48,7 @@ export class NgModalService {
 				}
 
 				public $onInit() {
-					require('fs').appendFileSync('onInit.txt', '$onInit1');
 					$modal.opened.then(() => {
-						require('fs').appendFileSync('onInit.txt', '$onInit2');
-
 						const modal = document.querySelector('.modal') as HTMLDivElement;
 						modal.classList.add('show');
 						modal.style.zIndex = '1050';
