@@ -17,14 +17,14 @@
   "main": "index.ts",
   "types": "index.ts",
   "scripts": {
-		"pretest": "node ./test/_teardown.js",
+    "pretest": "node ./test/_teardown.js",
     "test": "ava"
   },
   "ava": {
-		"files": [
-			"test/*.ts",
-			"test/inputs/**/*.ts"
-		],
+    "files": [
+      "test/*.ts",
+      "test/inputs/**/*.ts"
+    ],
     "compileEnhancements": false,
     "extensions": [
       "ts"
@@ -56,6 +56,7 @@
     "angular-mocks": "^1.7.2",
     "ava": "^1.0.0-beta.6",
     "browser-env": "^3.2.5",
+    "pretty": "^2.0.0",
     "ts-node": "^7.0.0",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2"

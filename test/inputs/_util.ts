@@ -1,6 +1,10 @@
 import { existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ExecutionContext } from 'ava';
+
+// @ts-ignore
+import pretty = require('pretty');
+
 import { app, wrapCtrl } from '../..';
 import { $controller, $ctrl, $element, $invokeTemplate, $scope } from '../mocks';
 import { InputService } from '../../src/input/service';
@@ -51,7 +55,7 @@ export function makeTpl(
 		i++;
 	}
 
-	writeFileSync(path, el.innerHTML);
+	writeFileSync(path, pretty(el.innerHTML));
 
 	return el.firstElementChild as Element;
 }
