@@ -1,4 +1,3 @@
-import 'element-closest';
 import * as Choices from 'choices.js';
 import { IAttributes } from 'angular';
 import { Callback } from '@ledge/types';

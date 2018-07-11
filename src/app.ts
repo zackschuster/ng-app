@@ -18,6 +18,7 @@ import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
 import '@uirouter/angularjs';
+import 'element-closest';
 
 type TransitionHooks =
 	'onBefore' |
