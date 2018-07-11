@@ -48,3 +48,19 @@ test('checkbox template', async t => {
 	util.testNgMessages(tpl, t);
 	util.testNgTranscludeContain(tpl, t);
 });
+
+test('checkbox template (inlined)', async t => {
+	const tpl = util.makeTpl(definedCheckBox.template, t, { inline: true });
+
+	t.true(tpl.classList.contains('form-check-inline'));
+
+	const input = util.testInput(tpl, t);
+	t.is(input.type, 'checkbox');
+	t.true(input.classList.contains('form-check-input'));
+
+	const label = util.testLabel(tpl, t);
+	t.true(label.classList.contains('form-check-label'));
+
+	util.testNgMessages(tpl, t);
+	util.testNgTranscludeContain(tpl, t);
+});
