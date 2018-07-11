@@ -28,7 +28,33 @@ test('textinput require', async t => {
 });
 
 test('textinput controller', async t => {
-	t.true(util.mockCtrl(definedTextInput.controller) instanceof NgComponentController);
+	const textCtrl = util.mockCtrl(definedTextInput.controller);
+	t.true(textCtrl instanceof NgComponentController);
+
+	const numberCtrl = util.mockCtrl(definedTextInput.controller, { min: 1, max: 3, type: 'number' });
+	t.true(numberCtrl instanceof NgComponentController);
+	t.is((numberCtrl as any).$attrs.type, 'number');
+
+	numberCtrl.ngModelCtrl = { $validators: {} } as any;
+
+	(numberCtrl as any).$onInit();
+
+	t.is(Object.keys(numberCtrl.ngModelCtrl.$validators).length, 2);
+
+	// min and max are initially undefined, so should return true for all
+	t.true(numberCtrl.ngModelCtrl.$validators.minVal(0, 0));
+	t.true(numberCtrl.ngModelCtrl.$validators.minVal(1, 1));
+	t.true(numberCtrl.ngModelCtrl.$validators.maxVal(3, 3));
+	t.true(numberCtrl.ngModelCtrl.$validators.maxVal(4, 4));
+
+	// manually set min and max for "proper" validation
+	(numberCtrl as any).min = Number((numberCtrl as any).$attrs.min);
+	(numberCtrl as any).max = Number((numberCtrl as any).$attrs.max);
+
+	t.false(numberCtrl.ngModelCtrl.$validators.minVal(0, 0));
+	t.true(numberCtrl.ngModelCtrl.$validators.minVal(1, 1));
+	t.true(numberCtrl.ngModelCtrl.$validators.maxVal(3, 3));
+	t.false(numberCtrl.ngModelCtrl.$validators.maxVal(4, 4));
 });
 
 test('textinput controllerAs', async t => {
