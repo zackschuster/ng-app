@@ -6,7 +6,7 @@ import * as util from '../_util';
 
 const definedCheckBox = InputService.defineInputComponent(checkBox, document);
 
-test('check box bindings', async t => {
+test('checkbox bindings', async t => {
 	t.deepEqual(definedCheckBox.bindings, {
 		ngModel: '=',
 		ngChecked: '<',
@@ -17,22 +17,22 @@ test('check box bindings', async t => {
 	});
 });
 
-test('check box transclude', async t => {
+test('checkbox transclude', async t => {
 	t.deepEqual(definedCheckBox.transclude, {
 		contain: '?contain',
 	});
 });
 
-test('check box controller', async t => {
+test('checkbox controller', async t => {
 	t.true(util.mockCtrl(definedCheckBox.controller) instanceof NgComponentController);
 });
 
-test('check box controllerAs', async t => {
+test('checkbox controllerAs', async t => {
 	t.is(definedCheckBox.controllerAs, undefined);
 });
 
-test('check box template', async t => {
-	const tpl = util.makeTpl(definedCheckBox.template, 'checkbox');
+test('checkbox template', async t => {
+	const tpl = util.makeTpl(definedCheckBox.template, t);
 
 	t.true(tpl.classList.contains('form-check'));
 

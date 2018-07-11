@@ -29,7 +29,7 @@ export function mockCtrl(ctrl: any) {
 
 export function makeTpl(
 	template: angular.IComponentOptions['template'],
-	folder: string,
+	t: ExecutionContext,
 	$attrs: Partial<angular.IAttributes> = {},
 ) {
 	$attrs.ngModel = 'ngModel';
@@ -38,7 +38,7 @@ export function makeTpl(
 	const el = document.createElement('div');
 	el.innerHTML = $invokeTemplate(template, $attrs);
 
-	writeFileSync(join(__dirname, folder, `snapshot.html`), el.innerHTML);
+	writeFileSync(join(__dirname, t.title.split(' ')[0], `snapshot.html`), el.innerHTML);
 
 	return el.firstElementChild as Element;
 }

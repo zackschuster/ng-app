@@ -6,7 +6,7 @@ import * as util from '../_util';
 
 const definedTextBox = InputService.defineInputComponent(textBox, document);
 
-test('check box bindings', async t => {
+test('textbox bindings', async t => {
 	t.deepEqual(definedTextBox.bindings, {
 		ngModel: '=',
 		ngModelOptions: '<',
@@ -16,22 +16,22 @@ test('check box bindings', async t => {
 	});
 });
 
-test('check box transclude', async t => {
+test('textbox transclude', async t => {
 	t.deepEqual(definedTextBox.transclude, {
 		contain: '?contain',
 	});
 });
 
-test('check box controller', async t => {
+test('textbox controller', async t => {
 	t.true(util.mockCtrl(definedTextBox.controller) instanceof NgComponentController);
 });
 
-test('check box controllerAs', async t => {
+test('textbox controllerAs', async t => {
 	t.is(definedTextBox.controllerAs, undefined);
 });
 
-test('check box template', async t => {
-	const tpl = util.makeTpl(definedTextBox.template, 'textbox');
+test('textbox template', async t => {
+	const tpl = util.makeTpl(definedTextBox.template, t);
 
 	const input = util.testInput(tpl, t, 'TEXTAREA');
 	t.true(input.classList.contains('form-control'));
