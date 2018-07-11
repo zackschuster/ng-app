@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-if (fs.existsSync('t.txt') === false) {
-	fs.appendFileSync('t.txt', '');
+if (fs.existsSync('snapshot.log') === false) {
+	fs.appendFileSync('snapshot.log', '');
 } else {
-	fs.truncateSync('t.txt', 0);
+	fs.truncateSync('snapshot.log', 0);
 }
 
 const inputsDir = path.join(process.cwd(), 'test', 'inputs');
@@ -21,6 +21,6 @@ for (let dir of dirs) {
 
 	for (const file of htmlFiles) {
 		fs.unlinkSync(file);
-		fs.appendFileSync('t.txt', file + '\n');
+		fs.appendFileSync('snapshot.log', file + '\n');
 	}
 }

@@ -1,6 +1,7 @@
 node_modules
-**/*.js
-!test/_setup.js
-!test/_teardown.js
 t.*
 *.html
+*.js
+*.log
+!test/_setup.js
+!test/_teardown.js
