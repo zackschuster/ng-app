@@ -1,5 +1,6 @@
 node_modules
 **/*.js
 !test/_setup.js
+!test/_teardown.js
 t.*
 *.html

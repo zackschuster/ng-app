@@ -1,3 +1,4 @@
+// @ts-nocheck
 if (typeof module !== 'undefined' && module.exports) {
 	require('browser-env')({ resources: 'usable' });
 	require('angular/angular.js');
