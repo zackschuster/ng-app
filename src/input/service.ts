@@ -42,6 +42,11 @@ export class InputService {
 		templateClass: 'form-group',
 		attrs: {},
 		ctrl: NgComponentController,
+		renderLabel: function defaultRenderLabel(h) {
+			const $transclude = h.createSlot();
+			$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
+			this.$label.appendChild($transclude);
+		} as InputComponentOptions['renderLabel'],
 	};
 
 	public static readonly $validationExps = {
@@ -116,15 +121,6 @@ export class InputService {
 		const $component = copy(Object.assign({}, this.$baseComponent, component));
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
-		if ($component.renderLabel == null) {
-			$component.renderLabel = function defaultRenderLabel(r) {
-				const $transclude = r.createSlot();
-				$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
-				this.$label.appendChild($transclude);
-			};
-		}
-		const renderLabel = $component.renderLabel;
-
 		const $definition = copy(this.$baseDefinition);
 
 		// assign child objects
@@ -171,7 +167,8 @@ export class InputService {
 				$label.removeChild(requiredTag);
 			}
 
-			renderLabel.call({ $label, $attrs }, h);
+			($component.renderLabel as NonNullable<InputComponentOptions['renderLabel']>)
+				.call({ $label, $attrs }, h);
 
 			if (requiredTag != null) {
 				$label.appendChild(requiredTag);

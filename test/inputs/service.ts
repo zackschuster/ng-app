@@ -1,7 +1,8 @@
 import test from 'ava';
+import { copy, isFunction } from 'angular';
+import { makeAttrs } from '../mocks';
 import { InputService } from '../../src/input/service';
 import { NgComponentController } from '../../src/controller';
-import { makeAttrs } from '../mocks';
 
 test('InputService.$validationAttrs', async t => {
 	t.deepEqual(InputService.$validationAttrs, [
@@ -39,13 +40,18 @@ test('InputService.$baseDefinition', async t => {
 });
 
 test('InputService.$baseComponent', async t => {
-	t.deepEqual(InputService.$baseComponent, {
+	const $baseComponent = copy(InputService.$baseComponent);
+	Reflect.deleteProperty($baseComponent, 'renderLabel');
+
+	t.deepEqual($baseComponent, {
 		isRadioOrCheckbox: false,
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: {},
 		ctrl: NgComponentController,
 	});
+
+	t.true(isFunction(InputService.$baseComponent.renderLabel));
 });
 
 test('InputService.modelIdentifier', async t => {
