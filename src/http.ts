@@ -7,6 +7,7 @@ export class NgDataService {
 
 	constructor(
 		private $http: angular.IHttpService,
+		private $timeout: angular.ITimeoutService,
 		private $log: NgLogger,
 		private prefix: string,
 		private baseOptions: angular.IRequestShortcutConfig = { withCredentials: true },
@@ -58,7 +59,8 @@ export class NgDataService {
 			return await new Promise<T>((resolve, reject) => {
 				promise
 					.then(({ data }) => resolve(data == null ? defaultReturn : data))
-					.catch(err => reject(err));
+					.catch(err => reject(err))
+					.finally(() => this.$timeout());
 			});
 		} catch (err) {
 			this.onError(err);
