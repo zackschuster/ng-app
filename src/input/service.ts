@@ -80,12 +80,9 @@ export class InputService {
 	 * @param $input - The input to set attributes on
 	 */
 	public static getInputInput($input: HTMLInputElement | HTMLTextAreaElement) {
-		if ($input.tagName === 'SELECT') {
-			throw new Error('Must be an input or text area');
-		}
-		return $input.tagName === 'INPUT' || $input.tagName === 'TEXTAREA'
-				? $input
-				: $input.querySelector('input') as HTMLInputElement;
+		return ['INPUT', 'TEXTAREA', 'SELECT'].includes($input.tagName)
+			? $input
+			: $input.querySelector('input') as HTMLInputElement;
 	}
 
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
@@ -181,18 +178,19 @@ export class InputService {
 				$template.appendChild($label);
 			}
 
+			// that's right, i named it after filterFilter. fight me.
+			const $inputInput = this.getInputInput($input);
+
 			this.$validationAttrs
 				.filter(x => $attrs.hasOwnProperty(x) === true)
 				.forEach(x => {
-					$input.setAttribute(
+					$inputInput.setAttribute(
 						x.replace(/[A-Z]/, s => `-${s.toLowerCase()}`),
 						x.startsWith('ng') ? `$ctrl.${x}` : 'true',
 					);
 				});
 
-			if ($input.tagName !== 'SELECT') {
-				// that's right, i named it after filterFilter. fight me.
-				const $inputInput = this.getInputInput($input);
+			if ($inputInput.tagName !== 'SELECT') {
 				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${this.$validationExps.$isInvalid} }`);
 				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 			}
@@ -213,7 +211,7 @@ export class InputService {
 				.concat(...attrs, 'email')
 				.filter(x => x.startsWith('ng') === false)
 				.filter(x => this.$validationMessages.has(x) === true)
-				.filter(x => x !== 'email' || $input.type === x)
+				.filter(x => x !== 'email' || $inputInput.type === x)
 				.forEach(x => {
 					const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
 					$message.innerText = this.$validationMessages.get(x) as string;
