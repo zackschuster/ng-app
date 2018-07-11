@@ -32,8 +32,12 @@ export function makeTpl(
 	t: ExecutionContext,
 	$attrs: Partial<angular.IAttributes> = {},
 ) {
-	$attrs.ngModel = 'ngModel';
-	$attrs.required = true;
+	Object.assign($attrs, {
+		ngModel: 'ngModel',
+		required: true, ngRequired: true,
+		disabled: true, ngDisabled: true,
+		readonly: true, ngReadonly: true,
+	});
 
 	const el = document.createElement('div');
 	el.innerHTML = $invokeTemplate(template, $attrs);
@@ -47,6 +51,14 @@ export function testInput(tpl: Element, t: ExecutionContext, tagName = 'INPUT') 
 	const input = tpl.querySelector(tagName.toLowerCase()) as HTMLInputElement;
 
 	t.is(input.tagName, tagName);
+
+	t.is(input.getAttribute('required'), 'true');
+	t.is(input.getAttribute('ng-required'), '$ctrl.ngRequired');
+	t.is(input.getAttribute('disabled'), 'true');
+	t.is(input.getAttribute('ng-disabled'), '$ctrl.ngDisabled');
+	t.is(input.getAttribute('readonly'), 'true');
+	t.is(input.getAttribute('ng-readonly'), '$ctrl.ngReadonly');
+
 	t.is(input.getAttribute('ng-model'), '$ctrl.ngModel');
 	t.is(input.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 	t.is(input.getAttribute('ng-blur'), '$ctrl.ngModelCtrl.$setTouched()');
