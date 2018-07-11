@@ -110,7 +110,7 @@ export class NgRenderer {
 
 		const $inputGroup = this.createElement('div', ['input-group']);
 		const $inputGroupPrepend = this.createElement('div', ['input-group-prepend'], inputGroupAttrs);
-		const $inputGroupText = this.createElement('span', ['input-group-text'], inputGroupAttrs);
+		const $inputGroupText = this.createElement('span', ['input-group-text']);
 		const $icon = this.createIcon(icon, icon.startsWith('fw!'));
 
 		$inputGroupText.appendChild($icon);
