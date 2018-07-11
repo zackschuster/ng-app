@@ -91,13 +91,16 @@ export function testLabel(tpl: Element, t: ExecutionContext) {
 	const ngAttrFor = label.getAttribute('ng-attr-for') as string;
 	t.regex(ngAttrFor, idRe);
 
-	const required = label.querySelector('span') as HTMLSpanElement;
-	t.is(required.innerHTML, ' *');
-	t.true(required.classList.contains('text-danger'));
+	const input = tpl.querySelector('input');
+	if (input != null && input.type !== 'radio') {
+		const required = label.querySelector('span') as HTMLSpanElement;
+		t.is(required.innerHTML, ' *');
+		t.true(required.classList.contains('text-danger'));
 
-	const transclude = label.querySelector('ng-transclude') as HTMLUnknownElement;
-	t.is(transclude.tagName, 'NG-TRANSCLUDE');
-	t.is(transclude.innerHTML, $ctrl.splitByCapitalLetter(ngAttrFor.split('_')[0]));
+		const transclude = label.querySelector('ng-transclude') as HTMLUnknownElement;
+		t.is(transclude.tagName, 'NG-TRANSCLUDE');
+		t.is(transclude.innerHTML, $ctrl.splitByCapitalLetter(ngAttrFor.split('_')[0]));
+	}
 
 	return label;
 }
