@@ -130,7 +130,8 @@ export const selectList: InputComponentOptions = {
 	type: 'input',
 	render(h) {
 		const input = h.createElement('select', [], [
-			['name', '{{id}}'], ['id', '{{id}}'],
+			['ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}'],
+			['ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}'],
 			['ng-show', '$ctrl.showChoices === true'],
 		]);
 
