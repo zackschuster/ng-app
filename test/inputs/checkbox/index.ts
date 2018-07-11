@@ -18,9 +18,11 @@ test('checkbox bindings', async t => {
 });
 
 test('checkbox transclude', async t => {
-	t.deepEqual(definedCheckBox.transclude, {
-		contain: '?contain',
-	});
+	t.deepEqual(definedCheckBox.transclude, { contain: '?contain' });
+});
+
+test('checkbox require', async t => {
+	t.deepEqual(definedCheckBox.require, { ngModelCtrl: 'ngModel' });
 });
 
 test('checkbox controller', async t => {

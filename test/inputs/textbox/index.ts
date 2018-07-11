@@ -17,9 +17,11 @@ test('textbox bindings', async t => {
 });
 
 test('textbox transclude', async t => {
-	t.deepEqual(definedTextBox.transclude, {
-		contain: '?contain',
-	});
+	t.deepEqual(definedTextBox.transclude, { contain: '?contain' });
+});
+
+test('textbox require', async t => {
+	t.deepEqual(definedTextBox.require, { ngModelCtrl: 'ngModel' });
 });
 
 test('textbox controller', async t => {
