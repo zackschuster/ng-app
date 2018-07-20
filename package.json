@@ -1,6 +1,6 @@
 {
   "name": "@ledge/ng-app",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "An ESM-friendly shim layer for Angular.js, written & distributed in TypeScript",
   "homepage": "https://github.com/zackschuster/ng-app",
   "author": "Zack Schuster (https://github.com/zackschuster)",
