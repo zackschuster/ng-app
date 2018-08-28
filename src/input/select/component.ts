@@ -50,6 +50,11 @@ class SelectController extends NgComponentController {
 				this.choices.setChoices(list, this.value, this.text);
 				this.destroyCurrentWatcher = this.createWatcher();
 				this.showChoices = true;
+
+				const input = this.$element.querySelector('input') as HTMLInputElement;
+				const ngModelParts = this.$attrs.ngModel.split('.');
+				const ngModel = ngModelParts[ngModelParts.length - 1];
+				input.setAttribute('aria-label', `${ngModel} list selection`);
 			});
 		}
 	}
