@@ -98,6 +98,13 @@ export class InputService {
 							$contain.remove();
 						}
 					}
+
+					this.$scope.$watch(
+						() => this.ngModel,
+						(_: any) => {
+							this.ngModelCtrl.$setViewValue(_);
+						},
+					);
 				});
 			}
 		};
