@@ -10,7 +10,6 @@
   },
   "license": "GPL-3.0",
   "files": [
-    "LICENSE.md",
     "index.ts",
     "src"
   ],
