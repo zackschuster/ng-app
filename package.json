@@ -1,6 +1,6 @@
 {
   "name": "@ledge/ng-app",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "description": "An ESM-friendly shim layer for Angular.js, written & distributed in TypeScript",
   "homepage": "https://github.com/zackschuster/ng-app",
   "author": "Zack Schuster (https://github.com/zackschuster)",
@@ -41,17 +41,24 @@
     "@types/angular-mocks": "1.7.0",
     "angular-mocks": "1.7.3",
     "ava": "1.0.0-beta.8",
-		"browser-env": "3.2.5",
-		"esm": "3.0.82",
+    "browser-env": "3.2.5",
+    "esm": "3.0.82",
     "pretty": "2.0.0",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
     "typescript": "3.0.3"
   },
   "ava": {
-		"files": ["test/**/*.ts", "!test/mocks/**"],
-		"compileEnhancements": false,
-    "extensions": ["ts"],
-    "require": ["./test/_register.js"]
+    "files": [
+      "test/**/*.ts",
+      "!test/mocks/**"
+    ],
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "./test/_register.js"
+    ]
   }
 }
