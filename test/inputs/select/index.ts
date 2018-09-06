@@ -14,7 +14,6 @@ test('select bindings', async t => {
 		ngReadonly: '<',
 		ngRequired: '<',
 		list: '<',
-		onChange: '<',
 	});
 });
 

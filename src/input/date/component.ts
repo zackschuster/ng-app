@@ -1,12 +1,8 @@
-import { isFunction } from 'angular';
-import { Callback } from '@ledge/types';
-
 import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
 
 class DateInputController extends NgComponentController {
 	private hasFocus: boolean = false;
-	private onChange: Callback;
 	private lastClick: number;
 	private minDate: Date | number | string | null;
 	private maxDate: Date | number | string | null;
@@ -87,12 +83,6 @@ class DateInputController extends NgComponentController {
 		input[method]();
 	}
 
-	public handleDateEvent() {
-		if (isFunction(this.onChange)) {
-			this.onChange(this.ngModel);
-		}
-	}
-
 	public getMinDate() {
 		return new Date(this.minDate as number).toLocaleDateString();
 	}
@@ -110,7 +100,6 @@ export const dateInput: InputComponentOptions = {
 			['datepicker-append-to-body', this.$attrs.appendToBody || 'false'],
 			['is-open', '$ctrl.hasFocus'],
 			['ng-click', '$ctrl.hasFocus = true'],
-			['ng-change', '$ctrl.handleDateEvent()'],
 		]);
 
 		return h.createIconInput(input, 'calendar', [

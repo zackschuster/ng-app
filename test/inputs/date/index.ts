@@ -62,7 +62,6 @@ test('date template', async t => {
 	t.is(input.getAttribute('datepicker-append-to-body'), 'false');
 	t.is(input.getAttribute('is-open'), '$ctrl.hasFocus');
 	t.is(input.getAttribute('ng-click'), '$ctrl.hasFocus = true');
-	t.is(input.getAttribute('ng-change'), '$ctrl.handleDateEvent()');
 
 	util.testLabel(tpl, t);
 	util.testNgMessages(tpl, t);

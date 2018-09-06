@@ -21,7 +21,6 @@ class SelectController extends NgComponentController {
 	private isMultiple: boolean;
 	private text: string;
 	private value: string;
-	private onChange: Callback;
 	private destroyCurrentWatcher: Callback;
 
 	public $postLink() {
@@ -80,10 +79,6 @@ class SelectController extends NgComponentController {
 					} else if (this.listHasValue(_)) {
 						this.choices.setValueByChoice(_);
 					}
-				}
-
-				if (this.onChange != null) {
-					this.onChange(_);
 				}
 			},
 		);
@@ -154,6 +149,5 @@ export const selectList: InputComponentOptions = {
 	ctrl: SelectController,
 	bindings: {
 		list: '<',
-		onChange: '<',
 	},
 };
