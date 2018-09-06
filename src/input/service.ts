@@ -87,6 +87,7 @@ export class InputService {
 
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
 		return class extends $ctrl {
+			private ngModelCtrl: angular.INgModelController;
 			constructor() {
 				super();
 				setTimeout(() => {
@@ -103,6 +104,7 @@ export class InputService {
 						() => this.ngModel,
 						(_: any) => {
 							this.ngModelCtrl.$setViewValue(_);
+							this.ngModelCtrl.$commitViewValue();
 						},
 					);
 				});
