@@ -1,6 +1,6 @@
 // tslint:disable:member-ordering max-classes-per-file
 import isIE11 from '@ledge/is-ie-11';
-import { IAttributes, copy } from 'angular';
+import { IAttributes, copy, equals } from 'angular';
 
 import { InputComponentOptions } from './options';
 import { NgComponentController } from '../controller';
@@ -102,9 +102,11 @@ export class InputService {
 
 					this.$scope.$watch(
 						() => this.ngModel,
-						(_: any) => {
-							this.ngModelCtrl.$setViewValue(_);
-							this.ngModelCtrl.$commitViewValue();
+						(curr: any, prev: any) => {
+							if (equals(curr, prev) === false) {
+								this.ngModelCtrl.$setViewValue(curr);
+								this.ngModelCtrl.$commitViewValue();
+							}
 						},
 					);
 				});
