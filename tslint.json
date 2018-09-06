@@ -1,0 +1,3 @@
+{
+	"extends": "@ledge/configs/tslint.json"
+}
