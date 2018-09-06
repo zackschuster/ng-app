@@ -1238,7 +1238,7 @@ escodegen@^1.9.0:
   optionalDependencies:
     source-map "~0.6.1"
 
-esm@^3.0.80:
+esm@3.0.82, esm@^3.0.80:
   version "3.0.82"
   resolved "https://registry.yarnpkg.com/esm/-/esm-3.0.82.tgz#e8c4363a14e30936bedf49a44bf962e2c91866ff"
 

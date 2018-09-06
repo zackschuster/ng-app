@@ -3,5 +3,5 @@ t.*
 *.html
 *.js
 *.log
-!test/_setup.js
+!test/_register.js
 !test/_teardown.js
