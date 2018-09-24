@@ -82,8 +82,10 @@ export class NgApp {
 				) => {
 					['day', 'month', 'year'].forEach(x => {
 						const templateUrl = `uib/template/datepicker/${x}.html`;
-						const template = $templateCache.get<string>(templateUrl).replace(/glyphicon/g, 'fa');
-						$templateCache.put(templateUrl, template);
+						const template = $templateCache.get<string>(templateUrl);
+						if (template != null) {
+							$templateCache.put(templateUrl, template.replace(/glyphicon/g, 'fa'));
+						}
 					});
 
 					this.$injector = $injector;
