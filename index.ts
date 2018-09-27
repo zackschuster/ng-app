@@ -11,5 +11,5 @@ export { NgApp };
 export { NgComponentController, NgController } from './src/controller';
 export { NgDataService } from './src/http';
 export { NgLogger } from './src/logger';
-export { NgModalOptions, NgModalService } from './src/modal';
+export { NgModalService } from './src/modal';
 export { NgRenderer } from './src/renderer';
