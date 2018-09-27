@@ -2,11 +2,13 @@ import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
 
 class TextInputController extends NgComponentController {
-	public min: number | undefined;
-	public max: number | undefined;
+	private min: number | undefined;
+	private max: number | undefined;
 
 	public $onInit() {
-		if (this.$attrs.type === 'number') {
+		const { type, minlength } = this.$attrs;
+
+		if (type === 'number') {
 			this.ngModelCtrl.$validators.minVal = val => {
 				return this.min == null || val >= this.min;
 			};
@@ -14,20 +16,38 @@ class TextInputController extends NgComponentController {
 				return this.max == null || val <= this.max;
 			};
 		}
+
+		if (minlength != null) {
+			this.ngModelCtrl.$validators.pattern = val => {
+				return val != null && val.length >= minlength;
+			};
+		}
 	}
 }
+
+const validators = new Map<string, string>([
+	['minVal', 'Must be greater than or equal to {{$ctrl.min}}'],
+	['maxVal', 'Must be less than or equal to {{$ctrl.max}}'],
+]);
 
 export const textInput: InputComponentOptions = {
 	type: 'input',
 	canHaveIcon: true,
 	attrs: { maxlength: 3000, placeholder: '' },
 	render(h) {
-		const input = h.createInput(this.$attrs.type);
+		const { type, minlength } = this.$attrs;
 
-		if (input.type === 'number') {
+		const input = h.createInput(type);
+
+		if (type === 'number' || type === 'range') {
 			input.setAttribute('ng-attr-min', '{{$ctrl.min}}');
 			input.setAttribute('ng-attr-max', '{{$ctrl.max}}');
 			input.setAttribute('ng-attr-step', `{{$ctrl.step || 'any'}}`);
+		}
+
+		if (minlength != null) {
+			input.setAttribute('pattern', `.{${minlength},}`);
+			validators.set('pattern', `Input must be at least ${minlength} characters`);
 		}
 
 		return input;
@@ -37,9 +57,6 @@ export const textInput: InputComponentOptions = {
 		max: '<',
 		step: '<',
 	},
-	validators: new Map<string, string>([
-		['minVal', 'Must be greater than or equal to {{$ctrl.min}}'],
-		['maxVal', 'Must be less than or equal to {{$ctrl.max}}'],
-	]),
+	validators,
 	ctrl: TextInputController,
 };
