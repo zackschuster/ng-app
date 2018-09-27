@@ -36,7 +36,7 @@
     "noty": "3.1.4"
   },
   "devDependencies": {
-    "@ledge/configs": "10.1.0",
+    "@ledge/configs": "11.0.0",
     "@types/angular-mocks": "1.7.0",
     "angular-mocks": "1.7.4",
     "ava": "1.0.0-beta.8",
@@ -45,7 +45,7 @@
     "pretty": "2.0.0",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
-    "typescript": "3.0.3"
+    "typescript": "3.1.1"
   },
   "ava": {
     "files": [
