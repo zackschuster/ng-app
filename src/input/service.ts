@@ -105,7 +105,14 @@ export class InputService {
 						(curr: any, prev: any) => {
 							if (equals(curr, prev) === false) {
 								this.ngModelCtrl.$setViewValue(curr);
-								this.ngModelCtrl.$commitViewValue();
+								const isValid = Object
+									.keys(this.ngModelCtrl.$validators)
+									.every(x => {
+										return this.ngModelCtrl.$validators[x](curr, curr);
+									});
+								if (isValid) {
+									this.ngModelCtrl.$commitViewValue();
+								}
 							}
 						},
 					);
