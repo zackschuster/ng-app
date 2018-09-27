@@ -111,7 +111,7 @@ export const dateInput: InputComponentOptions = {
 		minDate: '<',
 		maxDate: '<',
 	},
-	validators: new Map<string, string>([
+	validators: new Map([
 		['minDate', 'Date must be on or after {{$ctrl.getMinDate()}}'],
 		['maxDate', 'Date must be on or before {{$ctrl.getMaxDate()}}'],
 	]),
