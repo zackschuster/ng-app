@@ -5,6 +5,13 @@ import { NgLogger } from './logger';
 import { NgDataService } from './http';
 
 export class NgController {
+	public static IsMobile() {
+		return typeof window === 'object' && window.innerWidth < 767;
+	}
+	public get isMobile() {
+		return NgController.IsMobile();
+	}
+
 	protected readonly $config: IConfig;
 	protected readonly $scope: angular.IScope;
 	protected readonly $element: HTMLElement;
