@@ -129,12 +129,11 @@ export class InputService {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer(doc);
 
-		const validators = component.validators instanceof Map
-			? new Map(component.validators)
-			: new Map();
-
 		const $component = copy(Object.assign({}, this.$baseComponent, component));
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
+		const validators = component.validators instanceof Map
+			? component.validators
+			: new Map();
 
 		const $definition = copy(this.$baseDefinition);
 
