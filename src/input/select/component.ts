@@ -24,15 +24,18 @@ class SelectController extends NgComponentController {
 	private destroyCurrentWatcher: Callback;
 
 	public $postLink() {
+		const select = this.$element.getElementsByTagName('select').item(0);
+		if (select == null) {
+			throw new Error('Unable to find select element (something has gone seriously wrong)');
+		}
+
 		this.isMultiple = SelectController.IsMultiple(this.$attrs);
 		this.value = this.$attrs.value || 'Value';
 		this.text = this.$attrs.text || 'Text';
 
-		const $select = this.$element.getElementsByTagName('select').item(0);
-
 		this.$scope.$watch(
 			_ => this.list,
-			_ => this.makeSelectList($select, this.list),
+			_ => this.makeSelectList(select, this.list),
 			true,
 		);
 	}
@@ -41,6 +44,10 @@ class SelectController extends NgComponentController {
 		if (this.choices != null) {
 			this.choices.destroy();
 			this.destroyCurrentWatcher();
+		}
+
+		if (el.getAttribute('ng-options') != null) {
+			return;
 		}
 
 		if (Array.isArray(list)) {
@@ -142,6 +149,15 @@ export const selectList: InputComponentOptions = {
 			placeholder.innerText = SelectController.GetPlaceholder(this.$attrs);
 			placeholder.value = '';
 			input.appendChild(placeholder);
+		}
+
+		if (NgComponentController.IsMobile()) {
+			const text = this.$attrs.text || 'Text';
+			const value = this.$attrs.value || 'Value';
+			input.classList.add('form-control');
+			input.setAttribute('ng-options', `item.${value} as item.${text} for item in $ctrl.list`);
+			input.setAttribute('ng-model', `$ctrl.ngModel`);
+			input.removeAttribute('ng-show');
 		}
 
 		return input;
