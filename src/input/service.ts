@@ -47,6 +47,10 @@ export class InputService {
 			$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
 			this.$label.appendChild($transclude);
 		} as InputComponentOptions['renderLabel'],
+		// tslint:disable-next-line:variable-name
+		postRender: function defaultPostRender(_h) {
+			return this.$template;
+		} as InputComponentOptions['postRender'],
 	};
 
 	public static readonly $validationExps = {
@@ -194,6 +198,9 @@ export class InputService {
 			if ($component.isRadioOrCheckbox === true) {
 				$template.appendChild($label);
 			}
+
+			($component.postRender as NonNullable<InputComponentOptions['postRender']>)
+				.call({ $template, $attrs }, h);
 
 			// that's right, i named it after filterFilter. fight me.
 			const $inputInput = this.getInputInput($input);

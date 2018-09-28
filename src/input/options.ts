@@ -71,4 +71,21 @@ export interface InputComponentOptions extends angular.IComponentOptions {
 		},
 		h: NgRenderer,
 	): void;
+
+	/**
+	 * Run after label is added to template
+	 */
+	postRender?(
+		this: {
+			/**
+			 * Input container
+			 */
+			$template: HTMLDivElement;
+			/**
+			 * Angular.js $attrs object
+			 */
+			$attrs: angular.IAttributes;
+		},
+		h: NgRenderer,
+	): Element;
 }
