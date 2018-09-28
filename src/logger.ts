@@ -1,7 +1,8 @@
 import * as Noty from 'noty';
 import { Callback, Indexed } from '@ledge/types';
+import { NgService } from './service';
 
-export class NgLogger {
+export class NgLogger extends NgService {
 	public log: angular.ILogCall;
 	private typeMap: {
 		warning: 'warn',
@@ -20,6 +21,7 @@ export class NgLogger {
 	};
 
 	constructor(private $log: angular.ILogService, private isProd = false) {
+		super();
 		this.log = this.$log.log;
 	}
 

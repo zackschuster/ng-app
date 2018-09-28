@@ -1,17 +1,17 @@
-import isIE11 from '@ledge/is-ie-11';
 import { PatchPayload } from '@ledge/types/patch';
 import { NgLogger } from './logger';
+import { NgService } from './service';
 
-export class NgDataService {
-	private isIE11 = isIE11();
-
+export class NgDataService extends NgService {
 	constructor(
 		private $http: angular.IHttpService,
 		private $timeout: angular.ITimeoutService,
 		private $log: NgLogger,
 		private prefix: string,
 		private baseOptions: angular.IRequestShortcutConfig = { withCredentials: true },
-	) { }
+	) {
+		super();
+	}
 
 	public async Get<T = any>(url: string, defaultReturn?: T) {
 		const baseGetOptions = { params: { timestamp: (this.isIE11 ? Date.now() : null) } };

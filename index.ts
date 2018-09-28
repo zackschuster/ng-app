@@ -8,6 +8,7 @@ export function wrapCtrl(controller: new() => any) {
 }
 
 export { NgApp };
+export { NgService } from './src/service';
 export { NgComponentController, NgController } from './src/controller';
 export { NgDataService } from './src/http';
 export { NgLogger } from './src/logger';

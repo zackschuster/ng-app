@@ -3,15 +3,9 @@ import { IConfig } from '@ledge/types';
 import { StateService } from '@uirouter/angularjs';
 import { NgLogger } from './logger';
 import { NgDataService } from './http';
+import { NgService } from './service';
 
-export class NgController {
-	public static IsMobile() {
-		return typeof window === 'object' && window.innerWidth < 767;
-	}
-	public get isMobile() {
-		return NgController.IsMobile();
-	}
-
+export class NgController extends NgService {
 	protected readonly $config: IConfig;
 	protected readonly $scope: angular.IScope;
 	protected readonly $element: HTMLElement;
@@ -31,22 +25,6 @@ export class NgController {
 		this.$log.confirm(_ => {
 			window.open(`http://${address}`);
 		});
-	}
-
-	/**
-	 * Separates words in a string by capital letters. Also capitalizes the first letter.
-	 * If string is all-caps, it's returned as-is.
-	 *
-	 * @param item - The string value to be split
-	 */
-	public splitByCapitalLetter(item: string) {
-		const split = item.split(/(?=[A-Z])/);
-		return split.every(x => x.length === 1)
-			? item
-			: split
-					.map(x => x.trim())
-					.map(x => x.charAt(0).toUpperCase() + x.substring(1))
-					.join(' ');
 	}
 
 	public getApiPrefix() {

@@ -3,36 +3,28 @@ import { element } from 'angular';
 import { NgController } from './controller';
 import { NgDataService } from './http';
 import { NgLogger } from './logger';
+import { NgService } from './service';
 
-export class NgModalService {
+export class NgModalService extends NgService {
 	constructor(
 		private $uibModal: angular.ui.bootstrap.IModalService,
 		private $timeout: angular.ITimeoutService,
 		private $http: NgDataService,
 		private $log: NgLogger,
-	) { }
+	) {
+		super();
+	}
 
-	public open(options: NgModalOptions) {
-		const defaults: NgModalOptions = {
-			appendTo: document.body,
-			template: '<div></div>',
-			size: 'lg',
-			controller: NgController,
-			controllerAs: '$ctrl',
-			onClose() {
-				return true;
-			},
-		};
-
-		const {
-			template,
-			size,
-			controller,
-			controllerAs,
-			appendTo,
-			onClose,
-		} = Object.assign(defaults, options) as Required<NgModalOptions>;
-
+	public open({
+		appendTo = document.body,
+		template = '<h1>Set the <code>template</code> property to replace me :)</h1>',
+		size = 'lg',
+		controller = NgController,
+		controllerAs = '$ctrl',
+		onClose = () => {
+			return true;
+		},
+	}: NgModalOptions = {}) {
 		const { $http, $timeout, $log } = this;
 		function makeModalCtrl() {
 			return class extends (controller as typeof NgController) {
