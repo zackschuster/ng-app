@@ -76,7 +76,7 @@ export class NgDataService extends NgService {
 
 		switch (err.status) {
 			case 404:
-				this.$log.devWarning(`Route '${url}' not found`);
+				this.$log.error(`Route '${url}' not found`);
 				break;
 			case 500:
 				const { data, statusText } = err;
@@ -98,7 +98,7 @@ export class NgDataService extends NgService {
 				this.$log.warning('Server timed out.');
 				break;
 			default:
-				this.$log.devWarning(`An unregistered error occurred for '${url}' (code: ${err.status})`);
+				this.$log.error(`The request to '${url}' returned an error (code: ${err.status})`);
 				break;
 		}
 	}
