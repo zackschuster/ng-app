@@ -42,6 +42,7 @@ test('InputService.$baseDefinition', async t => {
 test('InputService.$baseComponent', async t => {
 	const $baseComponent = copy(InputService.$baseComponent);
 	Reflect.deleteProperty($baseComponent, 'renderLabel');
+	Reflect.deleteProperty($baseComponent, 'postRender');
 
 	t.deepEqual($baseComponent, {
 		isRadioOrCheckbox: false,
