@@ -126,6 +126,7 @@ export class NgApp {
 			}
 		}]);
 
+		setTimeout(() => document.body.classList.add('bootstrapped'));
 		this.$bootstrap(document.body, [this.$id], { strictDi });
 	}
 
