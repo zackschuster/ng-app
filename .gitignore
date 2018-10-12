@@ -1,6 +1,8 @@
 .vscode
 node_modules
 t.*
+.DS_Store
+*.ini
 *.html
 *.js
 *.log
