@@ -14,3 +14,4 @@ export { NgDataService } from './src/http';
 export { NgLogger } from './src/logger';
 export { NgModalService } from './src/modal';
 export { NgRenderer } from './src/renderer';
+export { StateServiceWithMeta } from './src/interfaces';
