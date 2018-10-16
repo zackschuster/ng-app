@@ -1,9 +1,9 @@
 // tslint:disable:max-classes-per-file
 import { IConfig } from '@ledge/types';
-import { StateService } from '@uirouter/angularjs';
 import { NgLogger } from './logger';
 import { NgDataService } from './http';
 import { NgService } from './service';
+import { StateServiceWithMeta } from './interfaces';
 
 export class NgController extends NgService {
 	protected readonly $config: IConfig;
@@ -14,7 +14,7 @@ export class NgController extends NgService {
 	protected readonly $log: NgLogger;
 	protected readonly $http: NgDataService;
 	protected readonly $injector: angular.auto.IInjectorService;
-	protected readonly $state: StateService;
+	protected readonly $state: StateServiceWithMeta;
 
 	protected readonly isProduction: boolean;
 	protected readonly isDevelopment: boolean;
