@@ -1,13 +1,14 @@
 // tslint:disable:max-classes-per-file
-import { bootstrap, injector, module } from 'angular';
-import { Ng1StateDeclaration, StateProvider } from '@uirouter/angularjs';
-import { HookMatchCriteria, StateService, TargetState, Transition, TransitionService } from '@uirouter/core';
+import { bootstrap, copy, injector, module } from 'angular';
+import { StateProvider } from '@uirouter/angularjs';
+import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
 import { Callback, IConfig } from '@ledge/types';
 import { autobind } from 'core-decorators';
 
 import { NgDataService } from './http';
 import { NgLogger } from './logger';
 import { NgModalService } from './modal';
+import { NgRouter, NgStateService } from './router';
 
 import { InputComponentOptions } from './input/options';
 import { InputService } from './input/service';
@@ -30,10 +31,39 @@ type TransitionHooks =
 	'onStart' |
 	'onSuccess';
 
+export interface NgConfig extends IConfig {
+	readonly IS_PROD: boolean;
+	readonly IS_DEV: boolean;
+	readonly IS_STAGING: boolean;
+}
+
 @autobind
 export class NgApp {
+
+	public get components() {
+		return Array.from(this.$components.keys());
+	}
+
+	public get module() {
+		return this.$module;
+	}
+
+	public get config() {
+		return copy(this.$config);
+	}
+
+	public set config(ngConfig: Partial<NgConfig>) {
+		const env = process.env.NODE_ENV;
+		this.$config = Object.assign(ngConfig, {
+			ENV: env,
+			IS_PROD: env === 'production',
+			IS_DEV: env === 'development',
+			IS_STAGING: env === 'staging',
+		} as NgConfig);
+	}
 	public readonly $id = '$core';
 	public $injector = injector(['ng']);
+	protected router: NgRouter;
 
 	private $dependencies = [
 		'ngAnimate',
@@ -43,14 +73,12 @@ export class NgApp {
 		'monospaced.elastic',
 	];
 
-	private $config: IConfig;
-	private $flags: { IS_PROD: boolean; IS_DEV: boolean; IS_STAGING: boolean };
+	private $config: NgConfig;
 
 	private readonly $module = module(this.$id, this.$dependencies);
 	private readonly $bootstrap = bootstrap;
 
 	private readonly $components: Map<string, angular.IComponentOptions> = new Map();
-	private $routes: Ng1StateDeclaration[] = [];
 
 	constructor() {
 		this.config = {};
@@ -63,10 +91,10 @@ export class NgApp {
 					$locationProvider: angular.ILocationProvider,
 					$qProvider: angular.IQProvider,
 				) => {
-					const { IS_DEV, IS_STAGING } = this.$flags;
+					const { IS_DEV, IS_STAGING } = this.$config;
 
 					$compileProvider
-						.debugInfoEnabled(IS_DEV || IS_STAGING)
+						.debugInfoEnabled(!!(IS_DEV || IS_STAGING))
 						.commentDirectivesEnabled(false)
 						.cssClassDirectivesEnabled(false);
 
@@ -93,35 +121,17 @@ export class NgApp {
 				}]);
 	}
 
-	public get components() {
-		return Array.from(this.$components.keys());
-	}
-
-	public get module() {
-		return this.$module;
-	}
-
-	public get config() {
-		return this.$config;
-	}
-
-	public set config(cfg: IConfig) {
-		this.$config = cfg;
-		this.$config.ENV = process.env.NODE_ENV;
-		this.$flags = {
-			IS_PROD: this.$config.ENV === 'production',
-			IS_DEV: this.$config.ENV === 'development',
-			IS_STAGING: this.$config.ENV === 'staging',
-		};
-	}
-
 	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
+		if (this.router == null) {
+			return this.logger().devWarning('app.registerRouter(ngRouter) must be run before bootstrap');
+		}
+
 		for (const [name, definition] of this.$components) {
 			this.$module.component(name, definition);
 		}
 
 		this.$module.config(['$stateProvider', ($stateProvider: StateProvider) => {
-			for (const definition of this.$routes) {
+			for (const definition of this.router.getRoutes()) {
 				$stateProvider.state(definition);
 			}
 		}]);
@@ -150,11 +160,8 @@ export class NgApp {
 		return this;
 	}
 
-	public registerRoutes(routes: Ng1StateDeclaration[]) {
-		this.$routes = [
-			...this.$routes,
-			...routes,
-		];
+	public registerRouter(router: NgRouter) {
+		this.router = router;
 		return this;
 	}
 
@@ -203,7 +210,7 @@ export class NgApp {
 	}
 
 	public http(options: angular.IRequestShortcutConfig = {
-		timeout: this.$flags.IS_PROD ? 10000 : undefined,
+		timeout: this.$config.IS_PROD ? 10000 : undefined,
 		withCredentials: true,
 	}) {
 		return new NgDataService(
@@ -216,7 +223,7 @@ export class NgApp {
 	}
 
 	public logger() {
-		return new NgLogger(this.$injector.get('$log'), this.$flags.IS_PROD);
+		return new NgLogger(this.$injector.get('$log'), this.$config.IS_PROD);
 	}
 
 	public modal() {
@@ -234,7 +241,7 @@ export class NgApp {
 
 	public _wrapComponentController($controller: new(...args: any[]) => angular.IController) {
 		const { config, http, logger, _verifyApiPrefix: getApiPrefix } = this;
-		const { IS_PROD, IS_DEV, IS_STAGING } = this.$flags;
+		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
 
 		// Force `this` to always refer to the class instance, no matter what
 		autobind($controller);
@@ -256,7 +263,7 @@ export class NgApp {
 				public $attrs: angular.IAttributes,
 				public $timeout: angular.ITimeoutService,
 				public $injector: angular.auto.IInjectorService,
-				public $state: StateService,
+				public $state: NgStateService,
 			) {
 				super();
 

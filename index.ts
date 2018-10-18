@@ -7,11 +7,12 @@ export function wrapCtrl(controller: new() => any) {
 	return app._wrapComponentController(controller);
 }
 
-export { NgApp };
-export { NgService } from './src/service';
-export { NgComponentController, NgController } from './src/controller';
-export { NgDataService } from './src/http';
-export { NgLogger } from './src/logger';
-export { NgModalService } from './src/modal';
-export { NgRenderer } from './src/renderer';
-export { StateServiceWithMeta } from './src/interfaces';
+export * from './src/app';
+export * from './src/service';
+export * from './src/controller';
+export * from './src/http';
+export * from './src/logger';
+export * from './src/modal';
+export * from './src/renderer';
+export * from './src/router';
+export * from './src/input';
