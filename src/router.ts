@@ -1,5 +1,5 @@
 import { Callback, Indexed } from '@ledge/types';
-import { IInjectable, ParamType, StateDeclaration, StateService, Transition } from '@uirouter/core';
+import { IInjectable, ParamType, StateDeclaration, StateService, TargetState, Transition } from '@uirouter/core';
 
 import { NgService } from './service';
 
@@ -137,6 +137,8 @@ interface _NgRoute extends StateDeclaration {
 	views?: any;
 }
 
+type NgTransitionFn = [string, ($trans: Transition) => Promise<Transition | TargetState>];
+
 export interface NgRoute extends _NgRoute {
 	/**
 	 * The name of the component to use for this view.
@@ -182,5 +184,7 @@ export interface NgRoute extends _NgRoute {
 	parent: string;
 	label: string;
 
-	onEnter?: [string, ($trans: Transition) => Promise<Transition>];
+	onEnter?: NgTransitionFn;
+	onExit?: NgTransitionFn;
+	onRetain?: NgTransitionFn;
 }
