@@ -1,15 +1,12 @@
 // tslint:disable:max-classes-per-file
 import { element } from 'angular';
 import { NgController } from './controller';
-import { NgDataService } from './http';
 import { NgLogger } from './logger';
 import { NgService } from './service';
 
 export class NgModalService extends NgService {
 	constructor(
 		private $uibModal: angular.ui.bootstrap.IModalService,
-		private $timeout: angular.ITimeoutService,
-		private $http: NgDataService,
 		private $log: NgLogger,
 	) {
 		super();
@@ -25,12 +22,11 @@ export class NgModalService extends NgService {
 			return true;
 		},
 	}: NgModalOptions = {}) {
-		const { $http, $timeout, $log } = this;
+		const { $log } = this;
+
 		function makeModalCtrl() {
 			return class extends (controller as typeof NgController) {
 				public close: (...args: any[]) => void;
-				public $http = $http;
-				public $timeout = $timeout;
 				public $log = $log;
 
 				protected onclose: typeof onClose;

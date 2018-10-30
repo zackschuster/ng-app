@@ -27,7 +27,9 @@ export class NgApp {
 	}
 
 	public get config() {
-		return copy(this.$config);
+		return this.$config != null
+			? copy(this.$config)
+			: Object.create(null);
 	}
 
 	public get components() {
@@ -232,12 +234,7 @@ export class NgApp {
 	}
 
 	protected $modal() {
-		return new NgModalService(
-			this.$injector.get('$uibModal'),
-			this.$timeout(),
-			this.$http(),
-			this.$logger(),
-		);
+		return new NgModalService(this.$injector.get('$uibModal'), this.$logger());
 	}
 
 	protected $timeout() {
