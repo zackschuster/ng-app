@@ -57,7 +57,7 @@ export class NgRenderer {
 	}
 
 	public createIcon(icon: string, isFixedWidth = false) {
-		const $iconClasses = ['fa', 'fa-' + icon.replace(/^fw!/, '')];
+		const $iconClasses = ['fa', `fa-${icon.replace(/^fw!/, '')}`];
 		if (isFixedWidth) {
 			$iconClasses.push('fa-fw');
 		}
