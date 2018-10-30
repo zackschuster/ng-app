@@ -1,4 +1,4 @@
-import { IConfig, Indexed } from '@ledge/types';
+import { IConfig } from '@ledge/types';
 import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
@@ -9,10 +9,6 @@ import { NgRouter, NgStateService } from './router';
 
 import { InputComponentOptions } from './input/options';
 import { InputService } from './input/service';
-
-export type NgComponentList =
-	Map<string, angular.IComponentOptions> |
-	Indexed<angular.IComponentOptions>;
 
 export interface NgConfig extends IConfig {
 	readonly IS_PROD: boolean;
@@ -134,16 +130,10 @@ export class NgApp {
 		return this;
 	}
 
-	public addComponents(components: NgComponentList) {
-		const componentIterable = (
-			components instanceof Map
-				? Array.from(components)
-				: Object.entries(components)
-		) as [string, InputComponentOptions][];
-
-		for (let [name, component] of componentIterable) {
-			if (component.type === 'input') {
-				component = InputService.defineInputComponent(component) as InputComponentOptions;
+	public addComponents(components: Map<string, angular.IComponentOptions>) {
+		for (let [name, component] of components) {
+			if (this.isInputComponent(component)) {
+				component = InputService.defineInputComponent(component);
 			}
 
 			if (typeof component.controller === 'string') {
@@ -157,6 +147,11 @@ export class NgApp {
 
 		return this;
 	}
+
+	public isInputComponent(component: angular.IComponentOptions & { type?: 'input' }):
+		component is InputComponentOptions {
+			return component.type === 'input';
+		}
 
 	public addDependency(moduleName: string) {
 		this.$dependencies.push(moduleName);
