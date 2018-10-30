@@ -69,7 +69,7 @@ app
 		}
 	}]);
 
-export function wrapCtrl(controller: new() => any) {
+export function makeNgCtrl(controller: new() => any) {
 	return app._makeNgComponentController(controller);
 }
 
