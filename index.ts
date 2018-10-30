@@ -20,42 +20,38 @@ const app = new NgApp()
 		'ui.router',
 		'monospaced.elastic',
 	])
-	.addHttpInterceptor(
-		['$q', ($q: angular.IQService) => {
-			return {
-				responseError(err: angular.IHttpPromiseCallbackArg<any>) {
-					const { data, status, statusText, config = { url: '' } } = err;
-					const { url = '' } = config;
+	.addHttpInterceptor({
+		responseError(err) {
+			const { data, status, statusText, config = { url: '' } } = err;
+			const { url = '' } = config;
 
-					switch (status) {
-						case 404:
-							app.log.error(`Route '${url}' not found`);
-							break;
-						case 400:
-							if (typeof data === 'string') {
-								app.log.error(data);
-							} else if (data != null && data.toString() === '[object Object]') {
-								app.log.error(Object.keys(data).map(x => `${x}: ${data[x]}`).join('\n\n'));
-							}
-							break;
-						case 401:
-						case 403:
-						case 500:
-							app.log.warning(statusText);
-							break;
-						case -1:
-							app.log.warning('Server timed out.');
-							break;
-						default:
-							app.log.error(`The request to '${url}' returned an error (code: ${status})`);
-							break;
+			switch (status) {
+				case 404:
+					app.log.error(`Route '${url}' not found`);
+					break;
+				case 400:
+					if (typeof data === 'string') {
+						app.log.error(data);
+					} else if (data != null && data.toString() === '[object Object]') {
+						app.log.error(Object.keys(data).map(x => `${x}: ${data[x]}`).join('\n\n'));
 					}
+					break;
+				case 401:
+				case 403:
+				case 500:
+					app.log.warning(statusText);
+					break;
+				case -1:
+					app.log.warning('Server timed out.');
+					break;
+				default:
+					app.log.error(`The request to '${url}' returned an error (code: ${status})`);
+					break;
+			}
 
-					return $q.reject(err);
-				},
-			};
-		}],
-	);
+			return err;
+		},
+	});
 
 app
 	.module

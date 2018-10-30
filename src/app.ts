@@ -9,6 +9,7 @@ import { NgRouter, NgStateService } from './router';
 
 import { InputComponentOptions } from './input/options';
 import { InputService } from './input/service';
+import { StateService } from '@uirouter/core';
 
 export interface NgConfig extends IConfig {
 	readonly IS_PROD: boolean;
@@ -38,6 +39,10 @@ export class NgApp {
 
 	public get dependencies() {
 		return new Set(this.$dependencies);
+	}
+
+	public get state() {
+		return this.$injector.get<StateService>('$state');
 	}
 
 	public get http() {
@@ -73,6 +78,7 @@ export class NgApp {
 	protected $config: NgConfig;
 
 	protected readonly $components: Map<string, angular.IComponentOptions> = new Map();
+	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
 
 	// tslint:disable:variable-name
 	private _http: ReturnType<NgApp['$http']>;
@@ -187,15 +193,13 @@ export class NgApp {
 		return this;
 	}
 
-	public addHttpInterceptor(interceptor: angular.Injectable<angular.IHttpInterceptorFactory>) {
-		this.$module.config(['$httpProvider', ($httpProvider: angular.IHttpProvider) => {
-			$httpProvider.interceptors.push(interceptor);
-		}]);
+	public addHttpInterceptor(interceptor: angular.IHttpInterceptor) {
+		this.$httpInterceptors.push(interceptor);
 		return this;
 	}
 
 	public _makeNgComponentController($controller: angular.IControllerConstructor) {
-		const { config, http, $logger, _verifyApiPrefix: getApiPrefix } = this;
+		const { config, http, $logger, getApiPrefix } = this;
 		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
 
 		// Force `this` to always refer to the class instance, no matter what
@@ -211,7 +215,6 @@ export class NgApp {
 			public isProduction = IS_PROD;
 			public isDevelopment = IS_DEV;
 			public isStaging = IS_STAGING;
-			public apiPrefix = getApiPrefix();
 
 			constructor(
 				$element: JQLite,
@@ -224,6 +227,7 @@ export class NgApp {
 				super();
 
 				this.$element = $element[0];
+				this.apiPrefix = getApiPrefix();
 			}
 		}
 
@@ -247,8 +251,9 @@ export class NgApp {
 	}) {
 		return new NgDataService(
 			this.$injector.get('$http'),
-			this.$timeout(),
-			this._verifyApiPrefix(),
+			this.$httpInterceptors,
+			this.forceUpdate,
+			this.getApiPrefix,
 			options,
 		);
 	}
@@ -257,8 +262,8 @@ export class NgApp {
 		return new NgLogger(this.$injector.get('$log'), this.$config.IS_PROD);
 	}
 
-	protected _verifyApiPrefix(config = this.$config) {
-		const { PREFIX = {} } = config;
+	protected getApiPrefix() {
+		const { PREFIX = {} } = this.$config;
 		const { API = '' } = PREFIX;
 
 		if (typeof API !== 'string') {
