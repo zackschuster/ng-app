@@ -103,6 +103,13 @@ export class NgApp {
 				}]);
 	}
 
+	/**
+	 * Force the application to run an update cycle
+	 */
+	public async forceUpdate() {
+		this.$injector.get('$rootScope').$applyAsync();
+	}
+
 	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
 		for (const [name, definition] of this.$components) {
 			this.$module.component(name, definition);
