@@ -11,8 +11,8 @@ import 'angular-ui-bootstrap';
 import '@uirouter/angularjs';
 import 'element-closest';
 
-export const app = new NgApp()
-	.addComponents(inputs)
+const app = new NgApp()
+	.addComponents(new Map(Object.entries(inputs)))
 	.addDependencies([
 		'ngAnimate',
 		'ngMessages',
@@ -68,6 +68,8 @@ app
 			$stateProvider.state(definition);
 		}
 	}]);
+
+export { app };
 
 export function makeNgCtrl(controller: new() => any) {
 	return app._makeNgComponentController(controller);
