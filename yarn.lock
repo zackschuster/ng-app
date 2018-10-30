@@ -913,10 +913,10 @@ chalk@^2.0.0, chalk@^2.0.1, chalk@^2.3.0, chalk@^2.3.1, chalk@^2.4.1:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-choices.js@4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/choices.js/-/choices.js-4.0.2.tgz#6a4a1d2b489450e9d42d61e9eb98100c70cc7827"
-  integrity sha512-NeL93SwZlYFC6K0U/ptyfHEcWbNVKpuEw+CfzyzpJ+stdrEX4Z55SVNIp2cgwW/jRhpLs10akoOFl0+KipDXpw==
+choices.js@4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/choices.js/-/choices.js-4.0.4.tgz#49976dcf88c9b948d1ab6f3630ba62dc156d0883"
+  integrity sha512-rXWy+pBzhalkMc/chnkj2DS4eAooJ/LxyyjXFbXu1nTfM3mvXiGesvM3F92FwVwPVqakd0iP5ZzTYs4/JiAFBQ==
   dependencies:
     classnames "^2.2.5"
     core-js "^2.5.6"

@@ -114,12 +114,12 @@ class SelectController extends NgComponentController {
 						this.choices.removeActiveItems(Infinity);
 						this.destroyCurrentWatcher = this.createWatcher();
 					}
-					(this.choices as any).setChoiceByValue(_);
+					this.choices.setChoiceByValue(_);
 				} else {
 					if (isReset) {
-						(this.choices as any).setChoiceByValue('');
+						this.choices.setChoiceByValue('');
 					} else if (this.list.find(x => (x[this.value] || x) === _) != null) {
-						(this.choices as any).setChoiceByValue(_);
+						this.choices.setChoiceByValue(_);
 					}
 				}
 			},
