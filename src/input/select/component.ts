@@ -17,15 +17,13 @@ class SelectController extends NgComponentController {
 
 	protected list: any[];
 	protected choices: Choices;
-	protected showChoices: boolean;
 
 	private text: string;
 	private value: string;
 	private destroyCurrentWatcher: Callback;
 
 	private get isMultiple() {
-		const { isSelectMultipleElement = false } = this.choices || {};
-		return isSelectMultipleElement;
+		return SelectController.IsMultiple(this.$attrs);
 	}
 
 	public $onInit() {
@@ -57,7 +55,14 @@ class SelectController extends NgComponentController {
 
 		if (Array.isArray(list)) {
 			this.$timeout().finally(() => {
-				const opts: _Choices.Options = { removeItemButton: true, itemSelectText: '', addItemText: '' };
+				const opts: _Choices.Options = {
+					classNames: {
+						hiddenState: 'ng-hide',
+					},
+					removeItemButton: true,
+					itemSelectText: '',
+					addItemText: '',
+				};
 
 				if (this.isMultiple) {
 					opts.placeholderValue = this.$attrs.placeholder || SelectController.GetPlaceholder(this.$attrs);
@@ -90,7 +95,6 @@ class SelectController extends NgComponentController {
 				});
 
 				this.destroyCurrentWatcher = this.createWatcher();
-				this.showChoices = true;
 
 				const input = this.$element.querySelector('input') as HTMLInputElement;
 				const ngModelParts = this.$attrs.ngModel.split('.');
@@ -134,7 +138,6 @@ export const selectList: InputComponentOptions = {
 		const input = h.createElement('select', [], [
 			['ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}'],
 			['ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}'],
-			['ng-show', '$ctrl.showChoices === true'],
 		]);
 
 		if (SelectController.IsMultiple(this.$attrs)) {

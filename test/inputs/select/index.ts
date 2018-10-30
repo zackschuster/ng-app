@@ -37,8 +37,6 @@ test('select template', async t => {
 	const tpl = util.makeTpl(definedSelectList.template, t);
 	const input = util.testInput(tpl, t, 'SELECT');
 
-	t.is(input.getAttribute('ng-show'), '$ctrl.showChoices === true');
-
 	const placeholder = input.firstElementChild as HTMLOptionElement;
 	t.is(placeholder.getAttribute('placeholder'), 'true');
 	t.is(placeholder.getAttribute('value'), '');
@@ -52,7 +50,6 @@ test('select template (multiple)', async t => {
 	const tpl = util.makeTpl(definedSelectList.template, t, { multiple: true });
 	const input = util.testInput(tpl, t, 'SELECT');
 
-	t.is(input.getAttribute('ng-show'), '$ctrl.showChoices === true');
 	t.is(input.getAttribute('multiple'), 'true');
 	t.is(input.firstElementChild, null);
 
