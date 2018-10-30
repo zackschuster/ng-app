@@ -107,6 +107,15 @@ export class NgApp {
 				}]);
 	}
 
+	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
+		for (const [name, definition] of this.$components) {
+			this.$module.component(name, definition);
+		}
+
+		setTimeout(() => document.body.classList.add('bootstrapped'));
+		this.$bootstrap(document.body, [this.$id], { strictDi });
+	}
+
 	public configure(ngConfig: Partial<NgConfig>) {
 		const env = process.env.NODE_ENV;
 
@@ -120,34 +129,8 @@ export class NgApp {
 		return this;
 	}
 
-	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
-		for (const [name, definition] of this.$components) {
-			this.$module.component(name, definition);
-		}
-
-		setTimeout(() => document.body.classList.add('bootstrapped'));
-		this.$bootstrap(document.body, [this.$id], { strictDi });
-	}
-
-	public addDependency(moduleName: string) {
-		this.$dependencies.push(moduleName);
-		return this;
-	}
-
-	public addDependencies(moduleNames: string[]) {
-		moduleNames.forEach(moduleName => this.addDependency(moduleName));
-		return this;
-	}
-
 	public setRouter(router: NgRouter) {
 		this.$router = router;
-		return this;
-	}
-
-	public addHttpInterceptor(interceptor: angular.Injectable<angular.IHttpInterceptorFactory>) {
-		this.$module.config(['$httpProvider', ($httpProvider: angular.IHttpProvider) => {
-			$httpProvider.interceptors.push(interceptor);
-		}]);
 		return this;
 	}
 
@@ -172,6 +155,23 @@ export class NgApp {
 			this.$components.set(name, component);
 		}
 
+		return this;
+	}
+
+	public addDependency(moduleName: string) {
+		this.$dependencies.push(moduleName);
+		return this;
+	}
+
+	public addDependencies(moduleNames: string[]) {
+		moduleNames.forEach(moduleName => this.addDependency(moduleName));
+		return this;
+	}
+
+	public addHttpInterceptor(interceptor: angular.Injectable<angular.IHttpInterceptorFactory>) {
+		this.$module.config(['$httpProvider', ($httpProvider: angular.IHttpProvider) => {
+			$httpProvider.interceptors.push(interceptor);
+		}]);
 		return this;
 	}
 
