@@ -18,12 +18,20 @@ export interface NgConfig extends IConfig {
 
 @autobind
 export class NgApp {
-	public get components() {
-		return new Set(this.$components.keys());
+	public get module() {
+		return this.$module;
+	}
+
+	public get router() {
+		return this.$router;
 	}
 
 	public get config() {
 		return copy(this.$config);
+	}
+
+	public get components() {
+		return new Set(this.$components.keys());
 	}
 
 	public get dependencies() {
@@ -31,23 +39,24 @@ export class NgApp {
 	}
 
 	public get http() {
-		return this.$http();
+		if (this._http == null) {
+			this._http = this.$http();
+		}
+		return this._http;
 	}
 
 	public get log() {
-		return this.$logger();
+		if (this._log == null) {
+			this._log = this.$logger();
+		}
+		return this._log;
 	}
 
 	public get modal() {
-		return this.$modal();
-	}
-
-	public get module() {
-		return this.$module;
-	}
-
-	public get router() {
-		return this.$router;
+		if (this._modal == null) {
+			this._modal = this.$modal();
+		}
+		return this._modal;
 	}
 
 	public readonly $id = '$core';
@@ -62,6 +71,12 @@ export class NgApp {
 	protected $config: NgConfig;
 
 	protected readonly $components: Map<string, angular.IComponentOptions> = new Map();
+
+	// tslint:disable:variable-name
+	private _http: ReturnType<NgApp['$http']>;
+	private _log: ReturnType<NgApp['$logger']>;
+	private _modal: ReturnType<NgApp['$modal']>;
+	// tslint:enable:variable-name
 
 	constructor() {
 		this.configure({})
