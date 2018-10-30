@@ -28,19 +28,20 @@ class SelectController extends NgComponentController {
 		return isSelectMultipleElement;
 	}
 
+	public $onInit() {
+		const { value = 'Value', text = 'Text' } = this.$attrs;
+
+		this.value = value;
+		this.text = text;
+	}
+
 	public $postLink() {
-		const select = this.$element.getElementsByTagName('select').item(0);
-		if (select == null) {
-			throw new Error('Unable to find select element (something has gone seriously wrong)');
-		}
-
-		this.value = this.$attrs.value || 'Value';
-		this.text = this.$attrs.text || 'Text';
-
-		this.$scope.$watch(
+		const select = this.$element.querySelector('select') as HTMLSelectElement;
+		this.$scope.$watchCollection(
 			_ => this.list,
-			_ => this.makeSelectList(select, this.list),
-			true,
+			_ => {
+				this.makeSelectList(select, this.list);
+			},
 		);
 	}
 
@@ -71,7 +72,7 @@ class SelectController extends NgComponentController {
 					}
 
 					this.ngModel = this.isMultiple
-						? [value].concat(this.ngModel || [])
+						? [value].concat(this.ngModel == null ? [] : this.ngModel)
 						: value;
 
 					this.$timeout();
