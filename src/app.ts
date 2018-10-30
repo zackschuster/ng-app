@@ -1,8 +1,5 @@
-// tslint:disable:max-classes-per-file
+import { IConfig, Indexed } from '@ledge/types';
 import { bootstrap, copy, injector, module } from 'angular';
-import { StateProvider } from '@uirouter/angularjs';
-import { HookMatchCriteria, TargetState, Transition, TransitionService } from '@uirouter/core';
-import { Callback, IConfig } from '@ledge/types';
 import { autobind } from 'core-decorators';
 
 import { NgDataService } from './http';
@@ -13,23 +10,9 @@ import { NgRouter, NgStateService } from './router';
 import { InputComponentOptions } from './input/options';
 import { InputService } from './input/service';
 
-import 'angular-animate';
-import 'angular-messages';
-import 'angular-elastic';
-import 'angular-ui-bootstrap';
-
-import '@uirouter/angularjs';
-import 'element-closest';
-
-type TransitionHooks =
-	'onBefore' |
-	'onEnter' |
-	'onError' |
-	'onExit' |
-	'onFinish' |
-	'onRetain' |
-	'onStart' |
-	'onSuccess';
+export type NgComponentList =
+	Map<string, angular.IComponentOptions> |
+	Indexed<angular.IComponentOptions>;
 
 export interface NgConfig extends IConfig {
 	readonly IS_PROD: boolean;
@@ -39,51 +22,54 @@ export interface NgConfig extends IConfig {
 
 @autobind
 export class NgApp {
-
 	public get components() {
-		return Array.from(this.$components.keys());
-	}
-
-	public get module() {
-		return this.$module;
+		return new Set(this.$components.keys());
 	}
 
 	public get config() {
 		return copy(this.$config);
 	}
 
-	public set config(ngConfig: Partial<NgConfig>) {
-		const env = process.env.NODE_ENV;
-		this.$config = Object.assign(ngConfig, {
-			ENV: env,
-			IS_PROD: env === 'production',
-			IS_DEV: env === 'development',
-			IS_STAGING: env === 'staging',
-		} as NgConfig);
+	public get dependencies() {
+		return new Set(this.$dependencies);
 	}
+
+	public get http() {
+		return this.$http();
+	}
+
+	public get log() {
+		return this.$logger();
+	}
+
+	public get modal() {
+		return this.$modal();
+	}
+
+	public get module() {
+		return this.$module;
+	}
+
+	public get router() {
+		return this.$router;
+	}
+
 	public readonly $id = '$core';
 	public $injector = injector(['ng']);
-	protected router: NgRouter;
 
-	private $dependencies = [
-		'ngAnimate',
-		'ngMessages',
-		'ui.bootstrap',
-		'ui.router',
-		'monospaced.elastic',
-	];
+	protected $dependencies: string[] = [];
 
-	private $config: NgConfig;
+	protected readonly $module = module(this.$id, this.$dependencies);
+	protected readonly $bootstrap = bootstrap;
 
-	private readonly $module = module(this.$id, this.$dependencies);
-	private readonly $bootstrap = bootstrap;
+	protected $router: NgRouter;
+	protected $config: NgConfig;
 
-	private readonly $components: Map<string, angular.IComponentOptions> = new Map();
+	protected readonly $components: Map<string, angular.IComponentOptions> = new Map();
 
 	constructor() {
-		this.config = {};
-
-		this.$module
+		this.configure({})
+			.$module
 			.config([
 				'$compileProvider', '$locationProvider', '$qProvider',
 				(
@@ -121,86 +107,66 @@ export class NgApp {
 				}]);
 	}
 
-	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
-		if (this.router == null) {
-			return this.logger().devWarning('app.registerRouter(ngRouter) must be run before bootstrap');
-		}
+	public configure(ngConfig: Partial<NgConfig>) {
+		const env = process.env.NODE_ENV;
 
+		this.$config = Object.assign(ngConfig, {
+			ENV: env,
+			IS_PROD: env === 'production',
+			IS_DEV: env === 'development',
+			IS_STAGING: env === 'staging',
+		} as NgConfig);
+
+		return this;
+	}
+
+	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
 		for (const [name, definition] of this.$components) {
 			this.$module.component(name, definition);
 		}
-
-		this.$module.config(['$stateProvider', ($stateProvider: StateProvider) => {
-			for (const definition of this.router.getRoutes()) {
-				$stateProvider.state(definition);
-			}
-		}]);
 
 		setTimeout(() => document.body.classList.add('bootstrapped'));
 		this.$bootstrap(document.body, [this.$id], { strictDi });
 	}
 
-	public registerConfigBlock(inlineAnnotatedFunction: (string | Callback)[]) {
-		this.$module.config(inlineAnnotatedFunction);
-		return this;
-	}
-
-	public registerRunBlock(inlineAnnotatedFunction: (string | Callback)[]) {
-		this.$module.run(inlineAnnotatedFunction);
-		return this;
-	}
-
-	public registerDependency(moduleName: string) {
+	public addDependency(moduleName: string) {
 		this.$dependencies.push(moduleName);
 		return this;
 	}
 
-	public registerDependencies(moduleNames: string[]) {
-		moduleNames.forEach(moduleName => this.registerDependency(moduleName));
+	public addDependencies(moduleNames: string[]) {
+		moduleNames.forEach(moduleName => this.addDependency(moduleName));
 		return this;
 	}
 
-	public registerRouter(router: NgRouter) {
-		this.router = router;
+	public setRouter(router: NgRouter) {
+		this.$router = router;
 		return this;
 	}
 
-	public registerTransitionHook(
-		hook: TransitionHooks,
-		criteria: HookMatchCriteria,
-		cb: (trans: Transition) => boolean | TargetState | Promise<boolean | TargetState>,
-	) {
-		this.$module.run(['$transitions', (transitions: TransitionService) => {
-			(transitions as any)[hook](criteria, cb);
-		}]);
-		return this;
-	}
-
-	public registerHttpInterceptor(interceptor: angular.Injectable<angular.IHttpInterceptorFactory>) {
+	public addHttpInterceptor(interceptor: angular.Injectable<angular.IHttpInterceptorFactory>) {
 		this.$module.config(['$httpProvider', ($httpProvider: angular.IHttpProvider) => {
 			$httpProvider.interceptors.push(interceptor);
 		}]);
 		return this;
 	}
 
-	public registerComponents(
-		components: Map<string, angular.IComponentOptions> | { [index: string]: angular.IComponentOptions },
-	) {
-		const componentIterable = components instanceof Map
-			? Array.from(components)
-			: Object.entries(components);
+	public addComponents(components: NgComponentList) {
+		const componentIterable = (
+			components instanceof Map
+				? Array.from(components)
+				: Object.entries(components)
+		) as [string, InputComponentOptions][];
 
 		for (let [name, component] of componentIterable) {
-			if ((component as InputComponentOptions).type === 'input') {
-				component = InputService.defineInputComponent(component as InputComponentOptions);
+			if (component.type === 'input') {
+				component = InputService.defineInputComponent(component) as InputComponentOptions;
 			}
 
 			if (typeof component.controller === 'string') {
 				throw new Error('String controller references not supported');
-			}
-
-			if (component.controller != null) {
-				component.controller = this._wrapComponentController(component.controller as new() => any);
+			} else if (typeof component.controller === 'function') {
+				component.controller = this._makeNgComponentController(component.controller);
 			}
 
 			this.$components.set(name, component);
@@ -209,46 +175,18 @@ export class NgApp {
 		return this;
 	}
 
-	public http(options: angular.IRequestShortcutConfig = {
-		timeout: this.$config.IS_PROD ? 10000 : undefined,
-		withCredentials: true,
-	}) {
-		return new NgDataService(
-			this.$injector.get('$http'),
-			this.timeout(),
-			this._verifyApiPrefix(),
-			options,
-		);
-	}
-
-	public logger() {
-		return new NgLogger(this.$injector.get('$log'), this.$config.IS_PROD);
-	}
-
-	public modal() {
-		return new NgModalService(
-			this.$injector.get('$uibModal'),
-			this.timeout(),
-			this.http(),
-			this.logger(),
-		);
-	}
-
-	public timeout() {
-		return this.$injector.get('$timeout');
-	}
-
-	public _wrapComponentController($controller: new(...args: any[]) => angular.IController) {
-		const { config, http, logger, _verifyApiPrefix: getApiPrefix } = this;
+	public _makeNgComponentController($controller: angular.IControllerConstructor) {
+		const { config, http, $logger, _verifyApiPrefix: getApiPrefix } = this;
 		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
 
 		// Force `this` to always refer to the class instance, no matter what
 		autobind($controller);
 
-		class InternalController extends $controller {
-			public $log = logger();
-			public $http = http();
-			public $config = config;
+		// tslint:disable-next-line:max-classes-per-file
+		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
+			public $log = $logger();
+			public $http = http;
+			public $config = config as Required<NgConfig>;
 			public $element: HTMLElement;
 
 			public isProduction = IS_PROD;
@@ -274,6 +212,35 @@ export class NgApp {
 			'$element', '$scope', '$attrs', '$timeout', '$injector', '$state',
 			InternalController,
 		];
+	}
+
+	protected $modal() {
+		return new NgModalService(
+			this.$injector.get('$uibModal'),
+			this.$timeout(),
+			this.$http(),
+			this.$logger(),
+		);
+	}
+
+	protected $timeout() {
+		return this.$injector.get('$timeout');
+	}
+
+	protected $http(options: angular.IRequestShortcutConfig = {
+		timeout: this.$config.IS_PROD ? 10000 : undefined,
+		withCredentials: true,
+	}) {
+		return new NgDataService(
+			this.$injector.get('$http'),
+			this.$timeout(),
+			this._verifyApiPrefix(),
+			options,
+		);
+	}
+
+	protected $logger() {
+		return new NgLogger(this.$injector.get('$log'), this.$config.IS_PROD);
 	}
 
 	protected _verifyApiPrefix(config = this.$config) {
