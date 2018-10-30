@@ -216,7 +216,6 @@ export class NgApp {
 		return new NgDataService(
 			this.$injector.get('$http'),
 			this.timeout(),
-			this.logger(),
 			this._verifyApiPrefix(),
 			options,
 		);

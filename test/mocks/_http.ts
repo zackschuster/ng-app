@@ -1,10 +1,9 @@
 // import { module } from 'angular';
 import { NgDataService } from '../../src/http';
 import { $injector } from './__injector';
-import { $log } from './_logger';
 
 export const $prefix = 'http://localhost:2323';
-export const $http = new NgDataService($injector.get('$http'), $injector.get('$timeout'), $log, $prefix);
+export const $http = new NgDataService($injector.get('$http'), $injector.get('$timeout'), $prefix);
 
 // doesn't work, never gotten $sceDelegateProvider code to make a difference
 // module('ngMock')
