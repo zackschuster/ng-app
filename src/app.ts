@@ -244,14 +244,13 @@ export class NgApp {
 	}
 
 	protected _verifyApiPrefix(config = this.$config) {
-		if (config.PREFIX == null || config.PREFIX.toString() !== '[object Object]') {
-			throw new Error('Error creating http service: PREFIX config not properly set');
+		const { PREFIX = {} } = config;
+		const { API = '' } = PREFIX;
+
+		if (typeof API !== 'string') {
+			this.log.devWarning('config.PREFIX.API not set to a string.');
 		}
 
-		if (typeof config.PREFIX.API !== 'string') {
-			throw new Error('Error creating http service: API prefix must be a string');
-		}
-
-		return config.PREFIX.API;
+		return API;
 	}
 }

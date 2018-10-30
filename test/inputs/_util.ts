@@ -5,7 +5,7 @@ import { ExecutionContext } from 'ava';
 // @ts-ignore
 import pretty = require('pretty');
 
-import { NgComponentController, app, wrapCtrl } from '../..';
+import { NgComponentController, wrapCtrl } from '../..';
 import { $controller, $ctrl, $element, $invokeTemplate, $scope } from '../mocks';
 import { InputService } from '../../src/input/service';
 
@@ -15,12 +15,6 @@ export function mockCtrl<T = NgComponentController>(
 	ctrl: any,
 	$attrs: Partial<angular.IAttributes> = {},
 ) {
-	app.config = {
-		PREFIX: {
-			API: '',
-		},
-	};
-
 	return $controller<T>(
 		wrapCtrl(ctrl) as any, {
 			$scope,
