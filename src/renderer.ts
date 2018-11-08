@@ -50,7 +50,6 @@ export class NgRenderer {
 	public createTextArea() {
 		return this.createElement('textarea', ['form-control'], [
 			...this.baseInputAttrs,
-			['msd-elastic', ''],
 			['maxlength', '{{maxlength}}'],
 			['placeholder', '{{placeholder}}'],
 		]);
