@@ -11,15 +11,17 @@ import 'angular-ui-bootstrap';
 import '@uirouter/angularjs';
 import 'element-closest';
 
-const app = new NgApp()
+const app = new NgApp();
+
+app
 	.addComponents(new Map(Object.entries(inputs)))
-	.addDependencies([
+	.addDependencies(
 		'ngAnimate',
 		'ngMessages',
 		'ui.bootstrap',
 		'ui.router',
 		'monospaced.elastic',
-	])
+	)
 	.addHttpInterceptor({
 		responseError(err) {
 			const { data, status, statusText, config = { url: '' } } = err;
@@ -68,7 +70,7 @@ app
 export { app };
 
 export function makeNgCtrl(controller: new() => any) {
-	return app._makeNgComponentController(controller);
+	return app.makeComponentController(controller);
 }
 
 export * from './src/app';

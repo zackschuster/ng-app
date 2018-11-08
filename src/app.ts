@@ -30,7 +30,7 @@ export class NgApp {
 	public get config() {
 		return this.$config != null
 			? copy(this.$config)
-			: Object.create(null);
+			: Object.create(null) as NgConfig;
 	}
 
 	public get components() {
@@ -143,13 +143,13 @@ export class NgApp {
 	}
 
 	public configure(ngConfig: Partial<NgConfig>) {
-		const env = process.env.NODE_ENV;
+		const { NODE_ENV } = process.env;
 
 		this.$config = Object.assign(ngConfig, {
-			ENV: env,
-			IS_PROD: env === 'production',
-			IS_DEV: env === 'development',
-			IS_STAGING: env === 'staging',
+			ENV: NODE_ENV,
+			IS_PROD: NODE_ENV === 'production',
+			IS_DEV: NODE_ENV === 'development',
+			IS_STAGING: NODE_ENV === 'staging',
 		} as NgConfig);
 
 		return this;
@@ -169,7 +169,7 @@ export class NgApp {
 			if (typeof component.controller === 'string') {
 				throw new Error('String controller references not supported');
 			} else if (typeof component.controller === 'function') {
-				component.controller = this._makeNgComponentController(component.controller);
+				component.controller = this.makeComponentController(component.controller);
 			}
 
 			this.$components.set(name, component);
@@ -183,13 +183,8 @@ export class NgApp {
 			return component.type === 'input';
 		}
 
-	public addDependency(moduleName: string) {
-		this.$dependencies.push(moduleName);
-		return this;
-	}
-
-	public addDependencies(moduleNames: string[]) {
-		moduleNames.forEach(moduleName => this.addDependency(moduleName));
+	public addDependencies(...moduleNames: string[]) {
+		this.$dependencies.push(...moduleNames);
 		return this;
 	}
 
@@ -198,8 +193,11 @@ export class NgApp {
 		return this;
 	}
 
-	public _makeNgComponentController($controller: angular.IControllerConstructor) {
-		const { config, http, $logger, getApiPrefix } = this;
+	public makeComponentController($controller: angular.IControllerConstructor): [
+		'$element', '$scope', '$attrs', '$timeout', '$injector', '$state',
+		new (...args: any) => angular.IController
+	] {
+		const { config, http, log, getApiPrefix } = this;
 		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
 
 		// Force `this` to always refer to the class instance, no matter what
@@ -207,9 +205,9 @@ export class NgApp {
 
 		// tslint:disable-next-line:max-classes-per-file
 		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
-			public $log = $logger();
+			public $log = log;
 			public $http = http;
-			public $config = config as Required<NgConfig>;
+			public $config = config;
 			public $element: HTMLElement;
 
 			public isProduction = IS_PROD;
