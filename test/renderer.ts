@@ -83,7 +83,7 @@ test('renderer creates textarea', async t => {
 	t.is(input.classList.length, 1);
 	t.true(input.classList.contains('form-control'));
 
-	t.is(input.attributes.length, 8); // includes "class" attribute
+	t.is(input.attributes.length, 7); // includes "class" attribute
 	t.is(input.type, 'textarea');
 	t.is(input.getAttribute('ng-attr-id'), '{{id}}_{{$ctrl.uniqueId}}');
 	t.is(input.getAttribute('ng-attr-name'), '{{id}}_{{$ctrl.uniqueId}}');

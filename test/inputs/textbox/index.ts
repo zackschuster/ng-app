@@ -45,7 +45,6 @@ test('textbox element', async t => {
 test('textbox template', async t => {
 	const input = util.testInput(template, t, 'TEXTAREA');
 	t.true(input.classList.contains('form-control'));
-	t.is(input.getAttribute('msd-elastic'), '');
 	t.is(input.getAttribute('placeholder'), '');
 	t.is(input.getAttribute('maxlength'), '3000');
 

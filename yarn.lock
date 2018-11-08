@@ -436,13 +436,6 @@ angular-animate@1.7.9:
   resolved "https://registry.npmjs.org/angular-animate/-/angular-animate-1.7.9.tgz#a397f82434c1e7ed5b7a298fa70fc3de989a6785"
   integrity sha512-fV+AISy/HTzurQH2ngsJg+lLIvfu0ahc1h4AYKauaXVw97rZc2k4iUA1bMstiEyClsdayQX568kjQc1NK+oYhw==
 
-angular-elastic@2.5.1:
-  version "2.5.1"
-  resolved "https://registry.npmjs.org/angular-elastic/-/angular-elastic-2.5.1.tgz#e938ab1bd8c76415b8ca6514b15fe3593a5df535"
-  integrity sha1-6TirG9jHZBW4ymUUsV/jWTpd9TU=
-  dependencies:
-    angular ">=1.0.6"
-
 angular-messages@1.7.9:
   version "1.7.9"
   resolved "https://registry.npmjs.org/angular-messages/-/angular-messages-1.7.9.tgz#6403b7f56df4b17b62d88762ac5e6b1702347fd2"

@@ -6,7 +6,6 @@ import { NgApp } from './src/app';
 
 import 'angular-animate';
 import 'angular-messages';
-import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
 // tslint:disable-next-line:no-duplicate-imports
@@ -20,7 +19,6 @@ const app = new NgApp()
 		'ngMessages',
 		'ui.bootstrap',
 		'ui.router',
-		'monospaced.elastic',
 	])
 	.addHttpInterceptor({
 		responseError(err) {
