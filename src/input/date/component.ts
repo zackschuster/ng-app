@@ -1,86 +1,85 @@
+import flatpickr from 'flatpickr';
+
 import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
 
+function isNumber(n: any): n is number {
+	return Number.isInteger(n);
+}
+
 class DateInputController extends NgComponentController {
-	private hasFocus: boolean = false;
-	private lastClick: number;
-	private minDate: Date | number | string | null;
-	private maxDate: Date | number | string | null;
+	private minDate?: Date | number | string;
+	private maxDate?: Date | number | string;
+	private flatpickr: flatpickr.Instance;
 
 	public $onInit() {
-		function isNumber(n: any): n is number {
-			return Number.isInteger(n);
-		}
-
 		this.ngModelCtrl.$validators.minDate = modelVal => {
-			if (modelVal != null && isNumber(this.minDate)) {
-				return this.minDate <= modelVal.valueOf();
+			if (modelVal != null) {
+				if (isNumber(this.minDate)) {
+					return this.minDate <= modelVal.valueOf();
+				} else if (this.minDate instanceof Date) {
+					return this.minDate.valueOf() <= modelVal.valueOf();
+				}
 			}
 			return true;
 		};
 
 		this.ngModelCtrl.$validators.maxDate = modelVal => {
-			if (modelVal != null && isNumber(this.maxDate)) {
-				return this.maxDate >= modelVal.valueOf();
+			if (modelVal != null) {
+				if (isNumber(this.maxDate)) {
+					return this.maxDate >= modelVal.valueOf();
+				} else if (this.maxDate instanceof Date) {
+					return this.maxDate.valueOf() >= modelVal.valueOf();
+				}
 			}
 			return true;
 		};
 
+		const dateFormat = 'MM/dd/yyyy';
+		this.flatpickr = flatpickr(this.$element, {
+			dateFormat,
+			defaultDate: this.ngModel,
+			inline: this.$attrs.inline,
+			mode: this.$attrs.mode,
+			nextArrow: '&raquo;',
+			prevArrow: '&laquo;',
+			weekNumbers: true,
+			wrap: true,
+			enable: [
+				(d) => {
+					const maxDate = Date.parse(this.maxDate as any);
+					return Number.isNaN(maxDate) || d.valueOf() < maxDate;
+				},
+				(d) => {
+					const minDate = Date.parse(this.minDate as any);
+					return Number.isNaN(minDate) || d.valueOf() > minDate;
+				},
+			],
+			onChange: (selected) => {
+				this.ngModel = selected.length > 1
+					? selected
+					: selected[0];
+				this.$scope.$applyAsync();
+			}
+		}) as flatpickr.Instance;
+
 		this.$scope.$watch(
 			_ => this.ngModel,
 			_ => {
-				if (!(_ instanceof Date)) {
-					if (typeof _ !== 'object') {
-						this.ngModel = new Date(_);
-					} else if (_ == null) {
-						this.ngModel = new Date(Date.now());
-					}
-				}
-			},
-		);
+				if (_ != null) {
+					const parsedDate = flatpickr.parseDate(_) as Date;
 
-		this.$scope.$watch(
-			_ => this.minDate,
-			_ => {
-				if (_ instanceof Date) {
-					this.minDate = _.valueOf();
-				} else if (typeof _ === 'string') {
-					this.minDate = Date.parse(_);
-					if (Number.isNaN(this.minDate)) {
-						this.$log.devWarning('Min value cannot be parsed as a date. Setting to null.');
-						this.minDate = null;
+					if (this.flatpickr.selectedDates.includes(parsedDate) === false) {
+						const date = flatpickr.formatDate(parsedDate, dateFormat);
+						this.flatpickr.setDate(date, false);
 					}
 				}
-			},
-		);
-
-		this.$scope.$watch(
-			_ => this.maxDate,
-			_ => {
-				if (_ instanceof Date) {
-					this.maxDate = _.valueOf();
-				} else if (typeof _ === 'string') {
-					this.maxDate = Date.parse(_);
-					if (Number.isNaN(this.maxDate)) {
-						this.$log.devWarning('Max value cannot be parsed as a date. Setting to null.');
-						this.maxDate = null;
-					}
-				}
-			},
-		);
+			}
+		)
 	}
 
-	public toggleDatepicker($event: any) {
-		if ($event.timeStamp - this.lastClick < 50) {
-			return;
-		}
-		this.lastClick = $event.timeStamp;
-
-		const input = this.$element.querySelector('input') as HTMLInputElement;
-		const hasFocus = this.hasFocus = !this.hasFocus;
-		const method = hasFocus ? 'focus' : 'blur';
-
-		input[method]();
+	public $onDestroy() {
+		this.flatpickr.destroy();
 	}
 
 	public getMinDate() {
@@ -96,14 +95,11 @@ export const dateInput: InputComponentOptions = {
 	type: 'input',
 	render(h) {
 		const input = h.createInput('text', [
-			['uib-datepicker-popup', 'MM/dd/yyyy'],
-			['datepicker-append-to-body', this.$attrs.appendToBody || 'false'],
-			['is-open', '$ctrl.hasFocus'],
-			['ng-click', '$ctrl.hasFocus = true'],
+			['data-input', 'true'],
 		]);
 
 		return h.createIconInput(input, 'calendar', [
-			['ng-click', '$ctrl.toggleDatepicker($event)'],
+			['data-toggle', 'true'],
 			['style', 'cursor:pointer'],
 		]);
 	},
