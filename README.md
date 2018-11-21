@@ -22,14 +22,12 @@ import 'ng1dependency2';
 /**
  * Accepts Angular.js module names
  */
-app
-	.addDependencies('ng1dependency1', 'ng1dependency2');
+app.addDependencies('ng1dependency1', 'ng1dependency2');
 
 /**
  * Only supports components - no abstracted directive API
  */
-app
-	.addComponents(components);
+app.addComponents(components);
 
 /**
  * Exposes raw Angular.js module APIs
@@ -78,16 +76,15 @@ class AppRouter extends NgRouter {
 	}
 }
 
-app
-	.setRouter(new AppRouter());
+app.setRouter(new AppRouter());
 
 /**
  * Only supports calling bootstrap manually
+ * Closes resource (component/module/router/etc) registration
  * By default, strictDi is enabled
  * To disable: `app.bootstrap({ strictDi: false });`
  */
-app
-	.bootstrap();
+app.bootstrap();
 ```
 
 ## Statically referenceable singleton services
