@@ -5,7 +5,6 @@ import { NgApp } from './src/app';
 
 import 'angular-animate';
 import 'angular-messages';
-import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
 import '@uirouter/angularjs';
@@ -20,7 +19,6 @@ app
 		'ngMessages',
 		'ui.bootstrap',
 		'ui.router',
-		'monospaced.elastic',
 	)
 	.addHttpInterceptor({
 		responseError(err) {

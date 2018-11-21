@@ -11,6 +11,7 @@ class TextBoxController extends NgComponentController {
 		this.$mirror.setAttribute('aria-hidden', 'true');
 		this.$mirror.setAttribute('aria-label', 'Hidden TextArea');
 		this.$mirror.setAttribute('tabindex', '-1');
+
 		this.$mirror.style.setProperty('position', 'absolute');
 		this.$mirror.style.setProperty('top', '-999px');
 		this.$mirror.style.setProperty('right', 'auto');
@@ -28,7 +29,6 @@ class TextBoxController extends NgComponentController {
 	}
 
 	public $onInit() {
-
 		const element = this.$element.querySelector('textarea') as HTMLTextAreaElement;
 		let computedStyle = window.getComputedStyle(element);
 
