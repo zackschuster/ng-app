@@ -325,10 +325,10 @@
   dependencies:
     arrify "^1.0.1"
 
-"@ledge/configs@11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-11.0.0.tgz#294cf35d6c8781c6fec0bd040b7526dad5708666"
-  integrity sha512-wiFClk5lIGglb4pHGOIa/iO3HrssxnUwJp1EgUtv7K+dRrhvO8BCRhS8xKWKU7a/udqrCkcItPyPdZJC743p1A==
+"@ledge/configs@12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-12.0.0.tgz#3472f89a58fa769a81c72a6a2a3759586737a989"
+  integrity sha512-OWr9TviHUfozuyRrUYnm82PjtfHqbKK1NPJnNh2mO+wAdmnStQnJj/AoSWIIH6Wr0Olp+ZsFyEv9MJwPebMMeg==
 
 "@ledge/is-ie-11@1.0.0":
   version "1.0.0"
@@ -369,9 +369,9 @@
   integrity sha512-wYU+/zlJWih7ZmonWVjGQ18tG7GboI9asMNjRBM5fpIFJWXSioQttCTw9qGL44cP82ghM8sCV9apEqm1zBDq2w==
 
 "@types/node@*", "@types/node@^10.11.7":
-  version "10.12.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.9.tgz#a07bfa74331471e1dc22a47eb72026843f7b95c8"
-  integrity sha512-eajkMXG812/w3w4a1OcBlaTwsFPO5F7fJ/amy+tieQxEMWBlbV1JGSjkFM+zkHNf81Cad+dfIRA+IBkvmvdAeA==
+  version "10.12.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.10.tgz#4fa76e6598b7de3f0cb6ec3abacc4f59e5b3a2ce"
+  integrity sha512-8xZEYckCbUVgK8Eg7lf5Iy4COKJ5uXlnIOnePN0WUwSQggy9tolM+tDJf7wMOnT/JT/W9xDYIaYggt3mRV2O5w==
 
 "@types/semver@^5.5.0":
   version "5.5.0"
