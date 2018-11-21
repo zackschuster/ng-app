@@ -5,37 +5,49 @@
 ## ESM-friendly api
 
 ```js
-import { app } from '@ledge/ng-app';
+import { app, NgRouter } from '@ledge/ng-app';
 import { myComponent } from './my-component';
 import * as myRoutes from './my-routes';
 
 // simple DI
 app
-	.registerDependency('ng1dependency')
-	.registerDependencies(['ng1dependency1', 'ng1dependency2']);
+	.addDependency('ng1dependency')
+	.addDependencies(['ng1dependency1', 'ng1dependency2']);
 
 // configuration
-app
-	.registerRunBlock(['serviceName', (serviceName) => {
-		/** run block code */
-	}])
-	.registerConfigBlock(['serviceName', (serviceName) => {
-		/** config block code */
-	}])
-	.registerHttpInterceptor(['serviceName', (serviceName) => {
-		/** http interceptor code */
-	}]);
+app.module.run(['serviceName', (serviceName) => {
+	/** run block code */
+}]);
+app.module.config(['serviceName', (serviceName) => {
+	/** config block code */
+}]);
+
+app.addHttpInterceptor({
+	request(config) {
+		return config;
+	},
+	response(rsp) {
+		return rsp;
+	},
+	responseError(rejection: any) {
+		return rejection;
+	}
+});
 
 // component-based, no directives
 app
-	.registerComponents({ myComponent });
+	.addComponents({ myComponent });
 
 // ui-router
+class AppRouter extends NgRouter {
+	getRoutes() {
+		const routes = [/* ...StateDeclaration-based routes...*/];
+		return routes;
+	}
+}
+
 app
-	.registerRoutes(myRoutes)
-	.registerTransitionHook('onBefore', { to: '**' }, ['serviceName', (serviceName) => {
-		/** ui-router transition hook code */
-	}]);
+	.setRouter(new AppRouter());
 
 // registration closes when bootstrap is called
 app.bootstrap();
@@ -47,17 +59,15 @@ app.bootstrap();
 - [angular-messages](https://www.npmjs.com/package/angular-messages)
 - [angular-ui-bootstrap](https://www.npmjs.com/package/angular-ui-bootstrap)
 - [angular-ui-router](https://www.npmjs.com/package/@uirouter/angularjs)
-- [angular-elastic](https://www.npmjs.com/package/angular-elastic)
 
-## Easily extractable service references
+## Statically referenceable singleton services
 
 ```js
 import { app } from '@ledge/ng-app';
 
-const http = app.http(); // using $http service
-const modal = app.modal(); // using ui-bootstrap modal
-const logger = app.logger(); // using Noty.js + $log service
-const timeout = app.timeout(); // returns $timeout service
+const http = app.http; // using $http service
+const modal = app.modal; // using ui-bootstrap modal
+const log = app.log; // using Noty.js + $log service
 ```
 
 ## Built-in, zero-config components
@@ -70,6 +80,13 @@ const timeout = app.timeout(); // returns $timeout service
 <text-input ng-model="model1">
 	Label Text
 </text-input>
+<text-input ng-model="model1" type="number" min="0" max="100" step="1">
+	Label Text
+</text-input>
+<text-input ng-model="model1" type="range" min="0" max="100" step="1">
+	Label Text
+</text-input>
+
 <text-box ng-model="model2" required>
 	Other Label Text
 </text-box>
