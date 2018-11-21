@@ -1,4 +1,4 @@
-import { IConfig } from '@ledge/types';
+import { IConfig, Indexed } from '@ledge/types';
 import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
@@ -161,8 +161,14 @@ export class NgApp {
 		return this;
 	}
 
-	public addComponents(components: Map<string, angular.IComponentOptions>) {
-		for (let [name, component] of components) {
+	public addComponents(
+		components: Map<string, angular.IComponentOptions> | Indexed<angular.IComponentOptions>,
+	) {
+		const entries = components instanceof Map
+			? components.entries()
+			: Object.entries(components);
+
+		for (let [name, component] of entries) {
 			if (this.isInputComponent(component)) {
 				component = InputService.defineInputComponent(component);
 			}
