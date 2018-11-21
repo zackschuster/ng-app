@@ -1,6 +1,6 @@
 // tslint:disable:no-async-without-await no-magic-numbers
 import test from 'ava';
-import { textInput } from '../../../src/input';
+import { htmlInput, textInput } from '../../../src/input';
 import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
@@ -10,6 +10,13 @@ const { controller, template } = util.mockCtrl(definition);
 
 test.after(async t => {
 	t.snapshot(template.outerHTML);
+});
+
+test('textinput -> htmlinput alias', async t => {
+	// should be separate objects with the same layout
+	t.false(definition === InputService.defineInputComponent(htmlInput, document));
+	// TODO: fails, fix
+	// t.deepEqual(definedHtmlInput, definedTextInput);
 });
 
 test('textinput bindings', async t => {
