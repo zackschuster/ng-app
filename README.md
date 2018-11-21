@@ -1,45 +1,6 @@
 # @ledge/ng-app [![Build Status](https://travis-ci.org/zackschuster/ng-app.svg?branch=master)](https://travis-ci.org/zackschuster/ng-app)
 
-> An ESM-friendly shim layer for Angular.js, written & distributed in TypeScript
-
-## ESM-friendly api
-
-```js
-import { app } from '@ledge/ng-app';
-import { myComponent } from './my-component';
-import * as myRoutes from './my-routes';
-
-// simple DI
-app
-	.registerDependency('ng1dependency')
-	.registerDependencies(['ng1dependency1', 'ng1dependency2']);
-
-// configuration
-app
-	.registerRunBlock(['serviceName', (serviceName) => {
-		/** run block code */
-	}])
-	.registerConfigBlock(['serviceName', (serviceName) => {
-		/** config block code */
-	}])
-	.registerHttpInterceptor(['serviceName', (serviceName) => {
-		/** http interceptor code */
-	}]);
-
-// component-based, no directives
-app
-	.registerComponents({ myComponent });
-
-// ui-router
-app
-	.registerRoutes(myRoutes)
-	.registerTransitionHook('onBefore', { to: '**' }, ['serviceName', (serviceName) => {
-		/** ui-router transition hook code */
-	}]);
-
-// registration closes when bootstrap is called
-app.bootstrap();
-```
+> An ES2015+ shim layer for Angular.js, written & distributed in TypeScript
 
 ## Common dependencies included
 
@@ -47,9 +8,86 @@ app.bootstrap();
 - [angular-messages](https://www.npmjs.com/package/angular-messages)
 - [angular-ui-bootstrap](https://www.npmjs.com/package/angular-ui-bootstrap)
 - [angular-ui-router](https://www.npmjs.com/package/@uirouter/angularjs)
-- [angular-elastic](https://www.npmjs.com/package/angular-elastic)
 
-## Easily extractable service references
+## Designed for native modules
+
+```js
+import { app, NgRouter } from '@ledge/ng-app';
+import * as components from './components';
+import * as routes from './routes';
+
+import 'ng1dependency1';
+import 'ng1dependency2';
+
+/**
+ * Accepts Angular.js module names
+ */
+app.addDependencies('ng1dependency1', 'ng1dependency2');
+
+/**
+ * Only supports components - no abstracted directive API
+ */
+app.addComponents(components);
+
+/**
+ * Exposes raw Angular.js module APIs
+ */
+app.module.run(['serviceName', (serviceName) => {
+	// run block code
+}]);
+app.module.config(['serviceName', (serviceName) => {
+	// config block code
+}]);
+
+/**
+ * Angular.js-style interceptor declarations with no $injector boilerplate
+ * (`requestError` currently not supported)
+ */
+app.addHttpInterceptor({
+	request(cfg) {
+		// ...
+		return cfg;
+	},
+	response(rsp) {
+		// ...
+		return rsp;
+	},
+	responseError(err) {
+		// ...
+		return err;
+	},
+});
+
+/**
+ * Routing support built-in with angular-ui-router
+ * @see https://github.com/angular-ui/ui-router
+ * @see https://github.com/ui-router/core
+ *
+ * Supports StateDeclaration-based routes with ng-app extras
+ * @see https://github.com/ui-router/core/blob/095f531977971de387c619024c284f0f4df375d6/src/state/interface.ts#L111
+ * @see https://github.com/zackschuster/ng-app/blob/91c6c6348d9bd501143bb570b6628ceae6299a9f/src/router.ts#L142
+ */
+class AppRouter extends NgRouter {
+	constructor() {
+		this.routes = routes;
+	}
+	getRoutes() {
+		return this.routes;
+	}
+}
+
+app.setRouter(new AppRouter());
+
+/**
+ * Only supports calling bootstrap manually
+ * Closes resource (component/module/router/etc) registration
+ * By default, strictDi is enabled
+ * To disable: `app.bootstrap({ strictDi: false });`
+ */
+app.bootstrap();
+```
+
+## Statically referenceable singleton services
 
 ```js
 import { app } from '@ledge/ng-app';
@@ -70,6 +108,13 @@ const timeout = app.timeout(); // returns $timeout service
 <text-input ng-model="model1">
 	Label Text
 </text-input>
+<html-input ng-model="model1" type="number" min="0" max="100" step="1">
+	Label Text
+</html-input>
+<html-input ng-model="model1" type="range" min="0" max="100" step="1">
+	Label Text
+</html-input>
+
 <text-box ng-model="model2" required>
 	Other Label Text
 </text-box>
