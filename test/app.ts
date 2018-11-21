@@ -30,6 +30,7 @@ test('app has default input components', async t => {
 		'radioList',
 		'selectList',
 		'textBox',
+		'htmlInput',
 		'textInput',
 	]));
 });

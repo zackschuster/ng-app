@@ -69,4 +69,4 @@ export const textInput: InputComponentOptions = {
 	ctrl: TextInputController,
 };
 
-export const htmlInput = textInput;
+export const htmlInput = Object.assign({}, textInput);

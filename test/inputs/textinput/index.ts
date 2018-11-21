@@ -1,13 +1,21 @@
 import test from 'ava';
-import { textInput } from '../../../src/input';
+import { textInput, htmlInput } from '../../../src/input';
 import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../_util';
 
 const definedTextInput = InputService.defineInputComponent(textInput, document);
+const definedHtmlInput = InputService.defineInputComponent(htmlInput, document);
+
+test('textinput -> htmlinput alias', async t => {
+	// should be separate objects with the same layout
+	t.false(definedHtmlInput === definedTextInput);
+	// TODO: fails, fix
+	// t.deepEqual(definedHtmlInput, definedTextInput);
+});
 
 test('textinput bindings', async t => {
-	t.deepEqual(definedTextInput.bindings, {
+	const expectedBindings = {
 		ngModel: '=',
 		ngModelOptions: '<',
 		ngDisabled: '<',
@@ -16,20 +24,28 @@ test('textinput bindings', async t => {
 		min: '<',
 		max: '<',
 		step: '<',
-	});
+	};
+
+	t.deepEqual(definedTextInput.bindings, expectedBindings);
+	t.deepEqual(definedHtmlInput.bindings, expectedBindings);
 });
 
 test('textinput transclude', async t => {
 	t.deepEqual(definedTextInput.transclude, { contain: '?contain' });
+	t.deepEqual(definedHtmlInput.transclude, { contain: '?contain' });
 });
 
 test('textinput require', async t => {
 	t.deepEqual(definedTextInput.require, { ngModelCtrl: 'ngModel' });
+	t.deepEqual(definedHtmlInput.require, { ngModelCtrl: 'ngModel' });
 });
 
 test('textinput controller', async t => {
 	const textCtrl = util.mockCtrl(definedTextInput.controller);
 	t.true(textCtrl instanceof NgComponentController);
+
+	const htmlCtrl = util.mockCtrl(definedHtmlInput.controller);
+	t.true(htmlCtrl instanceof NgComponentController);
 
 	const numberCtrl = util.mockCtrl(definedTextInput.controller, { min: 1, max: 3, type: 'number' });
 	t.true(numberCtrl instanceof NgComponentController);
@@ -59,6 +75,7 @@ test('textinput controller', async t => {
 
 test('textinput controllerAs', async t => {
 	t.is(definedTextInput.controllerAs, undefined);
+	t.is(definedHtmlInput.controllerAs, undefined);
 });
 
 test('textinput template', async t => {

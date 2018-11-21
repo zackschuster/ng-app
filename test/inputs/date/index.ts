@@ -45,7 +45,7 @@ test('date template', async t => {
 	const inputGroupPrepend = inputGroup.firstElementChild as HTMLDivElement;
 	t.true(inputGroupPrepend.classList.contains('input-group-prepend'));
 	t.is(inputGroupPrepend.tagName, 'DIV');
-	t.is(inputGroupPrepend.getAttribute('ng-click'), '$ctrl.toggleDatepicker($event)');
+	t.is(inputGroupPrepend.getAttribute('data-toggle'), 'true');
 	t.is(inputGroupPrepend.style.cursor, 'pointer');
 
 	const inputGroupText = inputGroupPrepend.firstElementChild as HTMLSpanElement;
@@ -58,10 +58,7 @@ test('date template', async t => {
 	t.is(icon.getAttribute('aria-hidden'), 'true');
 
 	const input = util.testInput(tpl, t);
-	t.is(input.getAttribute('uib-datepicker-popup'), 'MM/dd/yyyy');
-	t.is(input.getAttribute('datepicker-append-to-body'), 'false');
-	t.is(input.getAttribute('is-open'), '$ctrl.hasFocus');
-	t.is(input.getAttribute('ng-click'), '$ctrl.hasFocus = true');
+	t.is(input.getAttribute('data-input'), 'true');
 
 	util.testLabel(tpl, t);
 	util.testNgMessages(tpl, t);
