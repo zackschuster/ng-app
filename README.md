@@ -1,6 +1,6 @@
 # @ledge/ng-app [![Build Status](https://travis-ci.org/zackschuster/ng-app.svg?branch=master)](https://travis-ci.org/zackschuster/ng-app)
 
-> An ES2015+ shim layer for Angular.js, written & distributed in TypeScript
+> A modern, groovy shim layer for Angular.js, written & distributed in TypeScript
 
 ## Common dependencies included
 
