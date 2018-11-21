@@ -68,3 +68,5 @@ export const textInput: InputComponentOptions = {
 	validators,
 	ctrl: TextInputController,
 };
+
+export const htmlInput = { ...textInput };
