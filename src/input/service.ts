@@ -135,9 +135,6 @@ export class InputService {
 
 		const $component = copy(Object.assign({}, this.$baseComponent, component));
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
-		const validators = component.validators instanceof Map
-			? component.validators
-			: new Map();
 
 		const $definition = copy(this.$baseDefinition);
 
@@ -225,8 +222,10 @@ export class InputService {
 				['role', 'alert'],
 			]);
 
+			const { validators = {} } = $component;
 			const attrs = Object.keys($component.attrs);
-			for (const [key, value] of validators) {
+
+			for (const [key, value] of Object.entries(validators)) {
 				this.$validationMessages.set(key, value);
 				attrs.push(key);
 			}

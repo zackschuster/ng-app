@@ -26,8 +26,6 @@ class TextInputController extends NgComponentController {
 }
 
 const validators = new Map<string, string>([
-	['minVal', 'Must be greater than or equal to {{$ctrl.min}}'],
-	['maxVal', 'Must be less than or equal to {{$ctrl.max}}'],
 ]);
 
 export const textInput: InputComponentOptions = {
@@ -65,7 +63,10 @@ export const textInput: InputComponentOptions = {
 		max: '<',
 		step: '<',
 	},
-	validators,
+	validators: {
+		minVal: 'Must be greater than or equal to {{$ctrl.min}}',
+		maxVal: 'Must be less than or equal to {{$ctrl.max}}',
+	},
 	ctrl: TextInputController,
 };
 
