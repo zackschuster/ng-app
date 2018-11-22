@@ -8,6 +8,7 @@ function isNumber(n: any): n is number {
 }
 
 class DateInputController extends NgComponentController {
+	private readonly SUPPORTED_MODES = ['single', 'multiple', 'range'];
 	private minDate?: Date | number | string;
 	private maxDate?: Date | number | string;
 	private flatpickr: flatpickr.Instance;
@@ -35,47 +36,39 @@ class DateInputController extends NgComponentController {
 			return true;
 		};
 
-		const dateFormat = 'MM/dd/yyyy';
+		const { inline, mode = 'single' } = this.$attrs;
+		if (this.SUPPORTED_MODES.includes(mode) === false) {
+			this.$log.devWarning(`Unsupported date-input \`mode\` ('${mode}') for #${this.$element.id}. Expected one of ${this.SUPPORTED_MODES.join(', ')}.`);
+		}
+
 		this.flatpickr = flatpickr(this.$element, {
-			dateFormat,
+			dateFormat: 'M n Y (l)',
 			defaultDate: this.ngModel,
-			inline: this.$attrs.inline,
-			mode: this.$attrs.mode,
+			inline: inline === 'true',
+			mode,
 			nextArrow: '&raquo;',
 			prevArrow: '&laquo;',
+			allowInput: true,
 			weekNumbers: true,
 			wrap: true,
 			enable: [
-				(d) => {
+				d => {
 					const maxDate = Date.parse(this.maxDate as any);
 					return Number.isNaN(maxDate) || d.valueOf() < maxDate;
 				},
-				(d) => {
+				d => {
 					const minDate = Date.parse(this.minDate as any);
 					return Number.isNaN(minDate) || d.valueOf() > minDate;
 				},
 			],
-			onChange: (selected) => {
+			onChange: selected => {
 				this.ngModel = selected.length > 1
 					? selected
 					: selected[0];
+
 				this.$scope.$applyAsync();
-			}
+			},
 		}) as flatpickr.Instance;
-
-		this.$scope.$watch(
-			_ => this.ngModel,
-			_ => {
-				if (_ != null) {
-					const parsedDate = flatpickr.parseDate(_) as Date;
-
-					if (this.flatpickr.selectedDates.includes(parsedDate) === false) {
-						const date = flatpickr.formatDate(parsedDate, dateFormat);
-						this.flatpickr.setDate(date, false);
-					}
-				}
-			}
-		)
 	}
 
 	public $onDestroy() {
@@ -94,14 +87,29 @@ class DateInputController extends NgComponentController {
 export const dateInput: InputComponentOptions = {
 	type: 'input',
 	render(h) {
-		const input = h.createInput('text', [
-			['data-input', 'true'],
+		const input = h.createInput('text');
+
+		// flatpickr requires control of the input element
+		input.removeAttribute('ng-model');
+		input.setAttribute('data-input', 'true');
+
+		const iconInput = h.createIconInput(input, 'calendar', [
+			['data-toggle', 'true'],
+			['style', 'cursor: pointer;'],
 		]);
 
-		return h.createIconInput(input, 'calendar', [
-			['data-toggle', 'true'],
-			['style', 'cursor:pointer'],
-		]);
+		const inputGroupAppend = h.createElement('div', ['input-group-append']);
+		inputGroupAppend.setAttribute('data-clear', 'true');
+		inputGroupAppend.style.setProperty('cursor', 'pointer');
+
+		const inputGroupText = h.createElement('span', ['input-group-text']);
+		const clearIcon = h.createIcon('times');
+
+		inputGroupText.appendChild(clearIcon);
+		inputGroupAppend.appendChild(inputGroupText);
+		iconInput.appendChild(inputGroupAppend);
+
+		return iconInput;
 	},
 	bindings: {
 		minDate: '<',
