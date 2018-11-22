@@ -46,9 +46,12 @@ test('InputService.$baseComponent', async t => {
 	t.true($baseComponent.renderLabel instanceof Function);
 	t.true($baseComponent.postRender instanceof Function);
 	t.true($baseComponent.render instanceof Function);
+	// tslint:disable-next-line: no-non-null-assertion
+	t.true(new $baseComponent.ctrl!() instanceof NgComponentController);
 	Reflect.deleteProperty($baseComponent, 'renderLabel');
 	Reflect.deleteProperty($baseComponent, 'postRender');
 	Reflect.deleteProperty($baseComponent, 'render');
+	Reflect.deleteProperty($baseComponent, 'ctrl');
 
 	t.deepEqual($baseComponent, {
 		isRadioOrCheckbox: false,
@@ -56,7 +59,6 @@ test('InputService.$baseComponent', async t => {
 		templateClass: 'form-group',
 		attrs: { },
 		type: 'input',
-		ctrl: NgComponentController,
 	} as any);
 
 	t.true(isFunction(InputService.$BaseComponent.renderLabel));

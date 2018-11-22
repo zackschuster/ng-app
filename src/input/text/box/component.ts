@@ -2,8 +2,8 @@ import { NgComponentController } from '../../../controller';
 import { InputComponentOptions } from '../../options';
 
 class TextBoxController extends NgComponentController {
-	protected $element: HTMLTextAreaElement;
-	protected $mirror = document.createElement('textarea');
+	public $element: HTMLTextAreaElement;
+	public $mirror = document.createElement('textarea');
 
 	constructor() {
 		super();

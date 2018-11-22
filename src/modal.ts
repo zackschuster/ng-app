@@ -17,7 +17,7 @@ export class NgModalService extends NgService {
 		appendTo = document.body,
 		template = '<h1>Set the <code>template</code> property to replace me :)</h1>',
 		size = 'lg',
-		controller = NgController,
+		controller = class extends NgController {},
 		controllerAs = '$ctrl',
 		onClose = () => {
 			return true;
@@ -26,7 +26,7 @@ export class NgModalService extends NgService {
 		const { $log } = this;
 
 		function makeModalCtrl() {
-			return class extends (controller as typeof NgController) {
+			return class extends controller {
 				public close: (...args: any[]) => void;
 				public dismiss: () => void;
 				public $log = $log;

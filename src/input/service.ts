@@ -12,7 +12,7 @@ const BaseComponent = Object.seal({
 	labelClass: 'form-control-label',
 	templateClass: 'form-group',
 	attrs: { },
-	ctrl: NgComponentController,
+	ctrl: class extends NgComponentController { },
 	render(_h) {
 		return this.$template;
 	},
@@ -150,8 +150,8 @@ export class InputService {
 		Object.assign($definition.bindings, $component.bindings);
 		Object.assign($definition.transclude, $component.transclude);
 
-		// assign controller
-		$definition.controller = InputService.wrapComponentCtrl($component.ctrl as typeof NgComponentController);
+		// tslint:disable-next-line:no-non-null-assertion -- assign controller
+		$definition.controller = InputService.wrapComponentCtrl($component.ctrl!);
 
 		// assign template
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
