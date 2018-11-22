@@ -74,7 +74,10 @@ export function testInput(
 	t.is(input.getAttribute('ng-readonly'), '$ctrl.ngReadonly');
 
 	if (tagName !== 'SELECT') {
-		t.is(input.getAttribute('ng-model'), '$ctrl.ngModel');
+		// date-input currently uses flatpickr in `wrap` mode, which requires `data-input` to be set on the input
+		if (input.hasAttribute('data-input') === false) {
+			t.is(input.getAttribute('ng-model'), '$ctrl.ngModel');
+		}
 		t.is(input.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 		t.is(input.getAttribute('ng-blur'), '$ctrl.ngModelCtrl.$setTouched()');
 		t.is(input.getAttribute('ng-class'), `{ 'is-invalid': ${InputService.$validationExps.$isInvalid} }`);
