@@ -39,7 +39,7 @@ export interface InputComponentOptions extends angular.IComponentOptions {
 	/**
 	 * Custom validator messages
 	 */
-	validators?: Map<string, string>;
+	validators?: Indexed<string>;
 
 	/**
 	 * Run after container & label creation, before label manipulation
