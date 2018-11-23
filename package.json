@@ -16,6 +16,8 @@
 	"main": "index.ts",
 	"types": "index.ts",
 	"scripts": {
+		"build": "webpack --env production",
+		"start": "webpack-dev-server",
 		"lint": "tslint --project .",
 		"compile": "tsc --noEmit",
 		"test": "ava"
@@ -42,11 +44,30 @@
 		"@types/angular-mocks": "1.7.0",
 		"angular-mocks": "1.7.9",
 		"ava": "2.4.0",
+		"bootstrap": "4.3.1",
 		"browser-env": "3.3.0",
+		"copy-webpack-plugin": "5.0.5",
+		"css-loader": "3.2.0",
 		"esm": "3.2.25",
-		"ts-node": "8.5.2",
-		"tslint": "5.20.1",
-		"typescript": "3.7.2"
+		"file-loader": "4.3.0",
+		"font-awesome": "4.7.0",
+		"fork-ts-checker-webpack-plugin": "3.1.0",
+		"html-webpack-plugin": "3.2.0",
+		"mini-css-extract-plugin": "0.8.0",
+		"optimize-css-assets-webpack-plugin": "5.0.3",
+		"pug": "2.0.4",
+		"pug-loader": "2.4.0",
+		"sass": "1.23.7",
+		"sass-loader": "8.0.0",
+		"ts-loader": "6.2.1",
+    "ts-node": "8.5.2",
+    "tslint": "5.20.1",
+		"typescript": "3.7.2",
+		"url-loader": "2.3.0",
+		"webpack": "4.41.2",
+		"webpack-cli": "3.3.10",
+		"webpack-dev-server": "3.9.0",
+		"webpack-merge": "4.2.2"
 	},
 	"ava": {
 		"files": [
