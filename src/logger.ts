@@ -1,4 +1,4 @@
-import * as Noty from 'noty';
+import Noty from 'noty';
 import { Callback } from '@ledge/types';
 import { NgService } from './service';
 
