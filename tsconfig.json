@@ -6,6 +6,7 @@
 	"include": [
 		"index.ts",
 		"src/**/*.ts",
+		"docs/**/*.ts",
 		"test/**/*.ts"
 	]
 }
