@@ -1,0 +1,20 @@
+html(lang="en")
+	head
+		base(href="/")
+		link(rel="preload shortcut icon" href="images/favicon.ico" type="image/x-icon")
+		meta(http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate")
+		meta(http-equiv="Pragma" content="no-cache")
+		meta(http-equiv="X-UA-Compatible" content="ie=edge")
+		meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+		meta(name="description" content="Documentation for the @ledge/ng-app web application platform.")
+		title= htmlWebpackPlugin.options.title
+
+	body
+		.row
+			.col
+				text-input(ng-model="$ctrl.textInput")
+			.col
+				date-input(ng-model="$ctrl.dateInput")
+			.col
+				select-list(ng-model="$ctrl.selectList" list="[{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]")
+		ui-view

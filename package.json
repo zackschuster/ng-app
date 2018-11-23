@@ -16,6 +16,8 @@
   "main": "index.ts",
   "types": "index.ts",
   "scripts": {
+		"build": "webpack --env production",
+		"start": "webpack-dev-server",
     "pretest": "node ./test/_teardown.js",
     "test": "ava"
   },
@@ -40,12 +42,31 @@
     "@types/angular-mocks": "1.7.0",
     "angular-mocks": "1.7.5",
     "ava": "1.0.0-rc.2",
+		"bootstrap": "4.1.3",
     "browser-env": "3.2.5",
-    "esm": "3.0.84",
+		"copy-webpack-plugin": "4.6.0",
+		"css-loader": "1.0.1",
+		"esm": "3.0.84",
+		"file-loader": "2.0.0",
+		"font-awesome": "4.7.0",
+		"fork-ts-checker-webpack-plugin": "0.5.0",
+		"html-webpack-plugin": "3.2.0",
+		"mini-css-extract-plugin": "0.4.5",
+		"optimize-css-assets-webpack-plugin": "5.0.1",
+		"pug": "2.0.3",
+		"pug-loader": "2.4.0",
     "pretty": "2.0.0",
+		"sass": "1.15.1",
+		"sass-loader": "7.1.0",
+		"ts-loader": "5.3.0",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
-    "typescript": "3.1.6"
+		"typescript": "3.1.6",
+		"url-loader": "1.1.2",
+		"webpack": "4.26.0",
+		"webpack-cli": "3.1.2",
+		"webpack-dev-server": "3.1.10",
+		"webpack-merge": "4.1.4"
   },
   "ava": {
     "files": [
