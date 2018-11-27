@@ -72,7 +72,9 @@ class DateInputController extends NgComponentController {
 	}
 
 	public $onDestroy() {
-		this.flatpickr.destroy();
+		if (this.flatpickr != null && typeof this.flatpickr.destroy === 'function') {
+			this.flatpickr.destroy();
+		}
 	}
 
 	public getMinDate() {
