@@ -4,13 +4,14 @@ import { HttpStatusCode } from '@ledge/types/http';
 import * as inputs from './src/input';
 import { NgApp } from './src/app';
 
+import 'element-closest/browser';
+
 import 'angular-animate';
 import 'angular-messages';
 import 'angular-ui-bootstrap';
 
 // tslint:disable-next-line:no-duplicate-imports
 import '@uirouter/angularjs';
-import 'element-closest/browser';
 
 const app = new NgApp()
 	.addComponents(new Map(Object.entries(inputs)))
