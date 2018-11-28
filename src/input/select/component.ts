@@ -1,5 +1,4 @@
-import Choices, { Choices as _Choices } from 'choices.js';
-import { isMobile } from '@ledge/is-mobile';
+import Choices from 'choices.js';
 import { IAttributes } from 'angular';
 
 import { InputComponentOptions } from '../options';
@@ -22,8 +21,27 @@ class SelectController extends NgComponentController {
 	protected list: any[];
 	protected choices: Choices;
 
-	private text: string;
-	private value: string;
+	// tslint:disable:variable-name
+	private _text: string;
+	private _value: string;
+	// tslint:enable:variable-name
+
+	public get text() {
+		if (typeof this._text !== 'string') {
+			const { text = 'Text' } = this.$attrs;
+			this._text = text;
+		}
+		return this._text;
+	}
+
+	public get value() {
+		if (typeof this._text !== 'string') {
+			const { value = 'Value' } = this.$attrs;
+			this._value = value;
+		}
+		return this._value;
+	}
+
 	private destroyCurrentWatcher: () => void;
 
 	private get isMultiple() {
@@ -31,79 +49,81 @@ class SelectController extends NgComponentController {
 	}
 
 	public $onInit() {
-		const { value = 'Value', text = 'Text' } = this.$attrs;
+		const select = this.$element.querySelector('select');
 
-		this.value = value;
-		this.text = text;
-	}
+		if (select instanceof HTMLSelectElement && select.getAttribute('ng-options') == null) {
+			this.choices = this.makeSelectList(select);
 
-	public $postLink() {
-		const select = this.$element.querySelector('select') as HTMLSelectElement;
-		this.$scope.$watchCollection(
-			_ => this.list,
-			_ => {
-				this.makeSelectList(select, this.list);
-			},
-		);
-	}
-
-	public makeSelectList(el: HTMLSelectElement, list: any[]) {
-		if (this.choices != null) {
-			this.choices.destroy();
-			this.destroyCurrentWatcher();
-		}
-
-		if (el.getAttribute('ng-options') != null) {
-			return;
-		}
-
-		if (Array.isArray(list)) {
-			this.$timeout().finally(() => {
-				const opts: Partial<_Choices.Options> = {
-					removeItemButton: true,
-					itemSelectText: '',
-					addItemText: '',
-				};
-
-				if (this.isMultiple) {
-					opts.placeholderValue = this.$attrs.placeholder || SelectController.GetPlaceholder(this.$attrs);
-				}
-
-				this.choices = new Choices(el, opts);
-				this.choices.setChoices(list, this.value, this.text);
-
-				this.choices.passedElement.element.addEventListener<'addItem'>('addItem', ({ detail: { value } }) => {
-					if (this.ngModel != null && (this.isMultiple ? this.ngModel.includes(value) : this.ngModel === value)) {
+			this.$scope.$watchCollection(
+				_ => this.list,
+				_ => {
+					if (Array.isArray(_) === false) {
+						this.$log.devWarning(`List not passed to select-list #${this.uniqueId}`);
 						return;
 					}
 
-					this.ngModel = this.isMultiple
-						? [value].concat(this.ngModel == null ? [] : this.ngModel)
-						: value;
-
-					this.$timeout();
-				});
-
-				this.choices.passedElement.element.addEventListener<'removeItem'>('removeItem', ({ detail: { value } }) => {
-					if (this.isMultiple) {
-						if (this.ngModel.length === 0) return;
-
-						this.ngModel = this.ngModel.filter((x: any) => x !== value);
-					} else {
-						this.ngModel = undefined;
+					if (typeof this.destroyCurrentWatcher !== 'function') {
+						this.destroyCurrentWatcher = this.createWatcher();
 					}
-					this.$timeout();
-				});
 
-				this.destroyCurrentWatcher = this.createWatcher();
-
-				const input = this.$element.querySelector('input') as HTMLInputElement;
-				const ngModelParts = this.$attrs.ngModel.split('.');
-				const ngModel = ngModelParts[ngModelParts.length - 1];
-
-				input.setAttribute('aria-label', `${ngModel} list selection`);
-			});
+					this.choices.setChoices(_, this.value, this.text, true);
+				},
+			);
 		}
+	}
+
+	public $onDestroy() {
+		if (this.choices instanceof Choices) {
+			this.choices.destroy();
+		}
+
+		if (typeof this.destroyCurrentWatcher === 'function') {
+			this.destroyCurrentWatcher();
+		}
+	}
+
+	public makeSelectList(el: HTMLSelectElement) {
+		const { placeholder = SelectController.GetPlaceholder(this.$attrs) } = this.$attrs;
+		const choices = new Choices(el, {
+			removeItemButton: true,
+			shouldSort: false,
+			itemSelectText: '',
+			addItemText: '',
+			placeholderValue: this.isMultiple
+				? placeholder
+				: null,
+		});
+
+		choices.passedElement.element.addEventListener<'addItem'>('addItem', ({ detail: { value } }) => {
+			if (this.ngModel != null && (this.isMultiple ? this.ngModel.includes(value) : this.ngModel === value)) {
+				return;
+			}
+
+			this.ngModel = this.isMultiple
+				? [value].concat(this.ngModel == null ? [] : this.ngModel)
+				: value;
+
+			this.$timeout();
+		});
+
+		choices.passedElement.element.addEventListener<'removeItem'>('removeItem', ({ detail: { value } }) => {
+			if (this.isMultiple) {
+				if (this.ngModel.length === 0) return;
+
+				this.ngModel = this.ngModel.filter((x: any) => x !== value);
+			} else {
+				this.ngModel = undefined;
+			}
+			this.$timeout();
+		});
+
+		const input = this.$element.querySelector('input') as HTMLInputElement;
+		const ngModelParts = this.$attrs.ngModel.split('.');
+		const ngModel = ngModelParts[ngModelParts.length - 1];
+
+		input.setAttribute('aria-label', `${ngModel} list selection`);
+
+		return choices;
 	}
 
 	private createWatcher() {
@@ -136,30 +156,31 @@ class SelectController extends NgComponentController {
 export const selectList: InputComponentOptions = {
 	type: 'input',
 	render(h) {
-		const input = h.createElement('select', [], [
-			['ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}'],
-			['ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}'],
-		]);
+		const select = h.createElement('select', ['form-control']);
+		select.setAttribute('ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}');
+		select.setAttribute('ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}');
 
 		if (SelectController.IsMultiple(this.$attrs)) {
-			input.setAttribute('multiple', 'true');
+			select.setAttribute('multiple', 'true');
 		} else {
-			const placeholder = h.createElement('option', [], [['placeholder', 'true']]);
-			placeholder.innerText = SelectController.GetPlaceholder(this.$attrs);
+			const placeholder = h.createElement('option');
+
+			placeholder.setAttribute('placeholder', 'true');
+			placeholder.text = SelectController.GetPlaceholder(this.$attrs);
 			placeholder.value = '';
-			input.appendChild(placeholder);
+
+			select.appendChild(placeholder);
 		}
 
-		if (isMobile()) {
-			const text = this.$attrs.text || 'Text';
-			const value = this.$attrs.value || 'Value';
-			input.classList.add('form-control');
-			input.setAttribute('ng-options', `item.${value} as item.${text} for item in $ctrl.list`);
-			input.setAttribute('ng-model', `$ctrl.ngModel`);
-			input.removeAttribute('ng-show');
+		if (NgComponentController.IsMobile()) {
+			select.setAttribute('ng-model', `$ctrl.ngModel`);
+			select.setAttribute(
+				'ng-options',
+				`item['{{$ctrl.value}}'] as item['{{$ctrl.text}}'] for item in $ctrl.list`,
+			);
 		}
 
-		return input;
+		return select;
 	},
 	ctrl: SelectController,
 	bindings: {
