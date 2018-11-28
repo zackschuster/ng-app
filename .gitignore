@@ -9,3 +9,5 @@ t.*
 test/**/snapshots
 !test/_register.js
 !test/_teardown.js
+!docs/*.js
+!docs/*.html
