@@ -133,13 +133,13 @@ export class NgApp {
 		this.$injector.get('$rootScope').$applyAsync();
 	}
 
-	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
+	public async bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
 		for (const [name, definition] of this.$components) {
 			this.$module.component(name, definition);
 		}
 
 		setTimeout(() => document.body.classList.add('bootstrapped'));
-		this.$bootstrap(document.body, [this.$id], { strictDi });
+		return this.$bootstrap(document.body, [this.$id], { strictDi });
 	}
 
 	public configure(ngConfig: Partial<NgConfig>) {
