@@ -16,7 +16,7 @@
 	"main": "index.ts",
 	"types": "index.ts",
 	"scripts": {
-		"build": "webpack --env production",
+		"build:docs": "webpack --env production",
 		"start": "webpack-dev-server",
 		"lint": "tslint --project .",
 		"compile": "tsc --noEmit",
