@@ -11,6 +11,7 @@ module.exports = (env = 'development') =>
 		},
 		output: {
 			path: env !== 'development' ? docs : process.cwd(),
+			publicPath: env !== 'development' ? '/ng-app/' : '/',
 		},
 		resolve: {
 			modules: ['docs'],
@@ -19,7 +20,7 @@ module.exports = (env = 'development') =>
 			new HtmlWebpackPlugin({
 				template: '!!pug-loader?!docs/src/index.pug',
 				title: '@ledge/ng-app docs',
-				baseUrl: '/',
+				baseUrl: env !== 'development' ? '/ng-app/' : '/',
 			}),
 		],
 	});
