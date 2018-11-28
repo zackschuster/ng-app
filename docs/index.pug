@@ -15,6 +15,27 @@ html(lang="en")
 				text-input(ng-model="$ctrl.textInput")
 			.col
 				date-input(ng-model="$ctrl.dateInput")
+		.row(
+			ng-init="$ctrl.selectListList = [{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]"
+		)
+			.col-12
+				p Current: {{$ctrl.selectListList | json}}
+				button(
+					type="button"
+					ng-click="$ctrl.selectListList = [{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]"
+				) Change 1
+				button(
+					type="button"
+					ng-click="$ctrl.selectListList = [{Text: 'Third Choice', Value: 3}, {Text: 'Fourth Choice', Value: 4}]"
+				) Change 2
+
 			.col
-				select-list(ng-model="$ctrl.selectList" list="[{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]")
+				| Select Single: {{$ctrl.selectSingle}}
+				select-list(ng-model="$ctrl.selectSingle" list="$ctrl.selectListList" sr-only)
+					| Select Single Input
+			.col
+				| Select Multiple: {{$ctrl.selectMultiple}}
+				select-list(ng-model="$ctrl.selectMultiple" list="$ctrl.selectListList" multiple sr-only)
+					| Select Multiple Input
+
 		ui-view
