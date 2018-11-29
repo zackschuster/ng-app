@@ -24,9 +24,7 @@ module.exports = (env = 'development') => {
 			path: env !== 'development'
 				? docs
 				: cwd,
-			publicPath: env !== 'development'
-				? '/ng-app/'
-				: '/',
+			publicPath: '/',
 		},
 	 });
 
@@ -41,7 +39,7 @@ module.exports = (env = 'development') => {
 		new HtmlWebpackPlugin({
 			template: '!!pug-loader?!docs/src/index.pug',
 			title: '@ledge/ng-app docs',
-			baseUrl: env !== 'development' ? '/ng-app/' : '/',
+			baseUrl: '/',
 		}),
 		new NgAppDocsPlugin(),
 	);
