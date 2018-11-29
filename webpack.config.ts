@@ -21,9 +21,7 @@ class NgAppDocsPlugin {
 module.exports = (env = 'development') => {
 	const config = require('@ledge/configs/webpack.merge')(env, {
 		output: {
-			path: env !== 'development'
-				? docs
-				: cwd,
+			path: docs,
 			publicPath: '/',
 		},
 	 });
