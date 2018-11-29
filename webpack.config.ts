@@ -2,9 +2,6 @@ import fs = require('fs');
 import path = require('path');
 import HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const cwd = process.cwd();
-const docs = path.join(cwd, 'docs');
-
 class NgAppDocsPlugin {
 	public apply(compiler: any) {
 		compiler.hooks.emit.tap(this.constructor.name, () => {
@@ -17,6 +14,8 @@ class NgAppDocsPlugin {
 	}
 }
 
+const docs = path.join(process.cwd(), 'docs');
+
 module.exports = (env = 'development') =>
 	require('@ledge/configs/webpack.merge')(env, {
 		entry: {
@@ -24,9 +23,7 @@ module.exports = (env = 'development') =>
 				.map(file => path.join(docs, 'src', file)),
 		},
 		output: {
-			path: env !== 'development'
-				? docs
-				: process.cwd(),
+			path: docs,
 			publicPath: '/',
 		},
 		resolve: {
