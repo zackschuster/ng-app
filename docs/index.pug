@@ -56,8 +56,9 @@ html(lang="en")
 
 						.row
 							.col
-								radio-list(ng-model="$ctrl.radioList" list="$ctrl.list")
-									| Check Box: #[strong(ng-bind="$ctrl.radioList || '(empty)'")]
+								fieldset
+									legend Radio List: #[strong(ng-bind="$ctrl.radioList || '(empty)'")]
+									radio-list(ng-model="$ctrl.radioList" list="$ctrl.list")
 
 							.col
 								check-box(ng-model="$ctrl.checkBox")
