@@ -1,11 +1,14 @@
-.vscode
-node_modules
-t.*
 .DS_Store
+.vscode
+
 *.ini
 *.html
 *.js
 *.log
+t.*
+
+node_modules
+
 !test/_register.js
 !test/_teardown.js
 !docs/*.js
