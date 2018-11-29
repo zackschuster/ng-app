@@ -25,10 +25,12 @@ class TextBoxController extends NgComponentController {
 		this.$mirror.style.setProperty('word-wrap', 'break-word');
 		this.$mirror.style.setProperty('border', '0');
 
+		// append mirror to the DOM
 		document.body.appendChild(this.$mirror);
 	}
 
 	public $onInit() {
+		// the query *must* return an element or nothing we've done so far matters
 		const element = this.$element.querySelector('textarea') as HTMLTextAreaElement;
 		let computedStyle = window.getComputedStyle(element);
 
@@ -53,20 +55,12 @@ class TextBoxController extends NgComponentController {
 		let maxHeight = parseInt(computedStyle.getPropertyValue('max-height'), 10);
 		maxHeight = maxHeight && maxHeight > 0 ? maxHeight : 9e4;
 
-		// append mirror to the DOM
-
 		// set resize and apply elastic
 		element.style.setProperty('resize', 'none');
 
-		let lastTime = 0;
 		const mirror = this.$mirror;
-
 		function adjust() {
-			requestAnimationFrame(time => {
-				if ((time - lastTime) < 16) {
-					return;
-				}
-				lastTime = time;
+			requestAnimationFrame(() => {
 				computedStyle = window.getComputedStyle(element);
 
 				const width = (parseInt(computedStyle.getPropertyValue('width'), 10) - boxOuter.width) + 'px';
@@ -95,11 +89,12 @@ class TextBoxController extends NgComponentController {
 		}
 
 		window.addEventListener('resize', adjust);
-		this.$scope.$watch(() => this.ngModelCtrl.$modelValue, adjust);
+		element.addEventListener('keydown', adjust);
 
 		this.$scope.$on('$destroy', () => {
 			this.$mirror.remove();
 			window.removeEventListener('resize', adjust);
+			element.removeEventListener('keydown', adjust);
 		});
 
 		// copy the essential styles from the textarea to the mirror
