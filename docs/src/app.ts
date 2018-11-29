@@ -1,4 +1,4 @@
-import { NgRouter, app } from '../index';
+import { NgRouter, app } from '../../index';
 
 app
 	.setRouter(new (class extends NgRouter { })())
