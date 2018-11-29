@@ -1,17 +1,22 @@
-// tslint:disable:no-var-requires
-const { join } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path = require('path');
+import HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const docs = join(process.cwd(), 'docs');
+const cwd = process.cwd();
+const docs = path.join(cwd, 'docs');
 
 module.exports = (env = 'development') =>
 	require('@ledge/configs/webpack.merge')(env, {
 		entry: {
-			app: ['app.ts', 'styles.scss'].map(x => join(docs, 'src', x)),
+			app: ['app.ts', 'styles.scss']
+				.map(file => path.join(docs, 'src', file)),
 		},
 		output: {
-			path: env !== 'development' ? docs : process.cwd(),
-			publicPath: env !== 'development' ? '/ng-app/' : '/',
+			path: env !== 'development'
+				? docs
+				: process.cwd(),
+			publicPath: env !== 'development'
+				? '/ng-app/'
+				: '/',
 		},
 		resolve: {
 			modules: ['docs'],
