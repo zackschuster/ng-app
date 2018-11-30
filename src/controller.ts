@@ -1,9 +1,5 @@
-// tslint:disable:max-classes-per-file
-import { NgLogger } from './services/logger';
-import { NgDataService } from './services/http';
-import { NgService } from './services/base';
-import { NgStateService } from './services/router';
 import { NgConfig } from './app';
+import { NgDataService, NgLogger, NgService, NgStateService } from './services';
 
 export abstract class NgController extends NgService {
 	[index: string]: any;
@@ -79,7 +75,5 @@ export abstract class NgController extends NgService {
 export abstract class NgComponentController extends NgController {
 	public ngModel: any;
 	public ngModelCtrl: angular.INgModelController;
-
-	// tslint:disable-next-line:no-non-null-assertion
-	public uniqueId = crypto.getRandomValues(new Int8Array(2))!.toLocaleString().replace(/[-]|[,]/g, '');
+	public uniqueId = crypto.getRandomValues(new Int8Array(2)).toLocaleString().replace(/[-]|[,]/g, '');
 }

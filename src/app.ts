@@ -209,7 +209,6 @@ export class NgApp {
 		// Force `this` to always refer to the class instance, no matter what
 		autobind($controller);
 
-		// tslint:disable-next-line:max-classes-per-file
 		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
 			public $log = log;
 			public $http = http;

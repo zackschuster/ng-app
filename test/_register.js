@@ -12,7 +12,6 @@ Object.defineProperty(global, 'angular', {
 	value: /** @type {*} */(window).angular,
 });
 
-// tslint:disable-next-line:max-line-length
 // taken from https://github.com/PeculiarVentures/node-webcrypto-ossl/blob/6ca13d14243901bb52c195ee0fee70bc4e58fd84/lib/webcrypto.ts#L39
 Object.defineProperty(global, 'crypto', {
 	configurable: false,
