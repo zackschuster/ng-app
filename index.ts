@@ -1,8 +1,8 @@
 import { StateProvider } from '@uirouter/angularjs';
 import { HttpStatusCode } from '@ledge/types/http';
 
-import * as inputs from './src/input';
 import { NgApp } from './src/app';
+import { inputs } from './src/input';
 
 import './polyfills';
 
@@ -74,5 +74,5 @@ export function makeNgCtrl(controller: new() => any) {
 
 export * from './src/app';
 export * from './src/controller';
-export * from './src/services';
 export * from './src/input';
+export * from './src/services';

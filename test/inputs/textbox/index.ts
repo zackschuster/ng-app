@@ -1,6 +1,6 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { textBox } from '../../../src/input';
+import { textBox } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../-util';

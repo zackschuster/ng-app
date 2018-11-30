@@ -1,6 +1,6 @@
 // tslint:disable:no-async-without-await no-magic-numbers
 import test from 'ava';
-import { htmlInput, textInput } from '../../../src/input';
+import { htmlInput, textInput } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
