@@ -4,7 +4,7 @@ import { IAttributes, copy, equals } from 'angular';
 
 import { InputComponentOptions } from './options';
 import { NgComponentController } from '../controller';
-import { NgRenderer } from '../services/renderer';
+import { NgRenderer, NgService } from '../services';
 
 const BaseComponent = Object.seal({
 	isRadioOrCheckbox: false,
@@ -36,7 +36,7 @@ const ValidationExpressions = Object.seal({
 	},
 });
 
-export class InputService {
+export class InputService extends NgService {
 	public static readonly $validationAttrs = [
 		'required', 'ngRequired',
 		'disabled', 'ngDisabled',
