@@ -1,4 +1,4 @@
-import { NgModalService } from '../../src/modal';
+import { NgModalService } from '../../src/services/modal';
 import { $injector } from './--injector';
 import { $log } from './-logger';
 

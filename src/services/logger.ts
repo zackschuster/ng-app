@@ -1,5 +1,5 @@
 import Noty from 'noty';
-import { NgService } from './service';
+import { NgService } from './base';
 
 export enum LogTypeMap {
 	warning = 'warn',

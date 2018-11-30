@@ -1,7 +1,7 @@
 import { Indexed } from '@ledge/types';
 import { ParamType, ResolveTypes, StateDeclaration, StateService, TargetState, Transition } from '@uirouter/core';
 
-import { NgService } from './service';
+import { NgService } from './base';
 
 export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 	public routes: T[] = [];

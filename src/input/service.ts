@@ -1,10 +1,10 @@
 import { isIE11 } from '@ledge/is-ie-11';
+import { Indexed } from '@ledge/types';
 import { IAttributes, copy, equals } from 'angular';
 
 import { InputComponentOptions } from './options';
 import { NgComponentController } from '../controller';
-import { NgRenderer } from '../renderer';
-import { Indexed } from '@ledge/types';
+import { NgRenderer } from '../services/renderer';
 
 const BaseComponent = Object.seal({
 	isRadioOrCheckbox: false,

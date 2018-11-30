@@ -1,6 +1,6 @@
 import { PatchPayload } from '@ledge/types/patch';
 import { isFunction } from 'angular';
-import { NgService } from './service';
+import { NgService } from './base';
 
 export class NgDataService extends NgService {
 	constructor(

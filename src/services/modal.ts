@@ -1,7 +1,7 @@
 import { element } from 'angular';
-import { NgController } from './controller';
+import { NgController } from '../controller';
 import { NgLogger } from './logger';
-import { NgService } from './service';
+import { NgService } from './base';
 
 const TIMEOUT = 100;
 

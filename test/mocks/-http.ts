@@ -2,8 +2,8 @@
 import { HttpStatusCode } from '@ledge/types/http';
 import { injector } from 'angular';
 
-import { NgDataService } from '../../src/http';
 import { app } from './--app';
+import { NgDataService } from '../../src/services/http';
 
 const $injector = injector(['ngMock']);
 

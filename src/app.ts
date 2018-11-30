@@ -2,10 +2,10 @@ import { IConfig, Indexed } from '@ledge/types';
 import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
-import { NgDataService } from './http';
-import { NgLogger } from './logger';
-import { NgModalService } from './modal';
-import { NgRouter, NgStateService } from './router';
+import { NgDataService } from './services/http';
+import { NgLogger } from './services/logger';
+import { NgModalService } from './services/modal';
+import { NgRouter, NgStateService } from './services/router';
 
 import { InputComponentOptions } from './input/options';
 import { InputService } from './input/service';
