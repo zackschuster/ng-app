@@ -4,7 +4,7 @@ import { HttpStatusCode } from '@ledge/types/http';
 import * as inputs from './src/input';
 import { NgApp } from './src/app';
 
-import 'element-closest/browser';
+import './src/polyfills';
 
 import 'angular-animate';
 import 'angular-messages';
