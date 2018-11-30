@@ -1,15 +1,10 @@
 import { IConfig, Indexed } from '@ledge/types';
+import { StateService } from '@uirouter/core';
 import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
-import { NgDataService } from './services/http';
-import { NgLogger } from './services/logger';
-import { NgModalService } from './services/modal';
-import { NgRouter, NgStateService } from './services/router';
-
-import { InputComponentOptions } from './input/options';
-import { InputService } from './input/service';
-import { StateService } from '@uirouter/core';
+import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
+import { InputComponentOptions, InputService } from './input';
 
 export interface NgConfig extends IConfig {
 	readonly IS_PROD: boolean;
