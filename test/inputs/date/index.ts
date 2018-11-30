@@ -1,5 +1,5 @@
 import test from 'ava';
-import { dateInput } from '../../../src/input';
+import { dateInput } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../_util';

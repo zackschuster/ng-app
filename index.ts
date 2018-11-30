@@ -1,7 +1,7 @@
 import { StateProvider } from '@uirouter/angularjs';
 
-import * as inputs from './src/input';
 import { NgApp } from './src/app';
+import { inputs } from './src/input';
 
 import './polyfills';
 
@@ -67,11 +67,11 @@ app
 
 export { app };
 
-export function makeNgCtrl(controller: new() => any) {
+export function makeNgCtrl(controller: new () => any) {
 	return app.makeComponentController(controller);
 }
 
 export * from './src/app';
 export * from './src/controller';
-export * from './src/services';
 export * from './src/input';
+export * from './src/services';
