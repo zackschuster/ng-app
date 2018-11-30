@@ -33,7 +33,6 @@
     "angular-ui-bootstrap": "2.5.6",
     "choices.js": "4.1.3",
     "core-decorators": "0.20.0",
-    "element-closest": "2.0.2",
     "flatpickr": "4.5.2",
     "noty": "3.1.4"
   },

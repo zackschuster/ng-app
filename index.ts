@@ -3,7 +3,7 @@ import { StateProvider } from '@uirouter/angularjs';
 import * as inputs from './src/input';
 import { NgApp } from './src/app';
 
-import 'element-closest';
+import './src/polyfills';
 
 import 'angular-animate';
 import 'angular-messages';
