@@ -13,14 +13,14 @@ test('app.module.name is app.$id', async t => {
 });
 
 test(`app.bootstrap() throws without base tag`, async t => {
-	t.throws(app.bootstrap);
+	await t.throwsAsync(app.bootstrap);
 });
 
 test(`app.bootstrap() doesn't throw with base tag`, async t => {
 	const base = document.createElement('base');
 	base.href = '/';
 	(document.head as HTMLHeadElement).appendChild(base);
-	t.notThrows(app.bootstrap);
+	await t.notThrowsAsync(app.bootstrap);
 });
 
 test('app has default input components', async t => {
