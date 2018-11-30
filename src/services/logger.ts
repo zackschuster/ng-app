@@ -1,6 +1,6 @@
 import Noty from 'noty';
 import { Callback } from '@ledge/types';
-import { NgService } from './service';
+import { NgService } from './base';
 
 export enum LogTypeMap {
 	warning = 'warn',

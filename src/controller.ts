@@ -1,8 +1,8 @@
 // tslint:disable:max-classes-per-file
-import { NgLogger } from './logger';
-import { NgDataService } from './http';
-import { NgService } from './service';
-import { NgStateService } from './router';
+import { NgLogger } from './services/logger';
+import { NgDataService } from './services/http';
+import { NgService } from './services/base';
+import { NgStateService } from './services/router';
 import { NgConfig } from './app';
 
 export abstract class NgController extends NgService {

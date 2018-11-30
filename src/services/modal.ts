@@ -1,8 +1,8 @@
 // tslint:disable:max-classes-per-file
 import { element } from 'angular';
-import { NgController } from './controller';
+import { NgController } from '../controller';
 import { NgLogger } from './logger';
-import { NgService } from './service';
+import { NgService } from './base';
 
 export class NgModalService extends NgService {
 	constructor(

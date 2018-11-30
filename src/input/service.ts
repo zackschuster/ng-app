@@ -4,7 +4,7 @@ import { IAttributes, copy, equals } from 'angular';
 
 import { InputComponentOptions } from './options';
 import { NgComponentController } from '../controller';
-import { NgRenderer } from '../renderer';
+import { NgRenderer } from '../services/renderer';
 
 export class InputService {
 	public static readonly $validationAttrs = [
