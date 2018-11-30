@@ -83,10 +83,12 @@ export class InputService {
 	/**
 	 * @param $input - The input to set attributes on
 	 */
-	public static getInputInput($input: HTMLInputElement | HTMLTextAreaElement) {
-		return ['INPUT', 'TEXTAREA', 'SELECT'].includes($input.tagName)
-			? $input
-			: $input.querySelector('input') as HTMLInputElement;
+	public static getInputInput($input: HTMLElement) {
+		return (
+			['INPUT', 'TEXTAREA', 'SELECT'].includes($input.tagName)
+				? $input
+				: $input.querySelector('input')
+		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 	}
 
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
@@ -154,11 +156,10 @@ export class InputService {
 
 			let $template = h.createElement('div', [$component.templateClass]);
 
-			const $input: HTMLInputElement = $component.render.call(
-				{ $template, $attrs }, // allow consumer to access $template and $attrs attributes from `this`
-				h);
+			// allow consumer to access $template and $attrs attributes from `this`
+			const $input = $component.render.call({ $template, $attrs }, h);
 
-			const isRadio = $input.type === 'radio';
+			const isRadio = ($input as HTMLInputElement).type === 'radio';
 			const isRequired = $attrs.hasOwnProperty('required');
 			const isSrOnly = $attrs.hasOwnProperty('srOnly');
 

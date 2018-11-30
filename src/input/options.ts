@@ -53,7 +53,7 @@ export interface InputComponentOptions extends angular.IComponentOptions {
 			$attrs: angular.IAttributes;
 		},
 		h: NgRenderer,
-	): Element;
+	): HTMLElement;
 
 	/**
 	 * Special hook to override how label text is generated

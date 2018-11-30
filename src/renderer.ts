@@ -103,7 +103,7 @@ export class NgRenderer {
 			: this.createElement('ng-transclude') as HTMLDivElement;
 	}
 
-	public createIconInput($input: HTMLInputElement, icon?: string, inputGroupAttrs: [string, string][] = []) {
+	public createIconInput($input: HTMLElement, icon?: string, inputGroupAttrs: [string, string][] = []) {
 		if (icon == null) {
 			return $input;
 		}
