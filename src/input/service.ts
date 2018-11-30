@@ -1,12 +1,11 @@
-// tslint:disable:member-ordering max-classes-per-file
 import isIE11 from '@ledge/is-ie-11';
 import { IAttributes, copy, equals } from 'angular';
 
 import { InputComponentOptions } from './options';
 import { NgComponentController } from '../controller';
-import { NgRenderer } from '../services/renderer';
+import { NgRenderer, NgService } from '../services';
 
-export class InputService {
+export class InputService extends NgService {
 	public static readonly $validationAttrs = [
 		'required', 'ngRequired',
 		'disabled', 'ngDisabled',
