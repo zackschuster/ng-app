@@ -33,7 +33,6 @@ module.exports = (env = 'development') =>
 			new HtmlWebpackPlugin({
 				template: '!!pug-loader?!docs/src/index.pug',
 				title: '@ledge/ng-app docs',
-				baseUrl: '/',
 			}),
 			new NgAppDocsPlugin(),
 		],
