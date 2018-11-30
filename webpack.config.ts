@@ -1,12 +1,31 @@
+import { Compiler } from 'webpack';
+
 import fs = require('fs');
 import path = require('path');
 import HtmlWebpackPlugin = require('html-webpack-plugin');
 
 class NgAppDocsPlugin {
 	constructor(private isDev: boolean) {}
-	public apply(compiler: any) {
+	public apply(compiler: Compiler) {
 		if (this.isDev === false) {
-			compiler.hooks.emit.tap(this.constructor.name, () => {
+			compiler.hooks.emit.tap(this.constructor.name, cmp => {
+				const { source } = cmp.assets['index.html'];
+				const polyfillKey = Object.keys(cmp.assets).find(x => x.startsWith('polyfills'));
+
+				cmp.assets['index.html'].source = function indexSourceFn() {
+					return source().replace(
+						'<script type="text/javascript"',
+						`<script type="text/javascript">
+							if (!('fetch' in window && 'assign' in Object)) {
+								var scriptElement = document.createElement('script');
+								scriptElement.async = false;
+								scriptElement.src = '/${polyfillKey}';
+								document.head.appendChild(scriptElement);
+							}
+						</script><script type="text/javascript"`,
+					);
+				};
+
 				const files = fs.readdirSync(docs, { withFileTypes: true }).filter(x => x.isFile());
 				files.forEach(x => fs.unlinkSync(path.join(docs, x.name)));
 			});
@@ -24,6 +43,7 @@ module.exports = (env = 'development') =>
 		entry: {
 			app: ['app.ts', 'styles.scss']
 				.map(file => path.join(docs, 'src', file)),
+			polyfills: 'polyfills.ts',
 		},
 		output: {
 			path: docs,
@@ -36,6 +56,7 @@ module.exports = (env = 'development') =>
 			new HtmlWebpackPlugin({
 				template: '!!pug-loader?!docs/src/index.pug',
 				title: '@ledge/ng-app docs',
+				chunks: ['app'],
 			}),
 			new NgAppDocsPlugin(env === 'development'),
 		],
