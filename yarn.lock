@@ -325,10 +325,10 @@
   dependencies:
     arrify "^1.0.1"
 
-"@ledge/configs@11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-11.0.0.tgz#294cf35d6c8781c6fec0bd040b7526dad5708666"
-  integrity sha512-wiFClk5lIGglb4pHGOIa/iO3HrssxnUwJp1EgUtv7K+dRrhvO8BCRhS8xKWKU7a/udqrCkcItPyPdZJC743p1A==
+"@ledge/configs@12.1.0":
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/@ledge/configs/-/configs-12.1.0.tgz#c164e7121c925109189b3792b8d583a9f7e7acf9"
+  integrity sha512-k+nt5Gz51tHxLKT4fgUCJja/8k0dNGAo8rTbhbiw1YMT2M8szL5X66DnTpOZDa5DOzsn2clZnx5/yP7+CtWAyA==
 
 "@ledge/is-ie-11@1.0.0":
   version "1.0.0"

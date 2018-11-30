@@ -36,7 +36,7 @@
     "noty": "3.1.4"
   },
   "devDependencies": {
-    "@ledge/configs": "11.0.0",
+    "@ledge/configs": "12.1.0",
     "@types/angular-mocks": "1.7.0",
     "angular-mocks": "1.7.5",
     "ava": "1.0.0-rc.1",
