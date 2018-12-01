@@ -1,16 +1,11 @@
-import { IConfig, Indexed } from '@ledge/types';
+import { Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
 import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
 import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
 import { InputService, NgInputOptions } from './input';
-
-export interface NgConfig extends IConfig {
-	readonly IS_PROD: boolean;
-	readonly IS_DEV: boolean;
-	readonly IS_STAGING: boolean;
-}
+import { NgAppConfig } from './options';
 
 const REQUEST_TIMEOUT = 10000;
 
@@ -27,7 +22,7 @@ export class NgApp {
 	public get config() {
 		return this.$config != null
 			? copy(this.$config)
-			: Object.create(null);
+			: Object.create(null) as NgAppConfig;
 	}
 
 	public get components() {
@@ -72,7 +67,7 @@ export class NgApp {
 	protected readonly $bootstrap = bootstrap;
 
 	protected $router: NgRouter;
-	protected $config: NgConfig;
+	protected $config: NgAppConfig;
 
 	protected readonly $components: Map<string, angular.IComponentOptions> = new Map();
 	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
@@ -137,16 +132,18 @@ export class NgApp {
 		return this.$bootstrap(document.body, [this.$id], { strictDi });
 	}
 
-	public configure(ngConfig: Partial<NgConfig>) {
-		const env = process.env.NODE_ENV;
+	public configure(config: Partial<NgAppConfig>) {
+		const { NODE_ENV } = process.env;
 
 		this.$config = {
-			ENV: env,
-			IS_PROD: env === 'production',
-			IS_DEV: env === 'development',
-			IS_STAGING: env === 'staging',
-			...ngConfig,
-		} as NgConfig;
+			...config,
+			...{
+				ENV: NODE_ENV,
+				IS_PROD: NODE_ENV === 'production',
+				IS_DEV: NODE_ENV === 'development',
+				IS_STAGING: NODE_ENV === 'staging',
+			},
+		};
 
 		return this;
 	}
@@ -233,7 +230,7 @@ export class NgApp {
 		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
 			public $log = $logger();
 			public $http = http;
-			public $config = config as Required<NgConfig>;
+			public $config = config as Required<NgAppConfig>;
 			public $element: HTMLElement;
 
 			public isProduction = IS_PROD;

@@ -1,4 +1,11 @@
 import { NgController } from './controller';
+import { IConfig } from '@ledge/types';
+
+export interface NgAppConfig extends IConfig {
+	readonly IS_PROD: boolean;
+	readonly IS_DEV: boolean;
+	readonly IS_STAGING: boolean;
+}
 
 export interface NgComponentOptions extends angular.IComponentOptions {
 	/**
