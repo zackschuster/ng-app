@@ -6,6 +6,7 @@ export * from './_input';
 export * from './_logger';
 export * from './_modal';
 export * from './_renderer';
+export * from './_service';
 
 export const $scope = $injector.get('$rootScope').$new();
 export const $element = $injector.get('$compile')

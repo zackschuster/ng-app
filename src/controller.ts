@@ -2,8 +2,6 @@ import { NgConfig } from './app';
 import { NgDataService, NgLogger, NgService, NgStateService } from './services';
 
 export abstract class NgController {
-	[index: string]: any;
-
 	public readonly $scope: angular.IScope;
 	public readonly $attrs: angular.IAttributes;
 	public readonly $timeout: angular.ITimeoutService;

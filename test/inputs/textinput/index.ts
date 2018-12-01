@@ -70,8 +70,8 @@ test('textinput controller (number)', async t => {
 	t.true(numberCtrl.ngModelCtrl.$validators.maxVal(4, 4));
 
 	// manually set min and max for "proper" validation
-	numberCtrl.min = Number(numberCtrl.$attrs.min);
-	numberCtrl.max = Number(numberCtrl.$attrs.max);
+	(numberCtrl as any).min = Number(numberCtrl.$attrs.min);
+	(numberCtrl as any).max = Number(numberCtrl.$attrs.max);
 
 	t.false(numberCtrl.ngModelCtrl.$validators.minVal(0, 0));
 	t.true(numberCtrl.ngModelCtrl.$validators.minVal(1, 1));
