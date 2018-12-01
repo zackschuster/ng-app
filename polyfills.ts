@@ -13,7 +13,7 @@ import 'core-js/fn/string/includes';
 import 'core-js/fn/string/starts-with';
 
 // element-closest | CC0-1.0 | github.com/jonathantneal/closest
-Element.prototype.matches = function matches(selector) {
+Element.prototype.matches = function matches(selector: string) {
 	// tslint:disable-next-line: no-this-assignment
 	var element = this;
 	var elements = (element.ownerDocument as Document).querySelectorAll(selector);
