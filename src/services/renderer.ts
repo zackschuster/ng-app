@@ -68,13 +68,14 @@ export class NgRenderer {
 			`.trim());
 		}
 
-		const icon = octicons[iconName];
-		const span = this.createElement('div');
+		const container = this.createElement('div');
+		container.innerHTML = octicons[iconName].toSVG();
 
-		span.setAttribute('aria-hidden', 'true');
-		span.innerHTML = icon.toSVG();
+		container.setAttribute('aria-hidden', 'true');
+		container.style.setProperty('display', 'flex');
+		container.style.setProperty('align-items', 'center');
 
-		return span;
+		return container;
 	}
 
 	public createLabel(classList: string[], {
