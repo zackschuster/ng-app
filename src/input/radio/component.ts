@@ -28,32 +28,28 @@ export const radioList: InputComponentOptions = {
 	labelClass: 'form-check-label',
 	render(h) {
 		const radio = h.createInput('radio');
-		const value = this.$attrs.value || 'Value';
+		const { value = 'Value' } = this.$attrs;
 
 		radio.setAttribute('ng-value', `item.${value}`);
 		radio.setAttribute('ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}_{{$index}}');
-
-		radio.style.cursor = 'pointer';
+		radio.style.setProperty('cursor', 'pointer');
 
 		if (this.$attrs.hasOwnProperty('inline')) {
 			this.$template.classList.remove('form-check');
 			this.$template.classList.add('form-check-inline');
 		}
 
-		this.$template.setAttribute('ng-repeat', 'item in $ctrl.list');
+		this.$template.setAttribute('ng-repeat', 'item in $ctrl.list track by $index');
 
 		return radio;
 	},
 	renderLabel() {
-		const text = this.$attrs.text || 'Text';
-		const value = this.$attrs.value || 'Value';
-
+		const { text = 'Text' } = this.$attrs;
 		const labelText = document.createTextNode(`{{item.${text}}}`);
 
 		this.$label.setAttribute('ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}_{{$index}}');
-		this.$label.setAttribute('ng-click', `$ctrl.ngModel === item.${value}`);
 		this.$label.appendChild(labelText);
-		this.$label.style.cursor = 'pointer';
+		this.$label.style.setProperty('cursor', 'pointer');
 	},
 	bindings: {
 		list: '<',
