@@ -1,13 +1,13 @@
 import flatpickr from 'flatpickr';
 
-import { InputComponentOptions } from '../options';
-import { NgComponentController } from '../../controller';
+import { NgInputOptions } from '../options';
+import { NgInputController } from '../controller';
 
 function isNumber(n: any): n is number {
 	return Number.isInteger(n);
 }
 
-class DateInputController extends NgComponentController {
+class DateInputController extends NgInputController {
 	private readonly SUPPORTED_MODES = ['single', 'multiple', 'range'];
 	private minDate?: Date | number | string;
 	private maxDate?: Date | number | string;
@@ -88,7 +88,7 @@ class DateInputController extends NgComponentController {
 	}
 }
 
-export const dateInput: InputComponentOptions = {
+export const dateInput: NgInputOptions = {
 	type: 'input',
 	render(h) {
 		const input = h.createInput('text');

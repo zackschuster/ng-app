@@ -4,7 +4,7 @@ import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
 import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
-import { InputComponentOptions, InputService } from './input';
+import { InputService, NgInputOptions } from './input';
 
 export interface NgConfig extends IConfig {
 	readonly IS_PROD: boolean;
@@ -157,7 +157,7 @@ export class NgApp {
 	}
 
 	public addComponents(
-		components: Map<string, angular.IComponentOptions> | Indexed<angular.IComponentOptions>,
+		components: Map<string, angular.IComponentOptions | NgInputOptions> | Indexed<angular.IComponentOptions | NgInputOptions>,
 	) {
 		const entries = components instanceof Map
 			? components.entries()
@@ -182,9 +182,9 @@ export class NgApp {
 	}
 
 	public isInputComponent(component: angular.IComponentOptions & { type?: 'input' }):
-		component is InputComponentOptions {
-		return component.type === 'input';
-	}
+		component is NgInputOptions {
+			return component.type === 'input';
+		}
 
 	public addDependency(moduleName: string) {
 		this.$dependencies.push(moduleName);

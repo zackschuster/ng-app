@@ -1,13 +1,13 @@
 import { ExecutionContext } from 'ava';
 import { element } from 'angular';
 
-import { NgComponentController, makeNgCtrl } from '../..';
+import { NgController, makeNgCtrl } from '../..';
 import { $controller, $injector, $svc } from '../mocks';
 import { InputService } from '../../src/input/service';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
-export function mockCtrl<T = NgComponentController>(definition: angular.IComponentOptions, $attrs: Partial<angular.IAttributes> = { }) {
+export function mockCtrl<T = NgController>(definition: angular.IComponentOptions, $attrs: Partial<angular.IAttributes> = { }) {
 	const $scope = $injector.get('$rootScope').$new();
 
 	Object.assign($attrs, {

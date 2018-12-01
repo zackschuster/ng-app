@@ -2,7 +2,7 @@
 import test from 'ava';
 import { dateInput } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
-import { NgComponentController } from '../../mocks';
+import { NgInputController } from '../../mocks';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(dateInput, document);
@@ -33,7 +33,7 @@ test('date require', async t => {
 });
 
 test('date controller', async t => {
-	t.true(controller instanceof NgComponentController);
+	t.true(controller instanceof NgInputController);
 });
 
 test('date controllerAs', async t => {

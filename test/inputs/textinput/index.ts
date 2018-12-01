@@ -2,7 +2,7 @@
 import test from 'ava';
 import { htmlInput, textInput } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
-import { NgComponentController } from '../../mocks';
+import { NgInputController } from '../../mocks';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(textInput, document);
@@ -41,12 +41,12 @@ test('textinput require', async t => {
 });
 
 test('textinput controller', async t => {
-	t.true(controller instanceof NgComponentController);
+	t.true(controller instanceof NgInputController);
 });
 
 test('textinput controller (number)', async t => {
 	const { controller: numberCtrl } = util.mockCtrl(definition, { min: 1, max: 3, type: 'number' });
-	t.true(numberCtrl instanceof NgComponentController);
+	t.true(numberCtrl instanceof NgInputController);
 	t.is(numberCtrl.$attrs.type, 'number');
 
 	numberCtrl.ngModelCtrl = { $validators: { } } as any;

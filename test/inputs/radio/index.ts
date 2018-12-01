@@ -2,7 +2,7 @@
 import test from 'ava';
 import { radioList } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
-import { NgComponentController } from '../../mocks';
+import { NgInputController } from '../../mocks';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(radioList, document);
@@ -35,7 +35,7 @@ test('radio require', async t => {
 });
 
 test('radio controller', async t => {
-	t.true(controller instanceof NgComponentController);
+	t.true(controller instanceof NgInputController);
 });
 
 test('radio controllerAs', async t => {

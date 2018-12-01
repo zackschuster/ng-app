@@ -1,7 +1,7 @@
-import { InputComponentOptions } from '../options';
-import { NgComponentController } from '../../controller';
+import { NgInputOptions } from '../options';
+import { NgInputController } from '../controller';
 
-class RadioListController extends NgComponentController {
+class RadioListController extends NgInputController {
 	public $postLink() {
 		setTimeout(() => {
 			if (this.$attrs.hasOwnProperty('required')) {
@@ -22,7 +22,7 @@ class RadioListController extends NgComponentController {
 	}
 }
 
-export const radioList: InputComponentOptions = {
+export const radioList: NgInputOptions = {
 	type: 'input',
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',

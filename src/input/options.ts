@@ -1,18 +1,13 @@
 // tslint:disable: no-redundant-jsdoc
 import { Indexed } from '@ledge/types';
-import { NgComponentController } from '../controller';
 import { NgRenderer } from '../services/renderer';
+import { NgComponentOptions } from '../options';
 
-export interface InputComponentOptions extends angular.IComponentOptions {
+export interface NgInputOptions extends NgComponentOptions {
 	/**
 	 * Set this so the app knows how to register your definition
 	 */
 	type: 'input';
-
-	/**
-	 * Use this instead of controller, as ng-app will disregard the controller prop for type safety reasons.
-	 */
-	ctrl?: new (...args: any[]) => NgComponentController;
 
 	/**
 	 * Allow input group icons to be defined by users on the input

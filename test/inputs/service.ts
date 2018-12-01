@@ -3,7 +3,7 @@ import test from 'ava';
 import { copy, isFunction } from 'angular';
 import { makeAttrs } from '../mocks';
 import { InputService } from '../../src/input/service';
-import { NgComponentController } from '../../src/controller';
+import { NgInputController } from '../../src/input/controller';
 
 test('InputService.$validationAttrs', async t => {
 	t.deepEqual(InputService.$validationAttrs, [
@@ -47,7 +47,7 @@ test('InputService.$baseComponent', async t => {
 	t.true($baseComponent.postRender instanceof Function);
 	t.true($baseComponent.render instanceof Function);
 	// tslint:disable-next-line: no-non-null-assertion
-	t.true(new $baseComponent.ctrl!() instanceof NgComponentController);
+	t.true(new $baseComponent.ctrl!() instanceof NgInputController);
 	Reflect.deleteProperty($baseComponent, 'renderLabel');
 	Reflect.deleteProperty($baseComponent, 'postRender');
 	Reflect.deleteProperty($baseComponent, 'render');
