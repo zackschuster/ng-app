@@ -1,7 +1,7 @@
 import { isIE11 } from '@ledge/is-ie-11';
 import { isMobile } from '@ledge/is-mobile';
 
-export class NgService {
+export abstract class NgService {
 	public static IsMobile() {
 		return isMobile();
 	}
