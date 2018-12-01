@@ -1,7 +1,7 @@
-import { NgComponentController } from '../../../controller';
-import { InputComponentOptions } from '../../options';
+import { NgInputOptions } from '../../options';
+import { NgInputController } from '../../controller';
 
-class TextBoxController extends NgComponentController {
+class TextBoxController extends NgInputController {
 	public $element: HTMLTextAreaElement;
 	public $mirror = document.createElement('textarea');
 
@@ -117,7 +117,7 @@ class TextBoxController extends NgComponentController {
 	}
 }
 
-export const textBox: InputComponentOptions = {
+export const textBox: NgInputOptions = {
 	type: 'input',
 	attrs: { maxlength: 3000, placeholder: '' },
 	render(h) {

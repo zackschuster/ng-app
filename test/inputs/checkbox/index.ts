@@ -1,7 +1,7 @@
 import test from 'ava';
 import { checkBox } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
-import { NgComponentController } from '../../mocks';
+import { NgInputController } from '../../mocks';
 import * as util from '../_util';
 
 const definedCheckBox = InputService.defineInputComponent(checkBox, document);
@@ -26,7 +26,7 @@ test('checkbox require', async t => {
 });
 
 test('checkbox controller', async t => {
-	t.true(util.mockCtrl(definedCheckBox.controller) instanceof NgComponentController);
+	t.true(util.mockCtrl(definedCheckBox.controller) instanceof NgInputController);
 });
 
 test('checkbox controllerAs', async t => {

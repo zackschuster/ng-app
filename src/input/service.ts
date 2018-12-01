@@ -1,8 +1,8 @@
 import isIE11 from '@ledge/is-ie-11';
 import { IAttributes, copy, equals } from 'angular';
 
-import { InputComponentOptions } from './options';
-import { NgComponentController } from '../controller';
+import { NgInputController } from './controller';
+import { NgInputOptions } from './options';
 import { NgRenderer, NgService } from '../services';
 
 export class InputService extends NgService {
@@ -40,16 +40,16 @@ export class InputService extends NgService {
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: {},
-		ctrl: NgComponentController,
+		ctrl: NgInputController,
 		renderLabel: function defaultRenderLabel(h) {
 			const $transclude = h.createSlot();
 			$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
 			this.$label.appendChild($transclude);
-		} as InputComponentOptions['renderLabel'],
+		} as NgInputOptions['renderLabel'],
 		// tslint:disable-next-line:variable-name
 		postRender: function defaultPostRender(_h) {
 			return this.$template;
-		} as InputComponentOptions['postRender'],
+		} as NgInputOptions['postRender'],
 	};
 
 	public static readonly $validationExps = {
@@ -130,7 +130,7 @@ export class InputService extends NgService {
 	 * Transform an input component definition into an ng component definition
 	 * @param component An object representing the requested component definition
 	 */
-	public static defineInputComponent(component: InputComponentOptions, doc = document) {
+	public static defineInputComponent(component: NgInputOptions, doc = document) {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer(doc);
 
@@ -182,7 +182,7 @@ export class InputService extends NgService {
 				$label.removeChild(requiredTag);
 			}
 
-			($component.renderLabel as NonNullable<InputComponentOptions['renderLabel']>)
+			($component.renderLabel as NonNullable<NgInputOptions['renderLabel']>)
 				.call({ $label, $attrs }, h);
 
 			if (requiredTag != null) {
@@ -196,7 +196,7 @@ export class InputService extends NgService {
 				$template.appendChild($label);
 			}
 
-			($component.postRender as NonNullable<InputComponentOptions['postRender']>)
+			($component.postRender as NonNullable<NgInputOptions['postRender']>)
 				.call({ $template, $attrs }, h);
 
 			// that's right, i named it after filterFilter. fight me.

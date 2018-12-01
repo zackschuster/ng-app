@@ -1,5 +1,5 @@
 import { NgConfig } from './app';
-import { NgDataService, NgLogger, NgService, NgStateService } from './services';
+import { NgDataService, NgLogger, NgStateService } from './services';
 
 export abstract class NgController {
 	public readonly $scope: angular.IScope;
@@ -68,10 +68,4 @@ export abstract class NgController {
 	 * different in Angular 1 there is no direct mapping and care should be taken when upgrading.
 	 */
 	public $postLink?(): void;
-}
-
-export abstract class NgComponentController extends NgController {
-	public ngModel: any;
-	public ngModelCtrl: angular.INgModelController;
-	public uniqueId = NgService.UUIDv4().replace(/[-]|[,]/g, '');
 }

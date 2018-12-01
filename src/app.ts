@@ -4,7 +4,7 @@ import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
 import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
-import { InputComponentOptions, InputService } from './input';
+import { InputService, NgInputOptions } from './input';
 
 export interface NgConfig extends IConfig {
 	readonly IS_PROD: boolean;
@@ -180,7 +180,7 @@ export class NgApp {
 	}
 
 	public isInputComponent(component: angular.IComponentOptions & { type?: 'input' }):
-		component is InputComponentOptions {
+		component is NgInputOptions {
 			return component.type === 'input';
 		}
 

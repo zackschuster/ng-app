@@ -1,7 +1,7 @@
 import test from 'ava';
 import { selectList } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
-import { NgComponentController } from '../../mocks';
+import { NgInputController } from '../../mocks';
 import * as util from '../_util';
 
 const definedSelectList = InputService.defineInputComponent(selectList, document);
@@ -26,7 +26,7 @@ test('select require', async t => {
 });
 
 test('select controller', async t => {
-	t.true(util.mockCtrl(definedSelectList.controller) instanceof NgComponentController);
+	t.true(util.mockCtrl(definedSelectList.controller) instanceof NgInputController);
 });
 
 test('select controllerAs', async t => {

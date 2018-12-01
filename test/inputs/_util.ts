@@ -5,13 +5,13 @@ import { ExecutionContext } from 'ava';
 // @ts-ignore
 import pretty = require('pretty');
 
-import { NgComponentController, makeNgCtrl } from '../..';
+import { NgController, makeNgCtrl } from '../..';
 import { $controller, $element, $invokeTemplate, $scope, $svc } from '../mocks';
 import { InputService } from '../../src/input/service';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
-export function mockCtrl<T = NgComponentController>(
+export function mockCtrl<T = NgController>(
 	ctrl: any,
 	$attrs: Partial<angular.IAttributes> = {},
 ) {

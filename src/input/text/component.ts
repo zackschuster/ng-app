@@ -1,8 +1,8 @@
 import { Indexed } from '@ledge/types';
-import { InputComponentOptions } from '../options';
-import { NgComponentController } from '../../controller';
+import { NgInputOptions } from '../options';
+import { NgInputController } from '../controller';
 
-class TextInputController extends NgComponentController {
+class TextInputController extends NgInputController {
 	private min: number | undefined;
 	private max: number | undefined;
 
@@ -31,7 +31,7 @@ const validators: Indexed<string> = {
 	maxVal: 'Must be less than or equal to {{$ctrl.max}}',
 };
 
-export const textInput: InputComponentOptions = {
+export const textInput: NgInputOptions = {
 	type: 'input',
 	canHaveIcon: true,
 	attrs: { maxlength: 3000, placeholder: '' },

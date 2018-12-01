@@ -1,6 +1,6 @@
-import { InputComponentOptions } from '../options';
+import { NgInputOptions } from '../options';
 
-export const checkBox: InputComponentOptions = {
+export const checkBox: NgInputOptions = {
 	type: 'input',
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',

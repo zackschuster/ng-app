@@ -2,7 +2,7 @@ import test from 'ava';
 import { copy, isFunction } from 'angular';
 import { makeAttrs } from '../mocks';
 import { InputService } from '../../src/input/service';
-import { NgComponentController } from '../../src/controller';
+import { NgInputController } from '../mocks';
 
 test('InputService.$validationAttrs', async t => {
 	t.deepEqual(InputService.$validationAttrs, [
@@ -49,7 +49,7 @@ test('InputService.$baseComponent', async t => {
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: {},
-		ctrl: NgComponentController,
+		ctrl: NgInputController,
 	});
 
 	t.true(isFunction(InputService.$baseComponent.renderLabel));

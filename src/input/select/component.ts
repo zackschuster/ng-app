@@ -1,11 +1,11 @@
 import Choices from 'choices.js';
 import { IAttributes } from 'angular';
 import { Callback } from '@ledge/types';
-import { InputComponentOptions } from '../options';
-import { NgComponentController } from '../../controller';
+import { NgInputOptions } from '../options';
 import { NgService } from '../../services';
+import { NgInputController } from '../controller';
 
-class SelectController extends NgComponentController {
+class SelectController extends NgInputController {
 	public static readonly SinglePlaceholder = '----Select One----';
 	public static readonly MultiplePlaceholder = '----Select All That Apply----';
 
@@ -158,7 +158,7 @@ class SelectController extends NgComponentController {
 	}
 }
 
-export const selectList: InputComponentOptions = {
+export const selectList: NgInputOptions = {
 	type: 'input',
 	render(h) {
 		const select = h.createElement('select', ['form-control']);

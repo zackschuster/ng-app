@@ -1,7 +1,7 @@
 import test from 'ava';
 import { radioList } from '../../../src/input/components';
 import { InputService } from '../../../src/input/service';
-import { NgComponentController } from '../../mocks';
+import { NgInputController } from '../../mocks';
 import * as util from '../_util';
 
 const definedRadioList = InputService.defineInputComponent(radioList, document);
@@ -28,7 +28,7 @@ test('radio require', async t => {
 });
 
 test('radio controller', async t => {
-	t.true(util.mockCtrl(definedRadioList.controller) instanceof NgComponentController);
+	t.true(util.mockCtrl(definedRadioList.controller) instanceof NgInputController);
 });
 
 test('radio controllerAs', async t => {
