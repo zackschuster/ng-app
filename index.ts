@@ -4,8 +4,6 @@ import { HttpStatusCode } from '@ledge/types/http';
 import { NgApp } from './src/app';
 import { inputs } from './src/input';
 
-import './polyfills';
-
 import 'angular-animate';
 import 'angular-messages';
 import 'angular-ui-bootstrap';
