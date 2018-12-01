@@ -99,8 +99,8 @@ const log = app.log; // using Noty.js + $log service
 
 ## Built-in, zero-config components
 
-- Built for Bootstrap 4+
-- Supports disabled, required and readonly tags, as well as their `ng-`equivalents
+- Compatible with Bootstrap 4
+- Supports `disabled`, `required` and `readonly` attributes, as well as their `ng-`equivalents
 - Generates well-formed & accessible HTML structures with labels, ids, names, etc.
 
 ```html
