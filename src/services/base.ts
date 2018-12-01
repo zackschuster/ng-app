@@ -6,6 +6,10 @@ export abstract class NgService {
 		return isMobile();
 	}
 
+	public static IsIE11() {
+		return isIE11();
+	}
+
 	/**
 	 * @see https://stackoverflow.com/a/2117523
 	 */
@@ -24,7 +28,7 @@ export abstract class NgService {
 	}
 
 	protected get isIE11() {
-		return isIE11();
+		return NgService.IsIE11();
 	}
 
 	/**
