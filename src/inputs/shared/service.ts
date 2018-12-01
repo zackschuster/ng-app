@@ -196,6 +196,7 @@ export class InputService extends NgService {
 			$template.appendChild(h.createSlot('contain'));
 
 			if ($component.isRadioOrCheckbox === true) {
+				$label.style.setProperty('cursor', 'pointer');
 				$template.appendChild($label);
 			}
 

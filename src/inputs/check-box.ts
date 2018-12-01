@@ -6,6 +6,7 @@ export const checkBox: NgInputOptions = {
 	labelClass: 'form-check-label',
 	render(h) {
 		const input = h.createInput('checkbox');
+		input.style.setProperty('cursor', 'pointer');
 
 		if (this.$attrs.hasOwnProperty('inline')) {
 			this.$template.classList.remove('form-check');
