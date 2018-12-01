@@ -17,7 +17,7 @@ export class NgModalService extends NgService {
 		appendTo = document.body,
 		template = '<h1>Set the <code>template</code> property to replace me :)</h1>',
 		size = 'lg',
-		controller = class extends NgController { },
+		controller = NgController,
 		controllerAs = '$ctrl',
 		onClose = () => {
 			return true;

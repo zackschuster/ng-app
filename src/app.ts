@@ -6,6 +6,7 @@ import { autobind } from 'core-decorators';
 import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
 import { InputService, NgInputOptions } from './input';
 import { NgAppConfig, NgComponentOptions } from './options';
+import { NgController } from './controller';
 
 const REQUEST_TIMEOUT = 10000;
 
@@ -221,15 +222,15 @@ export class NgApp {
 		return this;
 	}
 
-	public _makeNgComponentController($controller: angular.IControllerConstructor) {
-		const { config, http, $logger, getApiPrefix } = this;
+	public _makeNgComponentController($controller: new (...args: any[]) => NgController) {
+		const { config, http, log, getApiPrefix } = this;
 		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
 
 		// force `this` to always refer to the class instance, no matter what
 		autobind($controller);
 
-		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
-			public $log = $logger();
+		class InternalController extends $controller {
+			public $log = log;
 			public $http = http;
 			public $config = config as Required<NgAppConfig>;
 			public $element: HTMLElement;
@@ -238,7 +239,7 @@ export class NgApp {
 			public isDevelopment = IS_DEV;
 			public isStaging = IS_STAGING;
 
-			protected apiPrefix: string;
+			public apiPrefix: string;
 
 			constructor(
 				$element: JQLite,

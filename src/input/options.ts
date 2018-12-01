@@ -2,6 +2,7 @@
 import { Indexed } from '@ledge/types';
 import { NgRenderer } from '../services/renderer';
 import { NgComponentOptions } from '../options';
+import { NgInputController } from './controller';
 
 export interface NgInputOptions extends NgComponentOptions {
 	/**
@@ -35,6 +36,8 @@ export interface NgInputOptions extends NgComponentOptions {
 	 * Custom validator messages
 	 */
 	validators?: Indexed<string>;
+
+	ctrl?: new () => NgInputController;
 
 	/**
 	 * Run after container & label creation, before label manipulation

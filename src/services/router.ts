@@ -3,7 +3,7 @@ import { ParamType, ResolveTypes, StateDeclaration, StateService, TargetState, T
 
 import { NgService } from './base';
 
-export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
+export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 	public routes: T[] = [];
 
 	public getRoutes() {

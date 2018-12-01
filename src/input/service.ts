@@ -6,7 +6,6 @@ import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
 import { NgRenderer, NgService } from '../services';
 import { NgComponentOptions } from '../options';
-import { NgController } from '../controller';
 
 const BaseComponent = Object.seal({
 	isRadioOrCheckbox: false,
@@ -99,10 +98,8 @@ export class InputService extends NgService {
 		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 	}
 
-	public static wrapComponentCtrl($ctrl: new(...args: any[]) => NgController) {
+	public static wrapComponentCtrl($ctrl: new(...args: any[]) => NgInputController) {
 		return class extends $ctrl {
-			private ngModel: unknown;
-			private ngModelCtrl: angular.INgModelController;
 			constructor() {
 				super();
 				setTimeout(() => {
