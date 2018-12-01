@@ -2,3 +2,9 @@
 @import '~choices.js/src/styles/choices.scss';
 @import '~flatpickr/dist/themes/dark.css';
 @import '~noty/src/noty.scss';
+
+.octicon {
+  display: inline-block;
+  vertical-align: text-top;
+  fill: currentColor;
+}
