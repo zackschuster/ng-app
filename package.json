@@ -25,7 +25,6 @@
     "@ledge/is-ie-11": "1.0.0",
     "@ledge/types": "4.1.0",
     "@types/angular-animate": "1.5.10",
-    "@types/angular-ui-bootstrap": "0.13.47",
     "@uirouter/angularjs": "1.0.19",
     "angular": "1.7.5",
     "angular-animate": "1.7.5",
