@@ -4,7 +4,7 @@ import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
 import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
-import { InputService, NgInputOptions } from './input';
+import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
 
 @autobind

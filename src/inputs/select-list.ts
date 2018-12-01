@@ -1,19 +1,17 @@
 import Choices from 'choices.js';
-import { IAttributes } from 'angular';
-import { Callback } from '@ledge/types';
-import { NgInputOptions } from '../options';
-import { NgService } from '../../services';
-import { NgInputController } from '../controller';
+
+import { NgService } from '../services';
+import { NgInputController, NgInputOptions } from './shared';
 
 class SelectController extends NgInputController {
 	public static readonly SinglePlaceholder = '----Select One----';
 	public static readonly MultiplePlaceholder = '----Select All That Apply----';
 
-	public static IsMultiple($attrs: IAttributes) {
+	public static IsMultiple($attrs: angular.IAttributes) {
 		return $attrs.hasOwnProperty('multiple') || $attrs.type === 'multiple';
 	}
 
-	public static GetPlaceholder($attrs: IAttributes) {
+	public static GetPlaceholder($attrs: angular.IAttributes) {
 		return $attrs.placeholder ||
 			this.IsMultiple($attrs)
 				? this.MultiplePlaceholder
@@ -44,7 +42,7 @@ class SelectController extends NgInputController {
 		return this._value;
 	}
 
-	private destroyCurrentWatcher: Callback;
+	private destroyCurrentWatcher: () => void;
 
 	private get isMultiple() {
 		return SelectController.IsMultiple(this.$attrs);

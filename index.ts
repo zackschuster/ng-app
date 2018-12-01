@@ -1,7 +1,7 @@
 import { StateProvider } from '@uirouter/angularjs';
 
 import { NgApp } from './src/app';
-import { inputs } from './src/input';
+import { inputs } from './src/inputs';
 import { misc } from './src/misc';
 
 import 'angular-animate';
@@ -73,6 +73,6 @@ export function makeNgCtrl(controller: new () => any) {
 
 export * from './src/app';
 export * from './src/controller';
-export * from './src/input';
+export * from './src/inputs';
 export * from './src/misc';
 export * from './src/services';

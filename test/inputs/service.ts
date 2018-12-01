@@ -1,7 +1,7 @@
 import test from 'ava';
 import { copy, isFunction } from 'angular';
 import { makeAttrs } from '../mocks';
-import { InputService } from '../../src/input/service';
+import { InputService } from '../../src/inputs';
 import { NgInputController } from '../mocks';
 
 test('InputService.$validationAttrs', async t => {

@@ -1,6 +1,6 @@
 import test from 'ava';
-import { dateInput } from '../../../src/input/components';
-import { InputService } from '../../../src/input/service';
+import { dateInput } from '../../../src/inputs/date-input';
+import { InputService } from '../../../src/inputs';
 import { NgInputController } from '../../mocks';
 import * as util from '../_util';
 

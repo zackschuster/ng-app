@@ -1,6 +1,6 @@
 import test from 'ava';
-import { textBox } from '../../../src/input/components';
-import { InputService } from '../../../src/input/service';
+import { textBox } from '../../../src/inputs/text-box';
+import { InputService } from '../../../src/inputs';
 import { NgInputController } from '../../mocks';
 import * as util from '../_util';
 

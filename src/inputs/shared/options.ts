@@ -1,6 +1,6 @@
 import { Indexed } from '@ledge/types';
-import { NgRenderer } from '../services/renderer';
-import { NgComponentOptions } from '../options';
+import { NgRenderer } from '../../services/renderer';
+import { NgComponentOptions } from '../../options';
 
 export interface NgInputOptions extends NgComponentOptions {
 	/**

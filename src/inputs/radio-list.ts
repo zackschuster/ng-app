@@ -1,5 +1,4 @@
-import { NgInputOptions } from '../options';
-import { NgInputController } from '../controller';
+import { NgInputController, NgInputOptions } from './shared';
 
 class RadioListController extends NgInputController {
 	public $postLink() {

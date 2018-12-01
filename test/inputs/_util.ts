@@ -7,7 +7,7 @@ import pretty = require('pretty');
 
 import { NgController, makeNgCtrl } from '../..';
 import { $controller, $element, $invokeTemplate, $scope, $svc } from '../mocks';
-import { InputService } from '../../src/input/service';
+import { InputService } from '../../src/inputs';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 

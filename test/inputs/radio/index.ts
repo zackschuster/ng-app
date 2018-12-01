@@ -1,6 +1,6 @@
 import test from 'ava';
-import { radioList } from '../../../src/input/components';
-import { InputService } from '../../../src/input/service';
+import { radioList } from '../../../src/inputs/radio-list';
+import { InputService } from '../../../src/inputs';
 import { NgInputController } from '../../mocks';
 import * as util from '../_util';
 

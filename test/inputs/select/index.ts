@@ -1,6 +1,6 @@
 import test from 'ava';
-import { selectList } from '../../../src/input/components';
-import { InputService } from '../../../src/input/service';
+import { selectList } from '../../../src/inputs/select-list';
+import { InputService } from '../../../src/inputs';
 import { NgInputController } from '../../mocks';
 import * as util from '../_util';
 
