@@ -350,13 +350,6 @@
   dependencies:
     "@types/angular" "*"
 
-"@types/angular-ui-bootstrap@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-1.0.0.tgz#57b2aebacf528f82826c7af7ff328c6da49d1b63"
-  integrity sha512-uqFykayfJIIFmXRrHoa6fPghUZvN+09JoOlHZzgPtm2bp/bVkQtVfef7/H3m//TUWTGCTZlijWtIhavaQNKRsg==
-  dependencies:
-    "@types/angular" "*"
-
 "@types/angular@*":
   version "1.6.56"
   resolved "https://registry.npmjs.org/@types/angular/-/angular-1.6.56.tgz#20124077bd44061e018c7283c0bb83f4b00322dd"
