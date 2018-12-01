@@ -5,6 +5,8 @@ import 'core-js/es6/set';
 import 'core-js/es6/promise';
 import 'core-js/fn/array/from';
 import 'core-js/fn/array/includes';
+import 'core-js/fn/number/is-integer';
+import 'core-js/fn/number/is-nan';
 import 'core-js/fn/object/assign';
 import 'core-js/fn/object/entries';
 import 'core-js/fn/string/includes';
