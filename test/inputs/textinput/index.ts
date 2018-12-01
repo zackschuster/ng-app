@@ -41,15 +41,15 @@ test('textinput require', async t => {
 });
 
 test('textinput controller', async t => {
-	const textCtrl = util.mockCtrl(definedTextInput.controller);
+	const textCtrl = util.mockCtrl(definedTextInput.ctrl);
 	t.true(textCtrl instanceof NgInputController);
 
-	const htmlCtrl = util.mockCtrl(definedHtmlInput.controller);
+	const htmlCtrl = util.mockCtrl(definedHtmlInput.ctrl);
 	t.true(htmlCtrl instanceof NgInputController);
 });
 
 test('textinput controller (number)', async t => {
-	const numberCtrl = util.mockCtrl<NgInputController>(definedTextInput.controller, { min: 1, max: 3, type: 'number' });
+	const numberCtrl = util.mockCtrl<NgInputController>(definedTextInput.ctrl, { min: 1, max: 3, type: 'number' });
 	t.true(numberCtrl instanceof NgInputController);
 	t.is(numberCtrl.$attrs.type, 'number');
 

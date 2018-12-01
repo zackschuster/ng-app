@@ -4,6 +4,8 @@ import { IAttributes, copy, equals } from 'angular';
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
 import { NgRenderer, NgService } from '../services';
+import { NgComponentOptions } from '../options';
+import { NgController } from '../controller';
 
 export class InputService extends NgService {
 	public static readonly $validationAttrs = [
@@ -19,7 +21,7 @@ export class InputService extends NgService {
 		['maxlength', 'Input is too long'],
 	]);
 
-	public static readonly $baseDefinition: angular.IComponentOptions = {
+	public static readonly $baseDefinition: NgComponentOptions = {
 		transclude: {
 			contain: '?contain',
 		},
@@ -36,11 +38,13 @@ export class InputService extends NgService {
 	};
 
 	public static readonly $baseComponent = {
-		isRadioOrCheckbox: false,
+		get isRadioOrCheckbox() {
+			return this.labelClass === 'form-check-label';
+		},
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: {},
-		ctrl: NgInputController,
+		ctrl: class extends NgInputController {},
 		renderLabel: function defaultRenderLabel(h) {
 			const $transclude = h.createSlot();
 			$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
@@ -90,8 +94,9 @@ export class InputService extends NgService {
 		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 	}
 
-	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
+	public static wrapComponentCtrl($ctrl: new(...args: any[]) => NgController) {
 		return class extends $ctrl {
+			private ngModel: unknown;
 			private ngModelCtrl: angular.INgModelController;
 			constructor() {
 				super();
@@ -99,7 +104,7 @@ export class InputService extends NgService {
 					const $contain = this.$element.querySelector('[ng-transclude="contain"]');
 					if ($contain != null && $contain.children.length === 0) {
 						if (isIE11()) {
-							$contain.removeNode(true);
+							($contain as any).removeNode(true);
 						} else {
 							$contain.remove();
 						}
@@ -135,8 +140,6 @@ export class InputService extends NgService {
 		const h = new NgRenderer(doc);
 
 		const $component = copy(Object.assign({}, this.$baseComponent, component));
-		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
-
 		const $definition = copy(this.$baseDefinition);
 
 		// assign child objects
@@ -144,7 +147,7 @@ export class InputService extends NgService {
 		Object.assign($definition.transclude, $component.transclude);
 
 		// assign controller
-		$definition.controller = this.wrapComponentCtrl($component.ctrl);
+		$definition.ctrl = this.wrapComponentCtrl($component.ctrl);
 
 		// assign template
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {

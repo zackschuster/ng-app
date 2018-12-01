@@ -5,7 +5,7 @@ import { autobind } from 'core-decorators';
 
 import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
 import { InputService, NgInputOptions } from './input';
-import { NgAppConfig } from './options';
+import { NgAppConfig, NgComponentOptions } from './options';
 
 @autobind
 export class NgApp {
@@ -151,7 +151,7 @@ export class NgApp {
 	}
 
 	public addComponents(
-		components: Map<string, angular.IComponentOptions> | Indexed<angular.IComponentOptions>,
+		components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>,
 	) {
 		const entries = components instanceof Map
 			? components.entries()
@@ -159,13 +159,13 @@ export class NgApp {
 
 		for (let [name, component] of entries) {
 			if (this.isInputComponent(component)) {
-				component = InputService.defineInputComponent(component);
+				component = InputService.defineInputComponent(component) as NgComponentOptions;
 			}
 
-			if (typeof component.controller === 'string') {
-				throw new Error('String controller references not supported');
-			} else if (typeof component.controller === 'function') {
-				component.controller = this.makeComponentController(component.controller);
+			if (typeof component.controller !== 'undefined') {
+				throw new Error(`[${name} component] 'controller' property not supported. Use the 'ctrl' property instead.`);
+			} else if (typeof component.ctrl === 'function') {
+				(component as angular.IComponentOptions).controller = this.makeComponentController(component.ctrl);
 			}
 
 			this.$components.set(name, component);

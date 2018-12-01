@@ -25,7 +25,7 @@ test('textbox require', async t => {
 });
 
 test('textbox controller', async t => {
-	t.true(util.mockCtrl(definedTextBox.controller) instanceof NgInputController);
+	t.true(util.mockCtrl(definedTextBox.ctrl) instanceof NgInputController);
 });
 
 test('textbox controllerAs', async t => {

@@ -27,7 +27,7 @@ test('date require', async t => {
 });
 
 test('date controller', async t => {
-	t.true(util.mockCtrl(definedDateInput.controller) instanceof NgInputController);
+	t.true(util.mockCtrl(definedDateInput.ctrl) instanceof NgInputController);
 });
 
 test('date controllerAs', async t => {

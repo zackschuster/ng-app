@@ -28,7 +28,7 @@ test('radio require', async t => {
 });
 
 test('radio controller', async t => {
-	t.true(util.mockCtrl(definedRadioList.controller) instanceof NgInputController);
+	t.true(util.mockCtrl(definedRadioList.ctrl) instanceof NgInputController);
 });
 
 test('radio controllerAs', async t => {
