@@ -1,3 +1,4 @@
+import { Indexed } from '@ledge/types';
 import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
 
@@ -25,8 +26,10 @@ class TextInputController extends NgComponentController {
 	}
 }
 
-const validators = new Map<string, string>([
-]);
+const validators: Indexed<string> = {
+	minVal: 'Must be greater than or equal to {{$ctrl.min}}',
+	maxVal: 'Must be less than or equal to {{$ctrl.max}}',
+};
 
 export const textInput: InputComponentOptions = {
 	type: 'input',
@@ -45,7 +48,7 @@ export const textInput: InputComponentOptions = {
 
 		if (minlength != null) {
 			input.setAttribute('pattern', `.{${minlength},}`);
-			validators.set('pattern', `Input must be at least ${minlength} characters`);
+			validators.pattern = `Input must be at least ${minlength} characters`;
 		}
 
 		return input;
@@ -63,10 +66,7 @@ export const textInput: InputComponentOptions = {
 		max: '<',
 		step: '<',
 	},
-	validators: {
-		minVal: 'Must be greater than or equal to {{$ctrl.min}}',
-		maxVal: 'Must be less than or equal to {{$ctrl.max}}',
-	},
+	validators,
 	ctrl: TextInputController,
 };
 
