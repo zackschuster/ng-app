@@ -1,5 +1,5 @@
-import { NgInputOptions } from '../../options';
-import { NgInputController } from '../../controller';
+import { NgInputOptions } from './shared/options';
+import { NgInputController } from './shared/controller';
 
 const DEFAULT_MAX_HEIGHT = 9e4;
 

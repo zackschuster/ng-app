@@ -1,7 +1,7 @@
 // tslint:disable: no-redundant-jsdoc
 import { Indexed } from '@ledge/types';
-import { NgRenderer } from '../services/renderer';
-import { NgComponentOptions } from '../options';
+import { NgRenderer } from '../../services/renderer';
+import { NgComponentOptions } from '../../options';
 import { NgInputController } from './controller';
 
 export interface NgInputOptions extends NgComponentOptions {

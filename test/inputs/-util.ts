@@ -3,7 +3,7 @@ import { element } from 'angular';
 
 import { NgController, makeNgCtrl } from '../..';
 import { $controller, $injector, $svc } from '../mocks';
-import { InputService } from '../../src/input/service';
+import { InputService } from '../../src/inputs';
 import { NgComponentOptions } from '../../src/options';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;

@@ -1,21 +1,21 @@
 import Choices from 'choices.js';
-import { IAttributes } from 'angular';
-import { NgInputOptions } from '../options';
-import { NgService } from '../../services';
-import { NgInputController } from '../controller';
+
+import { NgService } from '../services';
+import { NgInputController, NgInputOptions } from './shared';
 
 class SelectController extends NgInputController {
 	public static readonly SinglePlaceholder = '----Select One----';
 	public static readonly MultiplePlaceholder = '----Select All That Apply----';
 
-	public static IsMultiple($attrs: IAttributes) {
+	public static IsMultiple($attrs: angular.IAttributes) {
 		return $attrs.hasOwnProperty('multiple') || $attrs.type === 'multiple';
 	}
 
-	public static GetPlaceholder($attrs: IAttributes) {
-		return $attrs.placeholder || SelectController.IsMultiple($attrs)
-			? SelectController.MultiplePlaceholder
-			: SelectController.SinglePlaceholder;
+	public static GetPlaceholder($attrs: angular.IAttributes) {
+		return $attrs.placeholder ||
+			SelectController.IsMultiple($attrs)
+				? SelectController.MultiplePlaceholder
+				: SelectController.SinglePlaceholder;
 	}
 
 	protected list: any[];

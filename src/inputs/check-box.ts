@@ -1,4 +1,4 @@
-import { NgInputOptions } from '../options';
+import { NgInputOptions } from './shared';
 
 export const checkBox: NgInputOptions = {
 	type: 'input',

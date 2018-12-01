@@ -2,7 +2,7 @@ import { StateProvider } from '@uirouter/angularjs';
 import { HttpStatusCode } from '@ledge/types/http';
 
 import { NgApp } from './src/app';
-import { inputs } from './src/input';
+import { inputs } from './src/inputs';
 
 import 'angular-animate';
 import 'angular-messages';
@@ -72,5 +72,5 @@ export function makeNgCtrl(controller: new() => any) {
 
 export * from './src/app';
 export * from './src/controller';
-export * from './src/input';
+export * from './src/inputs';
 export * from './src/services';

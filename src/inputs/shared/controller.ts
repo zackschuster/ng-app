@@ -1,5 +1,5 @@
-import { NgController } from '../controller';
-import { NgService } from '../services';
+import { NgController } from '../../controller';
+import { NgService } from '../../services';
 
 export class NgInputController extends NgController {
 	public ngModel: any;
