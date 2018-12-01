@@ -1,5 +1,5 @@
 import test from 'ava';
-import { NgDataService, NgLogger, NgModalService, app } from '..';
+import { NgDataService, NgLogger, NgModalService, app, inputs, misc } from '..';
 import { $prefix } from './mocks';
 
 app.configure({
@@ -24,15 +24,7 @@ test(`app.bootstrap() doesn't throw with base tag`, async t => {
 });
 
 test('app has default input components', async t => {
-	t.deepEqual(app.components, new Set([
-		'checkBox',
-		'dateInput',
-		'radioList',
-		'selectList',
-		'textBox',
-		'htmlInput',
-		'textInput',
-	]));
+	t.deepEqual(app.components, new Set([...Object.keys(inputs), ...Object.keys(misc)]));
 });
 
 test('app.http returns NgDataService', async t => {

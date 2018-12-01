@@ -2,6 +2,7 @@ import { StateProvider } from '@uirouter/angularjs';
 
 import { NgApp } from './src/app';
 import { inputs } from './src/input';
+import { misc } from './src/misc';
 
 import 'angular-animate';
 import 'angular-messages';
@@ -12,6 +13,7 @@ const app = new NgApp();
 
 app
 	.addComponents(inputs)
+	.addComponents(misc)
 	.addDependencies(
 		'ngAnimate',
 		'ngMessages',
@@ -72,4 +74,5 @@ export function makeNgCtrl(controller: new () => any) {
 export * from './src/app';
 export * from './src/controller';
 export * from './src/input';
+export * from './src/misc';
 export * from './src/services';
