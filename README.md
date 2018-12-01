@@ -2,12 +2,11 @@
 
 > A modern, groovy shim layer for Angular.js, written & distributed in TypeScript. Supports IE11.
 
-## Common dependencies included
+## Some batteries included
 
-- [angular-animate](https://www.npmjs.com/package/angular-animate)
-- [angular-messages](https://www.npmjs.com/package/angular-messages)
-- [angular-ui-bootstrap](https://www.npmjs.com/package/angular-ui-bootstrap)
-- [angular-ui-router](https://www.npmjs.com/package/@uirouter/angularjs)
+- [Animation](https://www.npmjs.com/package/angular-animate)
+- [Validation](https://www.npmjs.com/package/angular-messages)
+- [Routing](https://www.npmjs.com/package/@uirouter/angularjs)
 
 ## Designed for native modules
 

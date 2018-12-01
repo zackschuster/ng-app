@@ -6,7 +6,6 @@ import { misc } from './src/misc';
 
 import 'angular-animate';
 import 'angular-messages';
-import 'angular-ui-bootstrap';
 import '@uirouter/angularjs';
 
 const app = new NgApp();
@@ -17,7 +16,6 @@ app
 	.addDependencies(
 		'ngAnimate',
 		'ngMessages',
-		'ui.bootstrap',
 		'ui.router',
 	)
 	.addHttpInterceptor({
