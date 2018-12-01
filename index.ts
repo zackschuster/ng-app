@@ -12,7 +12,7 @@ import 'angular-ui-bootstrap';
 import '@uirouter/angularjs';
 
 const app = new NgApp()
-	.addComponents(new Map(Object.entries(inputs)))
+	.addComponents(inputs)
 	.addDependencies([
 		'ngAnimate',
 		'ngMessages',
