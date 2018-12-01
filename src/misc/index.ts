@@ -1,4 +1,4 @@
-import { appIcon } from './icon';
+import { appIcon } from './app-icon';
 
 export const misc = {
 	appIcon,
