@@ -202,6 +202,7 @@ export class NgApp {
 		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
 
 		// Force `this` to always refer to the class instance, no matter what
+		console.log($controller);
 		autobind($controller);
 
 		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
