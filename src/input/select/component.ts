@@ -178,11 +178,8 @@ export const selectList: NgInputOptions = {
 		}
 
 		if (NgService.IsMobile()) {
-			select.setAttribute('ng-model', `$ctrl.ngModel`);
-			select.setAttribute(
-				'ng-options',
-				`item['{{$ctrl.value}}'] as item['{{$ctrl.text}}'] for item in $ctrl.list`,
-			);
+			select.setAttribute('ng-model', '$ctrl.ngModel');
+			select.setAttribute('ng-options', `item['{{$ctrl.value}}'] as item['{{$ctrl.text}}'] for item in $ctrl.list track by $index`);
 		}
 
 		return select;
