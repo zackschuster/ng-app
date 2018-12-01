@@ -1,12 +1,12 @@
 import test from 'ava';
-import { $compCtrl, $ctrl, $prefix } from './mocks';
+import { $ctrl, $inputCtrl, $prefix } from './mocks';
 
 test('$ctrl.getApiPrefix', async t => {
 	t.is($ctrl.getApiPrefix(), $prefix);
 });
 
 test('$compCtrl.uniqueId', async t => {
-	t.is(typeof $compCtrl.uniqueId, 'string');
-	t.false($compCtrl.uniqueId.includes('-'));
-	t.false($compCtrl.uniqueId.includes(','));
+	t.is(typeof $inputCtrl.uniqueId, 'string');
+	t.false($inputCtrl.uniqueId.includes('-'));
+	t.false($inputCtrl.uniqueId.includes(','));
 });

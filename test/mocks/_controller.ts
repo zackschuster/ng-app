@@ -7,6 +7,6 @@ import { $injector } from './__injector';
 export { NgInputController };
 export const $controller = $injector.get('$controller');
 export const $ctrl = new NgController();
-export const $compCtrl = new NgInputController();
+export const $inputCtrl = new NgInputController();
 
 ($ctrl as any).apiPrefix = $prefix;
