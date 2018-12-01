@@ -17,7 +17,10 @@ export class NgRenderer {
 		attrs: [string, string][] = [],
 	) {
 		const $el = this.document.createElement(tagName);
-		$el.classList.add(...classes);
+
+		if (classes.length > 0) {
+			$el.classList.add(...classes);
+		}
 
 		for (const [key, value] of attrs) {
 			$el.setAttribute(key, value);
