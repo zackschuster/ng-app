@@ -159,12 +159,14 @@ export class NgApp {
 
 		for (let [name, component] of entries) {
 			if (this.isInputComponent(component)) {
-				component = InputService.defineInputComponent(component) as NgComponentOptions;
+				component = InputService.defineInputComponent(component);
 			}
 
 			if (typeof component.controller !== 'undefined') {
 				throw new Error(`[${name} component] 'controller' property not supported. Use the 'ctrl' property instead.`);
-			} else if (typeof component.ctrl === 'function') {
+			}
+
+			if (typeof component.ctrl === 'function') {
 				(component as angular.IComponentOptions).controller = this.makeComponentController(component.ctrl);
 			}
 
@@ -189,7 +191,7 @@ export class NgApp {
 		return this;
 	}
 
-	public makeComponentController($controller: angular.IControllerConstructor): [
+	public makeComponentController($controller: new () => angular.IController): [
 		'$element', '$scope', '$attrs', '$timeout', '$injector', '$state',
 		new (...args: any) => angular.IController
 	] {
@@ -199,7 +201,7 @@ export class NgApp {
 		// Force `this` to always refer to the class instance, no matter what
 		autobind($controller);
 
-		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
+		class InternalController extends $controller {
 			public $log = log;
 			public $http = http;
 			public $config = config;

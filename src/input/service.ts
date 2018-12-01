@@ -5,7 +5,6 @@ import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
 import { NgRenderer, NgService } from '../services';
 import { NgComponentOptions } from '../options';
-import { NgController } from '../controller';
 
 export class InputService extends NgService {
 	public static readonly $validationAttrs = [
@@ -44,7 +43,7 @@ export class InputService extends NgService {
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: {},
-		ctrl: class extends NgInputController {},
+		ctrl: NgInputController,
 		renderLabel: function defaultRenderLabel(h) {
 			const $transclude = h.createSlot();
 			$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
@@ -94,10 +93,8 @@ export class InputService extends NgService {
 		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 	}
 
-	public static wrapComponentCtrl($ctrl: new(...args: any[]) => NgController) {
+	public static wrapComponentCtrl($ctrl: new(...args: any[]) => NgInputController) {
 		return class extends $ctrl {
-			private ngModel: unknown;
-			private ngModelCtrl: angular.INgModelController;
 			constructor() {
 				super();
 				setTimeout(() => {
@@ -139,15 +136,14 @@ export class InputService extends NgService {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer(doc);
 
-		const $component = copy(Object.assign({}, this.$baseComponent, component));
-		const $definition = copy(this.$baseDefinition);
+		const $component = Object.assign({}, copy(this.$baseComponent), component);
+		const $definition = Object.assign(copy(this.$baseDefinition), {
+			ctrl: this.wrapComponentCtrl($component.ctrl),
+		});
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);
 		Object.assign($definition.transclude, $component.transclude);
-
-		// assign controller
-		$definition.ctrl = this.wrapComponentCtrl($component.ctrl);
 
 		// assign template
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
