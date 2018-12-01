@@ -1,5 +1,4 @@
-import { NgInputOptions } from './shared/options';
-import { NgInputController } from './shared/controller';
+import { NgInputController, NgInputOptions } from './shared';
 
 class TextBoxController extends NgInputController {
 	public $element: HTMLTextAreaElement;

@@ -1,6 +1,5 @@
 import { Indexed } from '@ledge/types';
-import { NgInputOptions } from './shared/options';
-import { NgInputController } from './shared/controller';
+import { NgInputController, NgInputOptions } from './shared';
 
 class TextInputController extends NgInputController {
 	private min: number | undefined;
