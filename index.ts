@@ -11,7 +11,7 @@ import '@uirouter/angularjs';
 const app = new NgApp();
 
 app
-	.addComponents(new Map(Object.entries(inputs)))
+	.addComponents(inputs)
 	.addDependencies(
 		'ngAnimate',
 		'ngMessages',
