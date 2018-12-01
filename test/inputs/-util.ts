@@ -4,10 +4,11 @@ import { element } from 'angular';
 import { NgController, makeNgCtrl } from '../..';
 import { $controller, $injector, $svc } from '../mocks';
 import { InputService } from '../../src/input/service';
+import { NgComponentOptions } from '../../src/options';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
-export function mockCtrl<T = NgController>(definition: angular.IComponentOptions, $attrs: Partial<angular.IAttributes> = { }) {
+export function mockCtrl<T = NgController>(definition: NgComponentOptions, $attrs: Partial<angular.IAttributes> = { }) {
 	const $scope = $injector.get('$rootScope').$new();
 
 	Object.assign($attrs, {
@@ -26,7 +27,7 @@ export function mockCtrl<T = NgController>(definition: angular.IComponentOptions
 
 	const $element = element(html);
 	const controller = $controller<T>(
-		makeNgCtrl(definition.controller as new () => any) as any, {
+		makeNgCtrl(definition.ctrl as new () => any) as any, {
 			$scope,
 			$element,
 			$attrs,
@@ -41,7 +42,7 @@ export function mockCtrl<T = NgController>(definition: angular.IComponentOptions
 }
 
 export function makeTpl(
-	template: angular.IComponentOptions['template'],
+	template: NgComponentOptions['template'],
 	t: ExecutionContext,
 	attrs: Partial<angular.IAttributes> = { },
 ) {

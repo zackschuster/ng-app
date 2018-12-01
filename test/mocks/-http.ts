@@ -7,7 +7,8 @@ import { NgDataService } from '../../src/services/http';
 
 const $injector = injector(['ngMock']);
 
-export const $prefix = app.config.PREFIX.API;
+// tslint:disable-next-line: no-non-null-assertion
+export const $prefix = app.config.PREFIX!.API as string;
 export const $http = new NgDataService(
 	$injector.get('$http'),
 	[],

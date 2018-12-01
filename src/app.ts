@@ -5,7 +5,7 @@ import { autobind } from 'core-decorators';
 
 import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
 import { InputService, NgInputOptions } from './input';
-import { NgAppConfig } from './options';
+import { NgAppConfig, NgComponentOptions } from './options';
 
 const REQUEST_TIMEOUT = 10000;
 
@@ -69,7 +69,7 @@ export class NgApp {
 	protected $router: NgRouter;
 	protected $config: NgAppConfig;
 
-	protected readonly $components: Map<string, angular.IComponentOptions> = new Map();
+	protected readonly $components: Map<string, NgComponentOptions> = new Map();
 	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
 
 	private _http: ReturnType<NgApp['$http']>;
@@ -154,7 +154,7 @@ export class NgApp {
 	}
 
 	public addComponents(
-		components: Map<string, angular.IComponentOptions | NgInputOptions> | Indexed<angular.IComponentOptions | NgInputOptions>,
+		components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>,
 	) {
 		const entries = components instanceof Map
 			? components.entries()
@@ -165,11 +165,12 @@ export class NgApp {
 				component = InputService.defineInputComponent(component);
 			}
 
-			if (typeof component.controller === 'string') {
-				throw new Error('String controller references not supported');
+			if (typeof component.controller !== 'undefined') {
+				throw new Error(`[${name} component] 'controller' property not supported. Use the 'ctrl' property instead.`);
 			}
-			if (typeof component.controller === 'function') {
-				component.controller = this._makeNgComponentController(component.controller);
+			if (typeof component.ctrl === 'function') {
+				// i like the explicit typecasting over `as never` or `as any`
+				component.controller = this._makeNgComponentController(component.ctrl) as unknown as undefined;
 			}
 
 			this.$components.set(name, component);
@@ -178,7 +179,7 @@ export class NgApp {
 		return this;
 	}
 
-	public isInputComponent(component: angular.IComponentOptions & { type?: 'input' }):
+	public isInputComponent(component: NgComponentOptions & { type?: 'input' }):
 		component is NgInputOptions {
 			return component.type === 'input';
 		}
