@@ -1,4 +1,4 @@
-import { NgConfig } from './app';
+import { NgAppConfig } from './options';
 import { NgDataService, NgLogger, NgStateService } from './services';
 
 export abstract class NgController {
@@ -7,7 +7,7 @@ export abstract class NgController {
 	public readonly $timeout: angular.ITimeoutService;
 	public readonly $injector: angular.auto.IInjectorService;
 
-	public readonly $config: NgConfig;
+	public readonly $config: NgAppConfig;
 	public readonly $log: NgLogger;
 	public readonly $http: NgDataService;
 	public readonly $state: NgStateService;
