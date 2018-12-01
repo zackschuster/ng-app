@@ -45,7 +45,6 @@ test('InputService.$baseComponent', async t => {
 	Reflect.deleteProperty($baseComponent, 'postRender');
 
 	t.deepEqual($baseComponent, {
-		isRadioOrCheckbox: false,
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: {},

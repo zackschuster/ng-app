@@ -37,9 +37,6 @@ export class InputService extends NgService {
 	};
 
 	public static readonly $baseComponent = {
-		get isRadioOrCheckbox() {
-			return this.labelClass === 'form-check-label';
-		},
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: {},
@@ -136,7 +133,14 @@ export class InputService extends NgService {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer(doc);
 
-		const $component = Object.assign({}, copy(this.$baseComponent), component);
+		const { $baseComponent } = this;
+		type BaseComponent = typeof $baseComponent;
+
+		const $component = Object.assign({
+			get isRadioOrCheckbox(this: BaseComponent) {
+				return this.labelClass === 'form-check-label';
+			},
+		}, copy($baseComponent), component);
 		const $definition = Object.assign(copy(this.$baseDefinition), {
 			ctrl: this.wrapComponentCtrl($component.ctrl),
 		});
