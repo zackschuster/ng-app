@@ -11,28 +11,24 @@ class NgAppDocsPlugin {
 	constructor(private isDev: boolean) { }
 	public apply(compiler: Compiler) {
 		if (this.isDev === false) {
-			compiler.hooks.emit.tap(this.constructor.name, cmp => {
-				const { source } = cmp.assets['index.html'];
-				const polyfillKey = Object.keys(cmp.assets).find(x => x.startsWith('polyfills'));
-
-				cmp.assets['index.html'].source = function indexSourceFn() {
-					return source().replace(
-						'<script type="text/javascript"',
-						`<script type="text/javascript">
-							if (!('fetch' in window && 'assign' in Object)) {
-								var scriptElement = document.createElement('script');
-								scriptElement.async = false;
-								scriptElement.src = '/${polyfillKey}';
-								document.head.appendChild(scriptElement);
-							}
-						</script><script type="text/javascript"`,
-					);
-				};
-
+			compiler.hooks.emit.tap(this.constructor.name, () => {
 				const files = fs.readdirSync(docs, { withFileTypes: true }).filter(x => x.isFile());
 				files.forEach(x => fs.unlinkSync(path.join(docs, x.name)));
 			});
 		}
+
+		compiler.hooks.emit.tap(this.constructor.name, cmp => {
+			const { source } = cmp.assets['index.html'];
+			const polyfillKey = Object.keys(cmp.assets).find(x => x.startsWith('polyfills'));
+
+			cmp.assets['index.html'].source = function indexSourceFn() {
+				return source().replace(
+					'<head>',
+					`<head><script type="text/javascript" src="/${polyfillKey}" nomodule></script>`,
+				);
+			};
+		});
+
 		compiler.hooks.afterEmit.tap(this.constructor.name, () => {
 			fs.writeFileSync(path.join(docs, 'CNAME'), 'ng-app.js.org');
 		});
