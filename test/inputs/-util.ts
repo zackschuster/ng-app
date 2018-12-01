@@ -2,7 +2,7 @@ import { ExecutionContext } from 'ava';
 import { element } from 'angular';
 
 import { NgComponentController, makeNgCtrl } from '../..';
-import { $controller, $ctrl, $injector } from '../mocks';
+import { $controller, $injector, $svc } from '../mocks';
 import { InputService } from '../../src/input/service';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
@@ -110,7 +110,7 @@ export function testLabel(tpl: Element, t: ExecutionContext) {
 
 		const transclude = label.querySelector('ng-transclude') as HTMLUnknownElement;
 		t.is(transclude.tagName, 'NG-TRANSCLUDE');
-		t.is(transclude.innerHTML, $ctrl.splitByCapitalLetter(ngAttrFor.split('_')[0]));
+		t.is(transclude.innerHTML, $svc.splitByCapitalLetter(ngAttrFor.split('_')[0]));
 	}
 
 	return label;

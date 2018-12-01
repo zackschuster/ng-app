@@ -5,8 +5,6 @@ import { NgStateService } from './services/router';
 import { NgConfig } from './app';
 
 export abstract class NgController {
-	[index: string]: any;
-
 	public readonly $scope: angular.IScope;
 	public readonly $attrs: angular.IAttributes;
 	public readonly $timeout: angular.ITimeoutService;

@@ -6,3 +6,4 @@ export * from './-input';
 export * from './-logger';
 export * from './-modal';
 export * from './-renderer';
+export * from './_service';
