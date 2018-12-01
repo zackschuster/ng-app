@@ -3,6 +3,7 @@ import { IAttributes } from 'angular';
 import { Callback } from '@ledge/types';
 import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
+import { NgService } from '../../services';
 
 class SelectController extends NgComponentController {
 	public static readonly SinglePlaceholder = '----Select One----';
@@ -176,7 +177,7 @@ export const selectList: InputComponentOptions = {
 			select.appendChild(placeholder);
 		}
 
-		if (NgComponentController.IsMobile()) {
+		if (NgService.IsMobile()) {
 			select.setAttribute('ng-model', `$ctrl.ngModel`);
 			select.setAttribute(
 				'ng-options',
