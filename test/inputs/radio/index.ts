@@ -51,7 +51,7 @@ test('radio template', async t => {
 
 	const formCheck = template.firstElementChild as Element;
 	t.true(formCheck.classList.contains('form-check'));
-	t.is(formCheck.getAttribute('ng-repeat'), 'item in $ctrl.list');
+	t.is(formCheck.getAttribute('ng-repeat'), 'item in $ctrl.list track by $index');
 
 	const input = util.testInput(template, t);
 	t.true(input.classList.contains('form-check-input'));
@@ -62,7 +62,6 @@ test('radio template', async t => {
 
 	const label = util.testLabel(template, t);
 	t.true(label.classList.contains('form-check-label'));
-	t.is(label.getAttribute('ng-click'), '$ctrl.ngModel === item.Value');
 	t.is(label.style.cursor, 'pointer');
 	t.is(label.innerHTML, '{{item.Text}}');
 	t.regex(label.getAttribute('ng-attr-for') as string, radioNgIdRe);
@@ -77,7 +76,7 @@ test('radio template (inlined)', async t => {
 
 	const formCheck = tpl.firstElementChild as Element;
 	t.true(formCheck.classList.contains('form-check-inline'));
-	t.is(formCheck.getAttribute('ng-repeat'), 'item in $ctrl.list');
+	t.is(formCheck.getAttribute('ng-repeat'), 'item in $ctrl.list track by $index');
 
 	const input = util.testInput(tpl, t);
 	t.true(input.classList.contains('form-check-input'));
@@ -88,7 +87,6 @@ test('radio template (inlined)', async t => {
 
 	const label = util.testLabel(tpl, t);
 	t.true(label.classList.contains('form-check-label'));
-	t.is(label.getAttribute('ng-click'), '$ctrl.ngModel === item.Value');
 	t.is(label.style.cursor, 'pointer');
 	t.is(label.innerHTML, '{{item.Text}}');
 	t.regex(label.getAttribute('ng-attr-for') as string, radioNgIdRe);
