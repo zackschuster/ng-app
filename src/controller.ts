@@ -75,5 +75,5 @@ export abstract class NgController extends NgService {
 export abstract class NgComponentController extends NgController {
 	public ngModel: any;
 	public ngModelCtrl: angular.INgModelController;
-	public uniqueId = crypto.getRandomValues(new Int8Array(2)).toLocaleString().replace(/[-]|[,]/g, '');
+	public uniqueId = NgService.UUIDv4().replace(/[-]|[,]/g, '');
 }
