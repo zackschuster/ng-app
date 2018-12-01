@@ -5,6 +5,7 @@
 	},
 	"include": [
 		"index.ts",
+		"polyfills.ts",
 		"src/**/*.ts",
 		"docs/**/*.ts",
 		"test/**/*.ts"
