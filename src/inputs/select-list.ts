@@ -1,7 +1,7 @@
 import Choices from 'choices.js';
 
-import { NgService } from '../services';
 import { NgInputController, NgInputOptions } from './shared';
+import { NgService } from '../services';
 
 class SelectController extends NgInputController {
 	public static readonly SinglePlaceholder = '----Select One----';
