@@ -6,7 +6,6 @@ import { inputs } from './src/inputs';
 
 import 'angular-animate';
 import 'angular-messages';
-import 'angular-ui-bootstrap';
 
 // tslint:disable-next-line:no-duplicate-imports
 import '@uirouter/angularjs';
@@ -16,7 +15,6 @@ const app = new NgApp()
 	.addDependencies([
 		'ngAnimate',
 		'ngMessages',
-		'ui.bootstrap',
 		'ui.router',
 	])
 	.addHttpInterceptor({

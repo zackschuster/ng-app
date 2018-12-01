@@ -12,4 +12,3 @@ Object.defineProperty(global, 'angular', {
 	writable: false,
 	value: /** @type {*} */(window).angular,
 });
-require('angular-ui-bootstrap');

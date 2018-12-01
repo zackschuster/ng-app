@@ -5,8 +5,6 @@ app
 		PREFIX: {
 			API: 'http://localhost:2323',
 		},
-	})
-	.$injector
-	.loadNewModules(['ui.bootstrap']);
+	});
 
 export { app };
