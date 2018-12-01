@@ -46,9 +46,8 @@ export const radioList: NgInputOptions = {
 		const { text = 'Text' } = this.$attrs;
 		const labelText = document.createTextNode(`{{item.${text}}}`);
 
-		this.$label.setAttribute('ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}_{{$index}}');
 		this.$label.appendChild(labelText);
-		this.$label.style.setProperty('cursor', 'pointer');
+		this.$label.setAttribute('ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}_{{$index}}');
 	},
 	bindings: {
 		list: '<',
