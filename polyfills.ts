@@ -1,3 +1,4 @@
+// tslint:disable:no-var-keyword prefer-const
 import 'core-js/es6/symbol';
 import 'core-js/es6/map';
 import 'core-js/es6/set';
@@ -10,18 +11,28 @@ import 'core-js/fn/string/includes';
 import 'core-js/fn/string/starts-with';
 
 // element-closest | CC0-1.0 | github.com/jonathantneal/closest
-if (typeof Element.prototype.closest !== 'function') {
-	Element.prototype.closest = function closest(selector: string) {
-		let element = this;
+Element.prototype.matches = function matches(selector) {
+	var element = this;
+	var elements = (element.ownerDocument as Document).querySelectorAll(selector);
+	var index = 0;
 
-		while (element && element.nodeType === 1) {
-			if (element.matches(selector)) {
-				return element;
-			}
+	while (elements[index] && elements[index] !== element) {
+		++index;
+	}
 
-			element = element.parentElement as Element;
+	return Boolean(elements[index]);
+};
+
+Element.prototype.closest = function closest(selector: string) {
+	var element = this;
+
+	while (element && element.nodeType === 1) {
+		if (element.matches(selector)) {
+			return element;
 		}
 
-		return null;
-	};
-}
+		element = element.parentElement as Element;
+	}
+
+	return null;
+};
