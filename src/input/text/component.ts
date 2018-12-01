@@ -57,7 +57,7 @@ export const textInput: InputComponentOptions = {
 		if (this.$attrs.type === 'range') {
 			const text = h.createElement('p', ['text-center', 'lead']);
 			text.textContent = '{{$ctrl.ngModel}}';
-			this.$template.append(text);
+			this.$template.appendChild(text);
 		}
 		return this.$template;
 	},
