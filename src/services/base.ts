@@ -1,6 +1,6 @@
 import isIE11 from '@ledge/is-ie-11';
 
-export class NgService {
+export abstract class NgService {
 	public static IsMobile() {
 		return typeof window === 'object' && window.innerWidth < 767;
 	}
