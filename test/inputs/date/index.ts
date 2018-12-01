@@ -53,8 +53,6 @@ test('date template', async t => {
 	t.is(inputGroupText.tagName, 'SPAN');
 
 	const icon = inputGroupText.firstElementChild as HTMLSpanElement;
-	t.true(icon.classList.contains('fa'));
-	t.true(icon.classList.contains('fa-calendar'));
 	t.is(icon.getAttribute('aria-hidden'), 'true');
 
 	const input = util.testInput(tpl, t);

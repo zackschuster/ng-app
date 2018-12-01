@@ -93,28 +93,17 @@ test('renderer creates textarea', async t => {
 });
 
 test('renderer creates icon', async t => {
-	const icon = h.createIcon('test');
-	t.is(icon.tagName.toLowerCase(), 'span');
-
-	t.is(icon.classList.length, 2);
-	t.true(icon.classList.contains('fa'));
-	t.true(icon.classList.contains('fa-test'));
-
-	t.is(icon.attributes.length, 2); // includes "class" attribute
+	const icon = h.createIcon('beaker');
+	t.is(icon.tagName.toLowerCase(), 'div');
 	t.is(icon.getAttribute('aria-hidden'), 'true');
+
+	const svg = icon.querySelector('svg') as SVGElement;
+	t.truthy(svg);
+	t.true(svg.classList.contains('octicon-beaker'));
 });
 
-test('renderer creates fixed-width icon', async t => {
-	const icon = h.createIcon('test', true);
-	t.is(icon.tagName.toLowerCase(), 'span');
-
-	t.is(icon.classList.length, 3);
-	t.true(icon.classList.contains('fa'));
-	t.true(icon.classList.contains('fa-test'));
-	t.true(icon.classList.contains('fa-fw'));
-
-	t.is(icon.attributes.length, 2); // includes "class" attribute
-	t.is(icon.getAttribute('aria-hidden'), 'true');
+test('renderer throws on unsupported icon', async t => {
+	t.throws(() => h.createIcon('an-unsupported-icon-name'));
 });
 
 test('renderer creates label', async t => {
@@ -174,6 +163,9 @@ test('renderer creates named transclusion slot', async t => {
 test('renderer creates icon input', async t => {
 	const input = h.createInput();
 	const iconInput = h.createIconInput(input, 'calendar');
-	t.truthy(iconInput.querySelector('.fa-calendar'));
+	const icon = iconInput.querySelector('svg') as SVGElement;
+
+	t.truthy(icon);
+	t.true(icon.classList.contains('octicon-calendar'));
 	t.true((iconInput.querySelector('input') as HTMLInputElement).isEqualNode(input));
 });

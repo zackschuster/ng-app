@@ -1,3 +1,6 @@
+// @ts-ignore
+import octicons from 'octicons';
+
 export class NgRenderer {
 	public baseInputAttrs: [string, string][] = [
 		['ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}'],
@@ -55,12 +58,20 @@ export class NgRenderer {
 		]);
 	}
 
-	public createIcon(icon: string, isFixedWidth = false) {
-		const $iconClasses = ['fa', `fa-${icon.replace(/^fw!/, '')}`];
-		if (isFixedWidth) {
-			$iconClasses.push('fa-fw');
+	public createIcon(iconName: string) {
+		if (octicons.hasOwnProperty(iconName) === false) {
+			throw new Error(`
+				Icon not supported: ${iconName}.\nSupported icons: ${Object.keys(octicons).sort().join(', ')}
+			`.trim());
 		}
-		return this.createElement('span', $iconClasses, [['aria-hidden', 'true']]);
+
+		const icon = octicons[iconName];
+		const span = this.createElement('div');
+
+		span.setAttribute('aria-hidden', 'true');
+		span.innerHTML = icon.toSVG();
+
+		return span;
 	}
 
 	public createLabel(classList: string[], {
@@ -110,7 +121,7 @@ export class NgRenderer {
 		const $inputGroup = this.createElement('div', ['input-group']);
 		const $inputGroupPrepend = this.createElement('div', ['input-group-prepend'], inputGroupAttrs);
 		const $inputGroupText = this.createElement('span', ['input-group-text']);
-		const $icon = this.createIcon(icon, icon.startsWith('fw!'));
+		const $icon = this.createIcon(icon);
 
 		$inputGroupText.appendChild($icon);
 		$inputGroupPrepend.appendChild($inputGroupText);

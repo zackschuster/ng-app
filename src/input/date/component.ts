@@ -105,7 +105,7 @@ export const dateInput: InputComponentOptions = {
 		inputGroupAppend.style.setProperty('cursor', 'pointer');
 
 		const inputGroupText = h.createElement('span', ['input-group-text']);
-		const clearIcon = h.createIcon('times');
+		const clearIcon = h.createIcon('x');
 
 		inputGroupText.appendChild(clearIcon);
 		inputGroupAppend.appendChild(inputGroupText);
