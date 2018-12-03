@@ -54,7 +54,7 @@ export const textInput: NgInputOptions = {
 	},
 	postRender(h) {
 		if (this.$attrs.type === 'range') {
-			const text = h.createElement('p', ['text-center', 'lead']);
+			const text = h.createHtmlElement('p', ['text-center', 'lead']);
 			text.textContent = '{{$ctrl.ngModel}}';
 			this.$template.appendChild(text);
 		}

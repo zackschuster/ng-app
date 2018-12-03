@@ -100,11 +100,11 @@ export const dateInput: NgInputOptions = {
 			['style', 'cursor: pointer;'],
 		]);
 
-		const inputGroupAppend = h.createElement('div', ['input-group-append']);
+		const inputGroupAppend = h.createHtmlElement('div', ['input-group-append']);
 		inputGroupAppend.setAttribute('data-clear', 'true');
 		inputGroupAppend.style.setProperty('cursor', 'pointer');
 
-		const inputGroupText = h.createElement('span', ['input-group-text']);
+		const inputGroupText = h.createHtmlElement('span', ['input-group-text']);
 		const clearIcon = h.createIcon('times');
 
 		inputGroupText.appendChild(clearIcon);

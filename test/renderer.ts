@@ -2,14 +2,14 @@
 import test from 'ava';
 import { h } from './mocks';
 
-test('renderer creates bare element', async t => {
-	const div = h.createElement('div');
+test('renderer creates html element', async t => {
+	const div = h.createHtmlElement('div');
 	t.is(div.classList.length, 0);
 	t.is(div.attributes.length, 0);
 });
 
-test('renderer creates element with classes', async t => {
-	const div = h.createElement('div', ['test1', 'test2']);
+test('renderer creates html element with classes', async t => {
+	const div = h.createHtmlElement('div', ['test1', 'test2']);
 	t.is(div.classList.length, 2);
 	t.true(div.classList.contains('test1'));
 	t.true(div.classList.contains('test2'));
@@ -17,8 +17,8 @@ test('renderer creates element with classes', async t => {
 	t.is(div.attributes.length, 1); // includes "class" attribute
 });
 
-test('renderer creates element with attributes', async t => {
-	const div = h.createElement('div', [], [['test1', 'test1'], ['test2', 'test2']]);
+test('renderer creates html element with attributes', async t => {
+	const div = h.createHtmlElement('div', [], [['test1', 'test1'], ['test2', 'test2']]);
 	t.is(div.classList.length, 0);
 
 	t.is(div.attributes.length, 2);
@@ -26,8 +26,8 @@ test('renderer creates element with attributes', async t => {
 	t.is(div.getAttribute('test2'), 'test2');
 });
 
-test('renderer creates element with classes and attributes', async t => {
-	const div = h.createElement('div', ['test1', 'test2'], [['test1', 'test1'], ['test2', 'test2']]);
+test('renderer creates html element with classes and attributes', async t => {
+	const div = h.createHtmlElement('div', ['test1', 'test2'], [['test1', 'test1'], ['test2', 'test2']]);
 	t.is(div.classList.length, 2);
 	t.true(div.classList.contains('test1'));
 	t.true(div.classList.contains('test2'));
