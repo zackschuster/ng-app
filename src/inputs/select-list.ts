@@ -159,14 +159,14 @@ class SelectController extends NgInputController {
 export const selectList: NgInputOptions = {
 	type: 'input',
 	render(h) {
-		const select = h.createElement('select', ['form-control']);
+		const select = h.createHtmlElement('select', ['form-control']);
 		select.setAttribute('ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}');
 		select.setAttribute('ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}');
 
 		if (SelectController.IsMultiple(this.$attrs)) {
 			select.setAttribute('multiple', 'true');
 		} else {
-			const placeholder = h.createElement('option');
+			const placeholder = h.createHtmlElement('option');
 
 			placeholder.setAttribute('placeholder', 'true');
 			placeholder.text = SelectController.GetPlaceholder(this.$attrs);

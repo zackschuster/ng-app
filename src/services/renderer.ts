@@ -11,7 +11,7 @@ export class NgRenderer {
 
 	constructor(private document: Document) { }
 
-	public createElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(
+	public createHtmlElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(
 		tagName: T,
 		classes: string[] = [],
 		attrs: [string, string][] = [],
@@ -50,11 +50,11 @@ export class NgRenderer {
 			$inputAttrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
 		}
 
-		return this.createElement('input', $class, $inputAttrs);
+		return this.createHtmlElement('input', $class, $inputAttrs);
 	}
 
 	public createTextArea() {
-		return this.createElement('textarea', ['form-control'], [
+		return this.createHtmlElement('textarea', ['form-control'], [
 			...this.baseInputAttrs,
 			['maxlength', '{{maxlength}}'],
 			['placeholder', '{{placeholder}}'],
@@ -68,7 +68,7 @@ export class NgRenderer {
 			`.trim());
 		}
 
-		const container = this.createElement('div');
+		const container = this.createHtmlElement('div');
 		container.innerHTML = octicons[iconName].toSVG();
 
 		container.setAttribute('aria-hidden', 'true');
@@ -92,14 +92,14 @@ export class NgRenderer {
 			isRadio: false,
 		},
 	) {
-		const $label = this.createElement(
+		const $label = this.createHtmlElement(
 			'label',
 			classList,
 			[['ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}']],
 		);
 
 		if (isRequired === true && !isRadio) {
-			const $span = this.createElement('span', ['text-danger']);
+			const $span = this.createHtmlElement('span', ['text-danger']);
 			$span.textContent = ' *';
 			$label.appendChild($span);
 		}
@@ -113,8 +113,8 @@ export class NgRenderer {
 
 	public createSlot(name?: string) {
 		return name != null
-			? this.createElement('div', [], [['ng-transclude', name]])
-			: this.createElement('ng-transclude') as HTMLDivElement;
+			? this.createHtmlElement('div', [], [['ng-transclude', name]])
+			: this.createHtmlElement('ng-transclude') as HTMLDivElement;
 	}
 
 	public createIconInput($input: HTMLElement, icon?: string, inputGroupAttrs: [string, string][] = []) {
@@ -122,9 +122,9 @@ export class NgRenderer {
 			return $input;
 		}
 
-		const $inputGroup = this.createElement('div', ['input-group']);
-		const $inputGroupPrepend = this.createElement('div', ['input-group-prepend'], inputGroupAttrs);
-		const $inputGroupText = this.createElement('span', ['input-group-text']);
+		const $inputGroup = this.createHtmlElement('div', ['input-group']);
+		const $inputGroupPrepend = this.createHtmlElement('div', ['input-group-prepend'], inputGroupAttrs);
+		const $inputGroupText = this.createHtmlElement('span', ['input-group-text']);
 		const $icon = this.createIcon(icon);
 
 		$inputGroupText.appendChild($icon);

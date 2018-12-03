@@ -153,7 +153,7 @@ export class InputService extends NgService {
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
 			const $el = $element[0];
 
-			let $template = h.createElement('div', [$component.templateClass]);
+			let $template = h.createHtmlElement('div', [$component.templateClass]);
 
 			// allow consumer to access $template and $attrs attributes from `this`
 			const $input = $component.render.call({ $template, $attrs }, h);
@@ -220,7 +220,7 @@ export class InputService extends NgService {
 				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 			}
 
-			const $validationBlock = h.createElement('div', [], [
+			const $validationBlock = h.createHtmlElement('div', [], [
 				['ng-messages', this.$validationExps.$error],
 				['ng-show', this.$validationExps.$isInvalid],
 				['role', 'alert'],
@@ -240,13 +240,13 @@ export class InputService extends NgService {
 				.filter(x => this.$validationMessages.has(x) === true)
 				.filter(x => x !== 'email' || $inputInput.type === x)
 				.forEach(x => {
-					const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
+					const $message = h.createHtmlElement('div', ['text-danger'], [['ng-message', x]]);
 					$message.innerText = this.$validationMessages.get(x) as string;
 					$validationBlock.appendChild($message);
 				});
 
 			if (isRadio === true) {
-				const $newTpl = h.createElement('div', ['form-group']);
+				const $newTpl = h.createHtmlElement('div', ['form-group']);
 				$newTpl.appendChild($template);
 				$newTpl.appendChild($validationBlock);
 				$template = $newTpl;
