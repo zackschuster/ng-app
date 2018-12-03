@@ -233,7 +233,7 @@ export class NgApp {
 	}
 
 	protected $modal() {
-		return new NgModalService(this.$injector.get('$uibModal'), this.$logger());
+		return new NgModalService({ open() { return { close() {}, dismiss() {} }; } } as any, this.$logger());
 	}
 
 	protected $timeout() {
