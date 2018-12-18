@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@ledge/is-ie-11": "1.0.0",
-    "@ledge/types": "4.1.0",
+    "@ledge/types": "4.1.1",
     "@types/angular-animate": "1.5.10",
     "@uirouter/angularjs": "1.0.19",
     "angular": "1.7.5",
@@ -36,18 +36,18 @@
     "octicons": "8.2.0"
   },
   "devDependencies": {
-    "@ledge/configs": "12.1.0",
+    "@ledge/configs": "13.0.1",
     "@types/angular-mocks": "1.7.0",
     "@types/html-webpack-plugin": "3.2.0",
     "angular-mocks": "1.7.5",
-    "ava": "1.0.0-rc.2",
+    "ava": "1.0.1",
 		"bootstrap": "4.1.3",
     "browser-env": "3.2.5",
 		"copy-webpack-plugin": "4.6.0",
-		"css-loader": "2.0.0",
+		"css-loader": "2.0.1",
 		"esm": "3.0.84",
 		"file-loader": "2.0.0",
-		"fork-ts-checker-webpack-plugin": "0.5.0",
+		"fork-ts-checker-webpack-plugin": "0.5.2",
 		"html-webpack-plugin": "3.2.0",
 		"mini-css-extract-plugin": "0.5.0",
 		"optimize-css-assets-webpack-plugin": "5.0.1",
@@ -64,7 +64,7 @@
 		"webpack": "4.27.1",
 		"webpack-cli": "3.1.2",
 		"webpack-dev-server": "3.1.10",
-		"webpack-merge": "4.1.4"
+		"webpack-merge": "4.1.5"
   },
   "ava": {
     "files": [
