@@ -21,7 +21,7 @@ export class NgModalService extends NgService {
 		onClose = () => {
 			return true;
 		},
-	}: NgModalOptions = {}) {
+	}: NgModalOptions = { }) {
 		const { $log } = this;
 
 		function makeModalCtrl() {

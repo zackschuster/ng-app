@@ -72,7 +72,7 @@ export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 		return param;
 	}
 
-	protected annotateResolveFunctions({ resolve = {} }: NgRoute) {
+	protected annotateResolveFunctions({ resolve = { } }: NgRoute) {
 		for (const [ id, resolveFn ] of Object.entries(resolve)) {
 			if (typeof resolveFn !== 'function') {
 				throw new Error('resolve methods must be a function');
@@ -85,8 +85,8 @@ export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 
 	protected generateRouteMeta(
 		{
-			params = {},
-			data = {},
+			params = { },
+			data = { },
 			name = '',
 			component = '',
 			parent = '',
@@ -97,7 +97,7 @@ export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 		let url = `/${data.isBase ? name : name.split(/(?=[A-Z])/).join('/').toLowerCase()}`
 			.replace(/View$/, '');
 
-		for (const [key, { type = {} }] of Object.entries<any>(params)) {
+		for (const [key, { type = { } }] of Object.entries<any>(params)) {
 			url += type.name === 'path' ? '/:' : (url.includes('?') ? '&' : '?');
 			url += key;
 		}

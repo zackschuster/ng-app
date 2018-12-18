@@ -5,7 +5,7 @@ export function makeAttrs(ngModel: string) {
 		$removeClass: () => '',
 		$updateClass() { return; },
 		$set() { return; },
-		$observe: () => new Function(),
+		$observe: () => function $observe() { return; },
 		$attr: Object.create(null),
 		ngModel,
 	};

@@ -1,6 +1,6 @@
 import { NgComponentController, NgController } from '../../src/controller';
-import { $prefix } from './_http';
-import { $injector } from './__injector';
+import { $prefix } from './-http';
+import { $injector } from './--injector';
 
 export { NgComponentController };
 export const $controller = $injector.get('$controller');

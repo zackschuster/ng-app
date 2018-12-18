@@ -2,7 +2,7 @@ import test from 'ava';
 import { radioList } from '../../../src/input';
 import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
-import * as util from '../_util';
+import * as util from '../-util';
 
 const definedRadioList = InputService.defineInputComponent(radioList, document);
 const radioNgIdRe = /\w([_]{{\$ctrl.uniqueId}}[_]{{\$index}})/;

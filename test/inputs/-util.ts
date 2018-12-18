@@ -13,17 +13,17 @@ const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
 export function mockCtrl<T = NgComponentController>(
 	ctrl: any,
-	$attrs: Partial<angular.IAttributes> = {},
+	$attrs: Partial<angular.IAttributes> = { },
 ) {
 	return $controller<T>(
 		makeNgCtrl(ctrl) as any, {
 			$scope,
 			$element,
 			$attrs,
-			$timeout: {},
-			$injector: {},
-			$state: {},
-			$http: {},
+			$timeout: { },
+			$injector: { },
+			$state: { },
+			$http: { },
 		},
 	);
 }
@@ -31,7 +31,7 @@ export function mockCtrl<T = NgComponentController>(
 export function makeTpl(
 	template: angular.IComponentOptions['template'],
 	t: ExecutionContext,
-	$attrs: Partial<angular.IAttributes> = {},
+	$attrs: Partial<angular.IAttributes> = { },
 ) {
 	Object.assign($attrs, {
 		ngModel: 'ngModel',

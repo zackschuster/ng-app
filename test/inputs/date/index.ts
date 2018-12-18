@@ -2,7 +2,7 @@ import test from 'ava';
 import { dateInput } from '../../../src/input';
 import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
-import * as util from '../_util';
+import * as util from '../-util';
 
 const definedDateInput = InputService.defineInputComponent(dateInput, document);
 

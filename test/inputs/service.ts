@@ -48,7 +48,7 @@ test('InputService.$baseComponent', async t => {
 		isRadioOrCheckbox: false,
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
-		attrs: {},
+		attrs: { },
 		ctrl: NgComponentController,
 	});
 

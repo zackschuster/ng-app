@@ -50,6 +50,7 @@
   "ava": {
     "files": [
       "test/**/*.ts",
+      "!test/inputs/-util.ts",
       "!test/mocks/**"
     ],
     "compileEnhancements": false,

@@ -87,7 +87,7 @@ export class NgApp {
 	// tslint:enable:variable-name
 
 	constructor() {
-		this.configure({})
+		this.configure({ })
 			.$module
 			.config([
 				'$compileProvider', '$locationProvider', '$qProvider',
@@ -263,7 +263,7 @@ export class NgApp {
 	}
 
 	protected getApiPrefix() {
-		const { PREFIX = {} } = this.$config;
+		const { PREFIX = { } } = this.$config;
 		const { API = '' } = PREFIX;
 
 		if (typeof API !== 'string') {

@@ -2,7 +2,7 @@ import test from 'ava';
 import { textInput } from '../../../src/input';
 import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
-import * as util from '../_util';
+import * as util from '../-util';
 
 const definedTextInput = InputService.defineInputComponent(textInput, document);
 
@@ -35,7 +35,7 @@ test('textinput controller', async t => {
 	t.true(numberCtrl instanceof NgComponentController);
 	t.is((numberCtrl as any).$attrs.type, 'number');
 
-	numberCtrl.ngModelCtrl = { $validators: {} } as any;
+	numberCtrl.ngModelCtrl = { $validators: { } } as any;
 
 	(numberCtrl as any).$onInit();
 
