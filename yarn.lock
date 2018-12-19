@@ -405,10 +405,10 @@
   resolved "https://registry.yarnpkg.com/@ledge/is-ie-11/-/is-ie-11-1.0.0.tgz#cdffc8d0de1bedb871e0fc73e32a6ed78907cc8b"
   integrity sha1-zf/I0N4b7bhx4Pxz4ypu14kHzIs=
 
-"@ledge/types@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@ledge/types/-/types-4.1.0.tgz#9ebc587139d3c9d186b3e5c63e1b81c7e0a29a4f"
-  integrity sha512-gpYgoX+thg+6Lc2IANKB7juYQPxcF9+FwxajQ2PsQvD8e6Msb0d39UxRjTFq7SoAXCiFaPQvJsmKMusEV8WSQQ==
+"@ledge/types@4.1.1":
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/@ledge/types/-/types-4.1.1.tgz#e702e75ce4626e33e9734e9ee795f9b9295fc6bc"
+  integrity sha512-PUzGFtp6iMEz43Ym7w1c8O36iHnXPxDNIKhxiw5i6a4HQnARoYu7neIJfqkLBH1U2WNcOjqxUybdXsOliA8RQw==
   dependencies:
     "@types/node" "*"
 
