@@ -1,6 +1,6 @@
 // import { module } from 'angular';
 import { NgDataService } from '../../src/services/http';
-import { $injector } from './__injector';
+import { $injector } from './--injector';
 
 export const $prefix = 'http://localhost:2323';
 export const $http = new NgDataService(

@@ -53,7 +53,7 @@ test('textinput controller (number)', async t => {
 	t.true(numberCtrl instanceof NgInputController);
 	t.is(numberCtrl.$attrs.type, 'number');
 
-	numberCtrl.ngModelCtrl = { $validators: {} } as any;
+	numberCtrl.ngModelCtrl = { $validators: { } } as any;
 
 	if (typeof numberCtrl.$onInit === 'function') {
 		numberCtrl.$onInit();

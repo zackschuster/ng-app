@@ -1,12 +1,12 @@
-import { $injector } from './__injector';
+import { $injector } from './--injector';
 
-export * from './_controller';
-export * from './_http';
-export * from './_input';
-export * from './_logger';
-export * from './_modal';
-export * from './_renderer';
-export * from './_service';
+export * from './-controller';
+export * from './-http';
+export * from './-input';
+export * from './-logger';
+export * from './-modal';
+export * from './-renderer';
+export * from './-service';
 
 export const $scope = $injector.get('$rootScope').$new();
 export const $element = $injector.get('$compile')
@@ -14,5 +14,5 @@ export const $element = $injector.get('$compile')
 	($scope);
 
 export function $invokeTemplate(template: any, $attrs: Partial<angular.IAttributes>) {
-	return $injector.invoke(template, {}, { $element, $attrs });
+	return $injector.invoke(template, { }, { $element, $attrs });
 }

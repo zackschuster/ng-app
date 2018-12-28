@@ -39,7 +39,7 @@ export class InputService extends NgService {
 	public static readonly $baseComponent = {
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
-		attrs: {},
+		attrs: { },
 		ctrl: NgInputController,
 		renderLabel: function defaultRenderLabel(h) {
 			const $transclude = h.createSlot();
@@ -226,7 +226,7 @@ export class InputService extends NgService {
 				['role', 'alert'],
 			]);
 
-			const { validators = {} } = $component;
+			const { validators = { } } = $component;
 			const attrs = Object.keys($component.attrs);
 
 			for (const [key, value] of Object.entries(validators)) {

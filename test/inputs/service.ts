@@ -47,7 +47,7 @@ test('InputService.$baseComponent', async t => {
 	t.deepEqual($baseComponent, {
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
-		attrs: {},
+		attrs: { },
 		ctrl: NgInputController,
 	});
 

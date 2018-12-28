@@ -1,8 +1,8 @@
 import { NgController } from '../../src/controller';
 import { NgInputController } from '../../src/inputs';
 
-import { $prefix } from './_http';
-import { $injector } from './__injector';
+import { $prefix } from './-http';
+import { $injector } from './--injector';
 
 export { NgInputController };
 export const $controller = $injector.get('$controller');

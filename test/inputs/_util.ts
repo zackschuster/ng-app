@@ -1,3 +1,6 @@
+// tslint:disable:file-name-casing
+	// required for ava to ignore
+
 import { existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ExecutionContext } from 'ava';
@@ -13,17 +16,17 @@ const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
 export function mockCtrl<T = NgController>(
 	ctrl: any,
-	$attrs: Partial<angular.IAttributes> = {},
+	$attrs: Partial<angular.IAttributes> = { },
 ) {
 	return $controller<T>(
 		makeNgCtrl(ctrl) as any, {
 			$scope,
 			$element,
 			$attrs,
-			$timeout: {},
-			$injector: {},
-			$state: {},
-			$http: {},
+			$timeout: { },
+			$injector: { },
+			$state: { },
+			$http: { },
 		},
 	);
 }
@@ -31,7 +34,7 @@ export function mockCtrl<T = NgController>(
 export function makeTpl(
 	template: angular.IComponentOptions['template'],
 	t: ExecutionContext,
-	$attrs: Partial<angular.IAttributes> = {},
+	$attrs: Partial<angular.IAttributes> = { },
 ) {
 	Object.assign($attrs, {
 		ngModel: 'ngModel',

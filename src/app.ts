@@ -77,7 +77,7 @@ export class NgApp {
 	// tslint:enable:variable-name
 
 	constructor() {
-		this.configure({})
+		this.configure({ })
 			.$module
 			.config([
 				'$compileProvider', '$locationProvider', '$qProvider',
@@ -233,7 +233,18 @@ export class NgApp {
 	}
 
 	protected $modal() {
-		return new NgModalService({ open() { return { close() {}, dismiss() {} }; } } as any, this.$logger());
+		return new NgModalService({
+			open() {
+				return {
+					close() {
+						return;
+					},
+					dismiss() {
+						return;
+					},
+				};
+			},
+		} as any, this.$logger());
 	}
 
 	protected $timeout() {
@@ -258,7 +269,7 @@ export class NgApp {
 	}
 
 	protected getApiPrefix() {
-		const { PREFIX = {} } = this.$config;
+		const { PREFIX = { } } = this.$config;
 		const { API = '' } = PREFIX;
 
 		if (typeof API !== 'string') {
