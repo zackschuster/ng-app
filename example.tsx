@@ -1,11 +1,12 @@
+// tslint:disable:comment-type
 /// <reference lib="dom" />
 /// <reference lib="es2018" />
 
-function h(name: string, props: { [index: string]: any } = {}, ...childNodes: Node[]) {
+function h(name: string, props: { [index: string]: any } = { }, ...childNodes: Node[]) {
 	const element = document.createElement(name);
 
 	if (props === null) {
-		props = {};
+		props = { };
 	}
 
 	const properties = Object.entries(props)
@@ -47,7 +48,7 @@ container.appendChild(
 		<thead>
 			<th>Row</th>
 		</thead>
-		{tbody}
+		{ tbody }
 	</table>,
 );
 

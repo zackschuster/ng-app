@@ -63,12 +63,11 @@ export class NgApp {
 
 	protected readonly $module = module(this.$id, this.$dependencies);
 	protected readonly $bootstrap = bootstrap;
+	protected readonly $components = new Map<string, angular.IComponentOptions>();
+	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
 
 	protected $router: NgRouter;
 	protected $config: NgAppConfig;
-
-	protected readonly $components: Map<string, angular.IComponentOptions> = new Map();
-	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
 
 	// tslint:disable:variable-name
 	private _http: ReturnType<NgApp['$http']>;
