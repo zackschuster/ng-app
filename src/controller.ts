@@ -1,7 +1,7 @@
 import { NgAppConfig } from './options';
-import { NgDataService, NgLogger, NgStateService } from './services';
+import { NgDataService, NgLogger, NgService, NgStateService } from './services';
 
-export class NgController {
+export class NgController extends NgService {
 	public readonly $scope: angular.IScope;
 	public readonly $attrs: angular.IAttributes;
 	public readonly $timeout: angular.ITimeoutService;
