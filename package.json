@@ -11,6 +11,7 @@
   "license": "GPL-3.0",
   "files": [
     "index.ts",
+    "polyfills.ts",
     "src"
   ],
   "main": "index.ts",
