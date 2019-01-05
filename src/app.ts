@@ -1,9 +1,9 @@
 import { Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
-import { bootstrap, copy, injector, module } from 'angular';
+import { bootstrap, copy, injector, isFunction, module } from 'angular';
 import { autobind } from 'core-decorators';
 
-import { NgDataService, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
+import { NgDataService, NgDataServiceOptions, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
 import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
 import { NgController } from './controller';
@@ -268,17 +268,24 @@ export class NgApp {
 		return this.$injector.get('$timeout');
 	}
 
-	protected $http(options: angular.IRequestShortcutConfig = {
+	protected $http(options: NgDataServiceOptions = {
 		timeout: this.$config.IS_PROD ? REQUEST_TIMEOUT : undefined,
 		withCredentials: true,
 	}) {
-		return new NgDataService(
-			this.$injector.get('$http'),
-			this.$httpInterceptors,
-			this.forceUpdate,
-			this.getApiPrefix,
-			options,
-		);
+		if (isFunction(options.onFinally) === false) {
+			options.onFinally = this.forceUpdate;
+		}
+		if (isFunction(options.getApiPrefix) === false) {
+			options.getApiPrefix = this.getApiPrefix;
+		}
+		if (Array.isArray(options.interceptors)) {
+			for (const interceptor of options.interceptors) {
+				this.addHttpInterceptor(interceptor);
+			}
+		}
+		options.interceptors = this.$httpInterceptors;
+
+		return new NgDataService(this.$injector.get('$http'), options);
 	}
 
 	protected $logger() {
