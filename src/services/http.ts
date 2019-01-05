@@ -2,13 +2,16 @@ import { PatchPayload } from '@ledge/types/patch';
 import { isFunction } from 'angular';
 import { NgService } from './base';
 
+export interface NgDataServiceOptions extends angular.IRequestShortcutConfig {
+	interceptors?: angular.IHttpInterceptor[];
+	onFinally?(): void;
+	getApiPrefix?(): string;
+}
+
 export class NgDataService extends NgService {
 	constructor(
 		private $http: angular.IHttpService,
-		private interceptors: angular.IHttpInterceptor[],
-		private update: () => void,
-		private prefixGetter: () => string,
-		private options: angular.IRequestShortcutConfig = { withCredentials: true },
+		private options: NgDataServiceOptions,
 	) {
 		super();
 	}
@@ -55,23 +58,29 @@ export class NgDataService extends NgService {
 	}
 
 	public getFullUrl(endpoint: string) {
-		const prefix = this.prefixGetter();
+		const { getApiPrefix = () => '/' } = this.options;
+		const prefix = getApiPrefix();
+
 		const hasSlash = prefix.endsWith('/') || endpoint.startsWith('/');
 		return `${prefix}${hasSlash ? '' : '/'}${endpoint}`;
 	}
 
 	private async getRequestConfig(method: string, url: string) {
-		let options = Object.assign({
-			method,
-			url,
-			params: {
-				timestamp: (this.isIE11 ? Date.now() : null),
+		let options = Object.assign(
+			{
+				method,
+				url,
+				params: {
+					timestamp: this.isIE11 ? Date.now() : null,
+				},
 			},
-		}, this.options);
+			this.options,
+		);
 
-		for (const onRequest of this.interceptors.map(x => x.request)) {
+		const { interceptors = [] } = this.options;
+		for (const onRequest of interceptors.map(x => x.request)) {
 			if (isFunction(onRequest)) {
-				options = await onRequest(options) as typeof options;
+				options = (await onRequest(options)) as typeof options;
 			}
 		}
 
@@ -81,21 +90,25 @@ export class NgDataService extends NgService {
 	private async fulfillRequest<T>(promise: angular.IHttpPromise<T>) {
 		try {
 			let response = await promise;
-			for (const onResponse of this.interceptors.map(x => x.response)) {
+			const { interceptors = [] } = this.options;
+			for (const onResponse of interceptors.map(x => x.response)) {
 				if (isFunction(onResponse)) {
 					response = await onResponse<T>(response);
 				}
 			}
 			return response.data;
 		} catch (err) {
-			for (const onResponseError of this.interceptors.map(x => x.responseError)) {
+			const { interceptors = [] } = this.options;
+			for (const onResponseError of interceptors.map(x => x.responseError)) {
 				if (isFunction(onResponseError)) {
 					err = await onResponseError<T>(err);
 				}
 			}
 			throw err;
 		} finally {
-			this.update();
+			if (isFunction(this.options.onFinally)) {
+				this.options.onFinally();
+			}
 		}
 	}
 }

@@ -31,6 +31,10 @@ test('app.http returns NgDataService', async t => {
 	t.true(app.http instanceof NgDataService);
 });
 
+test('app.http.getFullUrl returns prefixed url', async t => {
+	t.is(app.http.getFullUrl('test'), `${$prefix}/test`);
+});
+
 test('app.log returns NgLogger', async t => {
 	t.true(app.log instanceof NgLogger);
 });

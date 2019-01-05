@@ -3,12 +3,14 @@ import { NgDataService } from '../../src/services/http';
 import { $injector } from './--injector';
 
 export const $prefix = 'http://localhost:2323';
-export const $http = new NgDataService(
-	$injector.get('$http'),
-	[],
-	$injector.get('$rootScope').$applyAsync,
-	() => $prefix,
-);
+export const $http = new NgDataService($injector.get('$http'), {
+	onFinally() {
+		$injector.get('$rootScope').$applyAsync();
+	},
+	getApiPrefix() {
+		return $prefix;
+	},
+});
 
 // doesn't work, never gotten $sceDelegateProvider code to make a difference
 // module('ngMock')
