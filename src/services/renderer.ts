@@ -1,5 +1,4 @@
-// @ts-ignore
-import octicons from 'octicons';
+import { octicons } from './icon';
 
 export class NgRenderer {
 	public baseInputAttrs: [string, string][] = [
