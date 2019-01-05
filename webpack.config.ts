@@ -3,9 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { InjectNomodulePolyfillsPlugin } = require('@ledge/configs/webpack.util');
+const { InjectIndexHtmlResourcesPlugin } = require('@ledge/configs/webpack.util');
 
-class NgAppDocsPlugin extends InjectNomodulePolyfillsPlugin {
+class NgAppDocsPlugin extends InjectIndexHtmlResourcesPlugin {
 	constructor(isDev) {
 		super();
 
