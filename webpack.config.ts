@@ -3,24 +3,26 @@
 const fs = require('fs');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { InjectIndexHtmlResourcesPlugin } = require('@ledge/configs/webpack.util');
 
-class NgAppDocsPlugin extends InjectIndexHtmlResourcesPlugin {
+class NgAppDocsPlugin {
+	// @ts-ignore
 	constructor(isDev) {
-		super();
-
 		// @ts-ignore
 		this.isDev = isDev;
 	}
 
+	// @ts-ignore
 	// tslint:disable-next-line:member-access
 	apply(compiler) {
-		super.apply(compiler);
-
 		// @ts-ignore
 		if (this.isDev === false) {
 			compiler.hooks.emit.tap(this.constructor.name, () => {
-				const files = fs.readdirSync(docs, { withFileTypes: true }).filter(x => x.isFile());
+				const files = fs
+					.readdirSync(docs, { withFileTypes: true })
+					// @ts-ignore
+					.filter(x => x.isFile());
+
+				// @ts-ignore
 				files.forEach(x => fs.unlinkSync(path.join(docs, x.name)));
 			});
 		}
