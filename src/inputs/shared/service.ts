@@ -63,14 +63,14 @@ export class InputService extends NgService {
 	};
 
 	/**
-	 * Retrieves the identifying name for an ngModel
+	 * Retrieves the identifying name for an ngModel (e.g., `$ctrl.example` in `ng-model="$ctrl.example"`)
 	 */
 	public static modelIdentifier($attrs: IAttributes) {
 		return ($attrs.ngModel as string).split('.').pop() as string;
 	}
 
 	/**
-	 * Gets text -- intended for a label -- from the ngModel property text
+	 * Generates label text from the identifying name for an ngModel (e.g., `$ctrl.example` in `ng-model="$ctrl.example"`)
 	 */
 	public static getDefaultLabelText($attrs: IAttributes) {
 		return this.modelIdentifier($attrs)
