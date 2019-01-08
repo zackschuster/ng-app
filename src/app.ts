@@ -37,7 +37,10 @@ export class NgApp {
 
 	public get http() {
 		if (this._http == null) {
-			this._http = this.$http();
+			this._http = this.$http({
+				timeout: this.$config.IS_PROD ? 10000 : undefined,
+				withCredentials: true,
+			});
 		}
 		return this._http;
 	}
@@ -246,10 +249,7 @@ export class NgApp {
 		} as any, this.$logger());
 	}
 
-	protected $http(options: NgDataServiceOptions = {
-		timeout: this.$config.IS_PROD ? 10000 : undefined,
-		withCredentials: true,
-	}) {
+	protected $http(options: NgDataServiceOptions) {
 		if (isFunction(options.onFinally) === false) {
 			options.onFinally = this.forceUpdate;
 		}
