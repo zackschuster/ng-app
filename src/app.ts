@@ -40,7 +40,10 @@ export class NgApp {
 
 	public get http() {
 		if (this._http == null) {
-			this._http = this.$http();
+			this._http = this.$http({
+				timeout: this.$config.IS_PROD ? REQUEST_TIMEOUT : undefined,
+				withCredentials: true,
+			});
 		}
 		return this._http;
 	}
@@ -264,10 +267,7 @@ export class NgApp {
 		return new NgModalService({ open() { return { close() { return; }, dismiss() { return; } }; } } as any, this.$logger());
 	}
 
-	protected $http(options: NgDataServiceOptions = {
-		timeout: this.$config.IS_PROD ? REQUEST_TIMEOUT : undefined,
-		withCredentials: true,
-	}) {
+	protected $http(options: NgDataServiceOptions) {
 		if (isFunction(options.onFinally) === false) {
 			options.onFinally = this.forceUpdate;
 		}
