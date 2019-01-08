@@ -246,10 +246,6 @@ export class NgApp {
 		} as any, this.$logger());
 	}
 
-	protected $timeout() {
-		return this.$injector.get('$timeout');
-	}
-
 	protected $http(options: NgDataServiceOptions = {
 		timeout: this.$config.IS_PROD ? 10000 : undefined,
 		withCredentials: true,
