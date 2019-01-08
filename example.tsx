@@ -2,7 +2,7 @@
 /// <reference lib="dom" />
 /// <reference lib="es2018" />
 
-function h(name: string, props: { [index: string]: any } = { }, ...childNodes: Node[]) {
+function h<T extends keyof HTMLElementTagNameMap>(name: T, props: { [index: string]: any } = { }, ...childNodes: Node[]): HTMLElementTagNameMap[T] {
 	const element = document.createElement(name);
 
 	if (props === null) {
