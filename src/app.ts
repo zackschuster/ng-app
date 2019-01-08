@@ -265,6 +265,7 @@ export class NgApp {
 				this.addHttpInterceptor(interceptor);
 			}
 		}
+		// allow all dataservice instances to share the same interceptor queue
 		options.interceptors = this.$httpInterceptors;
 
 		return new NgDataService(this.$injector.get('$http'), options);
