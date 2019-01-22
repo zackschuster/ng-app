@@ -25,10 +25,10 @@
     "@types/angular-animate": "1.5.10",
     "@types/angular-ui-bootstrap": "0.13.47",
     "@uirouter/angularjs": "1.0.19",
-    "angular": "1.7.5",
-    "angular-animate": "1.7.5",
+    "angular": "1.7.6",
+    "angular-animate": "1.7.6",
     "angular-elastic": "2.5.1",
-    "angular-messages": "1.7.5",
+    "angular-messages": "1.7.6",
     "angular-ui-bootstrap": "2.5.6",
     "choices.js": "4.1.3",
     "core-decorators": "0.20.0",
@@ -36,16 +36,16 @@
     "noty": "3.1.4"
   },
   "devDependencies": {
-    "@ledge/configs": "13.0.1",
+    "@ledge/configs": "14.0.1",
     "@types/angular-mocks": "1.7.0",
-    "angular-mocks": "1.7.5",
-    "ava": "1.0.1",
+    "angular-mocks": "1.7.6",
+    "ava": "1.1.0",
     "browser-env": "3.2.5",
-    "esm": "3.0.84",
+    "esm": "3.1.1",
     "pretty": "2.0.0",
-    "ts-node": "7.0.1",
-    "tslint": "5.12.0",
-    "typescript": "3.2.2"
+    "ts-node": "8.0.1",
+    "tslint": "5.12.1",
+    "typescript": "3.2.4"
   },
   "ava": {
     "files": [
