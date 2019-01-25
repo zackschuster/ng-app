@@ -1,5 +1,5 @@
 import test from 'ava';
-import { copy, isFunction } from 'angular';
+import { copy } from 'angular';
 import { makeAttrs } from '../mocks';
 import { InputService } from '../../src/inputs';
 import { NgInputController } from '../mocks';
@@ -51,7 +51,7 @@ test('InputService.$baseComponent', async t => {
 		ctrl: NgInputController,
 	});
 
-	t.true(isFunction(InputService.$baseComponent.renderLabel));
+	t.true(typeof InputService.$baseComponent.renderLabel === 'function');
 });
 
 test('InputService.modelIdentifier', async t => {

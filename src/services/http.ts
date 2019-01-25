@@ -1,5 +1,4 @@
 import { PatchPayload } from '@ledge/types/patch';
-import { isFunction } from 'angular';
 import { NgService } from './base';
 
 export interface NgDataServiceOptions extends angular.IRequestShortcutConfig {
@@ -79,7 +78,7 @@ export class NgDataService extends NgService {
 
 		const { interceptors = [] } = this.options;
 		for (const onRequest of interceptors.map(x => x.request)) {
-			if (isFunction(onRequest)) {
+			if (typeof onRequest === 'function') {
 				options = (await onRequest(options)) as typeof options;
 			}
 		}
@@ -92,7 +91,7 @@ export class NgDataService extends NgService {
 			let response = await promise;
 			const { interceptors = [] } = this.options;
 			for (const onResponse of interceptors.map(x => x.response)) {
-				if (isFunction(onResponse)) {
+				if (typeof onResponse === 'function') {
 					response = await onResponse<T>(response);
 				}
 			}
@@ -100,13 +99,13 @@ export class NgDataService extends NgService {
 		} catch (err) {
 			const { interceptors = [] } = this.options;
 			for (const onResponseError of interceptors.map(x => x.responseError)) {
-				if (isFunction(onResponseError)) {
+				if (typeof onResponseError === 'function') {
 					err = await onResponseError<T>(err);
 				}
 			}
 			throw err;
 		} finally {
-			if (isFunction(this.options.onFinally)) {
+			if (typeof this.options.onFinally === 'function') {
 				this.options.onFinally();
 			}
 		}

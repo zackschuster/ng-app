@@ -1,11 +1,18 @@
 import { Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
-import { bootstrap, copy, injector, isFunction, module } from 'angular';
+import { bootstrap, copy, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
-import { NgDataService, NgDataServiceOptions, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
 import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
+import {
+	NgDataService,
+	NgDataServiceOptions,
+	NgLogger,
+	NgModalService,
+	NgRouter,
+	NgStateService,
+} from './services';
 
 @autobind
 export class NgApp {
@@ -20,7 +27,7 @@ export class NgApp {
 	public get config() {
 		return this.$config != null
 			? copy(this.$config)
-			: Object.create(null) as NgAppConfig;
+			: (Object.create(null) as NgAppConfig);
 	}
 
 	public get components() {
@@ -80,9 +87,10 @@ export class NgApp {
 
 	constructor() {
 		this.configure({ })
-			.$module
-			.config([
-				'$compileProvider', '$locationProvider', '$qProvider',
+			.$module.config([
+				'$compileProvider',
+				'$locationProvider',
+				'$qProvider',
 				(
 					$compileProvider: angular.ICompileProvider,
 					$locationProvider: angular.ILocationProvider,
@@ -97,25 +105,19 @@ export class NgApp {
 
 					$locationProvider.html5Mode(true);
 					$qProvider.errorOnUnhandledRejections(false);
-			}])
+				},
+			])
 			.run([
-				'$injector', '$animate', '$templateCache',
+				'$injector',
+				'$animate',
 				(
 					$injector: angular.auto.IInjectorService,
 					$animate: angular.animate.IAnimateService,
-					$templateCache: angular.ITemplateCacheService,
 				) => {
-					['day', 'month', 'year'].forEach(x => {
-						const templateUrl = `uib/template/datepicker/${x}.html`;
-						const template = $templateCache.get<string>(templateUrl);
-						if (template != null) {
-							$templateCache.put(templateUrl, template.replace(/glyphicon/g, 'fa'));
-						}
-					});
-
 					this.$injector = $injector;
 					$animate.enabled(true);
-				}]);
+				},
+			]);
 	}
 
 	/**
@@ -125,7 +127,9 @@ export class NgApp {
 		this.$injector.get('$rootScope').$applyAsync();
 	}
 
-	public async bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
+	public async bootstrap(
+		{ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true },
+	) {
 		for (const [name, definition] of this.$components) {
 			this.$module.component(name, definition);
 		}
@@ -155,9 +159,10 @@ export class NgApp {
 	public addComponents(
 		components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>,
 	) {
-		const entries = components instanceof Map
-			? components.entries()
-			: Object.entries(components);
+		const entries =
+			components instanceof Map
+				? components.entries()
+				: Object.entries(components);
 
 		for (let [name, component] of entries) {
 			if (this.isInputComponent(component)) {
@@ -165,11 +170,15 @@ export class NgApp {
 			}
 
 			if (typeof component.controller !== 'undefined') {
-				throw new Error(`[${name} component] 'controller' property not supported. Use the 'ctrl' property instead.`);
+				throw new Error(
+					`[${name} component] 'controller' property not supported. Use the 'ctrl' property instead.`,
+				);
 			}
 
 			if (typeof component.ctrl === 'function') {
-				(component as angular.IComponentOptions).controller = this.makeComponentController(component.ctrl);
+				(component as angular.IComponentOptions).controller = this.makeComponentController(
+					component.ctrl,
+				);
 			}
 
 			this.$components.set(name, component);
@@ -178,10 +187,11 @@ export class NgApp {
 		return this;
 	}
 
-	public isInputComponent(component: angular.IComponentOptions & { type?: 'input' }):
-		component is NgInputOptions {
-			return component.type === 'input';
-		}
+	public isInputComponent(
+		component: angular.IComponentOptions & { type?: 'input' },
+	): component is NgInputOptions {
+		return component.type === 'input';
+	}
 
 	public addDependencies(...moduleNames: string[]) {
 		this.$dependencies.push(...moduleNames);
@@ -193,8 +203,15 @@ export class NgApp {
 		return this;
 	}
 
-	public makeComponentController($controller: new () => angular.IController): [
-		'$element', '$scope', '$attrs', '$timeout', '$injector', '$state',
+	public makeComponentController(
+		$controller: new () => angular.IController,
+	): [
+		'$element',
+		'$scope',
+		'$attrs',
+		'$timeout',
+		'$injector',
+		'$state',
 		new (...args: any) => angular.IController
 	] {
 		const { config, http, log, getApiPrefix } = this;
@@ -229,7 +246,12 @@ export class NgApp {
 		}
 
 		return [
-			'$element', '$scope', '$attrs', '$timeout', '$injector', '$state',
+			'$element',
+			'$scope',
+			'$attrs',
+			'$timeout',
+			'$injector',
+			'$state',
 			InternalController,
 		];
 	}
@@ -250,10 +272,10 @@ export class NgApp {
 	}
 
 	protected $http(options: NgDataServiceOptions) {
-		if (isFunction(options.onFinally) === false) {
+		if ((typeof options.onFinally === 'function') === false) {
 			options.onFinally = this.forceUpdate;
 		}
-		if (isFunction(options.getApiPrefix) === false) {
+		if ((typeof options.getApiPrefix === 'function') === false) {
 			options.getApiPrefix = this.getApiPrefix;
 		}
 		if (Array.isArray(options.interceptors)) {
