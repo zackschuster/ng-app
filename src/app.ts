@@ -257,18 +257,7 @@ export class NgApp {
 	}
 
 	protected $modal() {
-		return new NgModalService({
-			open() {
-				return {
-					close() {
-						return;
-					},
-					dismiss() {
-						return;
-					},
-				};
-			},
-		} as any, this.$logger());
+		return new NgModalService(this.$logger());
 	}
 
 	protected $http(options: NgDataServiceOptions) {
