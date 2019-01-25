@@ -1,5 +1,6 @@
-// tslint:disable:no-var-requires
+// tslint:disable:no-var-requires no-redundant-jsdoc
 
+/** @type {typeof import('fs')} */
 const fs = require('fs');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
