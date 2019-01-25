@@ -3,7 +3,7 @@ import { StateService } from '@uirouter/core';
 import { bootstrap, copy, injector, isFunction, module } from 'angular';
 import { autobind } from 'core-decorators';
 
-import { NgDataService, NgDataServiceOptions, NgLogger, NgModalService, NgRouter, NgStateService } from './services';
+import { NgDataService, NgDataServiceOptions, NgLogger, NgModal, NgRouter, NgStateService } from './services';
 import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
 import { NgController } from './controller';
@@ -264,7 +264,12 @@ export class NgApp {
 	}
 
 	protected $modal() {
-		return new NgModalService({ open() { return { close() { return; }, dismiss() { return; } }; } } as any, this.$logger());
+		return new NgModal(
+			this.$logger(),
+			this.$injector.get('$compile'),
+			this.$injector.get('$controller'),
+			this.$injector.get('$rootScope'),
+		);
 	}
 
 	protected $http(options: NgDataServiceOptions) {

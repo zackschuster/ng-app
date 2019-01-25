@@ -1,7 +1,7 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
 import { $prefix, app } from './mocks';
-import { NgDataService, NgLogger, NgModalService } from '../src/services';
+import { NgDataService, NgLogger, NgModal } from '../src/services';
 
 test('app.module.name is app.$id', async t => {
 	t.is(app.$id, app.module.name);
@@ -32,5 +32,5 @@ test('app.log returns NgLogger', async t => {
 });
 
 test('app.modal returns NgModalService', async t => {
-	t.true(app.modal instanceof NgModalService);
+	t.true(app.modal instanceof NgModal);
 });

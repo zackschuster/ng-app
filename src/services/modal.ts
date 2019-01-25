@@ -1,297 +1,275 @@
-// tslint:disable:ban-types
-import { element } from 'angular';
 import { NgController } from '../controller';
 import { NgLogger } from './logger';
 import { NgService } from './base';
 
-const TIMEOUT = 100;
+const TIMEOUT = 150;
 
-export class NgModalService extends NgService {
+export class NgModal extends NgService {
+	protected backdrop: HTMLDivElement;
+	protected container: HTMLDivElement;
+	protected content: HTMLDivElement;
+	protected dialog: HTMLDivElement;
+	protected header: HTMLDivElement;
+	protected headerCloseButton: HTMLButtonElement;
+	protected title: HTMLHeadingElement;
+	protected body: HTMLDivElement;
+	protected footer: HTMLDivElement;
+	protected footerCancelButton: HTMLButtonElement;
+	protected footerOkButton: HTMLButtonElement;
+
 	constructor(
-		private $uibModal: UiModalService,
 		private $log: NgLogger,
+		private $compile: angular.ICompileService,
+		private $controller: angular.IControllerService,
+		private $rootScope: angular.IRootScopeService,
 	) {
 		super();
+
+		this.backdrop = this.makeBackdrop();
+		this.header = this.makeHeader();
+
+		this.title = this.makeTitle();
+		this.header.appendChild(this.title);
+
+		this.headerCloseButton = this.makeHeaderCloseButton();
+		this.header.appendChild(this.headerCloseButton);
+
+		this.content = this.makeContent();
+		this.content.appendChild(this.header);
+
+		this.body = this.makeBody();
+		this.content.appendChild(this.body);
+
+		this.footer = this.makeFooter();
+		this.footerCancelButton = this.makeFooterCancelButton();
+		this.footer.appendChild(this.footerCancelButton);
+
+		this.footerOkButton = this.makeFooterOkButton();
+		this.footer.appendChild(this.footerOkButton);
+
+		this.content.appendChild(this.footer);
+
+		this.dialog = this.makeDialog();
+		this.dialog.appendChild(this.content);
+
+		this.container = this.makeContainer();
+		this.container.appendChild(this.dialog);
+		document.body.appendChild(this.container);
 	}
 
-	public open({
-		appendTo = document.body,
-		template = '<h1>Set the <code>template</code> property to replace me :)</h1>',
-		size = 'lg',
-		controller = NgController,
-		controllerAs = '$ctrl',
-		onClose = () => {
-			return true;
-		},
-	}: NgModalOptions = { }) {
+	public open<T extends NgController>(options: NgModalOptions<T> = { }) {
 		const { $log } = this;
+		const {
+			title = 'Set the <code>title</code> property to replace me :)',
+			template = '<p class="lead">Set the <code>template</code> property to replace me :)</p>',
+			controller = NgController,
+			onClose = () => {
+				return true;
+			},
+		} = options;
 
-		function makeModalCtrl() {
-			return class extends controller {
-				public close: (...args: any[]) => void;
-				public dismiss: () => void;
-				public $log = $log;
+		const defaultCancelBtnText = 'Cancel';
+		const defaultOkBtnText = 'Ok';
+		let {
+			cancelBtnText = defaultCancelBtnText,
+			okBtnText = defaultOkBtnText,
+		} = options;
 
-				protected onclose: typeof onClose;
-
-				constructor(public $scope: angular.IScope) {
-					super();
-				}
-
-				public $onInit() {
-					$modal.opened.then(() => {
-						const modal = document.querySelector('.modal') as HTMLDivElement;
-						modal.classList.add('show');
-						modal.style.zIndex = '1050';
-						modal.style.color = 'black';
-
-						appendTo.appendChild(backdrop);
-
-						this.onclose = onClose.bind({ $log: this.$log });
-
-						const teardown = () => {
-							modal.classList.remove('show');
-							window.removeEventListener('keydown', listener);
-
-							backdrop.classList.remove('modal-backdrop');
-							appendTo.removeChild(backdrop);
-						};
-
-						const close = (...args: any[]) => {
-							teardown();
-							setTimeout(() => $modal.close(...args), TIMEOUT);
-						};
-						const dismiss = () => {
-							teardown();
-							setTimeout(() => $modal.dismiss(), TIMEOUT);
-						};
-
-						const listener = (e: KeyboardEvent) => {
-							if (e.key === 'Escape' || e.key === 'Esc') {
-								this.dismiss();
-							}
-						};
-
-						window.addEventListener('keydown', listener);
-
-						this.close = (...args: any[]) => {
-							const param = {
-								isDismiss: false,
-								close,
-								item: null,
-							};
-
-							param.item = args.length === 1 ? args[0] : args;
-							if (this.onclose(param)) {
-								close(...args);
-							}
-						};
-
-						this.dismiss = () => {
-							if (this.onclose({ isDismiss: true, close })) {
-								dismiss();
-							}
-						};
-					});
-				}
-			};
+		if (cancelBtnText !== false) {
+			if (cancelBtnText === true) {
+				cancelBtnText = defaultCancelBtnText;
+			}
+			this.footerCancelButton.innerText = cancelBtnText;
+		}
+		if (okBtnText !== false) {
+			if (okBtnText === true) {
+				okBtnText = defaultOkBtnText;
+			}
+			this.footerOkButton.innerText = okBtnText;
 		}
 
-		const backdrop = document.createElement('div');
+		this.title.innerHTML = typeof title === 'function' ? title() : title;
+		this.body.innerHTML = typeof template === 'function' ? template() : template;
 
-		backdrop.classList.add('modal-backdrop');
-		backdrop.classList.add('show');
-		backdrop.style.opacity = '0.5';
+		const $scope = Object.assign(this.$rootScope.$new(true), {
+			$ctrl: this.$controller<T>(controller as any),
+		});
+		this.$compile(this.container)($scope);
 
-		const $modal = this.$uibModal.open({
-			animation: true,
-			backdrop: false,
-			keyboard: false,
+		const escapeKeyListener = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' || e.key === 'Esc') {
+				close();
+			}
+		};
+		const dismiss = () => {
+			removeEventListeners();
+			this.hideModal(escapeKeyListener, $scope);
+		};
 
-			ariaLabelledBy: 'modal-title',
-			ariaDescribedBy: 'modal-body',
+		this.showModal(escapeKeyListener);
 
-			appendTo: element(appendTo) as angular.IAugmentedJQuery,
-			template,
-			size,
-			controller: ['$scope', makeModalCtrl()],
-			controllerAs,
+		const removeEventListeners = () => {
+			this.headerCloseButton.removeEventListener('click', dismiss);
+			this.footerCancelButton.removeEventListener('click', dismiss);
+			this.footerOkButton.removeEventListener('click', close);
+			this.backdrop.removeEventListener('click', close);
+		};
+
+		const close = () => {
+			if (onClose.call({ $log }, controller as T)) {
+				dismiss();
+			}
+		};
+		this.headerCloseButton.addEventListener('click', dismiss);
+		this.footerCancelButton.addEventListener('click', dismiss);
+		this.footerOkButton.addEventListener('click', close);
+		this.backdrop.addEventListener('click', close);
+
+		return { close, dismiss };
+	}
+
+	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
+		this.backdrop.style.setProperty('display', 'block');
+
+		this.container.style.setProperty('display', 'block');
+		this.container.classList.remove('show');
+		this.container.removeAttribute('aria-hidden');
+		this.container.setAttribute('aria-modal', 'true');
+		this.container.style.setProperty('padding-right', '17px');
+		this.container.style.setProperty('pointer-events', 'none');
+
+		setTimeout(() => {
+			this.backdrop.classList.add('show');
+			this.container.classList.add('show');
 		});
 
-		return $modal;
+		window.addEventListener('keydown', escapeKeyListener);
+		document.body.appendChild(this.backdrop);
+		document.body.classList.add('modal-open');
+	}
+
+	protected hideModal(
+		escapeKeyListener: (e: KeyboardEvent) => void,
+		scope: angular.IScope,
+	) {
+		this.backdrop.classList.remove('show');
+		this.container.classList.remove('show');
+
+		setTimeout(() => {
+			this.container.style.setProperty('display', 'none');
+			this.backdrop.style.setProperty('display', 'none');
+		}, TIMEOUT);
+
+		scope.$destroy();
+		window.removeEventListener('keydown', escapeKeyListener);
+		document.body.classList.remove('modal-open');
+	}
+
+	protected makeBackdrop() {
+		const backdrop = document.createElement('div');
+		backdrop.classList.add('modal-backdrop');
+		backdrop.classList.add('fade');
+		return backdrop;
+	}
+
+	protected makeContainer() {
+		const container = document.createElement('div');
+		container.classList.add('fade');
+		container.classList.add('modal');
+		container.setAttribute('aria-hidden', 'true');
+		container.setAttribute('aria-labelledby', 'modal-title');
+		container.setAttribute('role', 'dialog');
+		container.setAttribute('tabindex', '-1');
+		return container;
+	}
+
+	protected makeDialog() {
+		const dialog = document.createElement('div');
+		dialog.classList.add('modal-dialog');
+		dialog.setAttribute('role', 'document');
+		return dialog;
+	}
+
+	protected makeContent() {
+		const content = document.createElement('div');
+		content.classList.add('modal-content');
+		return content;
+	}
+
+	protected makeHeader() {
+		const header = document.createElement('div');
+		header.classList.add('modal-header');
+		return header;
+	}
+
+	protected makeHeaderCloseButton() {
+		const btn = document.createElement('button');
+		btn.classList.add('close');
+		btn.setAttribute('aria-label', 'Close');
+		btn.setAttribute('type', 'button');
+		btn.innerHTML = '&times;';
+		return btn;
+	}
+
+	protected makeTitle() {
+		const title = document.createElement('h5');
+		title.setAttribute('id', 'modal-title');
+		title.classList.add('modal-title');
+		return title;
+	}
+
+	protected makeBody() {
+		const body = document.createElement('div');
+		body.classList.add('modal-body');
+		return body;
+	}
+
+	protected makeFooter() {
+		const footer = document.createElement('div');
+		footer.classList.add('modal-footer');
+		return footer;
+	}
+
+	protected makeFooterCancelButton() {
+		const btn = document.createElement('button');
+		btn.classList.add('btn', 'btn-info');
+		btn.setAttribute('type', 'button');
+		return btn;
+	}
+
+	protected makeFooterOkButton() {
+		const btn = document.createElement('button');
+		btn.classList.add('btn', 'btn-success');
+		btn.setAttribute('type', 'button');
+		return btn;
 	}
 }
 
-export interface NgModalOptions {
-	template?: string;
-	appendTo?: Element;
-	size?: 'sm' | 'md' | 'lg';
-	controller?: new () => any;
-	controllerAs?: string;
-	onClose?(
-		this: { $log: NgLogger },
-		args: {
-			item?: any,
-			isDismiss: boolean,
-			close(...args: any[]): void,
-		},
-	): boolean;
-}
+export interface NgModalOptions<T extends NgController> {
+	/**
+	 * String representing the modal's title
+	 */
+	title?: string | (() => string);
 
-export interface UiModalService {
-	getPromiseChain(): angular.IPromise<any>;
-	open(options: UIModalSettings): UIModalInstanceService;
-}
+	/**
+	 * Inline template representing the modal's content
+	 */
+	template?: string | (() => string);
 
-export interface UIModalSettings {
-		/**
-		 * a path to a template representing modal's content
-		 */
-		templateUrl?: string | (() => string);
+	/**
+	 * Ok button text (false to hide)
+	 */
+	okBtnText?: string | boolean;
 
-		/**
-		 * inline template representing the modal's content
-		 */
-		template?: string | (() => string);
+	/**
+	 * Cancel button text (false to hide, true for default)
+	 */
+	cancelBtnText?: string | boolean;
 
-		/**
-		 * a scope instance to be used for the modal's content (actually the $modal service is going to create a child scope of a provided scope).
-		 * Defaults to `$rootScope`.
-		 */
-		scope?: angular.IScope;
+	/**
+	 * A controller for a modal instance.
+	 */
+	controller?: T;
 
-		/**
-		 * a controller for a modal instance - it can initialize scope used by modal.
-		 * A controller can be injected with `$modalInstance`
-		 * If value is an array, it must be in Inline Array Annotation format for injection (strings followed by factory method)
-		 */
-		controller?: string | Function | (string | Function)[];
-
-		/**
-		 *  an alternative to the controller-as syntax, matching the API of directive definitions.
-		 *  Requires the controller option to be provided as well
-		 */
-		controllerAs?: string;
-
-		/**
-		 * When used with controllerAs and set to true, it will bind the controller properties onto the $scope directly.
-		 */
-		bindToController?: boolean;
-
-		/**
-		 * members that will be resolved and passed to the controller as locals; it is equivalent of the `resolve` property for AngularJS routes
-		 * If property value is an array, it must be in Inline Array Annotation format for injection (strings followed by factory method)
-		 */
-		resolve?: { [key: string]: string | Function | (string | Function)[] | Object };
-
-		/**
-		 * Set to false to disable animations on new modal/backdrop. Does not toggle animations for modals/backdrops that are already displayed.
-		 */
-		animation?: boolean;
-
-		/**
-		 * controls the presence of a backdrop
-		 * Allowed values:
-		 *   - true (default)
-		 *   - false (no backdrop)
-		 *   - 'static' backdrop is present but modal window is not closed when clicking outside of the modal window
-		 */
-		backdrop?: boolean | string;
-
-		/**
-		 * indicates whether the dialog should be closable by hitting the ESC key
-		 */
-		keyboard?: boolean;
-
-		/**
-		 * additional CSS class(es) to be added to a modal backdrop template
-		 */
-		backdropClass?: string;
-
-		/**
-		 * additional CSS class(es) to be added to a modal window template
-		 */
-		windowClass?: string;
-
-		/**
-		 * Optional suffix of modal window class. The value used is appended to the `modal-` class, i.e. a value of `sm` gives `modal-sm`.
-		 */
-		size?: string;
-
-		/**
-		 * a path to a template overriding modal's window template
-		 */
-		windowTemplateUrl?: string;
-
-		/**
-		 * The  class added to the body element when the modal is opened.
-		 */
-		openedClass?: string;
-
-		/**
-		 * CSS class(es) to be added to the top modal window.
-		 */
-		windowTopClass?: string;
-
-		/**
-		 * Appends the modal to a specific element.
-		 */
-		appendTo?: angular.IAugmentedJQuery;
-
-		/**
-		 * A string reference to the component to be rendered that is registered with Angular's compiler. If using a directive, the directive must have `restrict: 'E'` and a template or templateUrl set.
-		 *
-		 * It supports these bindings:
-		 *   - `close` - A method that can be used to close a modal, passing a result. The result must be passed in this format: `{$value: myResult}`
-		 *   - `dismiss` - A method that can be used to dismiss a modal, passing a result. The result must be passed in this format: `{$value: myRejectedResult}`
-		 *   - `modalInstance` - The modal instance. This is the same `$uibModalInstance` injectable found when using `controller`.
-		 *   - `resolve` - An object of the modal resolve values. See [UI Router resolves] for details.
-		 */
-		component?: string;
-
-		/**
-		 * Sets the `aria-describedby` property on the modal.
-		 * The string should be an id (without the leading '#') pointing to the element that describes your modal.
-		 * @memberOf IModalSettings
-		 */
-		ariaDescribedBy?: string;
-
-		/**
-		 * Sets the `aria-labelledby` property on the modal.
-		 * The string should be an id (without the leading '#') pointing to the element that labels your modal.
-		 * @memberOf IModalSettings
-		 */
-		ariaLabelledBy?: string;
-}
-
-export interface UIModalInstanceService {
-
-		/**
-		 * A promise that is resolved when a modal is closed and rejected when a modal is dismissed.
-		 */
-		result: angular.IPromise<any>;
-
-		/**
-		 * A promise that is resolved when a modal gets opened after downloading content's template and resolving all variables.
-		 */
-		opened: angular.IPromise<any>;
-
-		/**
-		 * A promise that is resolved when a modal is rendered.
-		 */
-		rendered: angular.IPromise<any>;
-
-		/**
-		 * A promise that is resolved when a modal is closed and the animation completes.
-		 */
-		closed: angular.IPromise<any>;
-		/**
-		 * A method that can be used to close a modal, passing a result. If `preventDefault` is called on the `modal.closing` event then the modal will remain open.
-		 */
-		close(result?: any): void;
-
-		/**
-		 * A method that can be used to dismiss a modal, passing a reason. If `preventDefault` is called on the `modal.closing` event then the modal will remain open.
-		 */
-		dismiss(reason?: any): void;
+	onClose?(this: { $log: NgLogger }, controller: T): boolean;
 }

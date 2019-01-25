@@ -1,7 +1,5 @@
-import { NgModalService } from '../../src/services/modal';
+import { NgModal } from '../../src/services/modal';
 import { $log } from './-logger';
+import { $injector } from './--injector';
 
-export const $modal = new NgModalService(
-	{ open() { return { close() { return; }, dismiss() { return; } }; } } as any,
-	$log,
-);
+export const $modal = new NgModal($log, $injector.get('$compile'), $injector.get('$controller'), $injector.get('$rootScope'));
