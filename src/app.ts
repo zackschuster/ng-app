@@ -257,7 +257,12 @@ export class NgApp {
 	}
 
 	protected $modal() {
-		return new NgModalService(this.$logger());
+		return new NgModalService(
+			this.$logger(),
+			this.$injector.get('$compile'),
+			this.$injector.get('$controller'),
+			this.$injector.get('$rootScope'),
+		);
 	}
 
 	protected $http(options: NgDataServiceOptions) {

@@ -1,5 +1,4 @@
-// tslint:disable:ban-types
-// import { NgController } from '../controller';
+import { NgController } from '../controller';
 import { NgLogger } from './logger';
 import { NgService } from './base';
 
@@ -16,87 +15,97 @@ export class NgModalService extends NgService {
 	public footerCloseButton: HTMLButtonElement;
 	public footerSaveButton: HTMLButtonElement;
 
-	constructor(private $log: NgLogger) {
+	constructor(
+		private $log: NgLogger,
+		private $compile: angular.ICompileService,
+		private $controller: angular.IControllerService,
+		private $rootScope: angular.IRootScopeService,
+	) {
 		super();
 
 		this.backdrop = this.makeBackdrop();
-		this.container = this.makeContainer();
-		this.dialog = this.makeDialog();
-		this.content = this.makeContent();
-		this.header = this.makeHeader();
-		this.headerCloseButton = this.makeHeaderCloseButton();
-		this.title = this.makeTitle();
-		this.body = this.makeBody();
-		this.footer = this.makeFooter();
-		this.footerCloseButton = this.makeFooterCloseButton();
-		this.footerSaveButton = this.makeFooterSaveButton();
-
 		document.appendChild(this.backdrop);
 
+		this.header = this.makeHeader();
+
+		this.title = this.makeTitle();
 		this.header.appendChild(this.title);
+
+		this.headerCloseButton = this.makeHeaderCloseButton();
 		this.header.appendChild(this.headerCloseButton);
+
+		this.content = this.makeContent();
 		this.content.appendChild(this.header);
+
+		this.body = this.makeBody();
 		this.content.appendChild(this.body);
+
+		this.footer = this.makeFooter();
+		this.footerCloseButton = this.makeFooterCloseButton();
 		this.footer.appendChild(this.footerCloseButton);
+
+		this.footerSaveButton = this.makeFooterSaveButton();
 		this.footer.appendChild(this.footerSaveButton);
+
 		this.content.appendChild(this.footer);
+
+		this.dialog = this.makeDialog();
 		this.dialog.appendChild(this.content);
+
+		this.container = this.makeContainer();
 		this.container.appendChild(this.dialog);
 	}
 
-	public open({
-		title = 'Set the <code>template</code> property to replace me :)',
-		template = '<p class="lead">Set the <code>template</code> property to replace me :)</p>',
-		size = 'lg',
-		// controller = NgController,
-		onClose = () => {
-			return true;
-		},
-	}: NgModalOptions = { }) {
-		const { $log } = this;
+	public open<T extends NgController>(options: NgModalOptions<T>) {
+		const { $log, hideModal } = this;
+		const {
+			title = 'Set the <code>template</code> property to replace me :)',
+			template = '<p class="lead">Set the <code>template</code> property to replace me :)</p>',
+			size = 'lg',
+			controller = NgController,
+			onSave = () => {
+				return true;
+			},
+			onDismiss = () => {
+				return true;
+			},
+		} = options;
 
 		this.title.innerText = typeof title === 'function' ? title() : title;
 		this.content.innerHTML = template;
 		this.container.classList.add(`modal-${size}`);
 
+		const $scope = Object.assign(this.$rootScope.$new(true), {
+			$ctrl: this.$controller<T>(controller as any),
+		});
+		this.$compile(this.container)($scope);
+
 		const escapeKeyListener = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' || e.key === 'Esc') {
-				if (onClose.call({ $log }, { isDismiss: true, close: this.hideModal })) {
-					this.hideModal(escapeKeyListener);
+				if (onDismiss.call({ $log })) {
+					dismiss();
 				}
 			}
 		};
+		const dismiss = hideModal.bind(null, escapeKeyListener, $scope);
 
 		this.showModal(escapeKeyListener);
 
-		// const close = (...args: any[]) => {
-		// 	const isDismiss = args.length === 0;
-		// 	const param = {
-		// 		isDismiss,
-		// 		close,
-		// 		item: isDismiss
-		// 			? null
-		// 			: args.length === 1
-		// 				? args[0]
-		// 				: args,
-		// 	};
+		const closeModalButton = () => {
+			this.headerCloseButton.removeEventListener('click', closeModalButton);
+			this.footerCloseButton.removeEventListener('click', closeModalButton);
+			dismiss();
+		};
+		this.headerCloseButton.addEventListener('click', closeModalButton);
+		this.footerCloseButton.addEventListener('click', closeModalButton);
 
-		// 	if (onClose.call({ $log }, param)) {
-		// 		close(...args);
-		// 	}
-		// };
-
-		// const $modal = this.$uibModal.open({
-		// 	ariaLabelledBy: 'modal-title',
-		// 	ariaDescribedBy: 'modal-body',
-
-		// 	template,
-		// 	size,
-		// 	controller: ['$scope', makeModalCtrl()],
-		// 	controllerAs: '$ctrl',
-		// });
-
-		// return $modal;
+		const save = () => {
+			if (onSave.call({ $log }, controller as T)) {
+				this.footerSaveButton.removeEventListener('click', save);
+				dismiss();
+			}
+		};
+		this.footerSaveButton.addEventListener('click', save);
 	}
 
 	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
@@ -109,11 +118,16 @@ export class NgModalService extends NgService {
 		window.addEventListener('keydown', escapeKeyListener);
 	}
 
-	protected hideModal(escapeKeyListener: (e: KeyboardEvent) => void) {
+	protected hideModal(
+		escapeKeyListener: (e: KeyboardEvent) => void,
+		scope: angular.IScope,
+	) {
 		this.backdrop.classList.remove('show');
 		this.container.classList.remove('show');
 		this.container.style.removeProperty('padding-right');
 		this.container.style.setProperty('display', 'none');
+
+		scope.$destroy();
 		window.removeEventListener('keydown', escapeKeyListener);
 	}
 
@@ -207,158 +221,28 @@ export class NgModalService extends NgService {
 	}
 }
 
-export interface NgModalOptions {
+export interface NgModalOptions<T extends NgController> {
 	/**
-	 * string representing the modal's title
+	 * String representing the modal's title
 	 */
 	title?: string | (() => string);
+
+	/**
+	 * Inline template representing the modal's content
+	 */
 	template?: string;
-	appendTo?: Element;
+
+	/**
+	 * Optional suffix of modal window class. The value used is appended to the `modal-` class, i.e. a value of `sm` gives `modal-sm`.
+	 */
 	size?: 'sm' | 'md' | 'lg';
-	controller?: new () => any;
-	controllerAs?: string;
-	onOpen?(
-		this: { $log: NgLogger },
-		args: {
-			item?: any,
-			open(...args: any[]): void,
-		},
-	): boolean;
-	onClose?(
-		this: { $log: NgLogger },
-		args: {
-			item?: any,
-			isDismiss: boolean,
-			close(...args: any[]): void,
-		},
-	): boolean;
-}
 
-export interface UiModalService {
-	getPromiseChain(): angular.IPromise<any>;
-	open(options: UIModalSettings): UIModalInstanceService;
-}
+	/**
+	 * A controller for a modal instance.
+	 */
+	controller?: T;
 
-export interface UIModalSettings {
-		/**
-		 * inline template representing the modal's content
-		 */
-		template?: string | (() => string);
+	onSave?(this: { $log: NgLogger }, controller: T): boolean;
 
-		/**
-		 * a scope instance to be used for the modal's content (actually the $modal service is going to create a child scope of a provided scope).
-		 * Defaults to `$rootScope`.
-		 */
-		scope?: angular.IScope;
-
-		/**
-		 * a controller for a modal instance - it can initialize scope used by modal.
-		 * A controller can be injected with `$modalInstance`
-		 * If value is an array, it must be in Inline Array Annotation format for injection (strings followed by factory method)
-		 */
-		controller?: string | Function | (string | Function)[];
-
-		/**
-		 *  an alternative to the controller-as syntax, matching the API of directive definitions.
-		 *  Requires the controller option to be provided as well
-		 */
-		controllerAs?: string;
-
-		/**
-		 * When used with controllerAs and set to true, it will bind the controller properties onto the $scope directly.
-		 */
-		bindToController?: boolean;
-
-		/**
-		 * members that will be resolved and passed to the controller as locals; it is equivalent of the `resolve` property for AngularJS routes
-		 * If property value is an array, it must be in Inline Array Annotation format for injection (strings followed by factory method)
-		 */
-		resolve?: { [key: string]: string | Function | (string | Function)[] | Object };
-
-		/**
-		 * additional CSS class(es) to be added to a modal backdrop template
-		 */
-		backdropClass?: string;
-
-		/**
-		 * additional CSS class(es) to be added to a modal window template
-		 */
-		windowClass?: string;
-
-		/**
-		 * Optional suffix of modal window class. The value used is appended to the `modal-` class, i.e. a value of `sm` gives `modal-sm`.
-		 */
-		size?: string;
-
-		/**
-		 * a path to a template overriding modal's window template
-		 */
-		windowTemplateUrl?: string;
-
-		/**
-		 * The  class added to the body element when the modal is opened.
-		 */
-		openedClass?: string;
-
-		/**
-		 * CSS class(es) to be added to the top modal window.
-		 */
-		windowTopClass?: string;
-
-		/**
-		 * A string reference to the component to be rendered that is registered with Angular's compiler. If using a directive, the directive must have `restrict: 'E'` and a template or templateUrl set.
-		 *
-		 * It supports these bindings:
-		 *   - `close` - A method that can be used to close a modal, passing a result. The result must be passed in this format: `{$value: myResult}`
-		 *   - `dismiss` - A method that can be used to dismiss a modal, passing a result. The result must be passed in this format: `{$value: myRejectedResult}`
-		 *   - `modalInstance` - The modal instance. This is the same `$uibModalInstance` injectable found when using `controller`.
-		 *   - `resolve` - An object of the modal resolve values. See [UI Router resolves] for details.
-		 */
-		component?: string;
-
-		/**
-		 * Sets the `aria-describedby` property on the modal.
-		 * The string should be an id (without the leading '#') pointing to the element that describes your modal.
-		 * @memberOf IModalSettings
-		 */
-		ariaDescribedBy?: string;
-
-		/**
-		 * Sets the `aria-labelledby` property on the modal.
-		 * The string should be an id (without the leading '#') pointing to the element that labels your modal.
-		 * @memberOf IModalSettings
-		 */
-		ariaLabelledBy?: string;
-}
-
-export interface UIModalInstanceService {
-
-		/**
-		 * A promise that is resolved when a modal is closed and rejected when a modal is dismissed.
-		 */
-		result: angular.IPromise<any>;
-
-		/**
-		 * A promise that is resolved when a modal gets opened after downloading content's template and resolving all variables.
-		 */
-		opened: angular.IPromise<any>;
-
-		/**
-		 * A promise that is resolved when a modal is rendered.
-		 */
-		rendered: angular.IPromise<any>;
-
-		/**
-		 * A promise that is resolved when a modal is closed and the animation completes.
-		 */
-		closed: angular.IPromise<any>;
-		/**
-		 * A method that can be used to close a modal, passing a result. If `preventDefault` is called on the `modal.closing` event then the modal will remain open.
-		 */
-		close(result?: any): void;
-
-		/**
-		 * A method that can be used to dismiss a modal, passing a reason. If `preventDefault` is called on the `modal.closing` event then the modal will remain open.
-		 */
-		dismiss(reason?: any): void;
+	onDismiss?(this: { $log: NgLogger }): boolean;
 }
