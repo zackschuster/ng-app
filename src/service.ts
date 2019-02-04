@@ -13,7 +13,12 @@ export class NgService {
 
 	/**
 	 * Separates words in a string by capital letters. Also capitalizes the first letter.
-	 * If string is all-caps, it's returned as-is.
+	 *
+	 * The following exceptions apply:
+	 * 1) If string is all-caps, it's returned as-is
+	 * 2) Any embedded acronyms (such as F.A.Q.) are returned as-is
+	 * 3) Consecutive capital letters are returned as-is
+	 * 3) Hyphenated words retain concatenation
 	 *
 	 * @param item - The string value to be split
 	 */
@@ -23,7 +28,24 @@ export class NgService {
 			? item
 			: split
 					.map(x => x.trim())
-					.map(x => x.charAt(0).toUpperCase() + x.substring(1))
-					.join(' ');
+					.map(x =>
+						x.length === 1 || (x.length === 2 && x.charAt(1) === '.')
+							? (x.toUpperCase() + '\uFFFF')
+							: (x.charAt(0).toUpperCase() + x.substring(1)),
+					)
+					.join(' ')
+					.replace(
+						/\w{1}\.?(\uFFFF){1}\s?/g,
+						([first, second]) =>
+							second === '.'
+								? first + second
+								: first,
+					)
+					.replace(
+						/\.{1}\w{2,}/g,
+						([first, second, ...rest]) =>
+							`${first} ${second.toUpperCase()}${rest.join('')}`,
+					)
+					.replace(/- /g, '-');
 	}
 }
