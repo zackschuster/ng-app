@@ -2,7 +2,7 @@ import { NgController } from '../controller';
 import { NgLogger } from './logger';
 import { NgService } from './base';
 
-export class NgModalService extends NgService {
+export class NgModal extends NgService {
 	public backdrop: HTMLDivElement;
 	public container: HTMLDivElement;
 	public content: HTMLDivElement;
@@ -24,7 +24,7 @@ export class NgModalService extends NgService {
 		super();
 
 		this.backdrop = this.makeBackdrop();
-		document.appendChild(this.backdrop);
+		document.body.appendChild(this.backdrop);
 
 		this.header = this.makeHeader();
 
@@ -57,16 +57,13 @@ export class NgModalService extends NgService {
 	}
 
 	public open<T extends NgController>(options: NgModalOptions<T>) {
-		const { $log, hideModal } = this;
+		const { $log } = this;
 		const {
 			title = 'Set the <code>template</code> property to replace me :)',
 			template = '<p class="lead">Set the <code>template</code> property to replace me :)</p>',
 			size = 'lg',
 			controller = NgController,
-			onSave = () => {
-				return true;
-			},
-			onDismiss = () => {
+			onClose = () => {
 				return true;
 			},
 		} = options;
@@ -82,30 +79,36 @@ export class NgModalService extends NgService {
 
 		const escapeKeyListener = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' || e.key === 'Esc') {
-				if (onDismiss.call({ $log })) {
-					dismiss();
-				}
+				close();
 			}
 		};
-		const dismiss = hideModal.bind(null, escapeKeyListener, $scope);
+		const hide = this.hideModal.bind(null, escapeKeyListener, $scope);
+		const dismiss = () => {
+			removeEventListeners();
+			hide();
+		};
 
 		this.showModal(escapeKeyListener);
 
-		const closeModalButton = () => {
-			this.headerCloseButton.removeEventListener('click', closeModalButton);
-			this.footerCloseButton.removeEventListener('click', closeModalButton);
-			dismiss();
+		const removeEventListeners = () => {
+			this.headerCloseButton.removeEventListener('click', dismiss);
+			this.footerCloseButton.removeEventListener('click', dismiss);
+			this.footerSaveButton.removeEventListener('click', close);
 		};
-		this.headerCloseButton.addEventListener('click', closeModalButton);
-		this.footerCloseButton.addEventListener('click', closeModalButton);
 
-		const save = () => {
-			if (onSave.call({ $log }, controller as T)) {
-				this.footerSaveButton.removeEventListener('click', save);
+		const close = () => {
+			if (onClose.call({ $log }, controller as T)) {
 				dismiss();
 			}
 		};
-		this.footerSaveButton.addEventListener('click', save);
+		this.headerCloseButton.addEventListener('click', dismiss);
+		this.footerCloseButton.addEventListener('click', dismiss);
+		this.footerSaveButton.addEventListener('click', close);
+
+		return {
+			close,
+			dismiss,
+		};
 	}
 
 	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
@@ -242,7 +245,5 @@ export interface NgModalOptions<T extends NgController> {
 	 */
 	controller?: T;
 
-	onSave?(this: { $log: NgLogger }, controller: T): boolean;
-
-	onDismiss?(this: { $log: NgLogger }): boolean;
+	onClose?(this: { $log: NgLogger }, controller: T): boolean;
 }

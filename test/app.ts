@@ -1,5 +1,5 @@
 import test from 'ava';
-import { NgDataService, NgLogger, NgModalService, app, inputs, misc } from '..';
+import { NgDataService, NgLogger, NgModal, app, inputs, misc } from '..';
 import { $prefix } from './mocks';
 
 app.configure({
@@ -40,5 +40,5 @@ test('app.log returns NgLogger', async t => {
 });
 
 test('app.modal returns NgModalService', async t => {
-	t.true(app.modal instanceof NgModalService);
+	t.true(app.modal instanceof NgModal);
 });

@@ -9,7 +9,7 @@ import {
 	NgDataService,
 	NgDataServiceOptions,
 	NgLogger,
-	NgModalService,
+	NgModal,
 	NgRouter,
 	NgStateService,
 } from './services';
@@ -257,7 +257,7 @@ export class NgApp {
 	}
 
 	protected $modal() {
-		return new NgModalService(
+		return new NgModal(
 			this.$logger(),
 			this.$injector.get('$compile'),
 			this.$injector.get('$controller'),
