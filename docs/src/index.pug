@@ -17,10 +17,17 @@ html(lang="en")
 
 		.container-fluid
 			.row
+				.col-12.my-3
+					.card
+						.card-body
+							button.btn.btn-outline-dark#open-modal(type="button") Open Modal
+
 				.col-12
 					.card
 						.card-body
-							app-icon(icon="x")
+							fieldset
+								legend Icons
+								app-icon(icon="x")
 
 			.card-deck
 				.card.mt-3.shadow

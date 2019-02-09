@@ -3,17 +3,17 @@ import { NgLogger } from './logger';
 import { NgService } from './base';
 
 export class NgModal extends NgService {
-	public backdrop: HTMLDivElement;
-	public container: HTMLDivElement;
-	public content: HTMLDivElement;
-	public dialog: HTMLDivElement;
-	public header: HTMLDivElement;
-	public headerCloseButton: HTMLButtonElement;
-	public title: HTMLHeadingElement;
-	public body: HTMLDivElement;
-	public footer: HTMLDivElement;
-	public footerCloseButton: HTMLButtonElement;
-	public footerSaveButton: HTMLButtonElement;
+	protected backdrop: HTMLDivElement;
+	protected container: HTMLDivElement;
+	protected content: HTMLDivElement;
+	protected dialog: HTMLDivElement;
+	protected header: HTMLDivElement;
+	protected headerCloseButton: HTMLButtonElement;
+	protected title: HTMLHeadingElement;
+	protected body: HTMLDivElement;
+	protected footer: HTMLDivElement;
+	protected footerCancelButton: HTMLButtonElement;
+	protected footerOkButton: HTMLButtonElement;
 
 	constructor(
 		private $log: NgLogger,
@@ -24,8 +24,6 @@ export class NgModal extends NgService {
 		super();
 
 		this.backdrop = this.makeBackdrop();
-		document.body.appendChild(this.backdrop);
-
 		this.header = this.makeHeader();
 
 		this.title = this.makeTitle();
@@ -41,11 +39,11 @@ export class NgModal extends NgService {
 		this.content.appendChild(this.body);
 
 		this.footer = this.makeFooter();
-		this.footerCloseButton = this.makeFooterCloseButton();
-		this.footer.appendChild(this.footerCloseButton);
+		this.footerCancelButton = this.makeFooterCancelButton();
+		this.footer.appendChild(this.footerCancelButton);
 
-		this.footerSaveButton = this.makeFooterSaveButton();
-		this.footer.appendChild(this.footerSaveButton);
+		this.footerOkButton = this.makeFooterOkButton();
+		this.footer.appendChild(this.footerOkButton);
 
 		this.content.appendChild(this.footer);
 
@@ -54,23 +52,42 @@ export class NgModal extends NgService {
 
 		this.container = this.makeContainer();
 		this.container.appendChild(this.dialog);
+		document.body.appendChild(this.container);
 	}
 
-	public open<T extends NgController>(options: NgModalOptions<T>) {
+	public open<T extends NgController>(options: NgModalOptions<T> = { }) {
 		const { $log } = this;
 		const {
-			title = 'Set the <code>template</code> property to replace me :)',
+			title = 'Set the <code>title</code> property to replace me :)',
 			template = '<p class="lead">Set the <code>template</code> property to replace me :)</p>',
-			size = 'lg',
 			controller = NgController,
 			onClose = () => {
 				return true;
 			},
 		} = options;
 
-		this.title.innerText = typeof title === 'function' ? title() : title;
-		this.content.innerHTML = template;
-		this.container.classList.add(`modal-${size}`);
+		const defaultCancelBtnText = 'Cancel';
+		const defaultOkBtnText = 'Ok';
+		let {
+			cancelBtnText = defaultCancelBtnText,
+			okBtnText = defaultOkBtnText,
+		} = options;
+
+		if (cancelBtnText !== false) {
+			if (cancelBtnText === true) {
+				cancelBtnText = defaultCancelBtnText;
+			}
+			this.footerCancelButton.innerText = cancelBtnText;
+		}
+		if (okBtnText !== false) {
+			if (okBtnText === true) {
+				okBtnText = defaultOkBtnText;
+			}
+			this.footerOkButton.innerText = okBtnText;
+		}
+
+		this.title.innerHTML = typeof title === 'function' ? title() : title;
+		this.body.innerHTML = typeof template === 'function' ? template() : template;
 
 		const $scope = Object.assign(this.$rootScope.$new(true), {
 			$ctrl: this.$controller<T>(controller as any),
@@ -82,18 +99,18 @@ export class NgModal extends NgService {
 				close();
 			}
 		};
-		const hide = this.hideModal.bind(null, escapeKeyListener, $scope);
 		const dismiss = () => {
 			removeEventListeners();
-			hide();
+			this.hideModal(escapeKeyListener, $scope);
 		};
 
 		this.showModal(escapeKeyListener);
 
 		const removeEventListeners = () => {
 			this.headerCloseButton.removeEventListener('click', dismiss);
-			this.footerCloseButton.removeEventListener('click', dismiss);
-			this.footerSaveButton.removeEventListener('click', close);
+			this.footerCancelButton.removeEventListener('click', dismiss);
+			this.footerOkButton.removeEventListener('click', close);
+			this.backdrop.removeEventListener('click', close);
 		};
 
 		const close = () => {
@@ -102,23 +119,31 @@ export class NgModal extends NgService {
 			}
 		};
 		this.headerCloseButton.addEventListener('click', dismiss);
-		this.footerCloseButton.addEventListener('click', dismiss);
-		this.footerSaveButton.addEventListener('click', close);
+		this.footerCancelButton.addEventListener('click', dismiss);
+		this.footerOkButton.addEventListener('click', close);
+		this.backdrop.addEventListener('click', close);
 
-		return {
-			close,
-			dismiss,
-		};
+		return { close, dismiss };
 	}
 
 	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
-		this.backdrop.classList.add('show');
-		this.container.classList.add('show');
+		this.backdrop.style.setProperty('display', 'block');
+
+		this.container.style.setProperty('display', 'block');
+		this.container.classList.remove('show');
 		this.container.removeAttribute('aria-hidden');
 		this.container.setAttribute('aria-modal', 'true');
-		this.container.style.setProperty('display', 'block');
 		this.container.style.setProperty('padding-right', '17px');
+		this.container.style.setProperty('pointer-events', 'none');
+
+		setTimeout(() => {
+			this.backdrop.classList.add('show');
+			this.container.classList.add('show');
+		});
+
 		window.addEventListener('keydown', escapeKeyListener);
+		document.body.appendChild(this.backdrop);
+		document.body.classList.add('modal-open');
 	}
 
 	protected hideModal(
@@ -127,17 +152,20 @@ export class NgModal extends NgService {
 	) {
 		this.backdrop.classList.remove('show');
 		this.container.classList.remove('show');
-		this.container.style.removeProperty('padding-right');
-		this.container.style.setProperty('display', 'none');
+		setTimeout(() => {
+			this.container.style.setProperty('display', 'none');
+			this.backdrop.style.setProperty('display', 'none');
+		}, 150);
 
 		scope.$destroy();
 		window.removeEventListener('keydown', escapeKeyListener);
+		document.body.classList.remove('modal-open');
 	}
 
 	protected makeBackdrop() {
 		const backdrop = document.createElement('div');
 		backdrop.classList.add('modal-backdrop');
-		backdrop.style.setProperty('opacity', '0.5');
+		backdrop.classList.add('fade');
 		return backdrop;
 	}
 
@@ -149,9 +177,6 @@ export class NgModal extends NgService {
 		container.setAttribute('aria-labelledby', 'modal-title');
 		container.setAttribute('role', 'dialog');
 		container.setAttribute('tabindex', '-1');
-		container.style.setProperty('color', 'black');
-		container.style.setProperty('display', 'none');
-		container.style.setProperty('z-index', '1050');
 		return container;
 	}
 
@@ -179,12 +204,7 @@ export class NgModal extends NgService {
 		btn.classList.add('close');
 		btn.setAttribute('aria-label', 'Close');
 		btn.setAttribute('type', 'button');
-
-		const headerCloseButtonText = document.createElement('span');
-		headerCloseButtonText.setAttribute('aria-hidden', 'true');
-		btn.textContent = '&times;';
-
-		btn.appendChild(headerCloseButtonText);
+		btn.innerHTML = '&times;';
 		return btn;
 	}
 
@@ -207,19 +227,17 @@ export class NgModal extends NgService {
 		return footer;
 	}
 
-	protected makeFooterCloseButton() {
+	protected makeFooterCancelButton() {
 		const btn = document.createElement('button');
-		btn.classList.add('btn', 'btn-warning');
+		btn.classList.add('btn', 'btn-info');
 		btn.setAttribute('type', 'button');
-		btn.textContent = 'Close';
 		return btn;
 	}
 
-	protected makeFooterSaveButton() {
+	protected makeFooterOkButton() {
 		const btn = document.createElement('button');
 		btn.classList.add('btn', 'btn-success');
 		btn.setAttribute('type', 'button');
-		btn.textContent = 'Save';
 		return btn;
 	}
 }
@@ -233,12 +251,17 @@ export interface NgModalOptions<T extends NgController> {
 	/**
 	 * Inline template representing the modal's content
 	 */
-	template?: string;
+	template?: string | (() => string);
 
 	/**
-	 * Optional suffix of modal window class. The value used is appended to the `modal-` class, i.e. a value of `sm` gives `modal-sm`.
+	 * Ok button text (false to hide)
 	 */
-	size?: 'sm' | 'md' | 'lg';
+	okBtnText?: string | boolean;
+
+	/**
+	 * Cancel button text (false to hide, true for default)
+	 */
+	cancelBtnText?: string | boolean;
 
 	/**
 	 * A controller for a modal instance.
