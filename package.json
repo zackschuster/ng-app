@@ -30,11 +30,11 @@
     "angular": "1.7.7",
     "angular-animate": "1.7.7",
     "angular-messages": "1.7.7",
-    "choices.js": "4.1.4",
+    "choices.js": "5.0.0",
     "core-decorators": "0.20.0",
     "flatpickr": "4.5.2",
     "noty": "3.1.4",
-    "octicons": "8.3.0"
+    "octicons": "8.4.1"
   },
   "devDependencies": {
     "@ledge/configs": "14.0.1",
