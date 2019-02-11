@@ -18,16 +18,18 @@ html(lang="en")
 		.container-fluid
 			.row
 				.col-12.my-3
-					.card
+					.card.shadow
 						.card-body
-							button.btn.btn-outline-dark#open-modal(type="button") Open Modal
+							button.btn.btn-outline-dark#open-modal(type="button") Modal
 
 				.col-12
-					.card
+					.card.shadow
 						.card-body
 							fieldset
 								legend Icons
-								app-icon(icon="x")
+								- var icons = require('./icons.json')
+								each icon in icons
+									app-icon(icon=icon)
 
 			.card-deck
 				.card.mt-3.shadow

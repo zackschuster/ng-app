@@ -67,12 +67,11 @@ export class NgRenderer {
 			`.trim());
 		}
 
-		const container = this.createHtmlElement('div');
-		container.innerHTML = octicons[iconName].toSVG();
-
+		const svg = octicons[iconName].toSVG({ 'aria-label': iconName });
+		const container = this.createHtmlElement('div', ['d-inline-flex', 'px-1']);
 		container.setAttribute('aria-hidden', 'true');
-		container.style.setProperty('display', 'flex');
-		container.style.setProperty('align-items', 'center');
+		container.setAttribute('title', iconName);
+		container.innerHTML = svg;
 
 		return container;
 	}
