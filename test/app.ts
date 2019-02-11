@@ -16,6 +16,7 @@ test('app has default input components', async t => {
 		'textBox',
 		'htmlInput',
 		'textInput',
+		'appSpinner',
 	]));
 });
 

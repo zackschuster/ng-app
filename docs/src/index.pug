@@ -10,17 +10,28 @@ html(lang="en")
 		title= htmlWebpackPlugin.options.title
 
 	body
-		nav.navbar.navbar-dark.bg-light.shadow-lg
+		nav.navbar.navbar-dark.bg-light.shadow-lg.mb-3
 			h1.text-center.pb-3.display-3
 				span.text-info.mr-2 @ledge/ng-app
 				strong.text-success docs
 
 		.container-fluid
-			.row
-				.col-12.my-3
-					.card
+			.row.no-gutters
+				.col-auto
+					.card.shadow
 						.card-body
-							button.btn.btn-outline-dark#open-modal(type="button") Open Modal
+							fieldset
+								legend Modal
+								button.btn.btn-outline-dark#open-modal(type="button") Open
+
+				.col
+					.card.shadow
+						.card-body
+							fieldset
+								legend Spinners
+								- var colors = require('./colors.json')
+								each color in colors
+									app-spinner(color=color)
 
 			.card-deck
 				.card.mt-3.shadow

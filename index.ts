@@ -3,6 +3,7 @@ import { HttpStatusCode } from '@ledge/types/http';
 
 import { NgApp } from './src/app';
 import { inputs } from './src/inputs';
+import { misc } from './src/misc';
 
 import 'angular-animate';
 import 'angular-messages';
@@ -12,6 +13,7 @@ import '@uirouter/angularjs';
 
 const app = new NgApp()
 	.addComponents(inputs)
+	.addComponents(misc)
 	.addDependencies([
 		'ngAnimate',
 		'ngMessages',
