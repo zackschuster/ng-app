@@ -77,7 +77,7 @@ test('renderer creates radio and checkbox inputs', async t => {
 test('renderer creates range input', async t => {
 	const range = h.createInput('range');
 	t.is(range.classList.length, 1);
-	t.true(range.classList.contains('form-control-range'));
+	t.true(range.classList.contains('custom-range'));
 
 	t.is(range.attributes.length, 6); // includes "class" attribute
 	t.is(range.type, 'range');

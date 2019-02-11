@@ -133,7 +133,7 @@ test('textinput template (range)', async t => {
 	const tpl = util.makeTpl(definedTextInput.template, t, { type: 'range' });
 
 	const input = util.testInput(tpl, t);
-	t.true(input.classList.contains('form-control-range'));
+	t.true(input.classList.contains('custom-range'));
 	t.is(input.type, 'range');
 	t.is(input.getAttribute('placeholder'), null);
 	t.is(input.getAttribute('maxlength'), null);
