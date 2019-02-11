@@ -39,10 +39,11 @@ export const textInput: NgInputOptions = {
 
 		const input = h.createInput(type);
 
-		if (type === 'number' || type === 'range') {
+		const isRange = type === 'range';
+		if (type === 'number' || isRange) {
 			input.setAttribute('ng-attr-min', '{{$ctrl.min}}');
 			input.setAttribute('ng-attr-max', '{{$ctrl.max}}');
-			input.setAttribute('ng-attr-step', `{{$ctrl.step || 'any'}}`);
+			input.setAttribute('ng-attr-step', `{{$ctrl.step || '${isRange ? 1 : 'any'}'}}`);
 		}
 
 		if (minlength != null) {
