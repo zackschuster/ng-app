@@ -75,6 +75,19 @@ test('renderer creates radio and checkbox inputs', async t => {
 	t.is(checkbox.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 });
 
+test('renderer creates range input', async t => {
+	const range = h.createInput('range');
+	t.is(range.classList.length, 1);
+	t.true(range.classList.contains('form-control-range'));
+
+	t.is(range.attributes.length, 6); // includes "class" attribute
+	t.is(range.type, 'range');
+	t.is(range.getAttribute('ng-attr-id'), '{{id}}_{{$ctrl.uniqueId}}');
+	t.is(range.getAttribute('ng-attr-name'), '{{id}}_{{$ctrl.uniqueId}}');
+	t.is(range.getAttribute('ng-model'), '$ctrl.ngModel');
+	t.is(range.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
+});
+
 test('renderer creates textarea', async t => {
 	const input = h.createTextArea();
 

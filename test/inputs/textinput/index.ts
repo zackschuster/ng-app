@@ -124,3 +124,27 @@ test('textinput template (number)', async t => {
 
 	util.testNgTranscludeContain(tpl, t);
 });
+
+test('textinput template (range)', async t => {
+	const tpl = util.makeTpl(definition.template, t, { type: 'range' });
+
+	const input = util.testInput(tpl, t);
+	t.true(input.classList.contains('custom-range'));
+	t.is(input.type, 'range');
+	t.is(input.getAttribute('placeholder'), null);
+	t.is(input.getAttribute('maxlength'), null);
+	t.is(input.getAttribute('ng-attr-min'), '{{$ctrl.min}}');
+	t.is(input.getAttribute('ng-attr-max'), '{{$ctrl.max}}');
+	t.is(input.getAttribute('ng-attr-step'), `{{$ctrl.step || '1'}}`);
+
+	const label = util.testLabel(tpl, t);
+	t.true(label.classList.contains('form-control-label'));
+
+	const ngMessages = util.testNgMessages(tpl, t);
+	const minVal = ngMessages.querySelector('[ng-message="minVal"]') as HTMLDivElement;
+	t.true(minVal.classList.contains('text-danger'));
+	const maxVal = ngMessages.querySelector('[ng-message="maxVal"]') as HTMLDivElement;
+	t.true(maxVal.classList.contains('text-danger'));
+
+	util.testNgTranscludeContain(tpl, t);
+});

@@ -29,11 +29,17 @@ export class NgRenderer {
 	}
 
 	public createInput(type = 'text', attrs: [string, string][] = []) {
+		const $isRange = type === 'range';
 		const $isRadio = type === 'radio';
 		const $isCheckbox = type === 'checkbox';
 		const $isFormCheck = $isRadio || $isCheckbox;
 
-		const $class = $isFormCheck ? ['form-check-input'] : ['form-control'];
+		const $class =
+			$isFormCheck
+				? ['form-check-input']
+				: $isRange
+					? ['form-control-range']
+					: ['form-control'];
 
 		const $inputAttrs: [string, string][] = [
 			...this.baseInputAttrs,
@@ -43,7 +49,7 @@ export class NgRenderer {
 
 		if ($isRadio) {
 			$inputAttrs.shift(); // we'll set the id in render
-		} else if ($isCheckbox === false) {
+		} else if ($isCheckbox === false && $isRange === false) {
 			$inputAttrs.push(['maxlength', '{{maxlength}}'], ['placeholder', '{{placeholder}}']);
 		}
 
