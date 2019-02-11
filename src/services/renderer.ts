@@ -38,7 +38,7 @@ export class NgRenderer {
 			$isFormCheck
 				? ['form-check-input']
 				: $isRange
-					? ['form-control-range']
+					? ['custom-range']
 					: ['form-control'];
 
 		const $inputAttrs: [string, string][] = [
