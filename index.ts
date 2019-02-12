@@ -1,23 +1,21 @@
-import { StateProvider } from '@uirouter/angularjs';
+import uirouter, { StateProvider } from '@uirouter/angularjs';
 import { HttpStatusCode } from '@ledge/types/http';
 
 import { NgApp } from './src/app';
 import { inputs } from './src/inputs';
 import { misc } from './src/misc';
 
-import 'angular-animate';
-import 'angular-messages';
-
-// tslint:disable-next-line:no-duplicate-imports
-import '@uirouter/angularjs';
+import ngAnimate from 'angular-animate';
+// @ts-ignore
+import ngMessages from 'angular-messages';
 
 const app = new NgApp()
 	.addComponents(inputs)
 	.addComponents(misc)
 	.addDependencies([
-		'ngAnimate',
-		'ngMessages',
-		'ui.router',
+		ngAnimate,
+		ngMessages,
+		uirouter,
 	])
 	.addHttpInterceptor({
 		responseError(err) {
