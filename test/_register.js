@@ -1,5 +1,4 @@
 // @ts-ignore
-require('esm');
 require('ts-node').register({ transpileOnly: true, ignore: [] });
 // @ts-ignore
 require('browser-env')({ resources: 'usable' });
