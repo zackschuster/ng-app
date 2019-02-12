@@ -4,9 +4,10 @@ import { NgApp } from './src/app';
 import { inputs } from './src/inputs';
 import { misc } from './src/misc';
 
-import 'angular-animate';
-import 'angular-messages';
-import '@uirouter/angularjs';
+import ngAnimate from 'angular-animate';
+// @ts-ignore
+import ngMessages from 'angular-messages';
+import uirouter from '@uirouter/angularjs';
 
 const app = new NgApp();
 
@@ -14,9 +15,9 @@ app
 	.addComponents(inputs)
 	.addComponents(misc)
 	.addDependencies(
-		'ngAnimate',
-		'ngMessages',
-		'ui.router',
+		ngAnimate,
+		ngMessages,
+		uirouter,
 	)
 	.addHttpInterceptor({
 		responseError(err) {
