@@ -1,7 +1,7 @@
 import { autobind } from 'core-decorators';
 import { Indexed } from '@ledge/types';
 import { NgAppConfig } from './options';
-import { NgDataService, NgLogger, NgService, NgStateService } from './services';
+import { NgHttp, NgLogger, NgService, NgStateService } from './services';
 
 export class NgController extends NgService {
 	public readonly $scope: angular.IScope;
@@ -10,7 +10,7 @@ export class NgController extends NgService {
 
 	public readonly $config: NgAppConfig;
 	public readonly $log: NgLogger;
-	public readonly $http: NgDataService;
+	public readonly $http: NgHttp;
 	public readonly $state: NgStateService;
 	public readonly $element: HTMLElement;
 
@@ -73,7 +73,7 @@ export class NgController extends NgService {
 
 export function makeInjectableCtrl($controller: new () => angular.IController, locals: {
 	log: NgLogger,
-	http: NgDataService,
+	http: NgHttp,
 	attrs?: Indexed,
 	config(): NgAppConfig;
 }) {

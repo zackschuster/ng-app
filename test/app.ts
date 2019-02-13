@@ -1,7 +1,7 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
 import { $prefix, app } from './mocks';
-import { NgDataService, NgLogger, NgModal } from '../src/services';
+import { NgHttp, NgLogger, NgModal } from '../src/services';
 
 test('app.module.name is app.$id', async t => {
 	t.is(app.$id, app.module.name);
@@ -32,7 +32,7 @@ test('app has default input components', async t => {
 });
 
 test('app.http returns NgDataService', async t => {
-	t.true(app.http instanceof NgDataService);
+	t.true(app.http instanceof NgHttp);
 });
 
 test('app.http.getFullUrl returns prefixed url', async t => {

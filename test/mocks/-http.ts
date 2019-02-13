@@ -2,12 +2,12 @@
 import { HttpStatusCode } from '@ledge/types/http';
 import { injector } from 'angular';
 
-import { NgDataService } from '../../src/services/http';
+import { NgHttp } from '../../src/services/http';
 import { $config } from './--app';
 
 const $injector = injector(['ngMock']);
 
-export const $http = new NgDataService($injector.get('$http'), {
+export const $http = new NgHttp($injector.get('$http'), {
 	onFinally() {
 		$injector.get('$rootScope').$applyAsync();
 	},

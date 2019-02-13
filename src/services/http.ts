@@ -3,16 +3,16 @@ import { isFunction } from 'angular';
 import { NgService } from './base';
 import { NgAppConfig } from '../options';
 
-export interface NgDataServiceOptions extends angular.IRequestShortcutConfig {
+export interface NgHttpOptions extends angular.IRequestShortcutConfig {
 	interceptors?: angular.IHttpInterceptor[];
 	onFinally?(): void;
 	getConfig(): NgAppConfig;
 }
 
-export class NgDataService extends NgService {
+export class NgHttp extends NgService {
 	constructor(
 		private $http: angular.IHttpService,
-		private options: NgDataServiceOptions,
+		private options: NgHttpOptions,
 	) {
 		super();
 	}

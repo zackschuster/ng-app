@@ -1,7 +1,7 @@
 import { NgController, makeInjectableCtrl } from '../controller';
 import { NgLogger } from './logger';
 import { NgService } from './base';
-import { NgDataService } from './http';
+import { NgHttp } from './http';
 import { NgAppConfig } from '../options';
 
 const TIMEOUT = 150;
@@ -25,7 +25,7 @@ export class NgModal extends NgService {
 
 	constructor(
 		protected $log: NgLogger,
-		protected $http: NgDataService,
+		protected $http: NgHttp,
 		protected $config: NgAppConfig,
 		protected $injector: angular.auto.IInjectorService,
 	) {
