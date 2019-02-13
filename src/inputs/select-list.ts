@@ -103,7 +103,7 @@ class SelectController extends NgInputController {
 				? [value].concat(this.ngModel == null ? [] : this.ngModel)
 				: value;
 
-			this.$timeout();
+			this.$scope.$applyAsync();
 		});
 
 		choices.passedElement.element.addEventListener<'removeItem'>('removeItem', ({ detail: { value } }) => {
@@ -114,7 +114,7 @@ class SelectController extends NgInputController {
 			} else {
 				this.ngModel = undefined;
 			}
-			this.$timeout();
+			this.$scope.$applyAsync();
 		});
 
 		const input = this.$element.querySelector('input') as HTMLInputElement;
