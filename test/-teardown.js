@@ -12,7 +12,7 @@ if (fs.existsSync(snapshotLog)) {
 
 const dirs = fs.readdirSync(inputsDir)
 	.filter(x => fs.statSync(path.join(inputsDir, x)).isDirectory())
-	.map(x => path.join(inputsDir, x))
+	.map(x => path.join(inputsDir, x));
 
 for (let dir of dirs) {
 	const htmlFiles = fs.readdirSync(dir)

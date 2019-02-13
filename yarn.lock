@@ -332,10 +332,10 @@
   dependencies:
     arrify "^1.0.1"
 
-"@ledge/configs@14.1.0":
-  version "14.1.0"
-  resolved "https://registry.npmjs.org/@ledge/configs/-/configs-14.1.0.tgz#a698e37e8808cd26054c4f70af1fad6269615fd5"
-  integrity sha512-FVwYaz1uT0ibtIpa0mf1Uo9L9VINFXrqyYUJuj/mroEFM61b3+WPrMxfFDn2io5EHWoyvCkmX48+kTBQWJW1rA==
+"@ledge/configs@14.2.1":
+  version "14.2.1"
+  resolved "https://registry.npmjs.org/@ledge/configs/-/configs-14.2.1.tgz#56363ce5523a1d6022dc8264ba471b7a445ceeb7"
+  integrity sha512-gOBxYaHaOXZu75E3gwnug/Ml+nQbT7EXZYs11T+SoC6/mO67zs1sz1YzxZCcnj7TC7C/8HxkwtAzihRQCMeNZQ==
 
 "@ledge/is-ie-11@1.0.0":
   version "1.0.0"

@@ -1,10 +1,11 @@
 import { PatchPayload } from '@ledge/types/patch';
 import { NgService } from './base';
+import { NgAppConfig } from '../options';
 
 export interface NgDataServiceOptions extends angular.IRequestShortcutConfig {
 	interceptors?: angular.IHttpInterceptor[];
 	onFinally?(): void;
-	getApiPrefix?(): string;
+	getConfig(): NgAppConfig;
 }
 
 export class NgDataService extends NgService {
@@ -57,8 +58,7 @@ export class NgDataService extends NgService {
 	}
 
 	public getFullUrl(endpoint: string) {
-		const { getApiPrefix = () => '/' } = this.options;
-		const prefix = getApiPrefix();
+		const prefix = this.options.getConfig().getApiPrefix();
 
 		const hasSlash = prefix.endsWith('/') || endpoint.startsWith('/');
 		return `${prefix}${hasSlash ? '' : '/'}${endpoint}`;

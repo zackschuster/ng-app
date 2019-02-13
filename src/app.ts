@@ -1,8 +1,9 @@
 import { Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
-import { bootstrap, copy, injector, module } from 'angular';
+import { bootstrap, injector, module } from 'angular';
 import { autobind } from 'core-decorators';
 
+import { NgController, makeInjectableCtrl } from './controller';
 import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
 import {
@@ -11,7 +12,6 @@ import {
 	NgLogger,
 	NgModal,
 	NgRouter,
-	NgStateService,
 } from './services';
 
 @autobind
@@ -25,9 +25,7 @@ export class NgApp {
 	}
 
 	public get config() {
-		return this.$config != null
-			? copy(this.$config)
-			: (Object.create(null) as NgAppConfig);
+		return this.$config;
 	}
 
 	public get components() {
@@ -47,6 +45,7 @@ export class NgApp {
 			this._http = this.$http({
 				timeout: this.$config.IS_PROD ? 10000 : undefined,
 				withCredentials: true,
+				getConfig: () => this.$config,
 			});
 		}
 		return this._http;
@@ -138,16 +137,15 @@ export class NgApp {
 		return this.$bootstrap(document.body, [this.$id], { strictDi });
 	}
 
-	public configure(config: Partial<NgAppConfig>) {
-		const { NODE_ENV } = process.env;
-
-		this.$config = Object.assign(config, {
-			ENV: NODE_ENV,
-			IS_PROD: NODE_ENV === 'production',
-			IS_DEV: NODE_ENV === 'development',
-			IS_STAGING: NODE_ENV === 'staging',
-		} as NgAppConfig);
-
+	public configure(config: {
+		NAME?: string,
+		ENV?: string,
+		PREFIX?: {
+			API: string,
+			TEMPLATE?: string,
+		},
+	}) {
+		this.$config = new NgAppConfig(config);
 		return this;
 	}
 
@@ -156,9 +154,7 @@ export class NgApp {
 		return this;
 	}
 
-	public addComponents(
-		components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>,
-	) {
+	public addComponents(components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>) {
 		const entries =
 			components instanceof Map
 				? components.entries()
@@ -176,9 +172,7 @@ export class NgApp {
 			}
 
 			if (typeof component.ctrl === 'function') {
-				(component as angular.IComponentOptions).controller = this.makeComponentController(
-					component.ctrl,
-				);
+				(component as angular.IComponentOptions).controller = this.makeComponentController(component.ctrl);
 			}
 
 			this.$components.set(name, component);
@@ -203,74 +197,38 @@ export class NgApp {
 		return this;
 	}
 
-	public makeComponentController(
-		$controller: new () => angular.IController,
-	): [
+	public makeComponentController($controller: new () => NgController): [
 		'$element',
 		'$scope',
-		'$attrs',
-		'$timeout',
 		'$injector',
-		'$state',
-		new (...args: any) => angular.IController
+		ReturnType<typeof makeInjectableCtrl>
 	] {
-		const { config, http, log, getApiPrefix } = this;
-		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
-
-		// Force `this` to always refer to the class instance, no matter what
-		autobind($controller);
-
-		class InternalController extends $controller {
-			public $log = log;
-			public $http = http;
-			public $config = config;
-			public $element: HTMLElement;
-
-			public isProduction = IS_PROD;
-			public isDevelopment = IS_DEV;
-			public isStaging = IS_STAGING;
-
-			constructor(
-				$element: JQLite,
-				public $scope: angular.IScope,
-				public $attrs: angular.IAttributes,
-				public $timeout: angular.ITimeoutService,
-				public $injector: angular.auto.IInjectorService,
-				public $state: NgStateService,
-			) {
-				super();
-
-				this.$element = $element[0];
-				this.apiPrefix = getApiPrefix();
-			}
-		}
+		const componentCtrl = makeInjectableCtrl($controller, {
+			log: this.log,
+			http: this.http,
+			config: () => this.config,
+		});
 
 		return [
 			'$element',
 			'$scope',
-			'$attrs',
-			'$timeout',
 			'$injector',
-			'$state',
-			InternalController,
+			componentCtrl,
 		];
 	}
 
 	protected $modal() {
 		return new NgModal(
-			this.$logger(),
-			this.$injector.get('$compile'),
-			this.$injector.get('$controller'),
-			this.$injector.get('$rootScope'),
+			this.log,
+			this.http,
+			this.config,
+			this.$injector,
 		);
 	}
 
 	protected $http(options: NgDataServiceOptions) {
 		if ((typeof options.onFinally === 'function') === false) {
 			options.onFinally = this.forceUpdate;
-		}
-		if ((typeof options.getApiPrefix === 'function') === false) {
-			options.getApiPrefix = this.getApiPrefix;
 		}
 		if (Array.isArray(options.interceptors)) {
 			for (const interceptor of options.interceptors) {
@@ -285,16 +243,5 @@ export class NgApp {
 
 	protected $logger() {
 		return new NgLogger(this.$injector.get('$log'), this.$config.IS_PROD);
-	}
-
-	protected getApiPrefix() {
-		const { PREFIX = { } } = this.$config;
-		const { API = '' } = PREFIX;
-
-		if (typeof API !== 'string') {
-			this.log.devWarning('config.PREFIX.API not set to a string.');
-		}
-
-		return API;
 	}
 }

@@ -1,10 +1,11 @@
 import { NgAppConfig } from './options';
 import { NgDataService, NgLogger, NgService, NgStateService } from './services';
+import { autobind } from 'core-decorators';
+import { Indexed } from '@ledge/types';
 
 export class NgController extends NgService {
 	public readonly $scope: angular.IScope;
 	public readonly $attrs: angular.IAttributes;
-	public readonly $timeout: angular.ITimeoutService;
 	public readonly $injector: angular.auto.IInjectorService;
 
 	public readonly $config: NgAppConfig;
@@ -68,4 +69,102 @@ export class NgController extends NgService {
 	 * different in Angular 1 there is no direct mapping and care should be taken when upgrading.
 	 */
 	public $postLink?(): void;
+}
+
+export function makeInjectableCtrl($controller: new () => angular.IController, locals: {
+	log: NgLogger,
+	http: NgDataService,
+	attrs?: Indexed,
+	config(): NgAppConfig;
+}) {
+	class InternalController extends $controller {
+		public $log = locals.log;
+		public $http = locals.http;
+		public $element: HTMLElement;
+		public $attrs: angular.IAttributes;
+		public $state: NgStateService;
+
+		public get $config() {
+			return locals.config();
+		}
+		public get isProduction() {
+			return this.$config.IS_PROD;
+		}
+		public get isDevelopment() {
+			return this.$config.IS_DEV;
+		}
+		public get isStaging() {
+			return this.$config.IS_STAGING;
+		}
+		public get apiPrefix() {
+			return this.$config.getApiPrefix();
+		}
+
+		constructor(
+			$element: JQLite,
+			public $scope: angular.IScope,
+			public $injector: angular.auto.IInjectorService,
+		) {
+			super();
+
+			this.$element = $element[0];
+			this.$attrs = new Attributes(this.$element, locals.attrs);
+			this.$state = this.$injector.get('$state');
+		}
+	}
+
+	autobind(InternalController);
+	return InternalController;
+}
+
+export class Attributes implements angular.IAttributes {
+	[name: string]: string | object;
+	public readonly $attr: Indexed<string> = { };
+
+	public PREFIX_REGEXP = /^((?:x|data)[:\-_])/i;
+	public SPECIAL_CHARS_REGEXP = /[:\-_]+(.)/g;
+
+	constructor(private readonly $$element: Element, attrs: Indexed = { }) {
+		for (const attr of Array.from($$element.attributes)) {
+			const normalized = this.$normalize(attr.name);
+			this[normalized] = attr.value;
+			this.$attr[attr.name] = normalized;
+		}
+
+		for (const [key, value] of Object.entries(attrs)) {
+			const normalized = this.$normalize(key);
+			this[normalized] = value;
+			this.$attr[key] = normalized;
+		}
+	}
+
+	public $normalize(name: string) {
+		return name
+			.replace(this.PREFIX_REGEXP, '')
+			.replace(this.SPECIAL_CHARS_REGEXP, (_, letter, offset) => offset ? letter.toUpperCase() : letter);
+	}
+
+	public $addClass(className: string) {
+		this.$$element.classList.add(className);
+	}
+
+	public $removeClass(className: string) {
+		this.$$element.classList.remove(className);
+	}
+
+	public $updateClass(_: string, __: string) {
+		// tslint:disable-next-line:no-console
+		console.warn('$updateClass is a noop');
+	}
+
+	public $set(_: string, __: any) {
+		// tslint:disable-next-line:no-console
+		console.warn('$set is a noop');
+	}
+
+	public $observe<T>(_: string, __: (value?: T) => any) {
+		// tslint:disable-next-line:no-console
+		console.warn('$observe is a noop');
+		return () => { return; };
+	}
 }

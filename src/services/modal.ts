@@ -1,6 +1,8 @@
-import { NgController } from '../controller';
+import { NgController, makeInjectableCtrl } from '../controller';
 import { NgLogger } from './logger';
 import { NgService } from './base';
+import { NgDataService } from './http';
+import { NgAppConfig } from '../options';
 
 export class NgModal extends NgService {
 	protected backdrop: HTMLDivElement;
@@ -15,13 +17,21 @@ export class NgModal extends NgService {
 	protected footerCancelButton: HTMLButtonElement;
 	protected footerOkButton: HTMLButtonElement;
 
+	protected $compile: angular.ICompileService;
+	protected $controller: angular.IControllerService;
+	protected $rootScope: angular.IRootScopeService;
+
 	constructor(
-		private $log: NgLogger,
-		private $compile: angular.ICompileService,
-		private $controller: angular.IControllerService,
-		private $rootScope: angular.IRootScopeService,
+		protected $log: NgLogger,
+		protected $http: NgDataService,
+		protected $config: NgAppConfig,
+		protected $injector: angular.auto.IInjectorService,
 	) {
 		super();
+
+		this.$compile = this.$injector.get('$compile');
+		this.$controller = this.$injector.get('$controller');
+		this.$rootScope = this.$injector.get('$rootScope');
 
 		this.backdrop = this.makeBackdrop();
 		this.header = this.makeHeader();
@@ -55,7 +65,7 @@ export class NgModal extends NgService {
 		document.body.appendChild(this.container);
 	}
 
-	public open<T extends NgController>(options: NgModalOptions<T> = { }) {
+	public open<T extends typeof NgController>(options: NgModalOptions<T> = { }) {
 		const { $log } = this;
 		const {
 			title = 'Set the <code>title</code> property to replace me :)',
@@ -89,10 +99,16 @@ export class NgModal extends NgService {
 		this.title.innerHTML = typeof title === 'function' ? title() : title;
 		this.body.innerHTML = typeof template === 'function' ? template() : template;
 
-		const $scope = Object.assign(this.$rootScope.$new(true), {
-			$ctrl: this.$controller<T>(controller as any),
+		const $scope = this.$rootScope.$new(true) as angular.IScope & { $ctrl: NgController };
+		const $element = this.$compile(this.container)($scope);
+		const $ctrl = makeInjectableCtrl(controller, {
+			log: this.$log,
+			http: this.$http,
+			config: () => this.$config,
 		});
-		this.$compile(this.container)($scope);
+
+		$scope.$ctrl = new $ctrl($element, $scope, this.$injector) as NgController;
+		$scope.$apply();
 
 		const escapeKeyListener = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' || e.key === 'Esc') {
@@ -242,7 +258,7 @@ export class NgModal extends NgService {
 	}
 }
 
-export interface NgModalOptions<T extends NgController> {
+export interface NgModalOptions<T extends typeof NgController> {
 	/**
 	 * String representing the modal's title
 	 */

@@ -8,27 +8,25 @@ import { ExecutionContext } from 'ava';
 // @ts-ignore
 import pretty = require('pretty');
 
-import { NgController, makeNgCtrl } from '../..';
-import { $controller, $element, $invokeTemplate, $scope, $svc } from '../mocks';
+import { $element, $http, $invokeTemplate, $log, $scope, $svc } from '../mocks';
 import { InputService } from '../../src/inputs';
+import { makeInjectableCtrl } from '../../src/controller';
+import { $config } from '../mocks/-config';
+import { $injector } from '../mocks/--injector';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
-export function mockCtrl<T = NgController>(
+export function mockCtrl(
 	ctrl: any,
 	$attrs: Partial<angular.IAttributes> = { },
 ) {
-	return $controller<T>(
-		makeNgCtrl(ctrl) as any, {
-			$scope,
-			$element,
-			$attrs,
-			$timeout: { },
-			$injector: { },
-			$state: { },
-			$http: { },
-		},
-	);
+	const Controller = makeInjectableCtrl(ctrl, {
+		log: $log,
+		http: $http,
+		config: () => $config,
+		attrs: $attrs,
+	});
+	return new Controller($element, $scope, $injector);
 }
 
 export function makeTpl(
