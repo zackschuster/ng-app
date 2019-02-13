@@ -1,5 +1,5 @@
 import test from 'ava';
-import { NgDataService, NgLogger, NgModal, app, inputs, misc } from '..';
+import { NgHttp, NgLogger, NgModal, app, inputs, misc } from '..';
 import { $prefix } from './mocks';
 
 app.configure({
@@ -28,7 +28,7 @@ test('app has default input components', async t => {
 });
 
 test('app.http returns NgDataService', async t => {
-	t.true(app.http instanceof NgDataService);
+	t.true(app.http instanceof NgHttp);
 });
 
 test('app.http.getFullUrl returns prefixed url', async t => {

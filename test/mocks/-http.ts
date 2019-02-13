@@ -1,9 +1,9 @@
 // import { module } from 'angular';
-import { NgDataService } from '../../src/services/http';
+import { NgHttp } from '../../src/services/http';
 import { $injector } from './--injector';
 import { $config } from './-config';
 
-export const $http = new NgDataService($injector.get('$http'), {
+export const $http = new NgHttp($injector.get('$http'), {
 	onFinally() {
 		$injector.get('$rootScope').$applyAsync();
 	},

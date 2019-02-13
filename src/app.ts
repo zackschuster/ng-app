@@ -7,8 +7,8 @@ import { NgController, makeInjectableCtrl } from './controller';
 import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
 import {
-	NgDataService,
-	NgDataServiceOptions,
+	NgHttp,
+	NgHttpOptions,
 	NgLogger,
 	NgModal,
 	NgRouter,
@@ -226,7 +226,7 @@ export class NgApp {
 		);
 	}
 
-	protected $http(options: NgDataServiceOptions) {
+	protected $http(options: NgHttpOptions) {
 		if ((typeof options.onFinally === 'function') === false) {
 			options.onFinally = this.forceUpdate;
 		}
@@ -238,7 +238,7 @@ export class NgApp {
 		// allow all dataservice instances to share the same interceptor queue
 		options.interceptors = this.$httpInterceptors;
 
-		return new NgDataService(this.$injector.get('$http'), options);
+		return new NgHttp(this.$injector.get('$http'), options);
 	}
 
 	protected $logger() {
