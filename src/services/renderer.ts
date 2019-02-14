@@ -10,7 +10,7 @@ export class NgRenderer extends Renderer2 {
 		['ng-model-options', '$ctrl.ngModelOptions'],
 	];
 
-	constructor(private document: Document) {
+	constructor(public readonly document: Document) {
 		super();
 	}
 
@@ -158,7 +158,9 @@ export class NgRenderer extends Renderer2 {
 		return;
 	}
 
-	public createElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(tagName: T) {
+	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T): HTMLElementTagNameMap[T];
+	public createElement(tagName: string): HTMLUnknownElement;
+	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T) {
 		return this.document.createElement(tagName);
 	}
 
