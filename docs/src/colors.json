@@ -2,9 +2,9 @@
 	"primary",
 	"secondary",
 	"success",
-	"danger",
-	"warning",
 	"info",
+	"warning",
+	"danger",
 	"light",
 	"dark"
 ]
