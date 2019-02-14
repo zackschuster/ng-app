@@ -99,7 +99,7 @@ export class InputService extends NgService {
 	}
 
 	public static wrapComponentCtrl($ctrl: new(...args: any[]) => NgInputController) {
-		return class extends $ctrl {
+		return class WrappedInputController extends $ctrl {
 			constructor() {
 				super();
 				setTimeout(() => {

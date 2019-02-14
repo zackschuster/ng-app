@@ -23,6 +23,12 @@ export class NgService {
 		});
 	}
 
+	public readonly uniqueId = this.UUIDv4().replace(/[-]|[,]/g, '');
+
+	public UUIDv4() {
+		return NgService.UUIDv4();
+	}
+
 	protected get isMobile() {
 		return isMobile();
 	}
