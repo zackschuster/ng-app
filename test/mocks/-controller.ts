@@ -1,13 +1,9 @@
 import { NgController, makeInjectableCtrl } from '../../src/controller';
-import { NgInputController } from '../../src/inputs';
 
 import { $injector } from './--injector';
 import { $config } from './--app';
 import { $http } from './-http';
 import { $log } from './-logger';
-
-export { NgInputController };
-export const $inputCtrl = new NgInputController();
 
 const Ctrl = makeInjectableCtrl(NgController, { log: $log, http: $http, config: () => $config });
 export const $scope = $injector.get('$rootScope').$new();

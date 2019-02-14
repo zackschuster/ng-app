@@ -1,8 +1,7 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
 import { radioList } from '../../../src/inputs/radio-list';
-import { InputService } from '../../../src/inputs';
-import { NgInputController } from '../../mocks';
+import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(radioList, document);

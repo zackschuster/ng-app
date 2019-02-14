@@ -1,8 +1,8 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
 import { copy, isFunction } from 'angular';
-import { NgInputController, makeAttrs } from '../mocks';
-import { InputService } from '../../src/inputs';
+import { makeAttrs } from '../mocks';
+import { InputService, NgInputController } from '../../src/inputs';
 
 test('InputService.$validationAttrs', async t => {
 	t.deepEqual(InputService.$validationAttrs, [
@@ -45,8 +45,7 @@ test('InputService.$baseComponent', async t => {
 	t.true($baseComponent.renderLabel instanceof Function);
 	t.true($baseComponent.postRender instanceof Function);
 	t.true($baseComponent.render instanceof Function);
-	// tslint:disable-next-line: no-non-null-assertion
-	t.true(new $baseComponent.ctrl!() instanceof NgInputController);
+	t.true($baseComponent.ctrl?.prototype instanceof NgInputController);
 	Reflect.deleteProperty($baseComponent, 'renderLabel');
 	Reflect.deleteProperty($baseComponent, 'postRender');
 	Reflect.deleteProperty($baseComponent, 'render');

@@ -1,8 +1,7 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
 import { selectList } from '../../../src/inputs/select-list';
-import { InputService } from '../../../src/inputs';
-import { NgInputController } from '../../mocks';
+import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(selectList, document);
