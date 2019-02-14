@@ -1,9 +1,10 @@
 // import { module } from 'angular';
 import { NgHttp } from '../../src/services/http';
+
 import { $injector } from './--injector';
 import { $config } from './-config';
 
-export const $http = new NgHttp($injector.get('$http'), {
+export const $http = new NgHttp({
 	onFinally() {
 		$injector.get('$rootScope').$applyAsync();
 	},
@@ -18,39 +19,33 @@ export const $http = new NgHttp($injector.get('$http'), {
 // 		$sceDelegateProvider.resourceUrlWhitelist(['self', `${$prefix}/**`]);
 // 	}]);
 
-const $backend = $injector.get('$httpBackend');
 export async function pingTestUrl(
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'JSONP',
 	endpoint: string,
 ) {
-	const url = $http.getFullUrl(endpoint);
-	$backend.when(method, url).respond(200, endpoint);
-
-	// flush requests at end of event loop
-	// skips an assignment dance in switch/case
-	setTimeout(() => {
-		try {
-			$backend.verifyNoOutstandingRequest();
-		} catch {
-			$backend.flush();
-		}
-	});
-
+	let rsp: any;
 	switch (method) {
 		case 'GET':
-			return $http.Get<string>(endpoint);
+			rsp = await $http.Get<string>(endpoint);
+			break;
 		case 'POST':
-			return $http.Post<string>(endpoint, endpoint);
+			rsp = await $http.Post<string>(endpoint, endpoint);
+			break;
 		case 'PUT':
-			return $http.Put<string>(endpoint, endpoint);
+			rsp = await $http.Put<string>(endpoint, endpoint);
+			break;
 		case 'PATCH':
-			return $http.Patch<string>(endpoint, [{ op: 'add', path: '/path', value: endpoint }]);
+			rsp = await $http.Patch<string>(endpoint, [{ op: 'add', path: '/path', value: endpoint }]);
+			break;
 		case 'DELETE':
-			return $http.Delete<string>(endpoint);
+			rsp = await $http.Delete<string>(endpoint);
+			break;
 		case 'JSONP':
 			throw new Error('Currently unable to test JSONP');
 		// 	return $http.Jsonp<string>(endpoint);
 		default:
 			throw new Error('Bad method');
 	}
+
+	return rsp;
 }

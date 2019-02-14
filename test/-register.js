@@ -1,17 +1,26 @@
-// @ts-ignore
 require('ts-node').register({ transpileOnly: true, ignore: [] });
-// @ts-ignore
 require('browser-env')({ resources: 'usable' });
 // @ts-ignore
 require('angular/angular.js');
 require('angular-mocks');
 
-Object.defineProperty(global, 'angular', {
-	configurable: false,
-	enumerable: true,
-	writable: false,
-	// tslint:disable-next-line:object-literal-sort-keys
-	value: /** @type {*} */(window).angular,
-});
+const defineGlobal = /**
+ * @param {string} name
+ * @param {any} value
+ */
+ (name, value) => {
+	Object.defineProperty(global, name, {
+		configurable: false,
+		enumerable: true,
+		writable: false,
+		value
+	});
+}
+
+const fetch = require('node-fetch');
+defineGlobal('fetch', fetch);
+defineGlobal('Request', fetch.Request);
+defineGlobal('Response', fetch.Response);
+defineGlobal('angular', /** @type {Window & { angular: import('angular') }} */(window).angular);
 
 require('@uirouter/angularjs');

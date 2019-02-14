@@ -8,6 +8,7 @@ import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
 import {
 	NgHttp,
+	NgHttpInterceptor,
 	NgHttpOptions,
 	NgLogger,
 	NgModal,
@@ -42,11 +43,7 @@ export class NgApp {
 
 	public get http() {
 		if (this._http == null) {
-			this._http = this.$http({
-				timeout: this.$config.IS_PROD ? 10000 : undefined,
-				withCredentials: true,
-				getConfig: () => this.$config,
-			});
+			this._http = this.$http({ timeout: this.$config.IS_PROD ? 10000 : undefined, getConfig: () => this.$config });
 		}
 		return this._http;
 	}
@@ -73,7 +70,7 @@ export class NgApp {
 	protected readonly $module = module(this.$id, this.$dependencies);
 	protected readonly $bootstrap = bootstrap;
 	protected readonly $components = new Map<string, angular.IComponentOptions>();
-	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
+	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
 
 	protected $router: NgRouter;
 	protected $config: NgAppConfig;
@@ -192,7 +189,7 @@ export class NgApp {
 		return this;
 	}
 
-	public addHttpInterceptor(interceptor: angular.IHttpInterceptor) {
+	public addHttpInterceptor(interceptor: NgHttpInterceptor) {
 		this.$httpInterceptors.push(interceptor);
 		return this;
 	}
@@ -238,7 +235,7 @@ export class NgApp {
 		// allow all dataservice instances to share the same interceptor queue
 		options.interceptors = this.$httpInterceptors;
 
-		return new NgHttp(this.$injector.get('$http'), options);
+		return new NgHttp(options);
 	}
 
 	protected $logger() {
