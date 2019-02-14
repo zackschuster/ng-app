@@ -1,7 +1,6 @@
 import test from 'ava';
 import { htmlInput, textInput } from '../../../src/inputs/text-input';
-import { InputService } from '../../../src/inputs';
-import { NgInputController } from '../../mocks';
+import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../_util';
 
 const definedTextInput = InputService.defineInputComponent(textInput, document);

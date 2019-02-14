@@ -1,7 +1,6 @@
 import test from 'ava';
 import { dateInput } from '../../../src/inputs/date-input';
-import { InputService } from '../../../src/inputs';
-import { NgInputController } from '../../mocks';
+import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../_util';
 
 const definedDateInput = InputService.defineInputComponent(dateInput, document);

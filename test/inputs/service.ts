@@ -1,8 +1,7 @@
 import test from 'ava';
 import { copy } from 'angular';
 import { makeAttrs } from '../mocks';
-import { InputService } from '../../src/inputs';
-import { NgInputController } from '../mocks';
+import { InputService, NgInputController } from '../../src/inputs';
 
 test('InputService.$validationAttrs', async t => {
 	t.deepEqual(InputService.$validationAttrs, [

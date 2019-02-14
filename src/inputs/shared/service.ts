@@ -1,5 +1,4 @@
-import isIE11 from '@ledge/is-ie-11';
-import { IAttributes, copy, equals } from 'angular';
+import { IAttributes, copy } from 'angular';
 
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
@@ -90,41 +89,6 @@ export class InputService extends NgService {
 		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 	}
 
-	public static wrapComponentCtrl($ctrl: new(...args: any[]) => NgInputController) {
-		return class WrappedInputController extends $ctrl {
-			constructor() {
-				super();
-				setTimeout(() => {
-					const $contain = this.$element.querySelector('[ng-transclude="contain"]');
-					if ($contain != null && $contain.children.length === 0) {
-						if (isIE11()) {
-							($contain as any).removeNode(true);
-						} else {
-							$contain.remove();
-						}
-					}
-
-					this.$scope.$watch(
-						() => this.ngModel,
-						(curr: any, prev: any) => {
-							if (equals(curr, prev) === false) {
-								this.ngModelCtrl.$setViewValue(curr);
-								const isValid = Object
-									.keys(this.ngModelCtrl.$validators)
-									.every(x => {
-										return this.ngModelCtrl.$validators[x](curr, curr);
-									});
-								if (isValid) {
-									this.ngModelCtrl.$commitViewValue();
-								}
-							}
-						},
-					);
-				});
-			}
-		};
-	}
-
 	/**
 	 * Transform an input component definition into an ng component definition
 	 * @param component An object representing the requested component definition
@@ -141,9 +105,8 @@ export class InputService extends NgService {
 				return this.labelClass === 'form-check-label';
 			},
 		}, copy($baseComponent), component);
-		const $definition = Object.assign(copy(this.$baseDefinition), {
-			ctrl: this.wrapComponentCtrl($component.ctrl),
-		});
+
+		const $definition = Object.assign(copy(this.$baseDefinition), { ctrl: $component.ctrl });
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);
