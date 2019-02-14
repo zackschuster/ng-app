@@ -5,6 +5,23 @@ class ModalController extends NgController {
 	public body = 'Body';
 }
 
+class AppController extends NgController {
+	public openModal() {
+		app.modal.open({
+			controller: ModalController,
+			title: '{{$ctrl.title}}',
+			template: '<p class="lead">{{$ctrl.body}}</p>',
+		});
+	}
+}
+
+app
+	.module
+	.controller(
+		'AppController',
+		app.makeComponentController(AppController),
+	);
+
 app
 	.configure({
 		PREFIX: {
@@ -15,10 +32,4 @@ app
 	.bootstrap()
 	.then(() => {
 		app.log.success('Welcome... to The World...');
-		const openModalBtn = document.getElementById('open-modal') as HTMLButtonElement;
-		openModalBtn.addEventListener('click', _ => app.modal.open({
-			controller: ModalController,
-			title: '{{$ctrl.title}}',
-			template: '<p class="lead">{{$ctrl.body}}</p>',
-		}));
 	});
