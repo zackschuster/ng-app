@@ -13,10 +13,12 @@ class SpinnerController extends NgController {
 		}
 
 		const renderer = new NgRenderer(document);
-		const spinner = renderer.createHtmlElement('div', ['spinner-border', `text-${color}`, 'mx-1'], [['role', 'status']]);
 		const srDesc = renderer.createHtmlElement('span', ['sr-only']);
 		srDesc.innerText = 'Loading...';
+
+		const spinner = renderer.createHtmlElement('div', ['spinner-border', `text-${color}`, 'mx-1'], [['role', 'status']]);
 		spinner.appendChild(srDesc);
+		spinner.style.setProperty('margin-top', '0.23rem');
 
 		this.$element.appendChild(spinner);
 	}
