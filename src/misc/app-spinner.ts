@@ -9,7 +9,7 @@ class SpinnerController extends NgController {
 		const { color = 'primary' } = this.$attrs;
 
 		if (this.colors.includes(color) === false) {
-			throw new Error(`Icon not supported: ${color}.\nSupported colors: ${this.colors.join(', ')}`);
+			throw new Error(`Color not supported: ${color}.\nSupported colors: ${this.colors.join(', ')}`);
 		}
 
 		const renderer = new NgRenderer(document);
