@@ -77,7 +77,8 @@ export function makeInjectableCtrl($controller: new () => angular.IController, l
 	attrs?: Indexed,
 	config(): NgAppConfig;
 }) {
-	class InternalController extends $controller {
+	autobind($controller);
+	return class InternalController extends $controller {
 		public $log = locals.log;
 		public $http = locals.http;
 		public $element: HTMLElement;
@@ -111,10 +112,7 @@ export function makeInjectableCtrl($controller: new () => angular.IController, l
 			this.$attrs = new Attributes(this.$element, locals.attrs);
 			this.$state = this.$injector.get('$state');
 		}
-	}
-
-	autobind(InternalController);
-	return InternalController;
+	};
 }
 
 export class Attributes implements angular.IAttributes {
