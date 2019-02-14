@@ -110,7 +110,7 @@ export class NgModal extends NgService {
 		});
 
 		$scope.$ctrl = new $ctrl($element, $scope, this.$injector) as NgController;
-		$scope.$apply();
+		$scope.$applyAsync();
 
 		const escapeKeyListener = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' || e.key === 'Esc') {
