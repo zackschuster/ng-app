@@ -13,6 +13,7 @@ import {
 	NgHttpOptions,
 	NgLogger,
 	NgModal,
+	NgRenderer,
 	NgRouter,
 } from './services';
 
@@ -221,6 +222,7 @@ export class NgApp {
 
 	protected $modal() {
 		return new NgModal(
+			new NgRenderer(document),
 			this.log,
 			this.http,
 			this.config,

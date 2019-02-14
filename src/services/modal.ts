@@ -3,6 +3,7 @@ import { NgLogger } from './logger';
 import { NgService } from './base';
 import { NgHttp } from './http';
 import { NgAppConfig } from '../options';
+import { NgRenderer } from './renderer';
 
 const TIMEOUT = 150;
 
@@ -24,6 +25,7 @@ export class NgModal extends NgService {
 	protected $rootScope: angular.IRootScopeService;
 
 	constructor(
+		protected $renderer: NgRenderer,
 		protected $log: NgLogger,
 		protected $http: NgHttp,
 		protected $config: NgAppConfig,
@@ -64,7 +66,7 @@ export class NgModal extends NgService {
 
 		this.container = this.makeContainer();
 		this.container.appendChild(this.dialog);
-		document.body.appendChild(this.container);
+		this.$renderer.document.body.appendChild(this.container);
 	}
 
 	public open<T extends typeof NgController>(options: NgModalOptions<T> = { }) {
@@ -160,8 +162,8 @@ export class NgModal extends NgService {
 		});
 
 		window.addEventListener('keydown', escapeKeyListener);
-		document.body.appendChild(this.backdrop);
-		document.body.classList.add('modal-open');
+		this.$renderer.document.body.appendChild(this.backdrop);
+		this.$renderer.document.body.classList.add('modal-open');
 	}
 
 	protected hideModal(
@@ -178,18 +180,18 @@ export class NgModal extends NgService {
 
 		scope.$destroy();
 		window.removeEventListener('keydown', escapeKeyListener);
-		document.body.classList.remove('modal-open');
+		this.$renderer.document.body.classList.remove('modal-open');
 	}
 
 	protected makeBackdrop() {
-		const backdrop = document.createElement('div');
+		const backdrop = this.$renderer.createElement('div');
 		backdrop.classList.add('modal-backdrop');
 		backdrop.classList.add('fade');
 		return backdrop;
 	}
 
 	protected makeContainer() {
-		const container = document.createElement('div');
+		const container = this.$renderer.createElement('div');
 		container.classList.add('fade');
 		container.classList.add('modal');
 		container.setAttribute('aria-hidden', 'true');
@@ -200,26 +202,26 @@ export class NgModal extends NgService {
 	}
 
 	protected makeDialog() {
-		const dialog = document.createElement('div');
+		const dialog = this.$renderer.createElement('div');
 		dialog.classList.add('modal-dialog');
 		dialog.setAttribute('role', 'document');
 		return dialog;
 	}
 
 	protected makeContent() {
-		const content = document.createElement('div');
+		const content = this.$renderer.createElement('div');
 		content.classList.add('modal-content');
 		return content;
 	}
 
 	protected makeHeader() {
-		const header = document.createElement('div');
+		const header = this.$renderer.createElement('div');
 		header.classList.add('modal-header');
 		return header;
 	}
 
 	protected makeHeaderCloseButton() {
-		const btn = document.createElement('button');
+		const btn = this.$renderer.createElement('button');
 		btn.classList.add('close');
 		btn.setAttribute('aria-label', 'Close');
 		btn.setAttribute('type', 'button');
@@ -228,33 +230,33 @@ export class NgModal extends NgService {
 	}
 
 	protected makeTitle() {
-		const title = document.createElement('h5');
+		const title = this.$renderer.createElement('h5');
 		title.setAttribute('id', 'modal-title');
 		title.classList.add('modal-title');
 		return title;
 	}
 
 	protected makeBody() {
-		const body = document.createElement('div');
+		const body = this.$renderer.createElement('div');
 		body.classList.add('modal-body');
 		return body;
 	}
 
 	protected makeFooter() {
-		const footer = document.createElement('div');
+		const footer = this.$renderer.createElement('div');
 		footer.classList.add('modal-footer');
 		return footer;
 	}
 
 	protected makeFooterCancelButton() {
-		const btn = document.createElement('button');
+		const btn = this.$renderer.createElement('button');
 		btn.classList.add('btn', 'btn-info');
 		btn.setAttribute('type', 'button');
 		return btn;
 	}
 
 	protected makeFooterOkButton() {
-		const btn = document.createElement('button');
+		const btn = this.$renderer.createElement('button');
 		btn.classList.add('btn', 'btn-success');
 		btn.setAttribute('type', 'button');
 		return btn;
