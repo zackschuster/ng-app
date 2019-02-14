@@ -7,14 +7,14 @@ import { NgController, makeInjectableCtrl } from './controller';
 import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
 import {
+	DEFAULT_REQUEST_TIMEOUT,
 	NgHttp,
+	NgHttpInterceptor,
 	NgHttpOptions,
 	NgLogger,
 	NgModal,
 	NgRouter,
 } from './services';
-
-const REQUEST_TIMEOUT = 10000;
 
 @autobind
 export class NgApp {
@@ -45,9 +45,8 @@ export class NgApp {
 	public get http() {
 		if (this._http == null) {
 			this._http = this.$http({
-				timeout: this.$config.IS_PROD ? REQUEST_TIMEOUT : undefined,
-				withCredentials: true,
-				getConfig: () => this.$config,
+				timeout: this.$config.IS_PROD ? DEFAULT_REQUEST_TIMEOUT : undefined,
+				getConfig: () => this.$config
 			});
 		}
 		return this._http;
@@ -76,8 +75,8 @@ export class NgApp {
 
 	protected readonly $module = module(this.$id, this.$dependencies);
 	protected readonly $bootstrap = bootstrap;
-	protected readonly $components: Map<string, NgComponentOptions> = new Map();
-	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
+	protected readonly $components = new Map<string, angular.IComponentOptions>();
+	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
 
 	private _http: ReturnType<NgApp['$http']>;
 	private _log: ReturnType<NgApp['$logger']>;
@@ -195,30 +194,8 @@ export class NgApp {
 		return this;
 	}
 
-	public addHttpInterceptor(interceptor: angular.IHttpInterceptor) {
-		if (this.$httpInterceptors.every(x => x != null)) {
-			this.$httpInterceptors.push(interceptor);
-		} else {
-			for (let i = 0; i < this.$httpInterceptors.length; i++) {
-				const current = this.$httpInterceptors[i];
-				if (current == null) {
-					this.$httpInterceptors[i] = interceptor;
-					break;
-				}
-			}
-		}
-		return this;
-	}
-
-	public removeHttpInterceptor(interceptor: angular.IHttpInterceptor) {
-		const i = this.$httpInterceptors.findIndex(x => x === interceptor);
-		if (i > -1) {
-			if (i === (this.$httpInterceptors.length - 1)) {
-				this.$httpInterceptors.pop();
-			} else {
-				this.$httpInterceptors.splice(i, 1);
-			}
-		}
+	public addHttpInterceptor(interceptor: NgHttpInterceptor) {
+		this.$httpInterceptors.push(interceptor);
 		return this;
 	}
 
@@ -266,7 +243,7 @@ export class NgApp {
 		// allow all dataservice instances to share the same interceptor queue
 		options.interceptors = this.$httpInterceptors;
 
-		return new NgHttp(this.$injector.get('$http'), options);
+		return new NgHttp(options);
 	}
 
 	protected $logger() {

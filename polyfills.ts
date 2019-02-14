@@ -12,6 +12,8 @@ import 'core-js/fn/object/assign';
 import 'core-js/fn/object/entries';
 import 'core-js/fn/string/includes';
 import 'core-js/fn/string/starts-with';
+import 'whatwg-fetch';
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 /**
  * @package element-closest

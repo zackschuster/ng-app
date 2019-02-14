@@ -18,9 +18,9 @@ const app = new NgApp()
 		uirouter,
 	])
 	.addHttpInterceptor({
-		responseError(err) {
-			const { data, status, statusText, config = { url: '' } } = err;
-			const { url = '' } = config;
+		async responseError(response, err) {
+			const { status, statusText, url } = response;
+			const data = await response.json();
 
 			switch (status) {
 				case HttpStatusCode.NotFound:

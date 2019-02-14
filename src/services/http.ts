@@ -3,104 +3,175 @@ import { isFunction } from 'angular';
 import { NgService } from './base';
 import { NgAppConfig } from '../options';
 
-export interface NgHttpOptions extends angular.IRequestShortcutConfig {
-	interceptors?: angular.IHttpInterceptor[];
+export const DEFAULT_REQUEST_TIMEOUT = 10000;
+
+export interface NgHttpInterceptor {
+	request?(config: Request): Request | Promise<Request>;
+	response?(response: any): any;
+	responseError?<T extends Error>(response: Response, err: T): void;
+}
+
+// tslint:disable:no-redundant-jsdoc
+export interface NgHttpOptions extends RequestInit {
+	/**
+	 *
+	 * @default `location.host`
+	 */
+	host?: string;
+
+	/**
+	 * If true, use `https://`. Otherwise, use `http://`
+	 * @default false
+	 */
+	ssl?: boolean;
+
+	/**
+	 * How many milliseconds to wait before aborting the request
+	 * @default 10000
+	 */
+	timeout?: number;
+
+	interceptors?: NgHttpInterceptor[];
+
+	/**
+	 * Unsupported
+	 */
+	referrer?: never;
+
+	/**
+	 * Unsupported
+	 */
+	signal?: never;
+
 	onFinally?(): void;
 	getConfig(): NgAppConfig;
 }
+// tslint:enable:no-redundant-jsdoc
 
 export class NgHttp extends NgService {
-	constructor(
-		private $http: angular.IHttpService,
-		private options: NgHttpOptions,
-	) {
+	private interceptors: {
+		request: ((config: Request) => Request | Promise<Request>)[];
+		response: ((response: any) => any)[];
+		responseError: (<T extends Error>(
+			response: Response,
+			err: T,
+		) => void)[];
+	};
+
+	constructor(private options: NgHttpOptions) {
 		super();
+		const { interceptors = [] } = options;
+		this.interceptors = {
+			request: interceptors
+				.map(x => x.request)
+				.filter(x => typeof x === 'function') as ((
+				config: Request,
+			) => Request | Promise<Request>)[],
+			response: interceptors
+				.map(x => x.response)
+				.filter(x => typeof x === 'function') as ((response: any) => any)[],
+			responseError: interceptors
+				.map(x => x.responseError)
+				.filter(x => typeof x === 'function') as (<T extends Error>(
+				response: Response,
+				err: T,
+			) => void)[],
+		};
 	}
 
 	public async Get<T = any>(url: string) {
-		url = this.getFullUrl(url);
-		return this.fulfillRequest(
-			this.$http.get<T>(url, await this.getRequestConfig('GET', url)),
-		);
+		return this.fetch<T>(url, 'GET');
 	}
 
 	public async Post<T = any>(url: string, data: any = null) {
-		url = this.getFullUrl(url);
-		return this.fulfillRequest(
-			this.$http.post<T>(url, data, await this.getRequestConfig('POST', url)),
-		);
+		return this.fetch<T>(url, 'POST', data);
 	}
 
 	public async Patch<T = any>(url: string, data: PatchPayload) {
-		url = this.getFullUrl(url);
-		return this.fulfillRequest(
-			this.$http.patch<T>(url, data, await this.getRequestConfig('PATCH', url)),
-		);
+		return this.fetch<T>(url, 'PATCH', data);
 	}
 
 	public async Put<T = any>(url: string, data: T) {
-		url = this.getFullUrl(url);
-		return this.fulfillRequest(
-			this.$http.put<T>(url, data, await this.getRequestConfig('PUT', url)),
-		);
+		return this.fetch(url, 'PUT', data);
 	}
 
 	public async Delete<T = any>(url: string) {
-		url = this.getFullUrl(url);
-		return this.fulfillRequest(
-			this.$http.delete<T>(url, await this.getRequestConfig('DELETE', url)),
-		);
+		return this.fetch<T>(url, 'DELETE');
 	}
 
 	public async Jsonp<T = any>(url: string) {
-		return this.fulfillRequest(
-			this.$http.jsonp<T>(url, await this.getRequestConfig('JSONP', url)),
-		);
+		return this.fetch<T>(url, 'JSONP');
 	}
 
-	public getFullUrl(endpoint: string) {
-		const prefix = this.options.getConfig().getApiPrefix();
-
-		const hasSlash = prefix.endsWith('/') || endpoint.startsWith('/');
-		return `${prefix}${hasSlash ? '' : '/'}${endpoint}`;
+	public getFullUrl(uri: string, host: string, ssl: boolean) {
+		return new URL(uri, `http${ssl ? 's' : ''}://${host}/`).toJSON();
 	}
 
-	private async getRequestConfig(method: string, url: string) {
-		let options = {
-			method,
-			url,
-			params: {
-				timestamp: (this.isIE11 ? Date.now() : null),
-			},
-			...this.options,
-		};
-
-		const { interceptors = [] } = this.options;
-		for (const onRequest of interceptors.map(x => x.request)) {
-			if (isFunction(onRequest)) {
-				options = (await onRequest(options)) as typeof options;
-			}
-		}
-
-		return options;
-	}
-
-	private async fulfillRequest<T>(promise: angular.IHttpPromise<T>) {
+	private async fetch<T>(
+		uri: string,
+		method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE' | 'JSONP',
+		data?: any,
+	) {
+		let response = new Response();
 		try {
-			let response = await promise;
-			const { interceptors = [] } = this.options;
-			for (const onResponse of interceptors.map(x => x.response)) {
-				if (isFunction(onResponse)) {
-					response = await onResponse<T>(response);
-				}
+			// headers?: HeadersInit;
+			// integrity?: string;
+			// signal?: AbortSignal | null;
+			// window?: any;
+
+			const {
+				host = this.options.getConfig().getApiPrefix(),
+				ssl = location.protocol === 'https:',
+				cache = 'no-store',
+				credentials = 'include',
+				headers,
+				integrity,
+				keepalive = false,
+				mode = 'cors',
+				redirect = 'manual',
+				referrerPolicy = 'origin-when-cross-origin',
+				timeout = DEFAULT_REQUEST_TIMEOUT,
+				window,
+			} = this.options;
+
+			const url = this.getFullUrl(uri, host, ssl);
+			const abortCtrl = new AbortController();
+
+			let request = new Request(url, {
+				method,
+				cache,
+				credentials,
+				headers,
+				integrity,
+				keepalive,
+				mode,
+				redirect,
+				referrerPolicy,
+				signal: abortCtrl.signal,
+				window,
+				body: JSON.stringify(data),
+			});
+
+			for (const onRequest of this.interceptors.request) {
+				request = await onRequest(request);
 			}
-			return response.data;
-		} catch (err) {
-			const { interceptors = [] } = this.options;
-			for (const onResponseError of interceptors.map(x => x.responseError)) {
-				if (isFunction(onResponseError)) {
-					err = await onResponseError<T>(err);
+
+			const abortTimer = setTimeout(abortCtrl.abort, timeout);
+			response = await fetch(request);
+			clearTimeout(abortTimer);
+
+			if (response.ok) {
+				let value: T = await response.json();
+				for (const onResponse of this.interceptors.response) {
+					value = await onResponse(value);
 				}
+				return value;
+			}
+
+			throw new Error();
+		} catch (err) {
+			for (const onResponseError of this.interceptors.responseError) {
+				await onResponseError(response.clone(), err);
 			}
 			throw err;
 		} finally {
