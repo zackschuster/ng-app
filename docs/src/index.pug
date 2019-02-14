@@ -25,7 +25,7 @@ html(lang="en")
 					.card.shadow
 						.card-body
 							fieldset
-								legend Icons
+								legend.h3 Icons
 								each icon in icons
 									app-icon(icon=icon)
 
@@ -33,14 +33,14 @@ html(lang="en")
 					.card.shadow-sm
 						.card-body
 							fieldset
-								legend Modal
+								legend.h3 Modal
 								button.btn.btn-outline-dark(type="button" ng-click="$ctrl.openModal()") Open
 
 				.col-auto
 					.card.shadow-sm
 						.card-body
 							fieldset#toasts
-								legend Toasts
+								legend.h3 Toasts
 								each toast in toasts
 									button.btn.mr-1(class="btn-" + (toast === 'error' ? 'danger' : toast) ng-click="$ctrl.$log." + toast + "('Example " + toast + " toast')" type="button")= toast
 
@@ -48,69 +48,71 @@ html(lang="en")
 					.card.shadow-sm
 						.card-body
 							fieldset
-								legend Spinners
+								legend.h3 Spinners
 								each color in colors
 									app-spinner(color=color)
 
 			.card-deck
-				.card.mt-3.shadow
-					fieldset.card-body
-						legend.display-4.mb-3.text-center Input
-						.row
-							.col
-								text-input(ng-model="$ctrl.textInput")
-									| Text Input: #[strong(ng-bind="$ctrl.textInput || '(empty)'")]
-							.col
-								text-input(ng-model="$ctrl.numberInput" type="number")
-									| Number Input: #[strong(ng-bind="$ctrl.numberInput || '(empty)'")]
-						.row
-							.col
-								text-input(ng-model="$ctrl.rangeInput" type="range")
-									| Range Input: #[strong(ng-bind="$ctrl.rangeInput || '(empty)'")]
-							.col
-								date-input(ng-model="$ctrl.dateInput")
-									| Date Input: #[strong(ng-bind="$ctrl.dateInput || '(empty)'")]
+				.card.mr-0.shadow-sm
+					.card-body
+						fieldset
+							legend.h3.mb-3 Inputs
+							.row
+								.col
+									text-input(ng-model="$ctrl.textInput")
+										| Text Input: #[strong(ng-bind="$ctrl.textInput || '(empty)'")]
+								.col
+									text-input(ng-model="$ctrl.numberInput" type="number")
+										| Number Input: #[strong(ng-bind="$ctrl.numberInput || '(empty)'")]
+							.row
+								.col
+									text-input(ng-model="$ctrl.rangeInput" type="range")
+										| Range Input: #[strong(ng-bind="$ctrl.rangeInput || '(empty)'")]
+								.col
+									date-input(ng-model="$ctrl.dateInput")
+										| Date Input: #[strong(ng-bind="$ctrl.dateInput || '(empty)'")]
 
-						.row
-							.col
-								text-box(ng-model="$ctrl.textBox")
-									| Text Area: #[strong(ng-bind="$ctrl.textBox || '(empty)'")]
+							.row
+								.col
+									text-box(ng-model="$ctrl.textBox")
+										| Text Area: #[strong(ng-bind="$ctrl.textBox || '(empty)'")]
 
-				.card.mt-3.shadow(
+				.card.ml-0.shadow-sm(
 					ng-init="$ctrl.list = [{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]"
 				)
-					fieldset.card-body
-						legend.display-4.mb-3.text-center Lists
-						.row
-							.col
-								select-list(ng-model="$ctrl.selectSingle" list="$ctrl.list")
-									| Single Select: #[strong(ng-bind="$ctrl.selectSingle || '(empty)'")]
+					.card-body
+						fieldset
+							legend.h3.mb-3 Lists
+							.row
+								.col
+									select-list(ng-model="$ctrl.selectSingle" list="$ctrl.list")
+										| Single Select: #[strong(ng-bind="$ctrl.selectSingle || '(empty)'")]
 
-							.col
-								select-list(ng-model="$ctrl.selectMultiple" list="$ctrl.list" multiple)
-									| Multiple Select: #[strong(ng-bind="$ctrl.selectMultiple || '(empty)'")]
+								.col
+									select-list(ng-model="$ctrl.selectMultiple" list="$ctrl.list" multiple)
+										| Multiple Select: #[strong(ng-bind="$ctrl.selectMultiple || '(empty)'")]
 
-						.row
-							.col
-								fieldset
-									legend Radio List: #[strong(ng-bind="$ctrl.radioList || '(empty)'")]
-									radio-list(ng-model="$ctrl.radioList" list="$ctrl.list")
+							.row
+								.col
+									fieldset
+										legend Radio List: #[strong(ng-bind="$ctrl.radioList || '(empty)'")]
+										radio-list(ng-model="$ctrl.radioList" list="$ctrl.list")
 
-							.col
-								check-box(ng-model="$ctrl.checkBox")
-									| Check Box: #[strong(ng-bind="$ctrl.checkBox || '(empty)'")]
+								.col
+									check-box(ng-model="$ctrl.checkBox")
+										| Check Box: #[strong(ng-bind="$ctrl.checkBox || '(empty)'")]
 
-						.row.justify-content-center.pt-5
-							.col-auto
-								button.btn.btn-dark.btn-lg(
-									type="button"
-									ng-click="$ctrl.list = [{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]"
-								) List 1
+							.row.justify-content-center.pt-5
+								.col-auto
+									button.btn.btn-dark.btn-lg(
+										type="button"
+										ng-click="$ctrl.list = [{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]"
+									) List 1
 
-							.col-auto
-								button.btn.btn-dark.btn-lg(
-									type="button"
-									ng-click="$ctrl.list = [{Text: 'Third Choice', Value: 3}, {Text: 'Fourth Choice', Value: 4}]"
-								) List 2
+								.col-auto
+									button.btn.btn-dark.btn-lg(
+										type="button"
+										ng-click="$ctrl.list = [{Text: 'Third Choice', Value: 3}, {Text: 'Fourth Choice', Value: 4}]"
+									) List 2
 
 		ui-view
