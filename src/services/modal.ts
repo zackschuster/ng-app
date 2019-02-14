@@ -8,28 +8,28 @@ import { NgRenderer } from './renderer';
 const TIMEOUT = 150;
 
 export class NgModal extends NgService {
-	protected backdrop: HTMLDivElement;
-	protected container: HTMLDivElement;
-	protected content: HTMLDivElement;
-	protected dialog: HTMLDivElement;
-	protected header: HTMLDivElement;
-	protected headerCloseButton: HTMLButtonElement;
-	protected title: HTMLHeadingElement;
-	protected body: HTMLDivElement;
-	protected footer: HTMLDivElement;
-	protected footerCancelButton: HTMLButtonElement;
-	protected footerOkButton: HTMLButtonElement;
+	protected readonly backdrop: HTMLDivElement;
+	protected readonly container: HTMLDivElement;
+	protected readonly content: HTMLDivElement;
+	protected readonly dialog: HTMLDivElement;
+	protected readonly header: HTMLDivElement;
+	protected readonly headerCloseButton: HTMLButtonElement;
+	protected readonly title: HTMLHeadingElement;
+	protected readonly body: HTMLDivElement;
+	protected readonly footer: HTMLDivElement;
+	protected readonly footerCancelButton: HTMLButtonElement;
+	protected readonly footerOkButton: HTMLButtonElement;
 
-	protected $compile: angular.ICompileService;
-	protected $controller: angular.IControllerService;
-	protected $rootScope: angular.IRootScopeService;
+	protected readonly $compile: angular.ICompileService;
+	protected readonly $controller: angular.IControllerService;
+	protected readonly $rootScope: angular.IRootScopeService;
 
 	constructor(
-		protected $renderer: NgRenderer,
-		protected $log: NgLogger,
-		protected $http: NgHttp,
-		protected $config: NgAppConfig,
-		protected $injector: angular.auto.IInjectorService,
+		protected readonly $renderer: NgRenderer,
+		protected readonly $log: NgLogger,
+		protected readonly $http: NgHttp,
+		protected readonly $config: NgAppConfig,
+		protected readonly $injector: angular.auto.IInjectorService,
 	) {
 		super();
 
