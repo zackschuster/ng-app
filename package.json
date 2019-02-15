@@ -36,7 +36,6 @@
     "choices.js": "6.0.0",
     "core-decorators": "0.20.0",
     "flatpickr": "4.5.2",
-    "noty": "3.1.4",
     "octicons": "8.4.1",
     "rxjs": "6.4.0",
     "whatwg-fetch": "3.0.0"

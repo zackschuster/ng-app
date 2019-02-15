@@ -5041,11 +5041,6 @@ normalize-url@^3.0.0:
   resolved "https://registry.npmjs.org/normalize-url/-/normalize-url-3.3.0.tgz#b2e1c4dc4f7c6d57743df733a4f5978d18650559"
   integrity sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==
 
-noty@3.1.4:
-  version "3.1.4"
-  resolved "https://registry.npmjs.org/noty/-/noty-3.1.4.tgz#f9eaac9df7883921b270ec6f2869e9aeedd8071b"
-  integrity sha512-HKOH392eBygTojC6fXVBOFxTqebjnn/e7/AS69zlWSH3Tn6+0RzfT3aDCGx2PY6Ed3xKBPhtz+xeHAHQGEh68Q==
-
 npm-bundled@^1.0.1:
   version "1.0.6"
   resolved "https://registry.npmjs.org/npm-bundled/-/npm-bundled-1.0.6.tgz#e7ba9aadcef962bb61248f91721cd932b3fe6bdd"

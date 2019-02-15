@@ -13,6 +13,12 @@ class AppController extends NgController {
 			template: '<p class="lead">{{$ctrl.body}}</p>',
 		});
 	}
+
+	public openConfirmToast() {
+		this.$log.confirm('Yes or No?')
+			.then(() => this.$log.success('Yes!'))
+			.catch(() => this.$log.info('No...'));
+	}
 }
 
 app

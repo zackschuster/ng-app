@@ -41,6 +41,7 @@ html(lang="en")
 						.card-body
 							fieldset#toasts
 								legend.h3 Toasts
+								button.btn.btn-dark.mr-1(type="button" ng-click="$ctrl.openConfirmToast()") confirm
 								each toast in toasts
 									button.btn.mr-1(class="btn-" + (toast === 'error' ? 'danger' : toast) ng-click="$ctrl.$log." + toast + "('Example " + toast + " toast')" type="button")= toast
 
