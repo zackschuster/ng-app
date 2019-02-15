@@ -4,7 +4,7 @@ import { selectList } from '../../../src/inputs/select-list';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
-const definition = InputService.defineInputComponent(selectList, document);
+const definition = InputService.defineInputComponent(selectList);
 const { controller, template } = util.mockCtrl(definition);
 
 test.after(async t => {

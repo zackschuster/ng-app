@@ -4,7 +4,7 @@ import { textBox } from '../../../src/inputs/text-box';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
-const definition = InputService.defineInputComponent(textBox, document);
+const definition = InputService.defineInputComponent(textBox);
 const { controller, template } = util.mockCtrl(definition);
 
 test.after(async t => {

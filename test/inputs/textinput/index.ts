@@ -4,7 +4,7 @@ import { htmlInput, textInput } from '../../../src/inputs/text-input';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
-const definition = InputService.defineInputComponent(textInput, document);
+const definition = InputService.defineInputComponent(textInput);
 const { controller, template } = util.mockCtrl(definition);
 
 test.after(async t => {
@@ -13,7 +13,7 @@ test.after(async t => {
 
 test('textinput -> htmlinput alias', async t => {
 	// should be separate objects with the same layout
-	t.false(definition === InputService.defineInputComponent(htmlInput, document));
+	t.false(definition === InputService.defineInputComponent(htmlInput));
 	// TODO: fails, fix
 	// t.deepEqual(definedHtmlInput, definedTextInput);
 });

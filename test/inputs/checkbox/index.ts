@@ -4,7 +4,7 @@ import { checkBox } from '../../../src/inputs/check-box';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
-const definition = InputService.defineInputComponent(checkBox, document);
+const definition = InputService.defineInputComponent(checkBox);
 const { controller, template } = util.mockCtrl(definition);
 
 test.after(async t => {

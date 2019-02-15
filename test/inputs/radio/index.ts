@@ -4,7 +4,7 @@ import { radioList } from '../../../src/inputs/radio-list';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
-const definition = InputService.defineInputComponent(radioList, document);
+const definition = InputService.defineInputComponent(radioList);
 const { controller, template } = util.mockCtrl(definition);
 
 test.after(async t => {

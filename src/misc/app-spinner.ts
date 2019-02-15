@@ -12,7 +12,7 @@ class SpinnerController extends NgController {
 			throw new Error(`Color not supported: ${color}.\nSupported colors: ${this.colors.join(', ')}`);
 		}
 
-		const renderer = new NgRenderer(document);
+		const renderer = new NgRenderer();
 		const srDesc = renderer.createHtmlElement('span', ['sr-only']);
 		srDesc.innerText = 'Loading...';
 

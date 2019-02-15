@@ -8,14 +8,12 @@ export class NgRenderer {
 		['ng-model-options', '$ctrl.ngModelOptions'],
 	];
 
-	constructor(public readonly document: Document) { }
-
 	public createHtmlElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(
 		tagName: T,
 		classes: string[] = [],
 		attrs: [string, string][] = [],
 	) {
-		const $el = this.document.createElement(tagName);
+		const $el = document.createElement(tagName);
 
 		if (classes.length > 0) {
 			$el.classList.add(...classes);
@@ -149,15 +147,15 @@ export class NgRenderer {
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T): HTMLElementTagNameMap[T];
 	public createElement(tagName: string): HTMLUnknownElement;
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T) {
-		return this.document.createElement(tagName);
+		return document.createElement(tagName);
 	}
 
 	public createText(value: string) {
-		return this.document.createTextNode(value);
+		return document.createTextNode(value);
 	}
 
 	public createComment(value: string) {
-		return this.document.createComment(value);
+		return document.createComment(value);
 	}
 
 	public appendChild(parent: HTMLElement, newChild: HTMLElement) {

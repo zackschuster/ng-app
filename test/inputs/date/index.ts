@@ -4,7 +4,7 @@ import { dateInput } from '../../../src/inputs/date-input';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
-const definition = InputService.defineInputComponent(dateInput, document);
+const definition = InputService.defineInputComponent(dateInput);
 const { controller, template } = util.mockCtrl(definition);
 
 test.after(async t => {
