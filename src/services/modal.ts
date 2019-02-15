@@ -5,7 +5,8 @@ import { NgHttp } from './http';
 import { NgAppConfig } from '../options';
 import { NgRenderer } from './renderer';
 
-const TIMEOUT = 150;
+const MODAL_SHOW_DELAY = 23;
+const MODAL_HIDE_DELAY = 150;
 
 export class NgModal extends NgService {
 	protected readonly backdrop: HTMLDivElement;
@@ -159,14 +160,14 @@ export class NgModal extends NgService {
 		this.container.style.setProperty('padding-right', '17px');
 		this.container.style.setProperty('pointer-events', 'none');
 
-		setTimeout(() => {
-			this.backdrop.classList.add('show');
-			this.container.classList.add('show');
-		});
-
 		window.addEventListener('keydown', escapeKeyListener);
 		document.body.appendChild(this.backdrop);
 		document.body.classList.add('modal-open');
+
+		setTimeout(() => {
+			this.backdrop.classList.add('show');
+			this.container.classList.add('show');
+		}, MODAL_SHOW_DELAY);
 	}
 
 	protected hideModal(
@@ -179,7 +180,7 @@ export class NgModal extends NgService {
 		setTimeout(() => {
 			this.container.style.setProperty('display', 'none');
 			this.backdrop.style.setProperty('display', 'none');
-		}, TIMEOUT);
+		}, MODAL_HIDE_DELAY);
 
 		scope.$destroy();
 		window.removeEventListener('keydown', escapeKeyListener);
