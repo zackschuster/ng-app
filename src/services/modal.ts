@@ -101,9 +101,12 @@ export class NgModal extends NgService {
 		}
 
 		this.title.innerHTML = typeof title === 'function' ? title() : title;
-		this.body.innerHTML = typeof template === 'function' ? template() : template;
+		this.body.innerHTML =
+			typeof template === 'function' ? template() : template;
 
-		const $scope = this.$rootScope.$new(true) as angular.IScope & { $ctrl: NgController };
+		const $scope = this.$rootScope.$new(true) as angular.IScope & {
+			$ctrl: NgController;
+		};
 		const $element = this.$compile(this.container)($scope);
 		const $ctrl = makeInjectableCtrl(controller, {
 			log: this.$log,
@@ -184,82 +187,78 @@ export class NgModal extends NgService {
 	}
 
 	protected makeBackdrop() {
-		const backdrop = this.$renderer.createElement('div');
-		backdrop.classList.add('modal-backdrop');
-		backdrop.classList.add('fade');
-		return backdrop;
+		return this.$renderer.createHtmlElement('div', ['modal-backdrop', 'fade']);
 	}
 
 	protected makeContainer() {
-		const container = this.$renderer.createElement('div');
-		container.classList.add('fade');
-		container.classList.add('modal');
-		container.setAttribute('aria-hidden', 'true');
-		container.setAttribute('aria-labelledby', 'modal-title');
-		container.setAttribute('role', 'dialog');
-		container.setAttribute('tabindex', '-1');
-		return container;
+		return this.$renderer.createHtmlElement(
+			'div',
+			['fade', 'modal'],
+			[
+				['aria-hidden', 'true'],
+				['aria-labelledby', 'modal-title'],
+				['role', 'dialog'],
+				['tabindex', '-1'],
+			],
+		);
 	}
 
 	protected makeDialog() {
-		const dialog = this.$renderer.createElement('div');
-		dialog.classList.add('modal-dialog');
-		dialog.setAttribute('role', 'document');
-		return dialog;
+		return this.$renderer.createHtmlElement(
+			'div',
+			['modal-dialog'],
+			[['role', 'document']],
+		);
 	}
 
 	protected makeContent() {
-		const content = this.$renderer.createElement('div');
-		content.classList.add('modal-content');
-		return content;
+		return this.$renderer.createHtmlElement('div', ['modal-content']);
 	}
 
 	protected makeHeader() {
-		const header = this.$renderer.createElement('div');
-		header.classList.add('modal-header');
-		return header;
+		return this.$renderer.createHtmlElement('div', ['modal-header']);
 	}
 
 	protected makeHeaderCloseButton() {
-		const btn = this.$renderer.createElement('button');
-		btn.classList.add('close');
-		btn.setAttribute('aria-label', 'Close');
-		btn.setAttribute('type', 'button');
+		const btn = this.$renderer.createHtmlElement(
+			'button',
+			['close'],
+			[['type', 'button'], ['aria-label', 'close']],
+		);
 		btn.innerHTML = '&times;';
 		return btn;
 	}
 
 	protected makeTitle() {
-		const title = this.$renderer.createElement('h5');
-		title.setAttribute('id', 'modal-title');
-		title.classList.add('modal-title');
-		return title;
+		return this.$renderer.createHtmlElement(
+			'h5',
+			['modal-title'],
+			[['id', `modal-title-${this.uniqueId}`]],
+		);
 	}
 
 	protected makeBody() {
-		const body = this.$renderer.createElement('div');
-		body.classList.add('modal-body');
-		return body;
+		return this.$renderer.createHtmlElement('div', ['modal-body']);
 	}
 
 	protected makeFooter() {
-		const footer = this.$renderer.createElement('div');
-		footer.classList.add('modal-footer');
-		return footer;
+		return this.$renderer.createHtmlElement('div', ['modal-footer']);
 	}
 
 	protected makeFooterCancelButton() {
-		const btn = this.$renderer.createElement('button');
-		btn.classList.add('btn', 'btn-info');
-		btn.setAttribute('type', 'button');
-		return btn;
+		return this.$renderer.createHtmlElement(
+			'button',
+			['btn', 'btn-info'],
+			[['type', 'button']],
+		);
 	}
 
 	protected makeFooterOkButton() {
-		const btn = this.$renderer.createElement('button');
-		btn.classList.add('btn', 'btn-success');
-		btn.setAttribute('type', 'button');
-		return btn;
+		return this.$renderer.createHtmlElement(
+			'button',
+			['btn', 'btn-success'],
+			[['type', 'button']],
+		);
 	}
 }
 
