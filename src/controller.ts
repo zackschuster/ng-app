@@ -20,9 +20,7 @@ export class NgController extends NgService {
 	public readonly apiPrefix: string;
 
 	public openWebAddress(address: string) {
-		this.$log.confirm(_ => {
-			window.open(`http://${address}`);
-		});
+		this.$log.confirm(`You are being sent to ${address}. Continue?`).then(() => window.open(`http://${address}`));
 	}
 
 	public getApiPrefix() {
