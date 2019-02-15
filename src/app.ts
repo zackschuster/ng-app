@@ -249,6 +249,6 @@ export class NgApp {
 	}
 
 	protected $logger() {
-		return new NgLogger(this.$injector.get('$log'), this.$config.IS_PROD);
+		return new NgLogger(new NgRenderer(document), this.$injector.get('$log'), this.$config.IS_PROD);
 	}
 }

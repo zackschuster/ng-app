@@ -91,10 +91,9 @@ app.bootstrap();
 ```js
 import { app } from '@ledge/ng-app';
 
-const http = app.http(); // using $http service
-const modal = app.modal(); // using ui-bootstrap modal
-const logger = app.logger(); // using Noty.js + $log service
-const timeout = app.timeout(); // returns $timeout service
+const http = app.http; // using fetch
+const modal = app.modal; // using bootstrap modals
+const log = app.log; // using bootstrap toasts + $log service
 ```
 
 ## Built-in, zero-config components
