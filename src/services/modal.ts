@@ -157,14 +157,14 @@ export class NgModal extends NgService {
 		this.container.style.setProperty('padding-right', '17px');
 		this.container.style.setProperty('pointer-events', 'none');
 
-		setTimeout(() => {
-			this.backdrop.classList.add('show');
-			this.container.classList.add('show');
-		});
-
 		window.addEventListener('keydown', escapeKeyListener);
 		document.body.appendChild(this.backdrop);
 		document.body.classList.add('modal-open');
+
+		setTimeout(() => {
+			this.backdrop.classList.add('show');
+			this.container.classList.add('show');
+		}, 23);
 	}
 
 	protected hideModal(
