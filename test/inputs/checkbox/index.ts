@@ -3,7 +3,7 @@ import { checkBox } from '../../../src/inputs/check-box';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../_util';
 
-const definedCheckBox = InputService.defineInputComponent(checkBox, document);
+const definedCheckBox = InputService.defineInputComponent(checkBox);
 
 test('checkbox bindings', async t => {
 	t.deepEqual(definedCheckBox.bindings, {

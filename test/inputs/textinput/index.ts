@@ -3,8 +3,8 @@ import { htmlInput, textInput } from '../../../src/inputs/text-input';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../_util';
 
-const definedTextInput = InputService.defineInputComponent(textInput, document);
-const definedHtmlInput = InputService.defineInputComponent(htmlInput, document);
+const definedTextInput = InputService.defineInputComponent(textInput);
+const definedHtmlInput = InputService.defineInputComponent(htmlInput);
 
 test('textinput -> htmlinput alias', async t => {
 	// should be separate objects with the same layout

@@ -217,7 +217,7 @@ export class NgApp {
 
 	protected $modal() {
 		return new NgModal(
-			new NgRenderer(document),
+			new NgRenderer(),
 			this.log,
 			this.http,
 			this.config,
@@ -241,6 +241,6 @@ export class NgApp {
 	}
 
 	protected $logger() {
-		return new NgLogger(new NgRenderer(document), this.$injector.get('$log'), this.$config.IS_PROD);
+		return new NgLogger(new NgRenderer(), this.$injector.get('$log'), this.$config.IS_PROD);
 	}
 }

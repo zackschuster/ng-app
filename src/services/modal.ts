@@ -64,7 +64,7 @@ export class NgModal extends NgService {
 
 		this.container = this.makeContainer();
 		this.container.appendChild(this.dialog);
-		this.$renderer.document.body.appendChild(this.container);
+		document.body.appendChild(this.container);
 	}
 
 	public open<T extends typeof NgController>(options: NgModalOptions<T> = { }) {
@@ -163,8 +163,8 @@ export class NgModal extends NgService {
 		});
 
 		window.addEventListener('keydown', escapeKeyListener);
-		this.$renderer.document.body.appendChild(this.backdrop);
-		this.$renderer.document.body.classList.add('modal-open');
+		document.body.appendChild(this.backdrop);
+		document.body.classList.add('modal-open');
 	}
 
 	protected hideModal(
@@ -180,7 +180,7 @@ export class NgModal extends NgService {
 
 		scope.$destroy();
 		window.removeEventListener('keydown', escapeKeyListener);
-		this.$renderer.document.body.classList.remove('modal-open');
+		document.body.classList.remove('modal-open');
 	}
 
 	protected makeBackdrop() {

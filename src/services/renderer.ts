@@ -10,10 +10,6 @@ export class NgRenderer extends Renderer2 {
 		['ng-model-options', '$ctrl.ngModelOptions'],
 	];
 
-	constructor(public readonly document: Document) {
-		super();
-	}
-
 	public createHtmlElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(
 		tagName: T,
 		classes: string[] = [],
@@ -161,15 +157,15 @@ export class NgRenderer extends Renderer2 {
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T): HTMLElementTagNameMap[T];
 	public createElement(tagName: string): HTMLUnknownElement;
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T) {
-		return this.document.createElement(tagName);
+		return document.createElement(tagName);
 	}
 
 	public createText(value: string) {
-		return this.document.createTextNode(value);
+		return document.createTextNode(value);
 	}
 
 	public createComment(value: string) {
-		return this.document.createComment(value);
+		return document.createComment(value);
 	}
 
 	public appendChild(parent: HTMLElement, newChild: HTMLElement) {

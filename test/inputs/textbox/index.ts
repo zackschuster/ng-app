@@ -3,7 +3,7 @@ import { textBox } from '../../../src/inputs/text-box';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../_util';
 
-const definedTextBox = InputService.defineInputComponent(textBox, document);
+const definedTextBox = InputService.defineInputComponent(textBox);
 
 test('textbox bindings', async t => {
 	t.deepEqual(definedTextBox.bindings, {

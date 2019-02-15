@@ -3,7 +3,7 @@ import { selectList } from '../../../src/inputs/select-list';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../_util';
 
-const definedSelectList = InputService.defineInputComponent(selectList, document);
+const definedSelectList = InputService.defineInputComponent(selectList);
 
 test('select bindings', async t => {
 	t.deepEqual(definedSelectList.bindings, {

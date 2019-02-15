@@ -3,7 +3,7 @@ import { dateInput } from '../../../src/inputs/date-input';
 import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../_util';
 
-const definedDateInput = InputService.defineInputComponent(dateInput, document);
+const definedDateInput = InputService.defineInputComponent(dateInput);
 
 test('date bindings', async t => {
 	t.deepEqual(definedDateInput.bindings, {

@@ -94,7 +94,8 @@ export class NgLogger extends NgService {
 		this.container.style.setProperty('right', '-1rem');
 		this.container.style.setProperty('width', '100%');
 		this.container.style.setProperty('max-width', '23rem');
-		this.$renderer.document.body.appendChild(this.container);
+
+		document.body.appendChild(this.container);
 	}
 
 	/**

@@ -6,8 +6,7 @@ class IconController extends NgController {
 	public icon: string;
 
 	public $onInit() {
-		const renderer = new NgRenderer(document);
-		const icon = renderer.createIcon(this.$attrs.icon);
+		const icon = new NgRenderer().createIcon(this.$attrs.icon);
 		this.$element.appendChild(icon);
 	}
 }
