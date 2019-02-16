@@ -23,13 +23,13 @@
     "test": "ava"
   },
   "dependencies": {
-    "@angular/core": "7.2.4",
+    "@angular/core": "7.2.5",
     "@ledge/is-ie-11": "1.0.0",
     "@ledge/types": "5.0.0",
     "@types/angular": "1.6.54",
     "@types/lodash": "^4.14.121",
     "@uirouter/angularjs": "1.0.22",
-    "abortcontroller-polyfill": "1.2.3",
+    "abortcontroller-polyfill": "1.2.4",
     "angular": "1.7.7",
     "angular-animate": "1.7.7",
     "angular-messages": "1.7.7",
@@ -65,7 +65,7 @@
     "tslint": "5.12.1",
     "typescript": "3.3.3",
     "url-loader": "1.1.2",
-    "webpack": "4.29.3",
+    "webpack": "4.29.4",
     "webpack-cli": "3.2.3",
     "webpack-dev-server": "3.1.14",
     "webpack-merge": "4.2.1"
