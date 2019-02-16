@@ -5,7 +5,7 @@ import { NgHttp, NgLogger, NgService, NgStateService } from './services';
 
 export class NgController extends NgService {
 	public readonly $scope: angular.IScope;
-	public readonly $attrs: angular.IAttributes;
+	public readonly $attrs: Attributes;
 	public readonly $injector: angular.auto.IInjectorService;
 
 	public readonly $config: NgAppConfig;
@@ -50,7 +50,13 @@ export class NgController extends NgService {
 	 * { currentValue, previousValue, isFirstChange() }. Use this hook to trigger updates within a component such as
 	 * cloning the bound value to prevent accidental mutation of the outer value.
 	 */
-	public $onChanges?(onChangesObj: angular.IOnChangesObject): void;
+	public $onChanges?<T = any>(onChangesObj: {
+		[property: string]: {
+			currentValue: T;
+			previousValue: T;
+			isFirstChange(): boolean;
+		},
+	}): void;
 
 	/**
 	 * Called on a controller when its containing scope is destroyed. Use this hook for releasing external resources,
@@ -69,7 +75,7 @@ export class NgController extends NgService {
 	public $postLink?(): void;
 }
 
-export function makeInjectableCtrl($controller: new () => angular.IController, locals: {
+export function makeInjectableCtrl($controller: new () => NgController, locals: {
 	log: NgLogger,
 	http: NgHttp,
 	attrs?: Indexed,
@@ -80,7 +86,7 @@ export function makeInjectableCtrl($controller: new () => angular.IController, l
 		public $log = locals.log;
 		public $http = locals.http;
 		public $element: HTMLElement;
-		public $attrs: angular.IAttributes;
+		public $attrs: Attributes;
 		public $state: NgStateService;
 
 		public get $config() {
@@ -113,54 +119,81 @@ export function makeInjectableCtrl($controller: new () => angular.IController, l
 	};
 }
 
-export class Attributes implements angular.IAttributes {
-	[name: string]: string | object;
+export class Attributes {
+	[name: string]: any;
 	public readonly $attr: Indexed<string> = { };
 
 	public PREFIX_REGEXP = /^((?:x|data)[:\-_])/i;
 	public SPECIAL_CHARS_REGEXP = /[:\-_]+(.)/g;
 
 	constructor(private readonly $$element: Element, attrs: Indexed = { }) {
-		for (const attr of Array.from($$element.attributes)) {
-			const normalized = this.$normalize(attr.name);
-			this[normalized] = attr.value;
-			this.$attr[attr.name] = normalized;
+		for (const { name: key, value } of Array.from($$element.attributes)) {
+			this.$record(key, value);
 		}
 
 		for (const [key, value] of Object.entries(attrs)) {
-			const normalized = this.$normalize(key);
-			this[normalized] = value;
-			this.$attr[key] = normalized;
+			this.$record(key, value);
 		}
 	}
 
+	/**
+	 * Converts an attribute name (e.g. dash/colon/underscore-delimited string, optionally prefixed with x- or data-) to its normalized, camelCase form.
+	 *
+	 * Also there is special case for Moz prefix starting with upper case letter.
+	 *
+	 * For further information check out the guide on @see https://docs.angularjs.org/guide/directive#matching-directives
+	 */
 	public $normalize(name: string) {
 		return name
 			.replace(this.PREFIX_REGEXP, '')
 			.replace(this.SPECIAL_CHARS_REGEXP, (_, letter, offset) => offset ? letter.toUpperCase() : letter);
 	}
 
+	/**
+	 * Adds the CSS class value specified by the classVal parameter to the
+	 * element. If animations are enabled then an animation will be triggered
+	 * for the class addition.
+	 */
 	public $addClass(className: string) {
 		this.$$element.classList.add(className);
 	}
 
+	/**
+	 * Removes the CSS class value specified by the classVal parameter from the
+	 * element. If animations are enabled then an animation will be triggered for
+	 * the class removal.
+	 */
 	public $removeClass(className: string) {
 		this.$$element.classList.remove(className);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public $updateClass(_: string, __: string) {
 		// tslint:disable-next-line:no-console
 		console.warn('$updateClass is a noop');
 	}
 
-	public $set(_: string, __: any) {
-		// tslint:disable-next-line:no-console
-		console.warn('$set is a noop');
+	/**
+	 * Set DOM element attribute value.
+	 */
+	public $set(key: string, value: any) {
+		this.$$element.setAttribute(key, value);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public $observe<T>(_: string, __: (value?: T) => any) {
 		// tslint:disable-next-line:no-console
 		console.warn('$observe is a noop');
 		return () => { return; };
+	}
+
+	protected $record(key: string, value: string) {
+		const normalized = this.$normalize(key);
+		this[normalized] = value;
+		this.$attr[key] = normalized;
 	}
 }

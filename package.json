@@ -42,6 +42,7 @@
 		"@ledge/configs": "17.0.0",
 		"@types/angular-mocks": "1.7.0",
 		"@types/html-webpack-plugin": "3.2.1",
+		"@types/lodash": "4.14.149",
 		"angular-mocks": "1.7.9",
 		"ava": "2.4.0",
 		"browser-env": "3.3.0",

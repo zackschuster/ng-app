@@ -1,3 +1,4 @@
+import { Indexed } from '@ledge/types';
 import { ExecutionContext } from 'ava';
 import { element } from 'angular';
 
@@ -41,9 +42,9 @@ export function mockCtrl<T = NgController>(definition: NgComponentOptions, $attr
 export function makeTpl(
 	template: NgComponentOptions['template'],
 	t: ExecutionContext,
-	attrs: Partial<angular.IAttributes> = { },
+	$attrs: Indexed = { },
 ) {
-	Object.assign(attrs, {
+	Object.assign($attrs, {
 		ngModel: '$ctrl.ngModel',
 		required: true, ngRequired: true,
 		disabled: true, ngDisabled: true,
@@ -54,7 +55,7 @@ export function makeTpl(
 
 	const html = $invokeTemplate(
 		template as angular.Injectable<(...args: any[]) => string>,
-		attrs,
+		$attrs,
 	);
 	t.snapshot(html);
 

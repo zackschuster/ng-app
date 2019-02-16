@@ -1,10 +1,11 @@
 import { Indexed } from '@ledge/types';
-import { IAttributes, copy } from 'angular';
+import { copy } from 'angular';
 
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
-import { NgRenderer, NgService } from '../../services';
+import { Attributes } from '../../controller';
 import { NgComponentOptions } from '../../options';
+import { NgRenderer, NgService } from '../../services';
 
 const BaseComponent = Object.seal({
 	isRadioOrCheckbox: false,
@@ -72,14 +73,14 @@ export class InputService extends NgService {
 	/**
 	 * Retrieves the identifying name for an ngModel
 	 */
-	public static modelIdentifier($attrs: IAttributes) {
+	public static modelIdentifier($attrs: Attributes) {
 		return ($attrs.ngModel as string).split('.').pop() as string;
 	}
 
 	/**
 	 * Gets text -- intended for a label -- from the ngModel property text
 	 */
-	public static getDefaultLabelText($attrs: IAttributes) {
+	public static getDefaultLabelText($attrs: Attributes) {
 		return InputService.modelIdentifier($attrs)
 			.split(/(?=[A-Z0-9])/)
 			.map(x => isNaN(Number(x)) ? x.charAt(0).toUpperCase() + x.substring(1) : x)
@@ -121,7 +122,7 @@ export class InputService extends NgService {
 		$definition.ctrl = $component.ctrl;
 
 		// assign template
-		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
+		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: Attributes) => {
 			const $el = $element[0];
 
 			let $template = h.createHtmlElement('div', [$component.templateClass as string]);
