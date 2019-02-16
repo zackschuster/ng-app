@@ -26,7 +26,7 @@
 		"@ledge/is-ie-11": "2.0.0",
 		"@ledge/is-mobile": "3.0.0",
 		"@ledge/types": "6.1.0",
-		"@types/angular-animate": "1.5.10",
+		"@types/angular": "1.6.57",
 		"@uirouter/angularjs": "1.0.19",
     "abortcontroller-polyfill": "1.4.0",
 		"angular": "1.7.9",
@@ -40,7 +40,6 @@
 	},
 	"devDependencies": {
 		"@ledge/configs": "17.0.0",
-		"@types/angular-mocks": "1.7.0",
 		"@types/html-webpack-plugin": "3.2.1",
 		"@types/lodash": "4.14.149",
 		"angular-mocks": "1.7.9",
