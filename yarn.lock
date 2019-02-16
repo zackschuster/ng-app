@@ -349,21 +349,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/angular-animate@1.5.10":
-  version "1.5.10"
-  resolved "https://registry.npmjs.org/@types/angular-animate/-/angular-animate-1.5.10.tgz#b94b45358c61163f1478768e8b081c76439c515f"
-  integrity sha512-MnYYvTHAPUbtT6gqwrnl6k3a03A5BlNz1nVlwVGxyS+MeWCX4DC14SJ/pgJUa8wj+J04wZ2prMxFsOfp6cyjjQ==
-  dependencies:
-    "@types/angular" "*"
-
-"@types/angular-mocks@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.npmjs.org/@types/angular-mocks/-/angular-mocks-1.7.0.tgz#310d999a3c47c10ecd8eef466b5861df84799429"
-  integrity sha512-MeT5vxWBx4Ny5/sNZJjpZdv4K2KGwqQYiRQQZctan1TTaNyiVlFRYbcmheolhM4KKbTWmoxTVeuvGzniTDg1kw==
-  dependencies:
-    "@types/angular" "*"
-
-"@types/angular@*":
+"@types/angular@1.6.54":
   version "1.6.54"
   resolved "https://registry.npmjs.org/@types/angular/-/angular-1.6.54.tgz#f9d5a03e4da7b021a6dabe5d63e899ed4567a5bd"
   integrity sha512-xA1FuozWXeRQ7FClUbvk8ePL+dydBeDoCWRPFTHU5+8uvVtIIfLGiHA8CMkwsbddFCYnTDVbLxG85a/HBx7LtA==
