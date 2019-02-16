@@ -4,6 +4,7 @@ import { NgService } from './base';
 import { NgHttp } from './http';
 import { NgAppConfig } from '../options';
 import { NgRenderer } from './renderer';
+import { NgInjector, NgScope } from '../ng';
 
 const MODAL_SHOW_DELAY = 23;
 const MODAL_HIDE_DELAY = 150;
@@ -21,21 +22,19 @@ export class NgModal extends NgService {
 	protected readonly footerCancelButton: HTMLButtonElement;
 	protected readonly footerOkButton: HTMLButtonElement;
 
-	protected readonly $compile: angular.ICompileService;
-	protected readonly $controller: angular.IControllerService;
-	protected readonly $rootScope: angular.IRootScopeService;
+	protected readonly $compile: (element: Element) => (scope: NgScope) => { [i: number]: HTMLElement };
+	protected readonly $rootScope: NgScope;
 
 	constructor(
 		protected readonly $renderer: NgRenderer,
 		protected readonly $log: NgLogger,
 		protected readonly $http: NgHttp,
 		protected readonly $config: NgAppConfig,
-		protected readonly $injector: angular.auto.IInjectorService,
+		protected readonly $injector: NgInjector,
 	) {
 		super();
 
 		this.$compile = this.$injector.get('$compile');
-		this.$controller = this.$injector.get('$controller');
 		this.$rootScope = this.$injector.get('$rootScope');
 
 		this.backdrop = this.makeBackdrop();
@@ -105,7 +104,7 @@ export class NgModal extends NgService {
 		this.body.innerHTML =
 			typeof template === 'function' ? template() : template;
 
-		const $scope = this.$rootScope.$new(true) as angular.IScope & { $ctrl: NgController; };
+		const $scope = this.$rootScope.$new(true) as Parameters<NgModal['hideModal']>[1];
 		const $element = this.$compile(this.container)($scope);
 		const $ctrl = makeInjectableCtrl(controller, {
 			log: this.$log,
@@ -170,7 +169,7 @@ export class NgModal extends NgService {
 
 	protected hideModal(
 		escapeKeyListener: (e: KeyboardEvent) => void,
-		scope: angular.IScope,
+		scope: NgScope & { $ctrl: NgController; },
 	) {
 		this.backdrop.classList.remove('show');
 		this.container.classList.remove('show');

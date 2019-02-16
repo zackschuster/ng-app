@@ -3,7 +3,7 @@ import { copy } from 'angular';
 
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
-import { Attributes } from '../../controller';
+import { NgAttributes } from '../../controller';
 import { NgComponentOptions } from '../../options';
 import { NgRenderer, NgService } from '../../services';
 
@@ -73,14 +73,14 @@ export class InputService extends NgService {
 	/**
 	 * Retrieves the identifying name for an ngModel
 	 */
-	public static modelIdentifier($attrs: Attributes) {
+	public static modelIdentifier($attrs: NgAttributes) {
 		return ($attrs.ngModel as string).split('.').pop() as string;
 	}
 
 	/**
 	 * Gets text -- intended for a label -- from the ngModel property text
 	 */
-	public static getDefaultLabelText($attrs: Attributes) {
+	public static getDefaultLabelText($attrs: NgAttributes) {
 		return InputService.modelIdentifier($attrs)
 			.split(/(?=[A-Z0-9])/)
 			.map(x => isNaN(Number(x)) ? x.charAt(0).toUpperCase() + x.substring(1) : x)
@@ -122,10 +122,10 @@ export class InputService extends NgService {
 		$definition.controller = $component.controller;
 
 		// assign template
-		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: Attributes) => {
+		$definition.template = ['$element', '$attrs', ($element: [HTMLElement], $attrs: NgAttributes) => {
 			const $el = $element[0];
 
-			let $template = h.createHtmlElement('div', [$component.templateClass as string]);
+			const $template = h.createHtmlElement('div', [$component.templateClass as string]);
 
 			// allow consumer to access $template and $attrs attributes from `this`
 			const $input = $component.render.call({ $template, $attrs }, h);
@@ -217,16 +217,18 @@ export class InputService extends NgService {
 					$validationBlock.appendChild($message);
 				});
 
+			let $html: string;
 			if (isRadio === true) {
 				const $newTpl = h.createHtmlElement('div', ['form-group']);
 				$newTpl.appendChild($template);
 				$newTpl.appendChild($validationBlock);
-				$template = $newTpl;
+				$html = $newTpl.outerHTML;
 			} else {
 				$template.appendChild($validationBlock);
+				$html = $template.outerHTML;
 			}
 
-			let $html = $template.outerHTML.replace(/{{id}}/g, InputService.modelIdentifier($attrs));
+			$html = $html.replace(/{{id}}/g, InputService.modelIdentifier($attrs));
 
 			attrs
 				.forEach(prop => {

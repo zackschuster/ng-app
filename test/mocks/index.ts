@@ -1,5 +1,5 @@
 import { $injector } from './--injector';
-import { Attributes } from '../../src/controller';
+import { NgAttributes } from '../../src/controller';
 
 export * from './--app';
 export * from './--injector';
@@ -15,6 +15,6 @@ export const $scope = $injector.get('$rootScope').$new();
 export const $element = $injector.get('$compile')
 	(document.createElement('div'))
 	($scope);
-export function $invokeTemplate(template: any, $attrs: Partial<Attributes>) {
+export function $invokeTemplate(template: any, $attrs: Partial<NgAttributes>) {
 	return $injector.invoke(template, { }, { $element, $attrs });
 }

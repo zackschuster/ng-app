@@ -1,10 +1,10 @@
 import { Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
-import { bootstrap, injector, isFunction, module } from 'angular';
 import { autobind } from 'core-decorators';
 
 import { NgController, makeInjectableCtrl } from './controller';
 import { InputService, NgInputOptions } from './inputs';
+import { NgInjector, bootstrap, injector, module } from './ng';
 import { NgAppConfig, NgComponentOptions } from './options';
 import {
 	DEFAULT_REQUEST_TIMEOUT,
@@ -97,40 +97,34 @@ export class NgApp {
 			.config([
 				'$compileProvider', '$locationProvider', '$qProvider',
 				(
-					$compileProvider: angular.ICompileProvider,
-					$locationProvider: angular.ILocationProvider,
+					$compileProvider: {
+						debugInfoEnabled(active: boolean): any;
+						commentDirectivesEnabled(active: boolean): any;
+						cssClassDirectivesEnabled(active: boolean): any;
+					},
+					$locationProvider: {
+						html5Mode(active: boolean): any;
+					},
 					$qProvider: {
-						errorOnUnhandledRejections(val: boolean): any,
+						errorOnUnhandledRejections(active: boolean): any,
 					},
 				) => {
 					const { IS_DEV, IS_STAGING } = this.$config;
 
-					$compileProvider
-						.debugInfoEnabled(!!(IS_DEV || IS_STAGING))
-						.commentDirectivesEnabled(false)
-						.cssClassDirectivesEnabled(false);
+					$compileProvider.debugInfoEnabled(!!(IS_DEV || IS_STAGING));
+					$compileProvider.commentDirectivesEnabled(false);
+					$compileProvider.cssClassDirectivesEnabled(false);
 
 					$locationProvider.html5Mode(true);
 					$qProvider.errorOnUnhandledRejections(false);
 				}])
 			.run([
-				'$injector', '$animate', '$templateCache',
-				(
-					$injector: angular.auto.IInjectorService,
-					$animate: angular.animate.IAnimateService,
-					$templateCache: angular.ITemplateCacheService,
-				) => {
-					['day', 'month', 'year'].forEach(x => {
-						const templateUrl = `uib/template/datepicker/${x}.html`;
-						const template = $templateCache.get<string>(templateUrl);
-						if (template != null) {
-							$templateCache.put(templateUrl, template.replace(/glyphicon/g, 'fa'));
-						}
-					});
-
+				'$injector', '$animate',
+				($injector: NgInjector, $animate: { enabled(active: boolean): any }) => {
 					this.$injector = $injector;
 					$animate.enabled(true);
-				}]);
+				},
+			]);
 	}
 
 	/**
@@ -142,7 +136,7 @@ export class NgApp {
 
 	public async bootstrap({ strictDi }: { strictDi?: boolean; } = { strictDi: true }) {
 		for (const [name, definition] of this.$components) {
-			this.$module.component(name, definition as angular.IComponentOptions);
+			this.$module.component(name, definition);
 		}
 
 		setTimeout(() => document.body.classList.add('bootstrapped'));
@@ -241,7 +235,7 @@ export class NgApp {
 		if ((typeof options.onFinally === 'function') === false) {
 			options.onFinally = this.forceUpdate;
 		}
-		if (isFunction(options.getConfig) === false) {
+		if (typeof options.getConfig !== 'function') {
 			options.getConfig = () => this.config;
 		}
 		if (Array.isArray(options.interceptors)) {
