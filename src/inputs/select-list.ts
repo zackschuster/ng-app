@@ -180,7 +180,7 @@ export const selectList: NgInputOptions = {
 
 		return select;
 	},
-	ctrl: SelectController,
+	controller: SelectController,
 	bindings: {
 		list: '<',
 	},

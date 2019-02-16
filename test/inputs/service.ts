@@ -45,11 +45,12 @@ test('InputService.$baseComponent', async t => {
 	t.true($baseComponent.renderLabel instanceof Function);
 	t.true($baseComponent.postRender instanceof Function);
 	t.true($baseComponent.render instanceof Function);
-	t.true($baseComponent.ctrl?.prototype instanceof NgInputController);
+	t.true(($baseComponent.controller as any).prototype instanceof NgInputController);
+
 	Reflect.deleteProperty($baseComponent, 'renderLabel');
 	Reflect.deleteProperty($baseComponent, 'postRender');
 	Reflect.deleteProperty($baseComponent, 'render');
-	Reflect.deleteProperty($baseComponent, 'ctrl');
+	Reflect.deleteProperty($baseComponent, 'controller');
 
 	t.deepEqual($baseComponent, {
 		isRadioOrCheckbox: false,

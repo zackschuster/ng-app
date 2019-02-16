@@ -53,5 +53,5 @@ export const radioList: NgInputOptions = {
 		list: '<',
 		ngChecked: '<',
 	},
-	ctrl: RadioListController,
+	controller: RadioListController,
 };

@@ -67,7 +67,7 @@ export const textInput: NgInputOptions = {
 		step: '<',
 	},
 	validators,
-	ctrl: TextInputController,
+	controller: TextInputController,
 };
 
 export const htmlInput = { ...textInput };

@@ -24,7 +24,7 @@ export function mockCtrl<T = NgController>(definition: NgComponentOptions, $attr
 		{ $element: element(el), $attrs },
 	);
 
-	const controller = makeInjectableCtrl(definition.ctrl as any, {
+	const controller = makeInjectableCtrl(definition.controller as any, {
 		log: $log,
 		http: $http,
 		config: () => $config,

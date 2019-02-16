@@ -13,7 +13,7 @@ const BaseComponent = Object.seal({
 	labelClass: 'form-control-label',
 	templateClass: 'form-group',
 	attrs: { },
-	ctrl: class extends NgInputController { },
+	controller: class extends NgInputController { },
 	render(_h) {
 		return this.$template;
 	},
@@ -116,10 +116,10 @@ export class InputService extends NgService {
 		Object.assign($definition.transclude, $component.transclude);
 
 		// assign controller
-		if ($component.ctrl === undefined) {
+		if ($component.controller === undefined) {
 			throw new Error(`Invalid component: ${JSON.stringify($component)}`);
 		}
-		$definition.ctrl = $component.ctrl;
+		$definition.controller = $component.controller;
 
 		// assign template
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: Attributes) => {

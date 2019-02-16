@@ -5,7 +5,7 @@ import { NgComponentOptions } from '../../options';
 import { NgInputController } from './controller';
 import { Attributes } from '../../controller';
 
-export interface NgInputOptions extends NgComponentOptions {
+export interface NgInputOptions extends NgComponentOptions<typeof NgInputController> {
 	/**
 	 * Set this so the app knows how to register your definition
 	 */

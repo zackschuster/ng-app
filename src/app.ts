@@ -67,6 +67,13 @@ export class NgApp {
 		return this._modal;
 	}
 
+	public get renderer() {
+		if (this._renderer == null) {
+			this._renderer = this.$renderer();
+		}
+		return this._renderer;
+	}
+
 	public readonly $id = '$core';
 	public $injector = injector(['ng']);
 
@@ -76,12 +83,13 @@ export class NgApp {
 
 	protected readonly $module = module(this.$id, this.$dependencies);
 	protected readonly $bootstrap = bootstrap;
-	protected readonly $components = new Map<string, angular.IComponentOptions>();
+	protected readonly $components = new Map<string, NgComponentOptions>();
 	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
 
-	private _http: ReturnType<NgApp['$http']>;
-	private _log: ReturnType<NgApp['$logger']>;
-	private _modal: ReturnType<NgApp['$modal']>;
+	private _http: NgHttp;
+	private _log: NgLogger;
+	private _modal: NgModal;
+	private _renderer: NgRenderer;
 
 	constructor() {
 		this.configure({ })
@@ -91,7 +99,9 @@ export class NgApp {
 				(
 					$compileProvider: angular.ICompileProvider,
 					$locationProvider: angular.ILocationProvider,
-					$qProvider: angular.IQProvider,
+					$qProvider: {
+						errorOnUnhandledRejections(val: boolean): any,
+					},
 				) => {
 					const { IS_DEV, IS_STAGING } = this.$config;
 
@@ -130,9 +140,9 @@ export class NgApp {
 		await this.$injector.get('$rootScope').$applyAsync();
 	}
 
-	public async bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
+	public async bootstrap({ strictDi }: { strictDi?: boolean; } = { strictDi: true }) {
 		for (const [name, definition] of this.$components) {
-			this.$module.component(name, definition);
+			this.$module.component(name, definition as angular.IComponentOptions);
 		}
 
 		setTimeout(() => document.body.classList.add('bootstrapped'));
@@ -166,12 +176,8 @@ export class NgApp {
 				component = InputService.defineInputComponent(component);
 			}
 
-			if (typeof component.controller !== 'undefined') {
-				throw new Error(`[${name} component] 'controller' property not supported. Use the 'ctrl' property instead.`);
-			}
-			if (typeof component.ctrl === 'function') {
-				// i like the explicit typecasting over `as never` or `as any`
-				component.controller = this.makeComponentController(component.ctrl) as unknown as undefined;
+			if (typeof component.controller === 'function') {
+				component.controller = this.makeComponentController(component.controller);
 			}
 
 			this.$components.set(name, component);
@@ -180,10 +186,11 @@ export class NgApp {
 		return this;
 	}
 
-	public isInputComponent(component: NgComponentOptions & { type?: 'input' }):
-		component is NgInputOptions {
-			return component.type === 'input';
-		}
+	public isInputComponent(
+		component: NgComponentOptions & { type?: 'input' },
+	): component is NgInputOptions {
+		return component.type === 'input';
+	}
 
 	public addDependency(moduleName: string) {
 		this.$dependencies.push(moduleName);
@@ -222,7 +229,7 @@ export class NgApp {
 
 	protected $modal() {
 		return new NgModal(
-			new NgRenderer(),
+			this.renderer,
 			this.log,
 			this.http,
 			this.config,
@@ -249,6 +256,9 @@ export class NgApp {
 	}
 
 	protected $logger() {
-		return new NgLogger(new NgRenderer(), this.$injector.get('$log'), this.$config.IS_PROD);
+		return new NgLogger(this.renderer, this.$config.IS_PROD);
+	}
+	protected $renderer() {
+		return new NgRenderer();
 	}
 }

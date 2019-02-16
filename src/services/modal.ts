@@ -105,9 +105,7 @@ export class NgModal extends NgService {
 		this.body.innerHTML =
 			typeof template === 'function' ? template() : template;
 
-		const $scope = this.$rootScope.$new(true) as angular.IScope & {
-			$ctrl: NgController;
-		};
+		const $scope = this.$rootScope.$new(true) as angular.IScope & { $ctrl: NgController; };
 		const $element = this.$compile(this.container)($scope);
 		const $ctrl = makeInjectableCtrl(controller, {
 			log: this.$log,

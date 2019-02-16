@@ -79,15 +79,31 @@ export enum LogTypeMap {
 
 type Type = 'alert' | 'success' | 'warning' | 'error' | 'info' | 'information';
 
-export class NgLogger extends NgService {
+export class NgConsole extends NgService {
+	// tslint:disable:no-console
+	public debug(...items: any[]) {
+		console.debug(items);
+	}
+	public error(...items: any[]) {
+		console.error(items);
+	}
+	public info(...items: any[]) {
+		console.info(items);
+	}
+	public log(...items: any[]) {
+		console.log(items);
+	}
+	public warn(...items: any[]) {
+		console.warn(items);
+	}
+	// tslint:enable:no-console
+}
+
+export class NgLogger extends NgConsole {
 	protected readonly container: HTMLDivElement;
 	protected readonly toasts: NgToast[] = [];
 
-	constructor(
-		private $renderer: NgRenderer,
-		private $log: angular.ILogService,
-		private isProd = false,
-	) {
+	constructor(private $renderer: NgRenderer, private isProd = false) {
 		super();
 
 		this.container = this.$renderer.createHtmlElement('div', ['position-fixed', 'd-block', 'p-2']);
@@ -199,7 +215,7 @@ export class NgLogger extends NgService {
 	 */
 	public notify(text: string, type: Type, timeout: false | number = 2323) {
 		const logType = LogTypeMap[type];
-		this.$log[logType](`${type}: ${text}`);
+		this[logType](`${type}: ${text}`);
 
 		const toast = new NgToast(this.$renderer);
 		toast.setBodyText(text);
