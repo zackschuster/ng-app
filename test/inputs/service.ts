@@ -1,5 +1,4 @@
 import test from 'ava';
-import { copy } from 'angular';
 import { makeAttrs } from '../mocks';
 import { InputService, NgInputController } from '../../src/inputs';
 
@@ -21,7 +20,7 @@ test('InputService.$validationMessages', async t => {
 });
 
 test('InputService.$baseDefinition', async t => {
-	t.deepEqual(InputService.$baseDefinition, {
+	t.deepEqual(InputService.makeBaseOptions(), {
 		transclude: {
 			contain: '?contain',
 		},
@@ -39,7 +38,10 @@ test('InputService.$baseDefinition', async t => {
 });
 
 test('InputService.$baseComponent', async t => {
-	const $baseComponent = copy(InputService.$baseComponent);
+	const $baseComponent = InputService.makeBaseComponent();
+	t.true(typeof $baseComponent.renderLabel === 'function');
+	t.true(typeof $baseComponent.postRender === 'function');
+
 	Reflect.deleteProperty($baseComponent, 'renderLabel');
 	Reflect.deleteProperty($baseComponent, 'postRender');
 
@@ -47,10 +49,10 @@ test('InputService.$baseComponent', async t => {
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: { },
+		isRadioOrCheckbox: false,
 		ctrl: NgInputController,
 	});
 
-	t.true(typeof InputService.$baseComponent.renderLabel === 'function');
 });
 
 test('InputService.modelIdentifier', async t => {

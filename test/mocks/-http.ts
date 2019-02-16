@@ -1,4 +1,3 @@
-// import { module } from 'angular';
 import { NgHttp } from '../../src/services/http';
 
 import { $injector } from './--injector';
@@ -12,12 +11,6 @@ export const $http = new NgHttp({
 		return $config;
 	},
 });
-
-// doesn't work, never gotten $sceDelegateProvider code to make a difference
-// module('ngMock')
-// 	.config(['$sceDelegateProvider', ($sceDelegateProvider: angular.ISCEDelegateProvider) => {
-// 		$sceDelegateProvider.resourceUrlWhitelist(['self', `${$prefix}/**`]);
-// 	}]);
 
 export async function pingTestUrl(
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'JSONP',

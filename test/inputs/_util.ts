@@ -10,15 +10,17 @@ import pretty = require('pretty');
 
 import { $element, $http, $invokeTemplate, $log, $scope, $svc } from '../mocks';
 import { InputService } from '../../src/inputs';
-import { makeInjectableCtrl } from '../../src/controller';
+import { NgController, makeInjectableCtrl } from '../../src/controller';
 import { $config } from '../mocks/-config';
 import { $injector } from '../mocks/--injector';
+import { Indexed } from '@ledge/types';
+import { NgComponentOptions } from '../../src/options';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
-export function mockCtrl(
-	ctrl: any,
-	$attrs: Partial<angular.IAttributes> = { },
+export function mockCtrl<T extends NgController>(
+	ctrl: new () => T,
+	$attrs: Indexed = { },
 ) {
 	const Controller = makeInjectableCtrl(ctrl, {
 		log: $log,
@@ -26,13 +28,13 @@ export function mockCtrl(
 		config: () => $config,
 		attrs: $attrs,
 	});
-	return new Controller($element, $scope, $injector);
+	return new Controller($element, $scope, $injector) as T;
 }
 
 export function makeTpl(
-	template: angular.IComponentOptions['template'],
+	template: NgComponentOptions['template'],
 	t: ExecutionContext,
-	$attrs: Partial<angular.IAttributes> = { },
+	$attrs: Indexed = { },
 ) {
 	Object.assign($attrs, {
 		ngModel: 'ngModel',

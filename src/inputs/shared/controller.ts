@@ -1,4 +1,4 @@
-import { equals } from 'angular';
+import isEqual from 'lodash/isEqual';
 import { NgController } from '../../controller';
 
 export class NgInputController extends NgController {
@@ -21,7 +21,7 @@ export class NgInputController extends NgController {
 			this.$scope.$watch(
 				() => this.ngModel,
 				(curr: any, prev: any) => {
-					if (equals(curr, prev) === false) {
+					if (isEqual(curr, prev) === false) {
 						this.ngModelCtrl.$setViewValue(curr);
 						const isValid = Object
 							.keys(this.ngModelCtrl.$validators)

@@ -2,16 +2,17 @@ import Choices from 'choices.js';
 
 import { NgInputController, NgInputOptions } from './shared';
 import { NgService } from '../services';
+import { Attributes } from '../controller';
 
 class SelectController extends NgInputController {
 	public static readonly SinglePlaceholder = '----Select One----';
 	public static readonly MultiplePlaceholder = '----Select All That Apply----';
 
-	public static IsMultiple($attrs: angular.IAttributes) {
+	public static IsMultiple($attrs: Attributes) {
 		return $attrs.hasOwnProperty('multiple') || $attrs.type === 'multiple';
 	}
 
-	public static GetPlaceholder($attrs: angular.IAttributes) {
+	public static GetPlaceholder($attrs: Attributes) {
 		return $attrs.placeholder ||
 			this.IsMultiple($attrs)
 				? this.MultiplePlaceholder

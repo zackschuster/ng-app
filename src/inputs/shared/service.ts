@@ -1,9 +1,8 @@
-import { IAttributes, copy } from 'angular';
-
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
 import { NgRenderer, NgService } from '../../services';
 import { NgComponentOptions } from '../../options';
+import { Attributes } from '../../controller';
 
 export class InputService extends NgService {
 	public static readonly $validationAttrs = [
@@ -18,39 +17,6 @@ export class InputService extends NgService {
 		['minlength', 'Input is not long enough'],
 		['maxlength', 'Input is too long'],
 	]);
-
-	public static readonly $baseDefinition: NgComponentOptions = {
-		transclude: {
-			contain: '?contain',
-		},
-		require: {
-			ngModelCtrl: 'ngModel',
-		},
-		bindings: {
-			ngModel: '=',
-			ngModelOptions: '<',
-			ngDisabled: '<',
-			ngReadonly: '<',
-			ngRequired: '<',
-		},
-	};
-
-	public static readonly $baseComponent = {
-		labelClass: 'form-control-label',
-		templateClass: 'form-group',
-		attrs: { },
-		ctrl: NgInputController,
-		renderLabel: function defaultRenderLabel(h) {
-			const $transclude = h.createSlot();
-			$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
-			this.$label.appendChild($transclude);
-		} as NgInputOptions['renderLabel'],
-		// tslint:disable-next-line:variable-name
-		postRender: function defaultPostRender(_h) {
-			return this.$template;
-		} as NgInputOptions['postRender'],
-	};
-
 	public static readonly $validationExps = {
 		$error: '$ctrl.ngModelCtrl.$error',
 		$invalid: '$ctrl.ngModelCtrl.$invalid',
@@ -61,17 +27,56 @@ export class InputService extends NgService {
 		},
 	};
 
+	public static makeBaseComponent() {
+		return {
+			labelClass: 'form-control-label',
+			templateClass: 'form-group',
+			attrs: { },
+			ctrl: NgInputController,
+			renderLabel: function defaultRenderLabel(h) {
+				const $transclude = h.createSlot();
+				$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
+				this.$label.appendChild($transclude);
+			} as NgInputOptions['renderLabel'],
+			// tslint:disable-next-line:variable-name
+			postRender: function defaultPostRender(_h) {
+				return this.$template;
+			} as NgInputOptions['postRender'],
+			get isRadioOrCheckbox() {
+				return this.labelClass === 'form-check-label';
+			},
+		};
+	}
+
+	public static makeBaseOptions(): NgComponentOptions {
+		return {
+			transclude: {
+				contain: '?contain',
+			},
+			require: {
+				ngModelCtrl: 'ngModel',
+			},
+			bindings: {
+				ngModel: '=',
+				ngModelOptions: '<',
+				ngDisabled: '<',
+				ngReadonly: '<',
+				ngRequired: '<',
+			},
+		};
+	}
+
 	/**
 	 * Retrieves the identifying name for an ngModel (e.g., `$ctrl.example` in `ng-model="$ctrl.example"`)
 	 */
-	public static modelIdentifier($attrs: IAttributes) {
+	public static modelIdentifier($attrs: Attributes) {
 		return ($attrs.ngModel as string).split('.').pop() as string;
 	}
 
 	/**
 	 * Generates label text from the identifying name for an ngModel (e.g., `$ctrl.example` in `ng-model="$ctrl.example"`)
 	 */
-	public static getDefaultLabelText($attrs: IAttributes) {
+	public static getDefaultLabelText($attrs: Attributes) {
 		return this.modelIdentifier($attrs)
 			.split(/(?=[A-Z0-9])/)
 			.map(x => isNaN(Number(x)) ? x.charAt(0).toUpperCase() + x.substring(1) : x)
@@ -97,23 +102,15 @@ export class InputService extends NgService {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer();
 
-		const { $baseComponent } = this;
-		type BaseComponent = typeof $baseComponent;
-
-		const $component = Object.assign({
-			get isRadioOrCheckbox(this: BaseComponent) {
-				return this.labelClass === 'form-check-label';
-			},
-		}, copy($baseComponent), component);
-
-		const $definition = Object.assign(copy(this.$baseDefinition), { ctrl: $component.ctrl });
+		const $component = Object.assign(InputService.makeBaseComponent(), component);
+		const $definition = Object.assign(InputService.makeBaseOptions(), { ctrl: $component.ctrl });
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);
 		Object.assign($definition.transclude, $component.transclude);
 
 		// assign template
-		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
+		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: Attributes) => {
 			const $el = $element[0];
 
 			let $template = h.createHtmlElement('div', [$component.templateClass]);
