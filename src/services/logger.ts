@@ -4,7 +4,7 @@ import { NgRenderer } from './renderer';
 import { autobind } from 'core-decorators';
 
 export class NgToast {
-	protected type: Type;
+	protected type: Parameters<NgLogger['notify']>[1];
 	protected readonly toast: HTMLDivElement;
 	protected readonly toastHeader: HTMLDivElement;
 	protected readonly toastBody: HTMLDivElement;
@@ -40,15 +40,13 @@ export class NgToast {
 		this.toastBody.innerHTML = text;
 	}
 
-	public setType(type: Type) {
+	public setType(type: Parameters<NgLogger['notify']>[1]) {
 		if (this.type != null) {
-			this.toast.classList.remove(`bg-${this.type === 'error' ? 'danger' : this.type}`);
+			this.toast.classList.remove(`bg-${this.type === '$error' ? 'danger' : this.type.replace(/^\$/, '')}`);
 		}
 		this.type = type;
-		this.toast.classList.add(`bg-${this.type === 'error' ? 'danger' : this.type}`);
-		if (type === 'alert') {
-			this.toast.classList.add('bg-white');
-		} else if (type !== 'warning') {
+		this.toast.classList.add(`bg-${this.type === '$error' ? 'danger' : this.type.replace(/^\$/, '')}`);
+		if (type !== '$warn') {
 			this.toast.classList.add('text-white');
 		}
 	}
@@ -68,33 +66,22 @@ export class NgToast {
 	}
 }
 
-export enum LogTypeMap {
-	warning = 'warn',
-	success = 'log',
-	information = 'info',
-	info = 'info',
-	error = 'error',
-	alert = 'error',
-}
-
-type Type = 'alert' | 'success' | 'warning' | 'error' | 'info' | 'information';
-
 export class NgConsole extends NgService {
 	// tslint:disable:no-console
-	public debug(...items: any[]) {
-		console.debug(items);
+	public $debug(...items: any[]) {
+		console.debug(...items);
 	}
-	public error(...items: any[]) {
-		console.error(items);
+	public $error(...items: any[]) {
+		console.error(...items);
 	}
-	public info(...items: any[]) {
-		console.info(items);
+	public $info(...items: any[]) {
+		console.info(...items);
 	}
-	public log(...items: any[]) {
-		console.log(items);
+	public $log(...items: any[]) {
+		console.log(...items);
 	}
-	public warn(...items: any[]) {
-		console.warn(items);
+	public $warn(...items: any[]) {
+		console.warn(...items);
 	}
 	// tslint:enable:no-console
 }
@@ -135,7 +122,7 @@ export class NgLogger extends NgConsole {
 		footer.appendChild(okBtn);
 		footer.appendChild(cancelBtn);
 
-		const toast = this.notify(msg, 'alert', false);
+		const toast = this.notify(msg, '$info', false);
 		toast.appendChild(footer);
 
 		return new Promise((resolve, reject) => {
@@ -161,7 +148,7 @@ export class NgLogger extends NgConsole {
 	 * @param isTemporary Whether the notification should disappear automatically (false by default)
 	 */
 	public error(text: string, isTemporary = false) {
-		this.notify(text, 'error', isTemporary && undefined);
+		this.notify(text, '$error', isTemporary && undefined);
 	}
 
 	/**
@@ -171,7 +158,7 @@ export class NgLogger extends NgConsole {
 	 * @param isTemporary Whether the notification should disappear automatically (true by default)
 	 */
 	public info(text: string, isTemporary = true) {
-		this.notify(text, 'info', isTemporary && undefined);
+		this.notify(text, '$info', isTemporary && undefined);
 	}
 
 	/**
@@ -181,7 +168,7 @@ export class NgLogger extends NgConsole {
 	 * @param isTemporary Whether the notification should disappear automatically (true by default)
 	 */
 	public success(text: string, isTemporary = true) {
-		this.notify(text, 'success', isTemporary && undefined);
+		this.notify(text, '$log', isTemporary && undefined);
 	}
 
 	/**
@@ -191,7 +178,7 @@ export class NgLogger extends NgConsole {
 	 * @param isTemporary Whether the notification should disappear automatically (true by default)
 	 */
 	public warning(text: string, isTemporary = true) {
-		this.notify(text, 'warning', isTemporary && undefined);
+		this.notify(text, '$warn', isTemporary && undefined);
 	}
 
 	/**
@@ -213,9 +200,8 @@ export class NgLogger extends NgConsole {
 	 * @param timeout Length in ms before notification disappears (`false` to set permanently)
 	 * @param buttons Interaction points for the user
 	 */
-	public notify(text: string, type: Type, timeout: false | number = 2323) {
-		const logType = LogTypeMap[type];
-		this[logType](`${type}: ${text}`);
+	public notify(text: string, type: '$log' | '$warn' | '$error' | '$info' | '$debug', timeout: false | number = 2323) {
+		this[type](`${type}: ${text}`);
 
 		const toast = new NgToast(this.$renderer);
 		toast.setBodyText(text);
