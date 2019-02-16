@@ -1,6 +1,6 @@
 import { IConfig, Indexed } from '@ledge/types';
 import { autobind } from 'core-decorators';
-import { Attributes, NgController, makeInjectableCtrl } from './controller';
+import { NgAttributes, NgController, makeInjectableCtrl } from './controller';
 
 @autobind
 export class NgAppConfig implements IConfig {
@@ -87,7 +87,7 @@ export interface NgComponentOptions<T = typeof NgController> {
 	 * $attrs - Current attributes object for the element
 	 * Use the array form to define dependencies (necessary if strictDi is enabled and you require dependency injection)
 	 */
-	template?: string | (() => string) | (string | (($element: JQLite, $attrs: Attributes) => string))[];
+	template?: string | (() => string) | (string | (($element: [HTMLElement], $attrs: NgAttributes) => string))[];
 
 	/**
 	 * Path or function that returns a path to an html template that should be used as the contents of this component.

@@ -2,11 +2,12 @@ import { NgAppConfig } from './options';
 import { NgHttp, NgLogger, NgService, NgStateService } from './services';
 import { Indexed } from '@ledge/types';
 import { autobind } from 'core-decorators';
+import { NgInjector, NgScope } from './ng';
 
 export class NgController extends NgService {
-	public readonly $scope: angular.IScope;
-	public readonly $attrs: Attributes;
-	public readonly $injector: angular.auto.IInjectorService;
+	public readonly $scope: NgScope;
+	public readonly $attrs: NgAttributes;
+	public readonly $injector: NgInjector;
 
 	public readonly $config: NgAppConfig;
 	public readonly $log: NgLogger;
@@ -86,7 +87,7 @@ export function makeInjectableCtrl<T extends NgController>($controller: new () =
 		public $log = locals.log;
 		public $http = locals.http;
 		public $element: HTMLElement;
-		public $attrs: Attributes;
+		public $attrs: NgAttributes;
 		public $state: NgStateService;
 
 		public get $config() {
@@ -106,24 +107,24 @@ export function makeInjectableCtrl<T extends NgController>($controller: new () =
 		}
 
 		constructor(
-			$element: JQLite,
-			public $scope: angular.IScope,
-			public $injector: angular.auto.IInjectorService,
+			$element: { [i: number]: HTMLElement },
+			public $scope: NgScope,
+			public $injector: NgInjector,
 		) {
 			super();
 
 			this.$element = $element[0];
-			this.$attrs = new Attributes(this.$element, locals.attrs);
+			this.$attrs = new NgAttributes(this.$element, locals.attrs);
 			this.$state = this.$injector.get('$state');
 		}
 	} as new (
-			$element: JQLite,
-			$scope: angular.IScope,
-			$injector: angular.auto.IInjectorService,
+			$element: { [i: number]: HTMLElement },
+			$scope: NgScope,
+			$injector: NgInjector,
 		) => T;
 }
 
-export class Attributes {
+export class NgAttributes {
 	[name: string]: any;
 	public readonly $attr: Indexed<string> = { };
 

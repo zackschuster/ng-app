@@ -1,7 +1,7 @@
 import { Indexed } from '@ledge/types';
 import { NgRenderer } from '../../services/renderer';
 import { NgComponentOptions } from '../../options';
-import { Attributes } from '../../controller';
+import { NgAttributes } from '../../controller';
 import { NgInputController } from './controller';
 
 export interface NgInputOptions extends NgComponentOptions<typeof NgInputController> {
@@ -44,7 +44,7 @@ export interface NgInputOptions extends NgComponentOptions<typeof NgInputControl
 			 * Input container
 			 */
 			$template: HTMLDivElement;
-			$attrs: Attributes;
+			$attrs: NgAttributes;
 		},
 		h: NgRenderer,
 	): HTMLElement;
@@ -58,7 +58,7 @@ export interface NgInputOptions extends NgComponentOptions<typeof NgInputControl
 			 * Input label
 			 */
 			$label: HTMLLabelElement;
-			$attrs: Attributes;
+			$attrs: NgAttributes;
 		},
 		h: NgRenderer,
 	): void;
@@ -72,7 +72,7 @@ export interface NgInputOptions extends NgComponentOptions<typeof NgInputControl
 			 * Input container
 			 */
 			$template: HTMLDivElement;
-			$attrs: Attributes;
+			$attrs: NgAttributes;
 		},
 		h: NgRenderer,
 	): Element;
