@@ -50,7 +50,7 @@ test('InputService.$baseComponent', async t => {
 		templateClass: 'form-group',
 		attrs: { },
 		isRadioOrCheckbox: false,
-		ctrl: NgInputController,
+		controller: NgInputController,
 	});
 
 });

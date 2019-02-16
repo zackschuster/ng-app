@@ -25,5 +25,5 @@ class SpinnerController extends NgController {
 }
 
 export const appSpinner: NgComponentOptions = {
-	ctrl: SpinnerController,
+	controller: SpinnerController,
 };

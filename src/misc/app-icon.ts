@@ -12,5 +12,5 @@ class IconController extends NgController {
 }
 
 export const appIcon: NgComponentOptions = {
-	ctrl: IconController,
+	controller: IconController,
 };

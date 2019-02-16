@@ -128,5 +128,5 @@ export const textBox: NgInputOptions = {
 
 		return textArea;
 	},
-	ctrl: TextBoxController,
+	controller: TextBoxController,
 };

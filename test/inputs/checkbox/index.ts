@@ -25,7 +25,7 @@ test('checkbox require', async t => {
 });
 
 test('checkbox controller', async t => {
-	t.true(util.mockCtrl(definedCheckBox.ctrl) instanceof NgInputController);
+	t.true(util.mockCtrl(definedCheckBox.controller) instanceof NgInputController);
 });
 
 test('checkbox controllerAs', async t => {

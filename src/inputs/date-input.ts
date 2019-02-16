@@ -119,5 +119,5 @@ export const dateInput: NgInputOptions = {
 		minDate: 'Date must be on or after {{$ctrl.getMinDate()}}',
 		maxDate: 'Date must be on or before {{$ctrl.getMaxDate()}}',
 	},
-	ctrl: DateInputController,
+	controller: DateInputController,
 };

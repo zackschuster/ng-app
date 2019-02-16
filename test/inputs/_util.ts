@@ -28,7 +28,7 @@ export function mockCtrl<T extends NgController>(
 		config: () => $config,
 		attrs: $attrs,
 	});
-	return new Controller($element, $scope, $injector) as T;
+	return new Controller($element, $scope, $injector);
 }
 
 export function makeTpl(

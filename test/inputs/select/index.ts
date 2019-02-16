@@ -25,7 +25,7 @@ test('select require', async t => {
 });
 
 test('select controller', async t => {
-	t.true(util.mockCtrl(definedSelectList.ctrl) instanceof NgInputController);
+	t.true(util.mockCtrl(definedSelectList.controller) instanceof NgInputController);
 });
 
 test('select controllerAs', async t => {

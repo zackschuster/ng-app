@@ -32,7 +32,7 @@ export class InputService extends NgService {
 			labelClass: 'form-control-label',
 			templateClass: 'form-group',
 			attrs: { },
-			ctrl: NgInputController,
+			controller: NgInputController,
 			renderLabel: function defaultRenderLabel(h) {
 				const $transclude = h.createSlot();
 				$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
@@ -103,7 +103,7 @@ export class InputService extends NgService {
 		const h = new NgRenderer();
 
 		const $component = Object.assign(InputService.makeBaseComponent(), component);
-		const $definition = Object.assign(InputService.makeBaseOptions(), { ctrl: $component.ctrl });
+		const $definition = Object.assign(InputService.makeBaseOptions(), { controller: $component.controller });
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);

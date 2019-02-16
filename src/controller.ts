@@ -75,14 +75,14 @@ export class NgController extends NgService {
 	public $postLink?(): void;
 }
 
-export function makeInjectableCtrl($controller: new () => NgController, locals: {
+export function makeInjectableCtrl<T extends NgController>($controller: new () => T, locals: {
 	log: NgLogger,
 	http: NgHttp,
 	attrs?: Indexed,
 	config(): NgAppConfig;
 }) {
 	autobind($controller);
-	return class InternalController extends $controller {
+	return class InternalController extends ($controller as unknown as (new () => any)) {
 		public $log = locals.log;
 		public $http = locals.http;
 		public $element: HTMLElement;
@@ -116,7 +116,11 @@ export function makeInjectableCtrl($controller: new () => NgController, locals: 
 			this.$attrs = new Attributes(this.$element, locals.attrs);
 			this.$state = this.$injector.get('$state');
 		}
-	};
+	} as new (
+			$element: JQLite,
+			$scope: angular.IScope,
+			$injector: angular.auto.IInjectorService,
+		) => T;
 }
 
 export class Attributes {
