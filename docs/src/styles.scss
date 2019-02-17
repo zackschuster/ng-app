@@ -4,3 +4,47 @@ $fa-font-path: '~font-awesome/fonts';
 @import '~choices.js/src/styles/choices.scss';
 @import '~flatpickr/dist/themes/dark.css';
 @import '~font-awesome/scss/font-awesome.scss';
+
+body {
+	> nav,
+	> main {
+		opacity: 0;
+		transition: opacity 232ms;
+	}
+
+	> #loading-spinner {
+		@extend .bg-dark;
+		@extend .d-flex;
+		@extend .align-items-center;
+		@extend .justify-content-center;
+
+		transition: opacity 232ms;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+
+		> [role=status] {
+			@extend .spinner-border;
+			@extend .text-danger;
+			@extend .display-4;
+		}
+	}
+
+	&.bootstrapped {
+		> nav,
+		> main {
+			opacity: 1;
+		}
+
+		> #loading-spinner {
+			opacity: 0;
+		}
+
+	}
+}
+
+.octicon {
+  fill: currentColor;
+}
