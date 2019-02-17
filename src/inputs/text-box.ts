@@ -93,7 +93,11 @@ class TextBoxController extends NgInputController {
 		element.addEventListener('keydown', adjust);
 
 		this.$scope.$on('$destroy', () => {
-			this.$mirror.remove();
+			if (this.isIE11) {
+				(this.$mirror as any).removeNode(true);
+			} else {
+				this.$mirror.remove();
+			}
 			window.removeEventListener('resize', adjust);
 			element.removeEventListener('keydown', adjust);
 		});
