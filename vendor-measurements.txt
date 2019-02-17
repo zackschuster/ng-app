@@ -12,8 +12,9 @@ P | Size  | Name
 7 | 80kb  | octicons
 8 | 92kb  | @uirouter/core
 9 | 8kb   | core-decorators
+10| 12kb  | @angular/core
 -----------------------------------------------
--	| 564kb | overall total
--	| 510kb | measured total
+-	| 576kb | overall total
+-	| 522kb | measured total
 -	| 54kb  | missing total
 -----------------------------------------------
