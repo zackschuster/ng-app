@@ -1,6 +1,5 @@
 import { NgController } from '../controller';
 import { NgComponentOptions } from '../options';
-import { NgRenderer } from '../services/renderer';
 
 class SpinnerController extends NgController {
 	private readonly colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
@@ -12,11 +11,10 @@ class SpinnerController extends NgController {
 			throw new Error(`Color not supported: ${color}.\nSupported colors: ${this.colors.join(', ')}`);
 		}
 
-		const renderer = new NgRenderer();
-		const srDesc = renderer.createHtmlElement('span', ['sr-only']);
+		const srDesc = this.$renderer.createHtmlElement('span', ['sr-only']);
 		srDesc.innerText = 'Loading...';
 
-		const spinner = renderer.createHtmlElement('div', ['spinner-border', `text-${color}`, 'mx-1'], [['role', 'status']]);
+		const spinner = this.$renderer.createHtmlElement('div', ['spinner-border', `text-${color}`, 'mx-1'], [['role', 'status']]);
 		spinner.appendChild(srDesc);
 		spinner.style.setProperty('margin-top', '0.23rem');
 

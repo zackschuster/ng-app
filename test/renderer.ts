@@ -1,15 +1,15 @@
 // tslint:disable:no-async-without-await no-magic-numbers
 import test from 'ava';
-import { h } from './mocks';
+import { $renderer } from './mocks';
 
 test('renderer creates html element', async t => {
-	const div = h.createHtmlElement('div');
+	const div = $renderer.createHtmlElement('div');
 	t.is(div.classList.length, 0);
 	t.is(div.attributes.length, 0);
 });
 
 test('renderer creates html element with classes', async t => {
-	const div = h.createHtmlElement('div', ['test1', 'test2']);
+	const div = $renderer.createHtmlElement('div', ['test1', 'test2']);
 	t.is(div.classList.length, 2);
 	t.true(div.classList.contains('test1'));
 	t.true(div.classList.contains('test2'));
@@ -18,7 +18,7 @@ test('renderer creates html element with classes', async t => {
 });
 
 test('renderer creates html element with attributes', async t => {
-	const div = h.createHtmlElement('div', [], [['test1', 'test1'], ['test2', 'test2']]);
+	const div = $renderer.createHtmlElement('div', [], [['test1', 'test1'], ['test2', 'test2']]);
 	t.is(div.classList.length, 0);
 
 	t.is(div.attributes.length, 2);
@@ -27,7 +27,7 @@ test('renderer creates html element with attributes', async t => {
 });
 
 test('renderer creates html element with classes and attributes', async t => {
-	const div = h.createHtmlElement('div', ['test1', 'test2'], [['test1', 'test1'], ['test2', 'test2']]);
+	const div = $renderer.createHtmlElement('div', ['test1', 'test2'], [['test1', 'test1'], ['test2', 'test2']]);
 	t.is(div.classList.length, 2);
 	t.true(div.classList.contains('test1'));
 	t.true(div.classList.contains('test2'));
@@ -38,7 +38,7 @@ test('renderer creates html element with classes and attributes', async t => {
 });
 
 test('renderer creates text input by default', async t => {
-	const input = h.createInput();
+	const input = $renderer.createInput();
 	t.is(input.classList.length, 1);
 	t.true(input.classList.contains('form-control'));
 
@@ -53,7 +53,7 @@ test('renderer creates text input by default', async t => {
 });
 
 test('renderer creates radio and checkbox inputs', async t => {
-	const radio = h.createInput('radio');
+	const radio = $renderer.createInput('radio');
 	t.is(radio.classList.length, 1);
 	t.true(radio.classList.contains('form-check-input'));
 
@@ -63,7 +63,7 @@ test('renderer creates radio and checkbox inputs', async t => {
 	t.is(radio.getAttribute('ng-model'), '$ctrl.ngModel');
 	t.is(radio.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 
-	const checkbox = h.createInput('checkbox');
+	const checkbox = $renderer.createInput('checkbox');
 	t.is(checkbox.classList.length, 1);
 	t.true(checkbox.classList.contains('form-check-input'));
 
@@ -76,7 +76,7 @@ test('renderer creates radio and checkbox inputs', async t => {
 });
 
 test('renderer creates range input', async t => {
-	const range = h.createInput('range');
+	const range = $renderer.createInput('range');
 	t.is(range.classList.length, 1);
 	t.true(range.classList.contains('custom-range'));
 
@@ -89,7 +89,7 @@ test('renderer creates range input', async t => {
 });
 
 test('renderer creates textarea', async t => {
-	const input = h.createTextArea();
+	const input = $renderer.createTextArea();
 
 	t.is(input.tagName.toLowerCase(), 'textarea');
 
@@ -107,19 +107,16 @@ test('renderer creates textarea', async t => {
 });
 
 test('renderer creates icon', async t => {
-	const icon = h.createIcon('test');
+	const icon = $renderer.createIcon('test');
 	t.is(icon.tagName.toLowerCase(), 'span');
 
 	t.is(icon.classList.length, 2);
 	t.true(icon.classList.contains('fa'));
 	t.true(icon.classList.contains('fa-test'));
-
-	t.is(icon.attributes.length, 2); // includes "class" attribute
-	t.is(icon.getAttribute('aria-hidden'), 'true');
 });
 
 test('renderer creates fixed-width icon', async t => {
-	const icon = h.createIcon('test', true);
+	const icon = $renderer.createIcon('test', true);
 	t.is(icon.tagName.toLowerCase(), 'span');
 
 	t.is(icon.classList.length, 3);
@@ -132,7 +129,7 @@ test('renderer creates fixed-width icon', async t => {
 });
 
 test('renderer creates label', async t => {
-	const label = h.createLabel(['test']);
+	const label = $renderer.createLabel(['test']);
 	t.is(label.tagName.toLowerCase(), 'label');
 
 	t.is(label.classList.length, 1);
@@ -143,7 +140,7 @@ test('renderer creates label', async t => {
 });
 
 test('renderer creates label with sr-only class', async t => {
-	const label = h.createLabel([], { isSrOnly: true });
+	const label = $renderer.createLabel([], { isSrOnly: true });
 	t.is(label.classList.length, 1);
 	t.true(label.classList.contains('sr-only'));
 
@@ -151,7 +148,7 @@ test('renderer creates label with sr-only class', async t => {
 });
 
 test('renderer creates label with required asterisk', async t => {
-	const label = h.createLabel([], { isRequired: true });
+	const label = $renderer.createLabel([], { isRequired: true });
 	t.is(label.classList.length, 0);
 
 	const span = label.querySelector('span') as HTMLSpanElement;
@@ -162,7 +159,7 @@ test('renderer creates label with required asterisk', async t => {
 });
 
 test('renderer creates radio label without required asterisk', async t => {
-	const label = h.createLabel([], { isRequired: true, isRadio: true });
+	const label = $renderer.createLabel([], { isRequired: true, isRadio: true });
 	t.is(label.classList.length, 0);
 
 	const span = label.querySelector('span') as HTMLSpanElement;
@@ -170,14 +167,14 @@ test('renderer creates radio label without required asterisk', async t => {
 });
 
 test('renderer creates anonymous transclusion slot', async t => {
-	const slot = h.createSlot();
+	const slot = $renderer.createSlot();
 	t.is(slot.tagName.toLowerCase(), 'ng-transclude');
 	t.is(slot.classList.length, 0);
 	t.is(slot.attributes.length, 0);
 });
 
 test('renderer creates named transclusion slot', async t => {
-	const slot = h.createSlot('test');
+	const slot = $renderer.createSlot('test');
 	t.is(slot.tagName.toLowerCase(), 'div');
 
 	t.is(slot.classList.length, 0);
@@ -186,8 +183,8 @@ test('renderer creates named transclusion slot', async t => {
 });
 
 test('renderer creates icon input', async t => {
-	const input = h.createInput();
-	const iconInput = h.createIconInput(input, 'calendar');
+	const input = $renderer.createInput();
+	const iconInput = $renderer.createIconInput(input, 'calendar');
 	t.truthy(iconInput.querySelector('.fa-calendar'));
 	t.true((iconInput.querySelector('input') as HTMLInputElement).isEqualNode(input));
 });

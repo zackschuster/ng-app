@@ -2,7 +2,7 @@ import { Indexed } from '@ledge/types';
 import { ExecutionContext } from 'ava';
 import { element } from 'angular';
 
-import { $config, $http, $injector, $invokeTemplate, $log, $svc } from '../mocks';
+import { $config, $http, $injector, $invokeTemplate, $log, $renderer, $svc } from '../mocks';
 import { NgController, makeInjectableCtrl } from '../../src/controller';
 import { InputService } from '../../src/inputs';
 import { NgComponentOptions } from '../../src/options';
@@ -27,8 +27,9 @@ export function mockCtrl<T = NgController>(definition: NgComponentOptions, $attr
 	const controller = makeInjectableCtrl(definition.controller as any, {
 		log: $log,
 		http: $http,
-		config: () => $config,
+		renderer: $renderer,
 		attrs: $attrs,
+		config: () => $config,
 	});
 
 	const $element = element(html);

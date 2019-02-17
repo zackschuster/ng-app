@@ -210,6 +210,7 @@ export class NgApp {
 		const componentCtrl = makeInjectableCtrl($controller, {
 			log: this.log,
 			http: this.http,
+			renderer: this.renderer,
 			config: () => this.config,
 		});
 

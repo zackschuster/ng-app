@@ -109,6 +109,7 @@ export class NgModal extends NgService {
 		const $ctrl = makeInjectableCtrl(controller, {
 			log: this.$log,
 			http: this.$http,
+			renderer: this.$renderer,
 			config: () => this.$config,
 		});
 
