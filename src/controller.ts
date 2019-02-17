@@ -1,5 +1,5 @@
 import { NgAppConfig } from './options';
-import { NgHttp, NgLogger, NgService, NgStateService } from './services';
+import { NgHttp, NgLogger, NgRenderer, NgService, NgStateService } from './services';
 import { Indexed } from '@ledge/types';
 import { autobind } from 'core-decorators';
 import { NgInjector, NgScope } from './ng';
@@ -13,6 +13,7 @@ export class NgController extends NgService {
 	public readonly $log: NgLogger;
 	public readonly $http: NgHttp;
 	public readonly $state: NgStateService;
+	public readonly $renderer: NgRenderer;
 	public readonly $element: HTMLElement;
 
 	public readonly isProduction: boolean;
@@ -79,6 +80,7 @@ export class NgController extends NgService {
 export function makeInjectableCtrl<T extends NgController>($controller: new () => T, locals: {
 	log: NgLogger,
 	http: NgHttp,
+	renderer: NgRenderer,
 	attrs?: Indexed,
 	config(): NgAppConfig;
 }) {
@@ -86,9 +88,10 @@ export function makeInjectableCtrl<T extends NgController>($controller: new () =
 	return class InternalController extends ($controller as unknown as (new () => any)) {
 		public $log = locals.log;
 		public $http = locals.http;
-		public $element: HTMLElement;
-		public $attrs: NgAttributes;
+		public $renderer = locals.renderer;
 		public $state: NgStateService;
+		public $attrs: NgAttributes;
+		public $element: HTMLElement;
 
 		public get $config() {
 			return locals.config();

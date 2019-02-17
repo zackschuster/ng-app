@@ -8,7 +8,7 @@ import { ExecutionContext } from 'ava';
 // @ts-ignore
 import pretty = require('pretty');
 
-import { $element, $http, $invokeTemplate, $log, $scope, $svc } from '../mocks';
+import { $element, $http, $invokeTemplate, $log, $renderer, $scope, $svc } from '../mocks';
 import { InputService } from '../../src/inputs';
 import { NgController, makeInjectableCtrl } from '../../src/controller';
 import { $config } from '../mocks/-config';
@@ -25,8 +25,9 @@ export function mockCtrl<T extends NgController>(
 	const Controller = makeInjectableCtrl(ctrl, {
 		log: $log,
 		http: $http,
-		config: () => $config,
+		renderer: $renderer,
 		attrs: $attrs,
+		config: () => $config,
 	});
 	return new Controller($element, $scope, $injector);
 }
