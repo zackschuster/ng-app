@@ -55,7 +55,8 @@ export class NgToast {
 		this.type = type;
 		this.toast.classList.add(`bg-${LogTypeToastBackgrounds[this.type]}`);
 		if (type === '$log') {
-			this.toastHeader.classList.add('bg-info');
+			this.toastHeader.classList.add('bg-dark');
+			this.toastHeader.style.setProperty('opacity', '0.75');
 			this.toastHeaderTimestamp.classList.remove('text-dark');
 			this.toastHeaderTimestamp.classList.add('text-white');
 		} else if (type !== '$warn') {
