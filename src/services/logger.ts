@@ -1,7 +1,16 @@
 // tslint:disable:no-magic-numbers
+import { autobind } from 'core-decorators';
 import { NgService } from './base';
 import { NgRenderer } from './renderer';
-import { autobind } from 'core-decorators';
+
+type LogType = '$log' | '$warn' | '$error' | '$info' | '$success';
+enum LogTypeToastBackgrounds {
+	$log = 'white',
+	$success = 'success',
+	$info = 'info',
+	$warn = 'warning',
+	$error = 'danger',
+}
 
 export class NgToast {
 	protected type: Parameters<NgLogger['notify']>[1];
@@ -11,7 +20,7 @@ export class NgToast {
 	protected readonly toastHeaderTimestamp: HTMLElement;
 
 	constructor(protected readonly $renderer: NgRenderer) {
-		this.toast = this.$renderer.createHtmlElement('div', ['toast', 'animated', 'row', 'align-items-center', 'justify-content-between', 'w-100'], [['role', 'alert'], ['aria-live', 'assertive'], ['aria-atomic', 'true']]);
+		this.toast = this.$renderer.createHtmlElement('div', ['toast', 'animated', 'row', 'justify-content-between', 'w-100'], [['role', 'alert'], ['aria-live', 'assertive'], ['aria-atomic', 'true']]);
 		this.toast.style.setProperty('cursor', 'pointer');
 		this.toast.style.setProperty('transition', 'opacity 500ms');
 		this.toast.style.setProperty('opacity', '0');
@@ -42,11 +51,15 @@ export class NgToast {
 
 	public setType(type: Parameters<NgLogger['notify']>[1]) {
 		if (this.type != null) {
-			this.toast.classList.remove(`bg-${this.type === '$error' ? 'danger' : this.type.replace(/^\$/, '')}`);
+			this.toast.classList.remove(`bg-${LogTypeToastBackgrounds[this.type]}`);
 		}
 		this.type = type;
-		this.toast.classList.add(`bg-${this.type === '$error' ? 'danger' : this.type.replace(/^\$/, '')}`);
-		if (type !== '$warn') {
+		this.toast.classList.add(`bg-${LogTypeToastBackgrounds[this.type]}`);
+		if (type === '$log') {
+			this.toastHeader.classList.add('bg-info');
+			this.toastHeaderTimestamp.classList.remove('text-dark');
+			this.toastHeaderTimestamp.classList.add('text-white');
+		} else if (type !== '$warn') {
 			this.toast.classList.add('text-white');
 		}
 	}
@@ -77,11 +90,14 @@ export class NgConsole extends NgService {
 	public $info(...items: any[]) {
 		console.info(...items);
 	}
+	public $warn(...items: any[]) {
+		console.warn(...items);
+	}
 	public $log(...items: any[]) {
 		console.log(...items);
 	}
-	public $warn(...items: any[]) {
-		console.warn(...items);
+	public $success(...items: any[]) {
+		this.$log(...items);
 	}
 	// tslint:enable:no-console
 }
@@ -113,30 +129,37 @@ export class NgLogger extends NgConsole {
 	 * Prompt the user to confirm intent for a previous action
 	 */
 	public confirm(msg = 'Please confirm your action') {
-		const okBtn = this.$renderer.createHtmlElement('button', ['btn', 'btn-success', 'mr-1']);
+		const okBtn = this.$renderer.createHtmlElement('button', ['btn', 'w-50', 'btn-success', 'rounded-0']);
 		okBtn.innerText = 'Yes';
-		const cancelBtn = this.$renderer.createHtmlElement('button', ['btn', 'btn-warning', 'mr-1']);
+		const cancelBtn = this.$renderer.createHtmlElement('button', ['btn', 'w-50', 'btn-dark', 'rounded-0']);
 		cancelBtn.innerText = 'No';
 
-		const footer = this.$renderer.createHtmlElement('div', ['d-inline-flex']);
-		footer.appendChild(okBtn);
+		const footer = this.$renderer.createHtmlElement('div', ['w-100']);
 		footer.appendChild(cancelBtn);
+		footer.appendChild(okBtn);
 
-		const toast = this.notify(msg, '$info', false);
+		const toast = this.notify(msg, '$log', false);
 		toast.appendChild(footer);
 
 		return new Promise((resolve, reject) => {
+			const removeListeners = () => {
+				okBtn.removeEventListener('click', ok);
+				cancelBtn.removeEventListener('click', cancel);
+			};
+
 			const ok = () => {
 				toast.hide();
-				okBtn.removeEventListener('click', ok);
-				setTimeout(resolve, 200);
+				removeListeners();
+				resolve();
 			};
-			okBtn.addEventListener('click', ok);
+
 			const cancel = () => {
 				toast.hide();
-				cancelBtn.removeEventListener('click', cancel);
-				setTimeout(reject, 200);
+				removeListeners();
+				reject();
 			};
+
+			okBtn.addEventListener('click', ok);
 			cancelBtn.addEventListener('click', cancel);
 		});
 	}
@@ -168,7 +191,7 @@ export class NgLogger extends NgConsole {
 	 * @param isTemporary Whether the notification should disappear automatically (true by default)
 	 */
 	public success(text: string, isTemporary = true) {
-		this.notify(text, '$log', isTemporary && undefined);
+		this.notify(text, '$success', isTemporary && undefined);
 	}
 
 	/**
@@ -200,7 +223,7 @@ export class NgLogger extends NgConsole {
 	 * @param timeout Length in ms before notification disappears (`false` to set permanently)
 	 * @param buttons Interaction points for the user
 	 */
-	public notify(text: string, type: '$log' | '$warn' | '$error' | '$info' | '$debug', timeout: false | number = 2323) {
+	public notify(text: string, type: LogType, timeout: false | number = 2323) {
 		this[type](`${type}: ${text}`);
 
 		const toast = new NgToast(this.$renderer);
