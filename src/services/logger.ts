@@ -1,3 +1,4 @@
+import isIE11 from '@ledge/is-ie-11';
 import { autobind } from 'core-decorators';
 import { NgService } from './base';
 import { NgRenderer } from './renderer';
@@ -75,7 +76,13 @@ export class NgToast {
 	public hide() {
 		this.toast.removeEventListener('click', this.hide);
 		this.toast.style.setProperty('opacity', '0');
-		setTimeout(() => this.toast.remove(), 500);
+		setTimeout(() => {
+			if (isIE11()) {
+				(this.toast as any).removeNode(true);
+			} else {
+				this.toast.remove();
+			}
+		}, 500);
 	}
 }
 

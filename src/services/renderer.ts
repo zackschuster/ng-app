@@ -1,8 +1,8 @@
 import { Indexed, WritableKeysOf } from '@ledge/types';
-import { RendererStyleFlags2 } from '@angular/core';
+import { Renderer2, RendererStyleFlags2 } from '@angular/core';
 import { octicons } from './icon';
 
-export class NgRenderer {
+export class NgRenderer extends Renderer2 {
 	public baseInputAttrs: [string, string][] = [
 		['ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}'],
 		['ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}'],

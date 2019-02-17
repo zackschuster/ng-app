@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const docs = path.join(process.cwd(), 'docs');
+
 class NgAppDocsPlugin {
 	// @ts-ignore
 	constructor(isDev) {
@@ -33,8 +35,6 @@ class NgAppDocsPlugin {
 		});
 	}
 }
-
-const docs = path.join(process.cwd(), 'docs');
 
 module.exports = (env = 'development') =>
 	require('@ledge/configs/webpack.merge')(env, {
