@@ -21,27 +21,19 @@ html(lang="en")
 
 		.container-fluid
 			.row.no-gutters
-				//- .col-12
-					.card.shadow
-						.card-body
-							fieldset
-								legend.h3 Icons
-								each icon in icons
-									app-icon(icon=icon)
-
 				.col-auto
 					.card.shadow-sm
 						.card-body
 							fieldset
-								legend.h3 Modal
-								button.btn.btn-outline-dark(type="button" ng-click="$ctrl.openModal()") Open
+								legend.h2.border-bottom.pb-2 Modal
+								button.btn.btn-block.btn-dark(type="button" ng-click="$ctrl.openModal()") open
 
 				.col-auto
 					.card.shadow-sm
 						.card-body
 							fieldset#toasts
-								legend.h3 Toasts
-								button.btn.btn-dark.mr-1(type="button" ng-click="$ctrl.openConfirmToast()") confirm
+								legend.h2.border-bottom.pb-2 Toasts
+								button.btn.btn-light.mr-1(type="button" ng-click="$ctrl.openConfirmToast()") confirm
 								each toast in toasts
 									button.btn.mr-1(class="btn-" + (toast === 'error' ? 'danger' : toast) ng-click="$ctrl.$log." + toast + "('Example " + toast + " toast')" type="button")= toast
 
@@ -49,7 +41,7 @@ html(lang="en")
 					.card.shadow-sm
 						.card-body
 							fieldset
-								legend.h3 Spinners
+								legend.h2.border-bottom.pb-2 Spinners
 								each color in colors
 									app-spinner(color=color)
 
@@ -57,7 +49,7 @@ html(lang="en")
 				.card.mr-0.shadow-sm
 					.card-body
 						fieldset
-							legend.h3.mb-3 Inputs
+							legend.h2.border-bottom.pb-2.mb-3 Inputs
 							.row
 								.col
 									text-input(ng-model="$ctrl.textInput")
@@ -83,7 +75,7 @@ html(lang="en")
 				)
 					.card-body
 						fieldset
-							legend.h3.mb-3 Lists
+							legend.h2.border-bottom.pb-2.mb-3 Lists
 							.row
 								.col
 									select-list(ng-model="$ctrl.selectSingle" list="$ctrl.list")
@@ -115,5 +107,13 @@ html(lang="en")
 										type="button"
 										ng-click="$ctrl.list = [{Text: 'Third Choice', Value: 3}, {Text: 'Fourth Choice', Value: 4}]"
 									) List 2
+
+		//- .col-12
+			.card.shadow
+				.card-body
+					fieldset
+						legend.h2.border-bottom.pb-2.mb-3 Icons
+						each icon in icons
+							app-icon(icon=icon height=42 width=42)
 
 		ui-view
