@@ -81,21 +81,45 @@ export class NgToast {
 
 export class NgConsole extends NgService {
 	// tslint:disable:no-console
+
+	/**
+	 * Invoke `Console.prototype.debug`
+	 */
 	public $debug(...items: any[]) {
 		console.debug(...items);
 	}
+
+	/**
+	 * Invoke `Console.prototype.error`
+	 */
 	public $error(...items: any[]) {
 		console.error(...items);
 	}
+
+	/**
+	 * Invoke `Console.prototype.info`
+	 */
 	public $info(...items: any[]) {
 		console.info(...items);
 	}
+
+	/**
+	 * Invoke `Console.prototype.warn`
+	 */
 	public $warn(...items: any[]) {
 		console.warn(...items);
 	}
+
+	/**
+	 * Invoke `Console.prototype.log`
+	 */
 	public $log(...items: any[]) {
 		console.log(...items);
 	}
+
+	/**
+	 * Invoke `Console.prototype.log`
+	 */
 	public $success(...items: any[]) {
 		this.$log(...items);
 	}
