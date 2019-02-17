@@ -1,6 +1,23 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { $log } from './mocks';
+import { $console, $log } from './mocks';
+import { NgService } from '../src/services';
+
+test('console subclasses service', async t => {
+	t.true($console instanceof NgService);
+});
+
+test('console has appropriate methods', async t => {
+	t.is(typeof $console.$debug, 'function');
+	t.is(typeof $console.$error, 'function');
+	t.is(typeof $console.$info, 'function');
+	t.is(typeof $console.$log, 'function');
+	t.is(typeof $console.$warn, 'function');
+});
+
+test('logger subclasses console', async t => {
+	t.true($log instanceof Object.getPrototypeOf($console).constructor);
+});
 
 test('logger has appropriate methods', async t => {
 	t.is(typeof $log.clear, 'function');
