@@ -1,4 +1,4 @@
-import { WritableKeysOf } from '@ledge/types';
+import { Indexed, WritableKeysOf } from '@ledge/types';
 import { RendererStyleFlags2 } from '@angular/core';
 import { octicons } from './icon';
 
@@ -66,14 +66,14 @@ export class NgRenderer {
 		]);
 	}
 
-	public createIcon(iconName: string) {
+	public createIcon(iconName: string, options: Indexed = { }) {
 		if (octicons.hasOwnProperty(iconName) === false) {
 			throw new Error(`
 				Icon not supported: ${iconName}.\nSupported icons: ${Object.keys(octicons).sort().join(', ')}
 			`.trim());
 		}
 
-		const svg = octicons[iconName].toSVG({ 'aria-label': iconName });
+		const svg = octicons[iconName].toSVG(Object.assign(options, { 'aria-label': iconName }));
 		const container = this.createHtmlElement('div', ['d-inline-flex', 'px-1']);
 		container.setAttribute('aria-hidden', 'true');
 		container.setAttribute('title', iconName);
