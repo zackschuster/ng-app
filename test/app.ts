@@ -2,11 +2,7 @@ import test from 'ava';
 import { NgHttp, NgLogger, NgModal, app, inputs, misc } from '..';
 import { $prefix } from './mocks';
 
-app.configure({
-	PREFIX: {
-		API: $prefix,
-	},
-});
+app.configure({ API_HOST: $prefix });
 
 test('app.module.name is app.$id', async t => {
 	t.is(app.$id, app.module.name);

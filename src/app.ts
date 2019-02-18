@@ -1,4 +1,4 @@
-import { IConfig, Indexed } from '@ledge/types';
+import { Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
 import { StateProvider } from '@uirouter/angularjs';
 import { autobind } from 'core-decorators';
@@ -161,14 +161,7 @@ export class NgApp {
 		return this.$bootstrap(document.body, [this.$id], { strictDi });
 	}
 
-	public configure(config: {
-		NAME?: string,
-		ENV?: string,
-		PREFIX?: {
-			API: string,
-			TEMPLATE?: string,
-		},
-	}) {
+	public configure(config: Partial<NgAppConfig>) {
 		this.$config = new NgAppConfig(config);
 		return this;
 	}
@@ -229,11 +222,11 @@ export class NgApp {
 			'$injector',
 			componentCtrl,
 		] as [
-			'$element',
-			'$scope',
-			'$injector',
-			typeof componentCtrl
-		];
+				'$element',
+				'$scope',
+				'$injector',
+				typeof componentCtrl
+			];
 	}
 
 	protected $modal() {
