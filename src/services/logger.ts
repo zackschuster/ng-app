@@ -93,6 +93,7 @@ export class NgToast {
 	 */
 	public show(timeout: false | number, container?: HTMLElement) {
 		if (container != null) {
+			this.remove();
 			container.appendChild(this.toast);
 		}
 
@@ -118,10 +119,7 @@ export class NgToast {
 					this.toast.removeEventListener('click', hideAnimation.play);
 					this.toast.removeEventListener('mouseover', resetAnimationOnMouseover);
 					this.toast.removeEventListener('mouseout', resumeAnimationOnMouseout);
-
-					if (this.toast.parentElement != null) {
-						this.toast.parentElement.removeChild(this.toast);
-					}
+					this.remove();
 					resolve();
 				},
 			});
@@ -161,6 +159,15 @@ export class NgToast {
 	 */
 	public hide() {
 		this.toast.click();
+	}
+
+	/**
+	 * Remove the toast from its container
+	 */
+	public remove() {
+		if (this.toast.parentElement != null) {
+			this.toast.parentElement.removeChild(this.toast);
+		}
 	}
 }
 
