@@ -38,9 +38,10 @@ html(lang="en")
 							.card-body
 								fieldset#toasts
 									legend.h2.border-bottom.pb-2 Toasts
-									button.btn.btn-light.mr-1(type="button" ng-click="$ctrl.openConfirmToast()") confirm
 									each toast in toasts
 										button.btn.mr-1(class="btn-" + (toast === 'error' ? 'danger' : toast) ng-click="$ctrl.$log." + toast + "('Example " + toast + " toast')" type="button")= toast
+									button.btn.btn-light.mr-1(type="button" ng-click="$ctrl.openConfirmToast()") confirm
+									button.btn.btn-outline-dark(type="button" ng-click="$ctrl.$log.clear()") &times; clear
 
 					.col
 						.card.shadow-sm
