@@ -40,6 +40,7 @@ html(lang="en")
 									each toast in toasts
 										button.btn.mr-1.mb-1.mb-md-0(class="btn-" + (toast === 'error' ? 'danger' : toast) ng-click="$ctrl.$log." + toast + "('Example " + toast + " toast')" type="button")= toast
 									button.btn.btn-light(type="button" ng-click="$ctrl.openConfirmToast()") confirm
+									button.btn.btn-outline-dark(type="button" ng-click="$ctrl.$log.clear()") &times; clear
 
 					.col.pl-md-0
 						.card.shadow-sm

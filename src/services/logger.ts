@@ -1,4 +1,3 @@
-import isIE11 from '@ledge/is-ie-11';
 import anime, { AnimeInstance } from 'animejs';
 import { NgService } from './base';
 import { NgRenderer } from './renderer';
@@ -61,47 +60,46 @@ export class NgToast {
 		}
 	}
 
-	public show(container: HTMLElement, timeout: false | number, onClose: (anime: AnimeInstance) => void = () => { return; }) {
-		this.toastHeaderTimestamp.innerText = new Date().toLocaleTimeString(navigator.language).replace(/(:\d{2})(?=\s[AP]M$)/, '');
-		this.toast.style.setProperty('opacity', '1');
+	public show(container: HTMLElement, timeout: false | number) {
 		container.appendChild(this.toast);
 
-		const showAnimation = anime({
+		anime({
 			targets: this.toast,
 			translateX: [500, 0],
 			duration: 1000,
 			easing: 'easeOutQuint(0.5, 1)',
+			begin: () => {
+				this.toastHeaderTimestamp.innerText = new Date().toLocaleTimeString(navigator.language).replace(/(:\d{2})(?=\s[AP]M$)/, '');
+				this.toast.style.setProperty('opacity', '1');
+			},
 		});
 
-		showAnimation.finished.then(() => {
+		return new Promise(resolve => {
 			const hideAnimation = anime({
 				targets: this.toast,
 				translateX: [0, 500],
 				duration: 1000,
 				autoplay: false,
 				easing: 'easeInQuint(0.5, 1)',
-			});
-
-			const closeOnClick = () => {
-				hideAnimation.play();
-				hideAnimation.finished.then(() => {
-					this.toast.removeEventListener('click', closeOnClick);
+				complete: () => {
+					this.toast.removeEventListener('click', hideAnimation.play);
 					this.toast.removeEventListener('mouseover', resetAnimationOnMouseover);
 					this.toast.removeEventListener('mouseout', resumeAnimationOnMouseout);
-					this.hide();
-					onClose(hideAnimation);
-				});
-			};
+
+					container.removeChild(this.toast);
+					resolve();
+				},
+			});
 
 			const isAutoClose = typeof timeout === 'number' && Number.isInteger(timeout);
-			const makeTimeout = () => setTimeout(() => closeOnClick(), timeout as number) as unknown as number;
+			const makeTimeout = () => (setTimeout as typeof window['setTimeout'])(hideAnimation.play, timeout as number);
 
-			let autoCloseId: number | undefined;
-			if (isAutoClose) {
-				autoCloseId = makeTimeout();
-			}
+			let autoCloseId = isAutoClose ? makeTimeout() : undefined;
+			let wasClosing = false;
 
 			const resetAnimationOnMouseover = () => {
+				wasClosing = hideAnimation.progress > 0;
+
 				clearTimeout(autoCloseId);
 				autoCloseId = undefined;
 
@@ -110,25 +108,21 @@ export class NgToast {
 			};
 
 			const resumeAnimationOnMouseout = () => {
-				if (hideAnimation.paused) {
-					closeOnClick();
+				if (wasClosing) {
+					hideAnimation.play();
 				} else if (isAutoClose && autoCloseId === undefined) {
 					autoCloseId = makeTimeout();
 				}
 			};
 
-			this.toast.addEventListener('click', closeOnClick);
+			this.toast.addEventListener('click', hideAnimation.play);
 			this.toast.addEventListener('mouseover', resetAnimationOnMouseover);
 			this.toast.addEventListener('mouseout', resumeAnimationOnMouseout);
 		});
 	}
 
 	public hide() {
-		if (isIE11()) {
-			(this.toast as any).removeNode(true);
-		} else {
-			this.toast.remove();
-		}
+		this.toast.click();
 	}
 }
 
@@ -307,7 +301,7 @@ export class NgLogger extends NgConsole {
 
 		toast.setBodyText(text);
 		toast.setType(type);
-		toast.show(this.container, timeout, () => {
+		toast.show(this.container, timeout).then(() => {
 			const index = this.toasts.findIndex(x => Object.is(x, toast));
 			this.toasts.splice(index, 1);
 		});
