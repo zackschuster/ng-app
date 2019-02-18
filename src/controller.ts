@@ -77,15 +77,15 @@ export class NgController extends NgService {
 	public $postLink?(): void;
 }
 
-export function makeInjectableCtrl<T extends NgController>($controller: new () => T, locals: {
+export function makeInjectableCtrl<T extends NgController>(ctrl: new () => T, locals: {
 	log: NgLogger,
 	http: NgHttp,
 	renderer: NgRenderer,
 	attrs?: Indexed,
 	config(): NgAppConfig;
 }) {
-	autobind($controller);
-	return class InternalController extends ($controller as unknown as (new () => any)) {
+	autobind(ctrl);
+	return class InternalController extends (ctrl as new () => any) {
 		public $log = locals.log;
 		public $http = locals.http;
 		public $renderer = locals.renderer;

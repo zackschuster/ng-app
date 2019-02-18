@@ -204,13 +204,8 @@ export class NgApp {
 		return this;
 	}
 
-	public makeComponentController($controller: new () => NgController): [
-		'$element',
-		'$scope',
-		'$injector',
-		ReturnType<typeof makeInjectableCtrl>
-	] {
-		const componentCtrl = makeInjectableCtrl($controller, {
+	public makeComponentController<T extends NgController>(ctrl: new () => T) {
+		const componentCtrl = makeInjectableCtrl<T>(ctrl, {
 			log: this.log,
 			http: this.http,
 			renderer: this.renderer,
@@ -222,6 +217,11 @@ export class NgApp {
 			'$scope',
 			'$injector',
 			componentCtrl,
+		] as [
+			'$element',
+			'$scope',
+			'$injector',
+			typeof componentCtrl
 		];
 	}
 
