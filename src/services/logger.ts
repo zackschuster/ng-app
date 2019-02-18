@@ -1,5 +1,5 @@
 // tslint:disable:no-magic-numbers
-import anime, { AnimeInstance } from 'animejs';
+import anime from 'animejs';
 import { NgService } from './base';
 import { NgRenderer } from './renderer';
 
@@ -13,14 +13,17 @@ enum LogTypeToastBackgrounds {
 }
 
 export class NgToast {
-	public animation: AnimeInstance;
-	protected type: Parameters<NgLogger['notify']>[1];
+	protected type: LogType;
 	protected readonly toast: HTMLDivElement;
 	protected readonly toastHeader: HTMLDivElement;
 	protected readonly toastBody: HTMLDivElement;
 	protected readonly toastHeaderTimestamp: HTMLElement;
 
-	constructor(protected readonly $renderer: NgRenderer) {
+	constructor(protected readonly $renderer: NgRenderer, options: {
+		text: string,
+		type: LogType,
+		container: HTMLElement,
+	}) {
 		this.toast = this.$renderer.createHtmlElement('div', ['toast', 'row', 'justify-content-between', 'w-100'], [['role', 'alert'], ['aria-live', 'assertive'], ['aria-atomic', 'true']]);
 		this.toast.style.setProperty('cursor', 'pointer');
 
@@ -33,7 +36,13 @@ export class NgToast {
 		this.toastHeader.appendChild(this.toastHeaderTimestamp);
 		this.toast.appendChild(this.toastHeader);
 		this.toast.appendChild(this.toastBody);
+
+		this.setBodyText(options.text);
+		this.setType(options.type);
+
+		options.container.appendChild(this.toast);
 	}
+
 	public appendChild(el: HTMLElement) {
 		this.toast.appendChild(el);
 		return this;
@@ -43,7 +52,7 @@ export class NgToast {
 		this.toastBody.innerHTML = text;
 	}
 
-	public setType(type: Parameters<NgLogger['notify']>[1]) {
+	public setType(type: LogType) {
 		if (this.type != null) {
 			this.toast.classList.remove(`bg-${LogTypeToastBackgrounds[this.type]}`);
 		}
@@ -61,8 +70,10 @@ export class NgToast {
 		}
 	}
 
-	public show(container: HTMLElement, timeout: false | number) {
-		container.appendChild(this.toast);
+	public show(timeout: false | number, container?: HTMLElement) {
+		if (container != null) {
+			container.appendChild(this.toast);
+		}
 
 		anime({
 			targets: this.toast,
@@ -87,7 +98,9 @@ export class NgToast {
 					this.toast.removeEventListener('mouseover', resetAnimationOnMouseover);
 					this.toast.removeEventListener('mouseout', resumeAnimationOnMouseout);
 
-					container.removeChild(this.toast);
+					if (this.toast.parentElement != null) {
+						this.toast.parentElement.removeChild(this.toast);
+					}
 					resolve();
 				},
 			});
@@ -297,16 +310,13 @@ export class NgLogger extends NgConsole {
 	public notify(text: string, type: LogType, timeout: false | number = 2323) {
 		this[type](`${type}: ${text}`);
 
-		const toast = new NgToast(this.$renderer);
-		this.toasts.push(toast);
-
-		toast.setBodyText(text);
-		toast.setType(type);
-		toast.show(this.container, timeout).then(() => {
+		const toast = new NgToast(this.$renderer, { text, type, container: this.container });
+		toast.show(timeout).then(() => {
 			const index = this.toasts.findIndex(x => Object.is(x, toast));
 			this.toasts.splice(index, 1);
 		});
 
+		this.toasts.push(toast);
 		return toast;
 	}
 }
