@@ -37,35 +37,41 @@ export class NgModal extends NgService {
 		this.$compile = this.$injector.get('$compile');
 		this.$rootScope = this.$injector.get('$rootScope');
 
-		this.backdrop = this.makeBackdrop();
-		this.header = this.makeHeader();
+		this.backdrop = this.$renderer.createHtmlElement('div', ['modal-backdrop', 'fade']);
+		this.title = this.$renderer.createHtmlElement('h5', ['modal-title'], [['id', `modal-title-${this.uniqueId}`]]);
 
-		this.title = this.makeTitle();
+		this.headerCloseButton = this.$renderer.createHtmlElement('button', ['close'], [['type', 'button'], ['aria-label', 'close']]);
+		this.headerCloseButton.innerHTML = '&times;';
+
+		this.header = this.$renderer.createHtmlElement('div', ['modal-header']);
+		this.body = this.$renderer.createHtmlElement('div', ['modal-body']);
+		this.footer = this.$renderer.createHtmlElement('div', ['modal-footer']);
+		this.content = this.$renderer.createHtmlElement('div', ['modal-content']);
+
 		this.header.appendChild(this.title);
-
-		this.headerCloseButton = this.makeHeaderCloseButton();
 		this.header.appendChild(this.headerCloseButton);
 
-		this.content = this.makeContent();
 		this.content.appendChild(this.header);
-
-		this.body = this.makeBody();
 		this.content.appendChild(this.body);
-
-		this.footer = this.makeFooter();
-		this.footerCancelButton = this.makeFooterCancelButton();
-		this.footer.appendChild(this.footerCancelButton);
-
-		this.footerOkButton = this.makeFooterOkButton();
-		this.footer.appendChild(this.footerOkButton);
-
 		this.content.appendChild(this.footer);
 
-		this.dialog = this.makeDialog();
+		this.footerCancelButton = this.$renderer.createHtmlElement('button', ['btn', 'btn-info'], [['type', 'button']]);
+		this.footerOkButton = this.$renderer.createHtmlElement('button', ['btn', 'btn-success'], [['type', 'button']]);
+
+		this.footer.appendChild(this.footerCancelButton);
+		this.footer.appendChild(this.footerOkButton);
+
+		this.dialog = this.$renderer.createHtmlElement('div', ['modal-dialog'], [['role', 'document']]);
 		this.dialog.appendChild(this.content);
 
-		this.container = this.makeContainer();
+		this.container = this.$renderer.createHtmlElement('div', ['fade', 'modal'], [
+			['aria-hidden', 'true'],
+			['aria-labelledby', 'modal-title'],
+			['role', 'dialog'],
+			['tabindex', '-1'],
+		]);
 		this.container.appendChild(this.dialog);
+
 		document.body.appendChild(this.container);
 	}
 
@@ -183,81 +189,6 @@ export class NgModal extends NgService {
 		scope.$destroy();
 		window.removeEventListener('keydown', escapeKeyListener);
 		document.body.classList.remove('modal-open');
-	}
-
-	protected makeBackdrop() {
-		return this.$renderer.createHtmlElement('div', ['modal-backdrop', 'fade']);
-	}
-
-	protected makeContainer() {
-		return this.$renderer.createHtmlElement(
-			'div',
-			['fade', 'modal'],
-			[
-				['aria-hidden', 'true'],
-				['aria-labelledby', 'modal-title'],
-				['role', 'dialog'],
-				['tabindex', '-1'],
-			],
-		);
-	}
-
-	protected makeDialog() {
-		return this.$renderer.createHtmlElement(
-			'div',
-			['modal-dialog'],
-			[['role', 'document']],
-		);
-	}
-
-	protected makeContent() {
-		return this.$renderer.createHtmlElement('div', ['modal-content']);
-	}
-
-	protected makeHeader() {
-		return this.$renderer.createHtmlElement('div', ['modal-header']);
-	}
-
-	protected makeHeaderCloseButton() {
-		const btn = this.$renderer.createHtmlElement(
-			'button',
-			['close'],
-			[['type', 'button'], ['aria-label', 'close']],
-		);
-		btn.innerHTML = '&times;';
-		return btn;
-	}
-
-	protected makeTitle() {
-		return this.$renderer.createHtmlElement(
-			'h5',
-			['modal-title'],
-			[['id', `modal-title-${this.uniqueId}`]],
-		);
-	}
-
-	protected makeBody() {
-		return this.$renderer.createHtmlElement('div', ['modal-body']);
-	}
-
-	protected makeFooter() {
-		return this.$renderer.createHtmlElement('div', ['modal-footer']);
-	}
-
-	protected makeFooterCancelButton() {
-		return this.$renderer.createHtmlElement(
-			'button',
-			['btn', 'btn-info'],
-			[['type', 'button']],
-		);
-	}
-
-	protected makeFooterOkButton() {
-		return this.$renderer.createHtmlElement(
-			'button',
-			['btn', 'btn-success'],
-			[['type', 'button']],
-		);
 	}
 }
 
