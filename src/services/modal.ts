@@ -107,7 +107,7 @@ export class NgModal extends NgService {
 		this.body.innerHTML =
 			typeof template === 'function' ? template() : template;
 
-		const $scope = this.$rootScope.$new(true) as Parameters<NgModal['hideModal']>[1];
+		const $scope = this.$rootScope.$new(true) as Parameters<NgModal['hide']>[1];
 		const $element = this.$compile(this.container)($scope);
 		const $ctrl = makeInjectableCtrl(controller, {
 			log: this.$log,
@@ -126,10 +126,10 @@ export class NgModal extends NgService {
 		};
 		const dismiss = () => {
 			removeEventListeners();
-			this.hideModal(escapeKeyListener, $scope);
+			this.hide(escapeKeyListener, $scope);
 		};
 
-		this.showModal(escapeKeyListener);
+		this.show(escapeKeyListener);
 
 		const removeEventListeners = () => {
 			this.headerCloseButton.removeEventListener('click', dismiss);
@@ -151,7 +151,7 @@ export class NgModal extends NgService {
 		return { close, dismiss };
 	}
 
-	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
+	protected show(escapeKeyListener: (e: KeyboardEvent) => void) {
 		this.backdrop.style.setProperty('display', 'block');
 
 		this.container.style.setProperty('display', 'block');
@@ -171,7 +171,7 @@ export class NgModal extends NgService {
 		}, 23);
 	}
 
-	protected hideModal(
+	protected hide(
 		escapeKeyListener: (e: KeyboardEvent) => void,
 		scope: NgScope & { $ctrl: NgController; },
 	) {
