@@ -29,11 +29,7 @@ app
 	);
 
 app
-	.configure({
-		PREFIX: {
-			API: 'api.ng-app.js.org',
-		},
-	})
+	.configure({ API_HOST: 'api.ng-app.js.org' })
 	.setRouter(new NgRouter())
 	.bootstrap()
 	.then(() => {

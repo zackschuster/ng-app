@@ -2,12 +2,7 @@ import { app } from '../..';
 
 export const $prefix = 'localhost:2323';
 
-app
-	.configure({
-		PREFIX: {
-			API: $prefix,
-		},
-	});
+app.configure({ API_HOST: $prefix });
 
 export const $config = app.config;
 

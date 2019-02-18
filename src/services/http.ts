@@ -114,13 +114,8 @@ export class NgHttp extends NgService {
 	) {
 		let response = new Response();
 		try {
-			// headers?: HeadersInit;
-			// integrity?: string;
-			// signal?: AbortSignal | null;
-			// window?: any;
-
 			const {
-				host = this.options.getConfig().getApiPrefix(),
+				host = this.options.getConfig().API_HOST,
 				ssl = location.protocol === 'https:',
 				cache = 'no-store',
 				credentials = 'include',

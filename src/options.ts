@@ -24,39 +24,26 @@ export class NgAppConfig implements IConfig {
 	public readonly ENV: string;
 
 	/**
-	 * A key/value map of prefixes for outgoing data requests.
+	 * The hostname for the API
 	 */
-	public readonly PREFIX: {
-		API: string;
-		TEMPLATE?: string;
-	};
+	public readonly API_HOST: string;
 
 	constructor({
 		NAME = 'ng-app',
 		ENV = '',
-		PREFIX = { API: '' },
-	} = { }) {
+		API_HOST = '',
+	}: Partial<NgAppConfig> = { }) {
 		if (ENV == null || ENV.length === 0) {
 			ENV = process.env.NODE_ENV as string;
 		}
 		this.ENV = ENV;
+
 		this.IS_PROD = ENV === 'production';
 		this.IS_DEV = ENV === 'development';
 		this.IS_STAGING = ENV === 'staging';
 
 		this.NAME = NAME;
-		this.PREFIX = PREFIX;
-	}
-
-	public getApiPrefix() {
-		const { PREFIX = { } as NgAppConfig['PREFIX'] } = this;
-		const { API = '' } = PREFIX;
-
-		if (typeof API !== 'string') {
-			throw new Error('config.PREFIX.API not set to a string.');
-		}
-
-		return API;
+		this.API_HOST = API_HOST;
 	}
 }
 

@@ -25,10 +25,6 @@ export class NgController extends NgService {
 		this.$log.confirm(`You are being sent to ${address}. Continue?`).then(() => window.open(`http://${address}`));
 	}
 
-	public getApiPrefix() {
-		return this.apiPrefix;
-	}
-
 	/**
 	 * Called on each controller after all the controllers on an element have been constructed and had their bindings
 	 * initialized (and before the pre & post linking functions for the directives on this element). This is a good
@@ -105,7 +101,7 @@ export function makeInjectableCtrl<T extends NgController>(ctrl: new () => T, lo
 			return this.$config.IS_STAGING;
 		}
 		public get apiPrefix() {
-			return this.$config.getApiPrefix();
+			return this.$config.API_HOST;
 		}
 
 		constructor(
