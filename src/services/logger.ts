@@ -43,15 +43,30 @@ export class NgToast {
 		options.container.appendChild(this.toast);
 	}
 
+	/**
+	 * Append a child element to the toast element
+	 *
+	 * @param el The element to append
+	 */
 	public appendChild(el: HTMLElement) {
 		this.toast.appendChild(el);
 		return this;
 	}
 
+	/**
+	 * Set the inner HTML of the toast's body element
+	 *
+	 * @param text The HTML to set
+	 */
 	public setBodyText(text: string) {
 		this.toastBody.innerHTML = text;
 	}
 
+	/**
+	 * Change the look & feel of the toast based on its associated log type
+	 *
+	 * @param type The log type of toast
+	 */
 	public setType(type: LogType) {
 		if (this.type != null) {
 			this.toast.classList.remove(`bg-${LogTypeToastBackgrounds[this.type]}`);
@@ -70,6 +85,12 @@ export class NgToast {
 		}
 	}
 
+	/**
+	 * Show the toast
+	 *
+	 * @param timeout Length in ms before toast disappears (`false` to set permanently)
+	 * @param container Optional container override
+	 */
 	public show(timeout: false | number, container?: HTMLElement) {
 		if (container != null) {
 			container.appendChild(this.toast);
@@ -135,6 +156,9 @@ export class NgToast {
 		});
 	}
 
+	/**
+	 * Hide the toast
+	 */
 	public hide() {
 		this.toast.click();
 	}
@@ -143,42 +167,54 @@ export class NgToast {
 // tslint:disable:no-console
 export class NgConsole extends NgService {
 	/**
-	 * Invoke `Console.prototype.debug`
+	 * Invokes `Console.prototype.debug`
+	 *
+	 * @param items list of items to log
 	 */
 	public $debug(...items: any[]) {
 		console.debug(...items);
 	}
 
 	/**
-	 * Invoke `Console.prototype.error`
+	 * Invokes `Console.prototype.error`
+	 *
+	 * @param items list of items to log
 	 */
 	public $error(...items: any[]) {
 		console.error(...items);
 	}
 
 	/**
-	 * Invoke `Console.prototype.info`
+	 * Invokes `Console.prototype.info`
+	 *
+	 * @param items list of items to log
 	 */
 	public $info(...items: any[]) {
 		console.info(...items);
 	}
 
 	/**
-	 * Invoke `Console.prototype.warn`
+	 * Invokes `Console.prototype.warn`
+	 *
+	 * @param items list of items to log
 	 */
 	public $warn(...items: any[]) {
 		console.warn(...items);
 	}
 
 	/**
-	 * Invoke `Console.prototype.log`
+	 * Invokes `Console.prototype.log`
+	 *
+	 * @param items list of items to log
 	 */
 	public $log(...items: any[]) {
 		console.log(...items);
 	}
 
 	/**
-	 * Invoke `Console.prototype.log`
+	 * Invokes `Console.prototype.log`
+	 *
+	 * @param items list of items to log
 	 */
 	public $success(...items: any[]) {
 		this.$log(...items);
@@ -211,6 +247,8 @@ export class NgLogger extends NgConsole {
 
 	/**
 	 * Prompt the user to confirm intent for a previous action
+	 *
+	 * @param msg Confirmation message
 	 */
 	public confirm(msg = 'Please confirm your action') {
 		const okBtn = this.$renderer.createHtmlElement('button', ['btn', 'w-50', 'btn-success', 'rounded-0']);
