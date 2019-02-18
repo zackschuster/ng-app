@@ -1,5 +1,5 @@
 import isIE11 from '@ledge/is-ie-11';
-import { autobind } from 'core-decorators';
+import anime, { AnimeInstance } from 'animejs';
 import { NgService } from './base';
 import { NgRenderer } from './renderer';
 
@@ -13,6 +13,7 @@ enum LogTypeToastBackgrounds {
 }
 
 export class NgToast {
+	public animation: AnimeInstance;
 	protected type: Parameters<NgLogger['notify']>[1];
 	protected readonly toast: HTMLDivElement;
 	protected readonly toastHeader: HTMLDivElement;
@@ -20,10 +21,8 @@ export class NgToast {
 	protected readonly toastHeaderTimestamp: HTMLElement;
 
 	constructor(protected readonly $renderer: NgRenderer) {
-		this.toast = this.$renderer.createHtmlElement('div', ['toast', 'animated', 'row', 'justify-content-between', 'w-100'], [['role', 'alert'], ['aria-live', 'assertive'], ['aria-atomic', 'true']]);
+		this.toast = this.$renderer.createHtmlElement('div', ['toast', 'row', 'justify-content-between', 'w-100'], [['role', 'alert'], ['aria-live', 'assertive'], ['aria-atomic', 'true']]);
 		this.toast.style.setProperty('cursor', 'pointer');
-		this.toast.style.setProperty('transition', 'opacity 500ms');
-		this.toast.style.setProperty('opacity', '0');
 
 		this.toastBody = this.$renderer.createHtmlElement('div', ['toast-body', 'h5', 'col', 'mb-0', 'pb-3']);
 		this.toastHeader = this.$renderer.createHtmlElement('div', ['toast-header']);
@@ -40,11 +39,6 @@ export class NgToast {
 		return this;
 	}
 
-	public onHide(cb: () => void) {
-		cb();
-		return this;
-	}
-
 	public setBodyText(text: string) {
 		this.toastBody.innerHTML = text;
 	}
@@ -53,8 +47,10 @@ export class NgToast {
 		if (this.type != null) {
 			this.toast.classList.remove(`bg-${LogTypeToastBackgrounds[this.type]}`);
 		}
+
 		this.type = type;
 		this.toast.classList.add(`bg-${LogTypeToastBackgrounds[this.type]}`);
+
 		if (type === '$log') {
 			this.toastHeader.classList.add('bg-dark');
 			this.toastHeader.style.setProperty('opacity', '0.75');
@@ -65,30 +61,79 @@ export class NgToast {
 		}
 	}
 
-	public show(container: HTMLElement) {
+	public show(container: HTMLElement, timeout: false | number, onClose: (anime: AnimeInstance) => void = () => { return; }) {
 		this.toastHeaderTimestamp.innerText = new Date().toLocaleTimeString(navigator.language).replace(/(:\d{2})(?=\s[AP]M$)/, '');
+		this.toast.style.setProperty('opacity', '1');
 		container.appendChild(this.toast);
-		this.toast.addEventListener('click', this.hide);
-		setTimeout(() => this.toast.style.setProperty('opacity', '1'), 23);
+
+		const showAnimation = anime({
+			targets: this.toast,
+			translateX: [500, 0],
+			duration: 1000,
+			easing: 'easeOutQuint(0.5, 1)',
+		});
+
+		showAnimation.finished.then(() => {
+			const hideAnimation = anime({
+				targets: this.toast,
+				translateX: [0, 500],
+				duration: 1000,
+				autoplay: false,
+				easing: 'easeInQuint(0.5, 1)',
+			});
+
+			const closeOnClick = () => {
+				hideAnimation.play();
+				hideAnimation.finished.then(() => {
+					this.toast.removeEventListener('click', closeOnClick);
+					this.toast.removeEventListener('mouseover', resetAnimationOnMouseover);
+					this.toast.removeEventListener('mouseout', resumeAnimationOnMouseout);
+					this.hide();
+					onClose(hideAnimation);
+				});
+			};
+
+			const isAutoClose = typeof timeout === 'number' && Number.isInteger(timeout);
+			const makeTimeout = () => setTimeout(() => closeOnClick(), timeout as number) as unknown as number;
+
+			let autoCloseId: number | undefined;
+			if (isAutoClose) {
+				autoCloseId = makeTimeout();
+			}
+
+			const resetAnimationOnMouseover = () => {
+				clearTimeout(autoCloseId);
+				autoCloseId = undefined;
+
+				hideAnimation.restart();
+				hideAnimation.pause();
+			};
+
+			const resumeAnimationOnMouseout = () => {
+				if (hideAnimation.paused) {
+					closeOnClick();
+				} else if (isAutoClose && autoCloseId === undefined) {
+					autoCloseId = makeTimeout();
+				}
+			};
+
+			this.toast.addEventListener('click', closeOnClick);
+			this.toast.addEventListener('mouseover', resetAnimationOnMouseover);
+			this.toast.addEventListener('mouseout', resumeAnimationOnMouseout);
+		});
 	}
 
-	@autobind
 	public hide() {
-		this.toast.removeEventListener('click', this.hide);
-		this.toast.style.setProperty('opacity', '0');
-		setTimeout(() => {
-			if (isIE11()) {
-				(this.toast as any).removeNode(true);
-			} else {
-				this.toast.remove();
-			}
-		}, 500);
+		if (isIE11()) {
+			(this.toast as any).removeNode(true);
+		} else {
+			this.toast.remove();
+		}
 	}
 }
 
+// tslint:disable:no-console
 export class NgConsole extends NgService {
-	// tslint:disable:no-console
-
 	/**
 	 * Invoke `Console.prototype.debug`
 	 */
@@ -130,8 +175,8 @@ export class NgConsole extends NgService {
 	public $success(...items: any[]) {
 		this.$log(...items);
 	}
-	// tslint:enable:no-console
 }
+// tslint:enable:no-console
 
 export class NgLogger extends NgConsole {
 	protected readonly container: HTMLDivElement;
@@ -140,9 +185,9 @@ export class NgLogger extends NgConsole {
 	constructor(private $renderer: NgRenderer, private isProd = false) {
 		super();
 
-		this.container = this.$renderer.createHtmlElement('div', ['position-fixed', 'd-block', 'p-2']);
-		this.container.style.setProperty('top', '0.1rem');
-		this.container.style.setProperty('right', '-1rem');
+		this.container = this.$renderer.createHtmlElement('div', ['position-fixed']);
+		this.container.style.setProperty('top', '0.5rem');
+		this.container.style.setProperty('right', '-1.5rem');
 		this.container.style.setProperty('width', '100%');
 		this.container.style.setProperty('max-width', '23rem');
 
@@ -258,19 +303,14 @@ export class NgLogger extends NgConsole {
 		this[type](`${type}: ${text}`);
 
 		const toast = new NgToast(this.$renderer);
+		this.toasts.push(toast);
+
 		toast.setBodyText(text);
 		toast.setType(type);
-		toast.show(this.container);
-		toast.onHide(() => {
+		toast.show(this.container, timeout, () => {
 			const index = this.toasts.findIndex(x => Object.is(x, toast));
 			this.toasts.splice(index, 1);
 		});
-
-		this.toasts.push(toast);
-
-		if (typeof timeout === 'number') {
-			setTimeout(toast.hide, timeout);
-		}
 
 		return toast;
 	}

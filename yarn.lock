@@ -354,6 +354,11 @@
   resolved "https://registry.npmjs.org/@types/angular/-/angular-1.6.54.tgz#f9d5a03e4da7b021a6dabe5d63e899ed4567a5bd"
   integrity sha512-xA1FuozWXeRQ7FClUbvk8ePL+dydBeDoCWRPFTHU5+8uvVtIIfLGiHA8CMkwsbddFCYnTDVbLxG85a/HBx7LtA==
 
+"@types/animejs@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/@types/animejs/-/animejs-2.0.1.tgz#f8088e8a0db301ffd4211bebe920d7896aab254c"
+  integrity sha512-IwmCpzWi8YMnk7cpIsMhnoM54Qc9tfE5MJcuv/71jSeeWS0QVw/aAcTyZatG9phUHW0S0AIqezO+uISqAWkZIg==
+
 "@types/anymatch@*":
   version "1.3.1"
   resolved "https://registry.npmjs.org/@types/anymatch/-/anymatch-1.3.1.tgz#336badc1beecb9dacc38bea2cf32adf627a8421a"
@@ -730,6 +735,11 @@ angular@1.7.7:
   version "1.7.7"
   resolved "https://registry.npmjs.org/angular/-/angular-1.7.7.tgz#26bd87693deadcbd5944610a7a0463fc79a18803"
   integrity sha512-MH3JEGd8y/EkNCKJ8EV6Ch0j9X0rZTta/QVIDpBWaIdfh85/e5KO8+ZKgvWIb02MQuiS20pDFmMFlv4ZaLcLWg==
+
+animejs@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/animejs/-/animejs-3.0.1.tgz#8b808bad575e3b6106489d8b04b92bc4062166fe"
+  integrity sha512-7mMoBQScvA7s4zm3EVgnuXXrtOu6TJNAhU+Ajo7HsXYH0NwbuZIcRHMO65a9NyUlmAXz4VPxlK5cENNOQbCi8g==
 
 ansi-align@^2.0.0:
   version "2.0.0"

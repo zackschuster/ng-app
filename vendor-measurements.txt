@@ -10,11 +10,12 @@ P | Size  | Name
 5 | 15kb  | lodash/isEqual
 6 | 29kb  | flatpickr
 7 | 80kb  | octicons
-8 | 92kb  | @uirouter/core
-9 | 8kb   | core-decorators
-10| 12kb  | @angular/core
+8 | 17kb  | animejs
+9 | 92kb  | @uirouter/core
+10| 8kb   | core-decorators
+11| 12kb  | @angular/core
 -----------------------------------------------
--	| 576kb | overall total
--	| 522kb | measured total
+-	| 593kb | overall total
+-	| 539kb | measured total
 -	| 54kb  | missing total
 -----------------------------------------------
