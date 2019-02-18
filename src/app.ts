@@ -1,5 +1,6 @@
-import { Indexed } from '@ledge/types';
+import { IConfig, Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
+import { StateProvider } from '@uirouter/angularjs';
 import { autobind } from 'core-decorators';
 
 import { NgController, makeInjectableCtrl } from './controller';
@@ -92,7 +93,8 @@ export class NgApp {
 
 	constructor() {
 		this.configure({ })
-			.$module.config([
+			.$module
+			.config([
 				'$compileProvider',
 				'$locationProvider',
 				'$qProvider',
@@ -119,6 +121,15 @@ export class NgApp {
 					$qProvider.errorOnUnhandledRejections(false);
 				},
 			])
+			.config(['$stateProvider', ($stateProvider: StateProvider) => {
+				if (this.router == null) {
+					return this.log.$warn('No router. Use `app.setRouter(r)` to disable this warning.');
+				}
+
+				for (const definition of this.router.getRoutes()) {
+					$stateProvider.state(definition);
+				}
+			}])
 			.run([
 				'$injector',
 				'$animate',

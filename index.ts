@@ -1,5 +1,3 @@
-import { StateProvider } from '@uirouter/angularjs';
-
 import { NgApp } from './src/app';
 import { inputs } from './src/inputs';
 import { misc } from './src/misc';
@@ -52,18 +50,6 @@ app
 			return err;
 		},
 	});
-
-app
-	.module
-	.config(['$stateProvider', ($stateProvider: StateProvider) => {
-		if (app.router == null) {
-			return app.log.devWarning('app.setRouter(ngRouter) must be run before bootstrap');
-		}
-
-		for (const definition of app.router.getRoutes()) {
-			$stateProvider.state(definition);
-		}
-	}]);
 
 export { app };
 
