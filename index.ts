@@ -8,9 +8,7 @@ import ngAnimate from 'angular-animate';
 import ngMessages from 'angular-messages';
 import uirouter from '@uirouter/angularjs';
 
-const app = new NgApp();
-
-app
+export const app = new NgApp()
 	.addComponents(inputs)
 	.addComponents(misc)
 	.addDependencies(
@@ -50,8 +48,6 @@ app
 			return err;
 		},
 	});
-
-export { app };
 
 export * from './src/app';
 export * from './src/controller';
