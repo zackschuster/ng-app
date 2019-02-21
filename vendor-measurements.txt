@@ -3,19 +3,19 @@
 -----------------------------------------------
 P | Size  | Name
 -----------------------------------------------
-1 | 87kb  | choices.js
-2 | 30kb  | angular-animate + angular-messages
-3 | 164kb | angular.js
-4 | 5kb   | @uirouter/angularjs
-5 | 15kb  | lodash/isEqual
+1 | 30kb  | angular-animate + angular-messages
+2 | 164kb | angular.js
+3 | 5kb   | @uirouter/angularjs
+4 | 15kb  | lodash/isEqual
+5 | 6kb	  | lodash/cloneDeep
 6 | 29kb  | flatpickr
-7 | 80kb  | octicons
+7 | 11kb  | fuse.js
 8 | 17kb  | animejs
 9 | 92kb  | @uirouter/core
 10| 8kb   | core-decorators
 11| 12kb  | @angular/core
 -----------------------------------------------
--	| 593kb | overall total
--	| 539kb | measured total
--	| 54kb  | missing total
+-	| 443kb | overall total
+-	| 398kb | measured total
+-	| 45kb  | missing total
 -----------------------------------------------

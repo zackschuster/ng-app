@@ -19,19 +19,21 @@ export class NgInputController<T = any> extends NgController {
 				}
 			}
 
-			this.$scope.$watch(
+			this.$scope.$watchCollection(
 				() => this.ngModel,
 				(curr: any, prev: any) => {
-					if (isEqual(curr, prev) === false) {
-						this.ngModelCtrl.$setViewValue(curr);
-						const isValid = Object
-							.keys(this.ngModelCtrl.$validators)
-							.every(x => {
-								return this.ngModelCtrl.$validators[x](curr, curr);
-							});
-						if (isValid) {
-							this.ngModelCtrl.$commitViewValue();
-						}
+					if (isEqual(curr, prev)) {
+						return;
+					}
+
+					this.ngModelCtrl.$setViewValue(curr);
+					const isValid = Object
+						.keys(this.ngModelCtrl.$validators)
+						.every(x => {
+							return this.ngModelCtrl.$validators[x](curr, curr);
+						});
+					if (isValid) {
+						this.ngModelCtrl.$commitViewValue();
 					}
 				},
 			);
