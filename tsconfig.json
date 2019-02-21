@@ -1,17 +1,7 @@
 {
 	"extends": "@ledge/configs/tsconfig.browser.json",
 	"compilerOptions": {
-		"module": "commonjs",
-		"plugins": [
-			{
-				"name": "typescript-tslint-plugin",
-				"configFile": "./tslint.json",
-				"alwaysShowRuleFailuresAsWarnings": true,
-				"ignoreDefinitionFiles": true,
-				"jsEnable": true,
-				"suppressWhileTypeErrorsPresent": false
-			}
-		]
+		"module": "commonjs"
 	},
 	"include": [
 		"index.ts",
