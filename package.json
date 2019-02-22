@@ -38,6 +38,7 @@
     "bootstrap": "4.3.1",
     "core-decorators": "0.20.0",
     "flatpickr": "4.5.2",
+    "fuse.js": "3.4.2",
     "octicons": "8.4.2",
     "rxjs": "6.4.0",
     "whatwg-fetch": "3.0.0"

@@ -1,3 +1,6 @@
+import Fuse from 'fuse.js';
+import cloneDeep from 'lodash/cloneDeep';
+
 import { NgInputController, NgInputOptions } from './shared';
 import { NgService } from '../services';
 import { NgAttributes } from '../controller';
@@ -19,6 +22,7 @@ class SelectController extends NgInputController {
 
 	protected isListOpen = false;
 	protected list: any[];
+	protected searchList: any[];
 
 	// tslint:disable:variable-name
 	private _text: string;
@@ -34,7 +38,7 @@ class SelectController extends NgInputController {
 	}
 
 	public get value() {
-		if (typeof this._text !== 'string') {
+		if (typeof this._value !== 'string') {
 			const { value = 'Value' } = this.$attrs;
 			this._value = value;
 		}
@@ -48,68 +52,94 @@ class SelectController extends NgInputController {
 	}
 
 	public $onInit() {
-		const select = this.$element.querySelector('select');
+		const container = this.$element.querySelector('.select-container') as HTMLDivElement;
+		const innerContainer = this.$element.querySelector('.select-inner-container') as HTMLDivElement;
+		const dropdown = this.$element.querySelector('.select-dropdown') as HTMLDivElement;
+		const dropdownlist = this.$element.querySelector('.select-dropdown-list') as HTMLDivElement;
+		const input = this.$element.querySelector('input') as HTMLInputElement;
 
-		if (this.isMultiple && select instanceof HTMLSelectElement) {
-			this.$scope.$watchCollection(
-				_ => this.list,
-				_ => {
-					if (Array.isArray(_) === false) {
-						this.$log.devWarning(`List not passed to select-list #${this.uniqueId}`);
-						return;
-					}
+		const updateSearchList = () => {
+			if (input.value) {
+				this.searchList = this.getSearchList(fuzzer.search(input.value));
+			} else {
+				this.searchList = cloneDeep(this.list);
+			}
+			this.$scope.$applyAsync();
+		};
 
-					if (typeof this.destroyCurrentWatcher !== 'function') {
-						this.destroyCurrentWatcher = this.createWatcher();
-					}
-				},
-			);
-		} else {
-			const container = this.$element.querySelector('.select-container') as HTMLDivElement;
-			const innerContainer = this.$element.querySelector('.select-inner-container') as HTMLDivElement;
-			const dropdown = this.$element.querySelector('.select-list-dropdown') as HTMLDivElement;
-			const dropdownlist = this.$element.querySelector('.select-list-dropdown > .select-list') as HTMLDivElement;
-			const input = this.$element.querySelector('input') as HTMLInputElement;
+		let fuzzer: Fuse<any, any>;
+		this.$scope.$watchCollection(
+			() => this.list,
+			_ => {
+				fuzzer = new Fuse(_, {
+					shouldSort: true,
+					threshold: 0.3,
+					location: 0,
+					distance: 100,
+					maxPatternLength: 32,
+					minMatchCharLength: 1,
+					keys: [this.text],
+				});
 
-			let shouldFocusInput = true;
-			innerContainer.onclick = e => {
-				if (e.target instanceof HTMLButtonElement) {
-					shouldFocusInput = true;
-					return;
-				}
+				updateSearchList();
+			},
+		);
 
-				if (shouldFocusInput) {
-					input.hidden = false;
-					input.focus();
-				}
-
+		let shouldFocusInput = true;
+		innerContainer.onclick = e => {
+			if (e.target instanceof HTMLButtonElement ||
+				(this.isMultiple &&
+					e.target instanceof HTMLElement &&
+					e.target.classList.contains('select-item') &&
+					e.target.classList.contains('placeholder') === false)) {
 				shouldFocusInput = true;
-			};
+				return;
+			}
 
-			input.onfocus = () => {
-				dropdown.classList.remove('border-top-0');
-				dropdown.classList.remove('border-bottom-0');
-				dropdownlist.hidden = false;
-			};
+			if (shouldFocusInput) {
+				input.hidden = false;
+				input.focus();
+			}
 
-			input.onblur = e => {
-				const { explicitOriginalTarget: target } = e as any;
-				const targetIsItem = target instanceof HTMLDivElement && target.classList.contains('select-item-choice');
+			shouldFocusInput = true;
+		};
 
-				if (targetIsItem || target.parentElement.classList.contains('select-item-choice')) {
-					this.select(targetIsItem ? target.dataset.value : target.parentElement.dataset.value);
-					shouldFocusInput = true;
-				} else {
-					shouldFocusInput = e.relatedTarget !== container && e.relatedTarget !== innerContainer;
-				}
+		input.onfocus = () => {
+			dropdown.classList.remove('border-top-0');
+			dropdown.classList.remove('border-bottom-0');
+			dropdownlist.hidden = false;
+		};
 
-				dropdown.classList.add('border-top-0');
-				dropdown.classList.add('border-bottom-0');
-				dropdownlist.hidden = true;
+		input.onblur = e => {
+			let { explicitOriginalTarget: target } = e as any;
+			if (target.nodeName === '#text') {
+				target = target.parentElement;
+			}
 
-				input.hidden = true;
-			};
-		}
+			const targetIsItem =
+				target instanceof HTMLDivElement &&
+				target.classList.contains('select-item') &&
+				target.parentElement instanceof HTMLDivElement &&
+				target.parentElement.classList.contains('select-dropdown-list');
+
+			if (targetIsItem) {
+				input.value = '';
+				this.select(target.dataset.value);
+				shouldFocusInput = true;
+			} else {
+				shouldFocusInput = e.relatedTarget !== container && e.relatedTarget !== innerContainer;
+			}
+
+			dropdown.classList.add('border-top-0');
+			dropdown.classList.add('border-bottom-0');
+			dropdownlist.hidden = true;
+
+			input.hidden = true;
+		};
+
+		input.oninput = () => {
+			updateSearchList();
+		};
 	}
 
 	public $onDestroy() {
@@ -118,101 +148,48 @@ class SelectController extends NgInputController {
 		}
 	}
 
-	public getDisplayText() {
-		if (this.ngModel == null) {
+	public getDisplayText(value: any) {
+		if (value == null) {
 			return SelectController.GetPlaceholder(this.$attrs);
 		}
 
 		// tslint:disable-next-line:triple-equals
-		return this.list.find(x => x[this.value] == this.ngModel)[this.text];
+		return this.list.find(x => x[this.value] == value)[this.text];
 	}
 
-	public removeItem() {
+	public remove(item: any) {
+		// tslint:disable-next-line:triple-equals
+		this.ngModel = this.ngModel.filter((x: any) => x != item);
+	}
+
+	public clear() {
 		this.ngModel = undefined;
+		this.searchList = this.getSearchList(this.list);
 	}
+
 	public select(value: any) {
-		this.ngModel = value;
+		if (this.isMultiple) {
+			this.ngModel = Array.isArray(this.ngModel)
+				? this.ngModel.includes(value)
+					? this.ngModel
+					: this.ngModel.concat(value)
+				: [value];
+		} else {
+			this.ngModel = value;
+		}
+
+		this.searchList = this.getSearchList(this.list);
+		this.$scope.$applyAsync();
 	}
 
-	public checkHighlight(item: any) {
-		return this.isMultiple
-			? this.ngModel.includes(item[this.value])
-			// tslint:disable-next-line:triple-equals
-			: this.ngModel == item[this.value];
-	}
-
-	// public makeSelectList(el: HTMLSelectElement) {
-	// 	const { placeholder = SelectController.GetPlaceholder(this.$attrs) } = this.$attrs;
-	// 	const choices = new Choices(el, {
-	// 		classNames: {
-	// 			hiddenState: 'd-none',
-	// 		},
-	// 		removeItemButton: true,
-	// 		shouldSort: false,
-	// 		itemSelectText: '',
-	// 		addItemText: '',
-	// 		placeholderValue: this.isMultiple
-	// 			? placeholder
-	// 			: null,
-	// 	});
-
-	// 	choices.passedElement.element.addEventListener('addItem', ({ detail: { value } }) => {
-	// 		if (this.ngModel != null && (this.isMultiple ? this.ngModel.includes(value) : this.ngModel === value)) {
-	// 			return;
-	// 		}
-
-	// 		this.ngModel = this.isMultiple
-	// 			? [value].concat(this.ngModel == null ? [] : this.ngModel)
-	// 			: value;
-
-	// 		this.$scope.$applyAsync();
-	// 	});
-
-	// 	choices.passedElement.element.addEventListener('removeItem', ({ detail: { value } }) => {
-	// 		if (this.isMultiple) {
-	// 			if (this.ngModel.length === 0) return;
-
-	// 			this.ngModel = this.ngModel.filter((x: any) => x !== value);
-	// 		} else {
-	// 			this.ngModel = undefined;
-	// 		}
-	// 		this.$scope.$applyAsync();
-	// 	});
-
-	// 	const input = this.$element.querySelector('input') as HTMLInputElement;
-	// 	const ngModelParts = this.$attrs.ngModel.split('.');
-	// 	const ngModel = ngModelParts[ngModelParts.length - 1];
-
-	// 	input.setAttribute('aria-label', `${ngModel} list selection`);
-
-	// 	return choices;
-	// }
-
-	private createWatcher() {
-		// return this.$scope.$watch(
-		// 	_ => this.ngModel,
-		// 	(_, prev: number[] = []) => {
-		// 		const isReset = _ == null || (this.isMultiple ? _.length === 0 : !_);
-
-		// 		if (this.isMultiple) {
-		// 			if (isReset) {
-		// 				this.choices.removeActiveItems(Infinity);
-		// 			} else if (prev.filter(x => _.includes(x) === false).length > 0) {
-		// 				this.destroyCurrentWatcher();
-		// 				this.choices.removeActiveItems(Infinity);
-		// 				this.destroyCurrentWatcher = this.createWatcher();
-		// 			}
-		// 			this.choices.setChoiceByValue(_);
-		// 		} else {
-		// 			if (isReset) {
-		// 				this.choices.setChoiceByValue('');
-		// 			} else if (this.list.find(x => (x[this.value] || x) === _) != null) {
-		// 				this.choices.setChoiceByValue(_);
-		// 			}
-		// 		}
-		// 	},
-		// );
-		return () => { return; };
+	private getSearchList(list: any[]) {
+		// tslint:disable:triple-equals
+		return Array.isArray(this.ngModel)
+			? list.filter(x => this.ngModel.every((y: any) => x[this.value] != y))
+			: this.ngModel == null
+				? cloneDeep(list)
+				: list.filter(x => x[this.value] != this.ngModel);
+		// tslint:enable:triple-equals
 	}
 }
 
@@ -246,63 +223,54 @@ export const selectList: NgInputOptions = {
 			select.classList.remove('d-none');
 			select.setAttribute(
 				'ng-options',
-				'item[\'{{$ctrl.value}}\'] as item[\'{{$ctrl.text}}\'] for item in $ctrl.list track by $index',
+				'item[\'{{$ctrl.value}}\'] as item[\'{{$ctrl.text}}\'] for item in $ctrl.searchList track by $index',
 			);
 			return select;
 		}
 
-		const type = `select-${isMultiple ? 'multiple' : 'one'}`;
-		const container = h.createHtmlElement('div', ['select-container'],
-			[
-				['data-type', type],
-				['role', 'combobox'],
-				['tabindex', '0'],
-				['aria-autocomplete', 'list'],
-				['aria-haspopup', 'true'],
-				['aria-expanded', 'false'],
-				['dir', 'ltr'],
-				['ng-attr-name', `${type}_{{$ctrl.uniqueId}}`],
-				['ng-attr-id', `${type}_{{$ctrl.uniqueId}}`],
-			],
-		);
-
 		const inner = h.createHtmlElement('div', ['select-inner-container']);
-		inner.appendChild(select);
-
 		const innerlist = h.createHtmlElement('div', ['select-list', isMultiple ? 'multiple' : 'single']);
-		const selected = h.createHtmlElement('div',
-			[
-				'select-item',
-				'select-item-selectable',
-			],
-			[
-				['aria-selected', 'true'],
-			],
-		);
-		selected.innerText = '{{$ctrl.getDisplayText()}}';
+		const selected = h.createHtmlElement('div', ['select-item']);
 
 		const btn = h.createHtmlElement('button', ['select-button'],
 			[
-				['ng-attr-aria-label', 'Remove item: \'{{$ctrl.getDisplayText()}}\''],
-				['ng-click', '$ctrl.removeItem()'],
+				['ng-attr-aria-label', 'Remove item: \'{{$ctrl.getDisplayText($ctrl.ngModel)}}\''],
+				['ng-click', '$ctrl.clear()'],
 			],
 		);
-		btn.innerText = 'Remove Item';
 
-		selected.appendChild(btn);
-		innerlist.appendChild(selected);
-		inner.appendChild(innerlist);
-		container.appendChild(inner);
+		if (isMultiple) {
+			const sbtn = btn.cloneNode() as HTMLButtonElement;
+			sbtn.setAttribute('ng-attr-aria-label', 'Remove item: \'{{$ctrl.getDisplayText(item)}}\'');
+			sbtn.setAttribute('ng-click', '$ctrl.remove(item)');
 
-		const dropdown = h.createHtmlElement('div',
+			selected.setAttribute('ng-repeat', 'item in $ctrl.ngModel track by $index');
+			selected.setAttribute('aria-selected', 'true');
+			selected.innerHTML = `{{$ctrl.getDisplayText(item)}}${sbtn.outerHTML}`;
+
+			const placeholder = h.createHtmlElement('div', ['select-item', 'placeholder'], [['ng-if', '$ctrl.ngModel == null || $ctrl.ngModel.length === 0']]);
+			placeholder.innerText = SelectController.GetPlaceholder(this.$attrs);
+
+			innerlist.appendChild(placeholder);
+		} else {
+			selected.setAttribute('ng-class', '{ \'placeholder\': $ctrl.ngModel == null }');
+			selected.innerText = '{{$ctrl.getDisplayText($ctrl.ngModel)}}';
+		}
+
+		const item = h.createHtmlElement('div', ['select-item'],
 			[
-				'select-list',
-				'select-list-dropdown',
-				'border-bottom-0',
-				'border-top-0',
+				['ng-repeat', 'item in $ctrl.searchList track by $index'],
+				['ng-attr-data-value', '{{item[$ctrl.value]}}'],
+				['role', 'option'],
 			],
+		);
+		item.innerText = '{{item[$ctrl.text]}}';
+
+		const list = h.createHtmlElement('div', ['select-dropdown-list'],
 			[
-				['aria-expanded', 'false'],
+				['dir', 'ltr'],
+				['role', 'listbox'],
+				['hidden', 'true'],
 			],
 		);
 
@@ -320,33 +288,34 @@ export const selectList: NgInputOptions = {
 			],
 		);
 
-		const list = h.createHtmlElement('div', ['select-list'],
+		const type = `select-${isMultiple ? 'multiple' : 'one'}`;
+		const container = h.createHtmlElement('div', ['select-container'],
 			[
+				['data-type', type],
+				['role', 'combobox'],
+				['tabindex', '0'],
+				['aria-autocomplete', 'list'],
+				['aria-haspopup', 'true'],
+				['aria-expanded', 'false'],
 				['dir', 'ltr'],
-				['role', 'listbox'],
-				['hidden', 'true'],
+				['ng-attr-name', `${type}_{{$ctrl.uniqueId}}`],
+				['ng-attr-id', `${type}_{{$ctrl.uniqueId}}`],
 			],
+		);
 
-		);
-		const item = h.createHtmlElement('div',
-			[
-				'select-item',
-				'select-item-choice',
-				'select-item-selectable',
-			],
-			[
-				['ng-class', '{ \'is-highlighted\': $ctrl.checkHighlight(item) }'],
-				['ng-repeat', `item in $ctrl.list track by $index`],
-				['ng-attr-data-value', '{{item[$ctrl.value]}}'],
-				['ng-attr-aria-selected', '{{$ctrl.checkHighlight(item)}}'],
-				['role', 'option'],
-			],
-		);
-		item.innerText = '{{item[$ctrl.text]}}';
+		const dropdown = h.createHtmlElement('div', ['select-dropdown', 'border-bottom-0', 'border-top-0'], [['aria-expanded', 'false']]);
+
+		innerlist.appendChild(selected);
+		innerlist.appendChild(btn);
+		inner.appendChild(select);
+		inner.appendChild(innerlist);
 
 		list.appendChild(item);
+
 		dropdown.appendChild(input);
 		dropdown.appendChild(list);
+
+		container.appendChild(inner);
 		container.appendChild(dropdown);
 
 		return container;
