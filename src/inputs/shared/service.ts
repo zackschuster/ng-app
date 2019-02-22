@@ -90,7 +90,7 @@ export class InputService extends NgService {
 		return (
 			['INPUT', 'TEXTAREA', 'SELECT'].includes($input.tagName)
 				? $input
-				: $input.querySelector('input')
+				: $input.querySelector('select') || $input.querySelector('input')
 		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 	}
 
