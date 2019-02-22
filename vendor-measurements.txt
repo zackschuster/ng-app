@@ -16,7 +16,12 @@ P | Size  | Name
 11| 8kb   | core-decorators
 12| 12kb  | @angular/core
 -----------------------------------------------
--	| 523kb | overall total
--	| 478kb | measured total
--	| 45kb  | missing total
+-	| 478kb | measured
+-	| 523kb | total
+-	| 199kb | ng1
+-	| 295kb | other
+-----------------------------------------------
+-	| 484kb | ng1 + other
+-	| 45kb 	| missing total (total - measured)
+-	| 6kb 	| missing measured (measured - (ng1 + other))
 -----------------------------------------------
