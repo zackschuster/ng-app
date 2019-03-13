@@ -9,7 +9,7 @@ import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
 import '@uirouter/angularjs';
-import 'element-closest';
+import 'element-closest/browser';
 
 const app = new NgApp()
 	.addComponents(new Map(Object.entries(inputs)))
