@@ -1,4 +1,4 @@
-import { Callback, Indexed } from '@ledge/types';
+import { Indexed } from '@ledge/types';
 import { IInjectable, ParamType, StateDeclaration, StateService, TargetState, Transition } from '@uirouter/core';
 
 import { NgService } from './service';
@@ -178,7 +178,7 @@ export interface NgRoute extends _NgRoute {
 	 * }
 	 * ```
 	 */
-	template?: string | Callback;
+	template?: string | ((...args: any[]) => void);
 
 	url: string;
 	parent: string;

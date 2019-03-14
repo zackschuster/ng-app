@@ -1,5 +1,4 @@
 import Noty from 'noty';
-import { Callback } from '@ledge/types';
 import { NgService } from './service';
 
 export enum LogTypeMap {
@@ -29,7 +28,7 @@ export class NgLogger extends NgService {
 	/**
 	 * Prompt the user to confirm intent for a previous action
 	 */
-	public confirm(action: Callback, msg = 'Please confirm your action') {
+	public confirm(action: (_?: any) => void, msg = 'Please confirm your action') {
 		const text = '<p class="h5 mb-0 ml-0">\
 		<i class="fa fa-exclamation-triangle text-warning mr-1"></i>' + msg + '</p>';
 

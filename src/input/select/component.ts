@@ -1,6 +1,5 @@
 import Choices, { Choices as _Choices } from 'choices.js';
 import { IAttributes } from 'angular';
-import { Callback } from '@ledge/types';
 import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
 
@@ -20,7 +19,7 @@ class SelectController extends NgComponentController {
 
 	private text: string;
 	private value: string;
-	private destroyCurrentWatcher: Callback;
+	private destroyCurrentWatcher: () => void;
 
 	private get isMultiple() {
 		return SelectController.IsMultiple(this.$attrs);
