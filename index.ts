@@ -8,6 +8,7 @@ import 'angular-messages';
 import 'angular-elastic';
 import 'angular-ui-bootstrap';
 
+// tslint:disable-next-line:no-duplicate-imports
 import '@uirouter/angularjs';
 import 'element-closest/browser';
 
