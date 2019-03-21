@@ -36,6 +36,7 @@ export class InputService {
 		},
 	};
 
+	// tslint:disable:static-this
 	public static readonly $baseComponent = {
 		isRadioOrCheckbox: false,
 		labelClass: 'form-control-label',
@@ -47,7 +48,6 @@ export class InputService {
 			$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
 			this.$label.appendChild($transclude);
 		} as InputComponentOptions['renderLabel'],
-		// tslint:disable-next-line:variable-name
 		postRender: function defaultPostRender(_h) {
 			return this.$template;
 		} as InputComponentOptions['postRender'],
@@ -62,6 +62,7 @@ export class InputService {
 			return `(${this.$touched} || ${this.$formInvalid}) && ${this.$invalid}`;
 		},
 	};
+	// tslint:enable:static-this
 
 	/**
 	 * Retrieves the identifying name for an ngModel
@@ -74,7 +75,7 @@ export class InputService {
 	 * Gets text -- intended for a label -- from the ngModel property text
 	 */
 	public static getDefaultLabelText($attrs: IAttributes) {
-		return this.modelIdentifier($attrs)
+		return InputService.modelIdentifier($attrs)
 			.split(/(?=[A-Z0-9])/)
 			.map(x => isNaN(Number(x)) ? x.charAt(0).toUpperCase() + x.substring(1) : x)
 			.join(' ');
@@ -97,6 +98,7 @@ export class InputService {
 			constructor() {
 				super();
 				setTimeout(() => {
+					// tslint:disable:static-this
 					const $contain = this.$element.querySelector('[ng-transclude="contain"]');
 					if ($contain != null && $contain.children.length === 0) {
 						if (isIE11()) {
@@ -122,6 +124,7 @@ export class InputService {
 							}
 						},
 					);
+					// tslint:enable:static-this
 				});
 			}
 		};
@@ -135,20 +138,20 @@ export class InputService {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer(doc);
 
-		const $component = copy(Object.assign({ }, this.$baseComponent, component));
+		const $component = copy(Object.assign({ }, InputService.$baseComponent, component));
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 		const validators = component.validators instanceof Map
 			? component.validators
 			: new Map();
 
-		const $definition = copy(this.$baseDefinition);
+		const $definition = copy(InputService.$baseDefinition);
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);
 		Object.assign($definition.transclude, $component.transclude);
 
 		// assign controller
-		$definition.controller = this.wrapComponentCtrl($component.ctrl);
+		$definition.controller = InputService.wrapComponentCtrl($component.ctrl);
 
 		// assign template
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
@@ -204,9 +207,9 @@ export class InputService {
 				.call({ $template, $attrs }, h);
 
 			// that's right, i named it after filterFilter. fight me.
-			const $inputInput = this.getInputInput($input);
+			const $inputInput = InputService.getInputInput($input);
 
-			this.$validationAttrs
+			InputService.$validationAttrs
 				.filter(x => $attrs.hasOwnProperty(x) === true)
 				.forEach(x => {
 					$inputInput.setAttribute(
@@ -216,30 +219,30 @@ export class InputService {
 				});
 
 			if ($inputInput.tagName !== 'SELECT') {
-				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${this.$validationExps.$isInvalid} }`);
+				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${InputService.$validationExps.$isInvalid} }`);
 				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 			}
 
 			const $validationBlock = h.createElement('div', [], [
-				['ng-messages', this.$validationExps.$error],
-				['ng-show', this.$validationExps.$isInvalid],
+				['ng-messages', InputService.$validationExps.$error],
+				['ng-show', InputService.$validationExps.$isInvalid],
 				['role', 'alert'],
 			]);
 
 			const attrs = Object.keys($component.attrs);
 			for (const [key, value] of validators) {
-				this.$validationMessages.set(key, value);
+				InputService.$validationMessages.set(key, value);
 				attrs.push(key);
 			}
 
-			this.$validationAttrs
+			InputService.$validationAttrs
 				.concat(...attrs, 'email')
 				.filter(x => x.startsWith('ng') === false)
-				.filter(x => this.$validationMessages.has(x) === true)
+				.filter(x => InputService.$validationMessages.has(x) === true)
 				.filter(x => x !== 'email' || $inputInput.type === x)
 				.forEach(x => {
 					const $message = h.createElement('div', ['text-danger'], [['ng-message', x]]);
-					$message.innerText = this.$validationMessages.get(x) as string;
+					$message.innerText = InputService.$validationMessages.get(x) as string;
 					$validationBlock.appendChild($message);
 				});
 
@@ -252,7 +255,7 @@ export class InputService {
 				$template.appendChild($validationBlock);
 			}
 
-			let $html = $template.outerHTML.replace(/{{id}}/g, this.modelIdentifier($attrs));
+			let $html = $template.outerHTML.replace(/{{id}}/g, InputService.modelIdentifier($attrs));
 
 			attrs
 				.forEach(prop => {

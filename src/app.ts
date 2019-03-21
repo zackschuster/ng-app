@@ -168,7 +168,8 @@ export class NgApp {
 
 			if (typeof component.controller === 'string') {
 				throw new Error('String controller references not supported');
-			} else if (typeof component.controller === 'function') {
+			}
+			if (typeof component.controller === 'function') {
 				component.controller = this._makeNgComponentController(component.controller);
 			}
 

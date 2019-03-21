@@ -11,7 +11,9 @@ class SelectController extends NgComponentController {
 		return $attrs.hasOwnProperty('multiple') || $attrs.type === 'multiple';
 	}
 	public static GetPlaceholder($attrs: IAttributes) {
-		return this.IsMultiple($attrs) ? this.MultiplePlaceholder : this.SinglePlaceholder;
+		return SelectController.IsMultiple($attrs)
+			? SelectController.MultiplePlaceholder
+			: SelectController.SinglePlaceholder;
 	}
 
 	protected list: any[];
