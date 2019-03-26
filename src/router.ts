@@ -1,5 +1,5 @@
 import { Indexed } from '@ledge/types';
-import { IInjectable, ParamType, StateDeclaration, StateService, TargetState, Transition } from '@uirouter/core';
+import { ParamType, StateDeclaration, StateService, TargetState, Transition } from '@uirouter/core';
 
 import { NgService } from './service';
 
@@ -135,9 +135,12 @@ interface _NgRoute extends StateDeclaration {
 	onRetain?: any;
 	onEnter?: any;
 	views?: any;
+	resolve?: any;
 }
 
-type NgTransitionFn = [string, ($trans: Transition) => Promise<Transition | TargetState>];
+export type NgResolveFn<T = any> = ($trans: Transition) => Promise<T>;
+export type NgAnnotatedResolveFn<T = any> = [string, NgResolveFn<T>];
+export type NgTransition = NgResolveFn<TargetState | Transition> | NgAnnotatedResolveFn<TargetState | Transition>;
 
 export interface NgRoute extends _NgRoute {
 	/**
@@ -158,7 +161,7 @@ export interface NgRoute extends _NgRoute {
 		[key: string]: string;
 	};
 
-	resolve?: Indexed<IInjectable>;
+	resolve?: Indexed<NgResolveFn | NgAnnotatedResolveFn | undefined>;
 
 	/**
 	 * Injected function which returns the HTML template.
@@ -184,7 +187,7 @@ export interface NgRoute extends _NgRoute {
 	parent: string;
 	label: string;
 
-	onEnter?: NgTransitionFn;
-	onExit?: NgTransitionFn;
-	onRetain?: NgTransitionFn;
+	onEnter?: NgTransition;
+	onExit?: NgTransition;
+	onRetain?: NgTransition;
 }
