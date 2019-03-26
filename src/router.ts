@@ -1,5 +1,5 @@
 import { Indexed } from '@ledge/types';
-import { ParamType, StateDeclaration, StateService, TargetState, Transition } from '@uirouter/core';
+import { ParamType, ResolveTypes, StateDeclaration, StateService, TargetState, Transition } from '@uirouter/core';
 
 import { NgService } from './service';
 
@@ -88,10 +88,12 @@ export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 
 	protected annotateResolveFunctions({ resolve = { } }: NgRoute) {
 		for (const [ id, resolveFn ] of Object.entries(resolve)) {
-			if (typeof resolveFn !== 'function') {
-				throw new Error('resolve methods must be a function');
+			if (Array.isArray(resolve)) {
+				continue;
 			}
-			resolve[id] = ['$transition$', resolveFn];
+			if (this.isNgTransitionFn(resolveFn)) {
+				resolve[id] = ['$transition$', resolveFn];
+			}
 		}
 
 		return resolve;
@@ -175,7 +177,7 @@ export interface NgRoute extends _NgRoute {
 		[key: string]: string;
 	};
 
-	resolve?: Indexed<NgResolveFn | NgAnnotatedResolveFn | undefined>;
+	resolve?: Indexed<NgResolveFn | NgAnnotatedResolveFn> | ResolveTypes[];
 
 	/**
 	 * Injected function which returns the HTML template.
