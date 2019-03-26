@@ -19,6 +19,16 @@ export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 			url,
 		}, partial);
 
+		if (this.isNgTransitionFn(state.onEnter)) {
+			state.onEnter = ['$transition$', state.onEnter];
+		}
+		if (this.isNgTransitionFn(state.onExit)) {
+			state.onExit = ['$transition$', state.onExit];
+		}
+		if (this.isNgTransitionFn(state.onRetain)) {
+			state.onRetain = ['$transition$', state.onRetain];
+		}
+
 		this.routes.push(state as T);
 
 		return state as T;
@@ -70,6 +80,10 @@ export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 
 		param.type.name = 'query';
 		return param;
+	}
+
+	protected isNgTransitionFn(item?: NgResolveFn | NgAnnotatedResolveFn): item is NgResolveFn {
+		return typeof item === 'function';
 	}
 
 	protected annotateResolveFunctions({ resolve = { } }: NgRoute) {
