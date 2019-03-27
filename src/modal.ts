@@ -1,10 +1,10 @@
-import { NgController, makeInjectableCtrl } from '../controller';
+import { NgController, makeInjectableCtrl } from './controller';
 import { NgLogger } from './logger';
-import { NgService } from './base';
+import { NgService } from './service';
 import { NgHttp } from './http';
-import { NgAppConfig } from '../options';
+import { NgAppConfig } from './options';
 import { NgRenderer } from './renderer';
-import { NgInjector, NgScope } from '../ng';
+import { NgInjector, NgScope } from './ng';
 
 const MODAL_SHOW_DELAY = 23;
 const MODAL_HIDE_DELAY = 150;

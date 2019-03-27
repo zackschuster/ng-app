@@ -52,6 +52,16 @@ export const app = new NgApp()
 	});
 
 export * from './src/app';
+export * from './src/attributes';
 export * from './src/controller';
+export * from './src/http';
+export * from './src/logger';
+export * from './src/modal';
+export * from './src/ng';
+export * from './src/options';
+export * from './src/renderer';
+export * from './src/router';
+export * from './src/service';
+
 export * from './src/inputs';
-export * from './src/services';
+export * from './src/misc';

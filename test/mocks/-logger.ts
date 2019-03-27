@@ -1,4 +1,4 @@
-import { NgConsole, NgLogger } from '../../src/services/logger';
+import { NgConsole, NgLogger } from '../../src/logger';
 import { $renderer } from './-renderer';
 
 export const $console = new NgConsole();

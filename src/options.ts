@@ -1,6 +1,7 @@
 import { IConfig, Indexed } from '@ledge/types';
 import { autobind } from 'core-decorators';
-import { NgAttributes, NgController, makeInjectableCtrl } from './controller';
+import { NgController, makeInjectableCtrl } from './controller';
+import { NgAttributes } from './attributes';
 
 @autobind
 export class NgAppConfig implements IConfig {

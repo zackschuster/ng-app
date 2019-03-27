@@ -4,19 +4,14 @@ import { StateProvider } from '@uirouter/angularjs';
 import { autobind } from 'core-decorators';
 
 import { NgController, makeInjectableCtrl } from './controller';
+import { DEFAULT_REQUEST_TIMEOUT, NgHttp, NgHttpInterceptor, NgHttpOptions } from './http';
 import { InputService, NgInputOptions } from './inputs';
+import { NgLogger } from './logger';
+import { NgModal } from './modal';
 import { NgInjector, bootstrap, injector, module } from './ng';
 import { NgAppConfig, NgComponentOptions } from './options';
-import {
-	DEFAULT_REQUEST_TIMEOUT,
-	NgHttp,
-	NgHttpInterceptor,
-	NgHttpOptions,
-	NgLogger,
-	NgModal,
-	NgRenderer,
-	NgRouter,
-} from './services';
+import { NgRenderer } from './renderer';
+import { NgRouter } from './router';
 
 @autobind
 export class NgApp {
@@ -216,7 +211,7 @@ export class NgApp {
 			config: () => this.config,
 		});
 
-		type NonReadonly<R> = { -readonly [P in keyof R] : R[P] };
+		type NonReadonly<R> = { -readonly [P in keyof R]: R[P] };
 		const injectable = ['$element', '$scope', '$injector', componentCtrl] as const;
 		return injectable as NonReadonly<typeof injectable>;
 	}

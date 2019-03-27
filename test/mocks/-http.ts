@@ -1,8 +1,8 @@
 // import { module } from 'angular';
 import { injector } from 'angular';
 
-import { NgHttp } from '../../src/services/http';
 import { $config } from './--app';
+import { NgHttp } from '../../src/http';
 
 const $injector = injector(['ngMock']);
 

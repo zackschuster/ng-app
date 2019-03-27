@@ -1,7 +1,6 @@
 import { PatchPayload } from '@ledge/types/patch';
-import { isFunction } from 'angular';
-import { NgService } from './base';
-import { NgAppConfig } from '../options';
+import { NgService } from './service';
+import { NgAppConfig } from './options';
 
 export const DEFAULT_REQUEST_TIMEOUT = 10000;
 
@@ -170,7 +169,7 @@ export class NgHttp extends NgService {
 			}
 			throw err;
 		} finally {
-			if (isFunction(this.options.onFinally)) {
+			if (typeof this.options.onFinally === 'function') {
 				this.options.onFinally();
 			}
 		}

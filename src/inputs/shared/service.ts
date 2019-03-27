@@ -3,9 +3,10 @@ import { copy } from 'angular';
 
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
-import { NgAttributes } from '../../controller';
+import { NgAttributes } from '../../attributes';
 import { NgComponentOptions } from '../../options';
-import { NgRenderer, NgService } from '../../services';
+import { NgRenderer } from '../../renderer';
+import { NgService } from '../../service';
 
 const BaseComponent = Object.seal({
 	isRadioOrCheckbox: false,
