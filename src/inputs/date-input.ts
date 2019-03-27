@@ -16,7 +16,8 @@ class DateInputController extends NgInputController {
 			if (modelVal != null) {
 				if (isNumber(this.minDate)) {
 					return this.minDate <= modelVal.valueOf();
-				} else if (this.minDate instanceof Date) {
+				}
+				if (this.minDate instanceof Date) {
 					return this.minDate.valueOf() <= modelVal.valueOf();
 				}
 			}
@@ -27,7 +28,8 @@ class DateInputController extends NgInputController {
 			if (modelVal != null) {
 				if (isNumber(this.maxDate)) {
 					return this.maxDate >= modelVal.valueOf();
-				} else if (this.maxDate instanceof Date) {
+				}
+				if (this.maxDate instanceof Date) {
 					return this.maxDate.valueOf() >= modelVal.valueOf();
 				}
 			}

@@ -25,10 +25,12 @@ export class InputService extends NgService {
 		$touched: '$ctrl.ngModelCtrl.$touched',
 		$formInvalid: `$ctrl.ngModelCtrl.$$parentForm.$submitted`,
 		get $isInvalid() {
+			// tslint:disable-next-line: static-this
 			return `(${this.$touched} || ${this.$formInvalid}) && ${this.$invalid}`;
 		},
 	};
 
+	// tslint:disable: static-this
 	public static makeBaseComponent() {
 		return {
 			labelClass: 'form-control-label',
@@ -40,7 +42,6 @@ export class InputService extends NgService {
 				$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
 				this.$label.appendChild($transclude);
 			} as NgInputOptions['renderLabel'],
-			// tslint:disable-next-line:variable-name
 			postRender: function defaultPostRender(_h) {
 				return this.$template;
 			} as NgInputOptions['postRender'],
@@ -79,7 +80,7 @@ export class InputService extends NgService {
 	 * Generates label text from the identifying name for an ngModel (e.g., `$ctrl.example` in `ng-model="$ctrl.example"`)
 	 */
 	public static getDefaultLabelText($attrs: NgAttributes) {
-		return this.modelIdentifier($attrs)
+		return InputService.modelIdentifier($attrs)
 			.split(/(?=[A-Z0-9])/)
 			.map(x => isNaN(Number(x)) ? x.charAt(0).toUpperCase() + x.substring(1) : x)
 			.join(' ');
@@ -166,9 +167,9 @@ export class InputService extends NgService {
 				.call({ $template, $attrs }, h);
 
 			// that's right, i named it after filterFilter. fight me.
-			const $inputInput = this.getInputInput($input);
+			const $inputInput = InputService.getInputInput($input);
 
-			this.$validationAttrs
+			InputService.$validationAttrs
 				.filter(x => $attrs.hasOwnProperty(x) === true)
 				.forEach(x => {
 					$inputInput.setAttribute(
@@ -178,13 +179,13 @@ export class InputService extends NgService {
 				});
 
 			if ($inputInput.tagName !== 'SELECT') {
-				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${this.$validationExps.$isInvalid} }`);
+				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${InputService.$validationExps.$isInvalid} }`);
 				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 			}
 
 			const $validationBlock = h.createHtmlElement('div', [], [
-				['ng-messages', this.$validationExps.$error],
-				['ng-show', this.$validationExps.$isInvalid],
+				['ng-messages', InputService.$validationExps.$error],
+				['ng-show', InputService.$validationExps.$isInvalid],
 				['role', 'alert'],
 			]);
 
@@ -192,18 +193,18 @@ export class InputService extends NgService {
 			const attrs = Object.keys($component.attrs);
 
 			for (const [key, value] of Object.entries(validators)) {
-				this.$validationMessages.set(key, value);
+				InputService.$validationMessages.set(key, value);
 				attrs.push(key);
 			}
 
-			this.$validationAttrs
+			InputService.$validationAttrs
 				.concat(...attrs, 'email')
 				.filter(x => x.startsWith('ng') === false)
-				.filter(x => this.$validationMessages.has(x) === true)
+				.filter(x => InputService.$validationMessages.has(x) === true)
 				.filter(x => x !== 'email' || $inputInput.type === x)
 				.forEach(x => {
 					const $message = h.createHtmlElement('div', ['text-danger'], [['ng-message', x]]);
-					$message.innerText = this.$validationMessages.get(x) as string;
+					$message.innerText = InputService.$validationMessages.get(x) as string;
 					$validationBlock.appendChild($message);
 				});
 
@@ -218,7 +219,7 @@ export class InputService extends NgService {
 				$html = $template.outerHTML;
 			}
 
-			$html = $html.replace(/{{id}}/g, this.modelIdentifier($attrs));
+			$html = $html.replace(/{{id}}/g, InputService.modelIdentifier($attrs));
 
 			attrs
 				.forEach(prop => {

@@ -15,19 +15,17 @@ class SelectController extends NgInputController {
 
 	public static GetPlaceholder($attrs: NgAttributes) {
 		return $attrs.placeholder ||
-			this.IsMultiple($attrs)
-			? this.MultiplePlaceholder
-			: this.SinglePlaceholder;
+			SelectController.IsMultiple($attrs)
+			? SelectController.MultiplePlaceholder
+			: SelectController.SinglePlaceholder;
 	}
 
 	protected isListOpen = false;
 	protected list: any[];
 	protected searchList: any[];
 
-	// tslint:disable:variable-name
 	private _text: string;
 	private _value: string;
-	// tslint:enable:variable-name
 
 	public get text() {
 		if (typeof this._text !== 'string') {

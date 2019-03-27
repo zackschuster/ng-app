@@ -80,12 +80,10 @@ export class NgApp {
 	protected $router: NgRouter;
 	protected $config: NgAppConfig;
 
-	// tslint:disable:variable-name
 	private _http: NgHttp;
 	private _log: NgLogger;
 	private _modal: NgModal;
 	private _renderer: NgRenderer;
-	// tslint:enable:variable-name
 
 	constructor() {
 		this.configure({ })
