@@ -1,4 +1,4 @@
-import { NgController, NgRouter, app } from '../../index';
+import { NgController, app } from '../../index';
 
 class ModalController extends NgController {
 	public title = 'Example Modal';
@@ -30,7 +30,6 @@ app
 
 app
 	.configure({ API_HOST: 'api.ng-app.js.org' })
-	.setRouter(new NgRouter())
 	.bootstrap()
 	.then(() => {
 		app.log.success('Welcome... to The World...');
