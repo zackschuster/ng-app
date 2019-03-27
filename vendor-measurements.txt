@@ -1,27 +1,27 @@
------------------------------------------------
---     						vendor.js									 --
------------------------------------------------
-P | Size  | Name
------------------------------------------------
-1 | 30kb  | angular-animate + angular-messages
-2 | 164kb | angular.js
-3 | 5kb   | @uirouter/angularjs
-4 | 15kb  | lodash/isEqual
-5 | 6kb	  | lodash/cloneDeep
-6 | 80kb  | octicons
-7 | 29kb  | flatpickr
-8 | 11kb  | fuse.js
-9 | 17kb  | animejs
-10| 92kb  | @uirouter/core
-11| 8kb   | core-decorators
-12| 12kb  | @angular/core
------------------------------------------------
--	| 478kb | measured
--	| 523kb | total
--	| 199kb | ng1
--	| 295kb | other
------------------------------------------------
--	| 484kb | ng1 + other
--	| 45kb 	| missing total (total - measured)
--	| 6kb 	| missing measured (measured - (ng1 + other))
------------------------------------------------
+------------------------------------------------------------
+--     									vendor.js						              --
+------------------------------------------------------------
+P | Size (kb) | Name
+------------------------------------------------------------
+1 |  30  			| angular-animate + angular-messages
+2 | 164  			| angular.js
+3 |   5				| @uirouter/angularjs
+4 |  15  			| lodash/isEqual
+5 |   6				| lodash/cloneDeep
+6 |  80  			| octicons
+7 |  29  			| flatpickr
+8 |  11  			| fuse.js
+9 |  17  			| animejs
+10|  92  			| @uirouter/core
+11|   8				| core-decorators
+12|  12  			| @angular/core
+------------------------------------------------------------
+-	| 478 			| measured
+-	| 523 			| total
+-	| 199 			| ng1
+-	| 295 			| other
+------------------------------------------------------------
+-	| 484 			| ng1 + other
+-	|  45				| missing total (total - measured)
+-	|   6				| missing measured (measured - (ng1 + other))
+------------------------------------------------------------
