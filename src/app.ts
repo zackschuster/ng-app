@@ -147,6 +147,9 @@ export class NgApp {
 		for (const [name, definition] of this.$components) {
 			this.$module.component(name, definition);
 		}
+		if (this.$router == null) {
+			this.$router = new (class extends NgRouter { })();
+		}
 
 		setTimeout(() => document.body.classList.add('bootstrapped'));
 		return this.$bootstrap(document.body, [this.$id], { strictDi });
