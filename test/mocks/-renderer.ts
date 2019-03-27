@@ -1,2 +1,2 @@
-import { NgRenderer } from '../../src/services/renderer';
+import { NgRenderer } from '../../src/renderer';
 export const $renderer = new NgRenderer();

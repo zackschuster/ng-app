@@ -2,8 +2,8 @@ import Fuse from 'fuse.js';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { NgInputController, NgInputOptions } from './shared';
-import { NgService } from '../services';
-import { NgAttributes } from '../controller';
+import { NgAttributes } from '../attributes';
+import { NgService } from '../service';
 
 class SelectController extends NgInputController {
 	public static readonly SinglePlaceholder = '----Select One----';

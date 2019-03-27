@@ -1,5 +1,5 @@
 import anime from 'animejs';
-import { NgService } from './base';
+import { NgService } from './service';
 import { NgRenderer } from './renderer';
 
 type LogType = '$log' | '$warn' | '$error' | '$info' | '$success';

@@ -1,5 +1,5 @@
 import { $injector } from './--injector';
-import { NgAttributes } from '../../src/controller';
+import { NgAttributes } from '../../src/attributes';
 
 export * from './-config';
 export * from './-controller';

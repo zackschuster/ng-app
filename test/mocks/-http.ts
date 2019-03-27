@@ -1,4 +1,4 @@
-import { NgHttp } from '../../src/services/http';
+import { NgHttp } from '../../src/http';
 
 import { $injector } from './--injector';
 import { $config } from './-config';

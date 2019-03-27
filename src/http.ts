@@ -1,6 +1,6 @@
 import { PatchPayload } from '@ledge/types/patch';
-import { NgService } from './base';
-import { NgAppConfig } from '../options';
+import { NgService } from './service';
+import { NgAppConfig } from './options';
 
 export interface NgHttpInterceptor {
 	request?(config: Request): Request | Promise<Request>;

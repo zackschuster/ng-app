@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual';
-import { NgController } from '../../controller';
 import { Indexed } from '@ledge/types';
+import { NgController } from '../../controller';
 
 export class NgInputController<T = any> extends NgController {
 	public ngModel: any;

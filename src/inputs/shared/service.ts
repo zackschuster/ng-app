@@ -1,8 +1,10 @@
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
-import { NgRenderer, NgService } from '../../services';
+
+import { NgAttributes } from '../../attributes';
 import { NgComponentOptions } from '../../options';
-import { NgAttributes } from '../../controller';
+import { NgRenderer } from '../../renderer';
+import { NgService } from '../../service';
 
 export class InputService extends NgService {
 	public static readonly $validationAttrs = [

@@ -1,8 +1,8 @@
 import { Indexed } from '@ledge/types';
-import { NgRenderer } from '../../services/renderer';
-import { NgComponentOptions } from '../../options';
-import { NgAttributes } from '../../controller';
 import { NgInputController } from './controller';
+import { NgAttributes } from '../../attributes';
+import { NgComponentOptions } from '../../options';
+import { NgRenderer } from '../../renderer';
 
 export interface NgInputOptions extends NgComponentOptions<typeof NgInputController> {
 	/**

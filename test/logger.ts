@@ -1,6 +1,6 @@
 import test from 'ava';
 import { $console, $log } from './mocks';
-import { NgService } from '../src/services';
+import { NgService } from '../src/service';
 
 test('console subclasses service', async t => {
 	t.true($console instanceof NgService);
