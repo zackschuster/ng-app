@@ -30,22 +30,22 @@
     "angular-elastic": "2.5.1",
     "angular-messages": "1.7.8",
     "angular-ui-bootstrap": "2.5.6",
-    "choices.js": "6.0.3",
+    "choices.js": "7.0.0",
     "core-decorators": "0.20.0",
     "element-closest": "3.0.1",
     "noty": "3.1.4"
   },
   "devDependencies": {
-    "@ledge/configs": "14.5.1",
+    "@ledge/configs": "14.5.2",
     "@types/angular-mocks": "1.7.0",
     "angular-mocks": "1.7.8",
-    "ava": "1.4.0",
+    "ava": "1.4.1",
     "browser-env": "3.2.6",
-    "esm": "3.2.20",
+    "esm": "3.2.22",
     "pretty": "2.0.0",
     "ts-node": "8.0.3",
-    "tslint": "5.14.0",
-    "typescript": "3.3.4000"
+    "tslint": "5.15.0",
+    "typescript": "3.4.1"
   },
   "ava": {
     "files": [
