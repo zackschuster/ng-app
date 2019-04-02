@@ -1,3 +1,4 @@
+// tslint:disable:file-name-casing
 require('esm');
 require('ts-node').register({ transpileOnly: true, ignore: [] });
 require('browser-env')({ resources: 'usable' });
