@@ -1,3 +1,4 @@
+// tslint:disable: no-redundant-jsdoc
 import { Indexed } from '@ledge/types';
 import { NgComponentController } from '../controller';
 import { NgRenderer } from '../renderer';
@@ -24,12 +25,14 @@ export interface InputComponentOptions extends angular.IComponentOptions {
 	attrs?: Indexed;
 
 	/**
-	 * CSS class to apply to the input container. Defaults to 'form-group'.
+	 * CSS class to apply to the input container
+	 * @default 'form-group'
 	 */
 	templateClass?: string;
 
 	/**
-	 * CSS class to apply to the input label. Defaults to 'form-control-label'.
+	 * CSS class to apply to the input label
+	 * @default 'form-control-label'
 	 */
 	labelClass?: string;
 
