@@ -40,19 +40,25 @@ test('InputService.$baseDefinition', async t => {
 });
 
 test('InputService.$baseComponent', async t => {
-	const $baseComponent = copy(InputService.$baseComponent);
+	const $baseComponent = copy(InputService.$BaseComponent);
+
+	t.true($baseComponent.renderLabel instanceof Function);
+	t.true($baseComponent.postRender instanceof Function);
+	t.true($baseComponent.render instanceof Function);
 	Reflect.deleteProperty($baseComponent, 'renderLabel');
 	Reflect.deleteProperty($baseComponent, 'postRender');
+	Reflect.deleteProperty($baseComponent, 'render');
 
 	t.deepEqual($baseComponent, {
 		isRadioOrCheckbox: false,
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: { },
+		type: 'input',
 		ctrl: NgComponentController,
-	});
+	} as any);
 
-	t.true(isFunction(InputService.$baseComponent.renderLabel));
+	t.true(isFunction(InputService.$BaseComponent.renderLabel));
 });
 
 test('InputService.modelIdentifier', async t => {

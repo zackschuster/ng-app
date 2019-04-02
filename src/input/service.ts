@@ -4,6 +4,37 @@ import { IAttributes, copy, equals } from 'angular';
 import { InputComponentOptions } from './options';
 import { NgComponentController } from '../controller';
 import { NgRenderer } from '../renderer';
+import { Indexed } from '@ledge/types';
+
+const BaseComponent = Object.seal({
+	isRadioOrCheckbox: false,
+	type: 'input',
+	labelClass: 'form-control-label',
+	templateClass: 'form-group',
+	attrs: { },
+	ctrl: NgComponentController,
+	render(_h) {
+		return this.$template;
+	},
+	renderLabel(h) {
+		const $transclude = h.createSlot();
+		$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
+		this.$label.appendChild($transclude);
+	},
+	postRender(_h) {
+		return this.$template;
+	},
+}) as InputComponentOptions & { isRadioOrCheckbox: boolean };
+
+const ValidationExpressions = Object.seal({
+	$Error: '$ctrl.ngModelCtrl.$error',
+	$Invalid: '$ctrl.ngModelCtrl.$invalid',
+	$Touched: '$ctrl.ngModelCtrl.$touched',
+	$FormInvalid: `$ctrl.ngModelCtrl.$$parentForm.$submitted`,
+	get $IsInvalid() {
+		return `(${this.$Touched} || ${this.$FormInvalid}) && ${this.$Invalid}`;
+	},
+});
 
 export class InputService {
 	public static readonly $validationAttrs = [
@@ -35,33 +66,8 @@ export class InputService {
 		},
 	};
 
-	// tslint:disable:static-this
-	public static readonly $baseComponent = {
-		isRadioOrCheckbox: false,
-		labelClass: 'form-control-label',
-		templateClass: 'form-group',
-		attrs: { },
-		ctrl: NgComponentController,
-		renderLabel: function defaultRenderLabel(h) {
-			const $transclude = h.createSlot();
-			$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
-			this.$label.appendChild($transclude);
-		} as InputComponentOptions['renderLabel'],
-		postRender: function defaultPostRender(_h) {
-			return this.$template;
-		} as InputComponentOptions['postRender'],
-	};
-
-	public static readonly $validationExps = {
-		$error: '$ctrl.ngModelCtrl.$error',
-		$invalid: '$ctrl.ngModelCtrl.$invalid',
-		$touched: '$ctrl.ngModelCtrl.$touched',
-		$formInvalid: `$ctrl.ngModelCtrl.$$parentForm.$submitted`,
-		get $isInvalid() {
-			return `(${this.$touched} || ${this.$formInvalid}) && ${this.$invalid}`;
-		},
-	};
-	// tslint:enable:static-this
+	public static readonly $BaseComponent = BaseComponent;
+	public static readonly $ValidationExpressions = ValidationExpressions;
 
 	/**
 	 * Retrieves the identifying name for an ngModel
@@ -97,7 +103,6 @@ export class InputService {
 			constructor() {
 				super();
 				setTimeout(() => {
-					// tslint:disable:static-this
 					const $contain = this.$element.querySelector('[ng-transclude="contain"]');
 					if ($contain != null && $contain.children.length === 0) {
 						if (isIE11()) {
@@ -123,7 +128,6 @@ export class InputService {
 							}
 						},
 					);
-					// tslint:enable:static-this
 				});
 			}
 		};
@@ -137,7 +141,7 @@ export class InputService {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer(doc);
 
-		const $component = copy(Object.assign({ }, InputService.$baseComponent, component));
+		const $component = copy(Object.assign({ }, InputService.$BaseComponent, component));
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 		const validators = component.validators instanceof Map
 			? component.validators
@@ -150,13 +154,13 @@ export class InputService {
 		Object.assign($definition.transclude, $component.transclude);
 
 		// assign controller
-		$definition.controller = InputService.wrapComponentCtrl($component.ctrl);
+		$definition.controller = InputService.wrapComponentCtrl($component.ctrl as typeof NgComponentController);
 
 		// assign template
 		$definition.template = ['$element', '$attrs', ($element: JQLite, $attrs: IAttributes) => {
 			const $el = $element[0];
 
-			let $template = h.createElement('div', [$component.templateClass]);
+			let $template = h.createElement('div', [$component.templateClass as string]);
 
 			// allow consumer to access $template and $attrs attributes from `this`
 			const $input = $component.render.call({ $template, $attrs }, h);
@@ -166,7 +170,7 @@ export class InputService {
 			const isSrOnly = $attrs.hasOwnProperty('srOnly');
 
 			// all inputs must have labels
-			const $label = h.createLabel([$component.labelClass], { isRequired, isSrOnly, isRadio });
+			const $label = h.createLabel([$component.labelClass as string], { isRequired, isSrOnly, isRadio });
 
 			if ($component.isRadioOrCheckbox === false) {
 				$template.appendChild($label);
@@ -218,17 +222,17 @@ export class InputService {
 				});
 
 			if ($inputInput.tagName !== 'SELECT') {
-				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${InputService.$validationExps.$isInvalid} }`);
+				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${InputService.$ValidationExpressions.$IsInvalid} }`);
 				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 			}
 
 			const $validationBlock = h.createElement('div', [], [
-				['ng-messages', InputService.$validationExps.$error],
-				['ng-show', InputService.$validationExps.$isInvalid],
+				['ng-messages', InputService.$ValidationExpressions.$Error],
+				['ng-show', InputService.$ValidationExpressions.$IsInvalid],
 				['role', 'alert'],
 			]);
 
-			const attrs = Object.keys($component.attrs);
+			const attrs = Object.keys($component.attrs as Indexed);
 			for (const [key, value] of validators) {
 				InputService.$validationMessages.set(key, value);
 				attrs.push(key);
@@ -260,7 +264,7 @@ export class InputService {
 				.forEach(prop => {
 					$html = $html.replace(
 						new RegExp(`{{${prop}}}`, 'g'),
-						$attrs[prop] || $component.attrs[prop],
+						$attrs[prop] || ($component.attrs as Indexed)[prop],
 					);
 				});
 
