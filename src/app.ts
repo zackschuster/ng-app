@@ -80,11 +80,9 @@ export class NgApp {
 	protected readonly $components: Map<string, angular.IComponentOptions> = new Map();
 	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
 
-	// tslint:disable:variable-name
 	private _http: ReturnType<NgApp['$http']>;
 	private _log: ReturnType<NgApp['$logger']>;
 	private _modal: ReturnType<NgApp['$modal']>;
-	// tslint:enable:variable-name
 
 	constructor() {
 		this.configure({ })
@@ -206,7 +204,6 @@ export class NgApp {
 		// Force `this` to always refer to the class instance, no matter what
 		autobind($controller);
 
-		// tslint:disable-next-line:max-classes-per-file
 		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
 			public $log = $logger();
 			public $http = http;

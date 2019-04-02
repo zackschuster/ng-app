@@ -1,4 +1,3 @@
-// tslint:disable:max-classes-per-file
 import { element } from 'angular';
 import { NgController } from './controller';
 import { NgLogger } from './logger';

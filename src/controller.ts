@@ -1,4 +1,3 @@
-// tslint:disable:max-classes-per-file
 import { NgLogger } from './logger';
 import { NgDataService } from './http';
 import { NgService } from './service';
@@ -36,7 +35,5 @@ export class NgController extends NgService {
 export class NgComponentController extends NgController {
 	public ngModel: any;
 	public ngModelCtrl: angular.INgModelController;
-
-	// tslint:disable-next-line:no-non-null-assertion
-	public uniqueId = crypto.getRandomValues(new Int8Array(2))!.toLocaleString().replace(/[-]|[,]/g, '');
+	public uniqueId = crypto.getRandomValues(new Int8Array(2)).toLocaleString().replace(/[-]|[,]/g, '');
 }

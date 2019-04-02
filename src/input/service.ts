@@ -1,4 +1,3 @@
-// tslint:disable:member-ordering max-classes-per-file
 import isIE11 from '@ledge/is-ie-11';
 import { IAttributes, copy, equals } from 'angular';
 
