@@ -36,8 +36,8 @@ class NgAppDocsPlugin {
 	}
 }
 
-module.exports = (env = 'development') =>
-	require('@ledge/configs/webpack.merge')(env, {
+function configure(env = 'development') {
+	return require('@ledge/configs/webpack.merge')(env, {
 		entry: {
 			app: ['app.ts', 'styles.scss'].map(x => path.join(docs, 'src', x)),
 			polyfills: path.join(docs, 'src', 'polyfills.ts'),
@@ -55,3 +55,6 @@ module.exports = (env = 'development') =>
 			new NgAppDocsPlugin(env === 'development'),
 		],
 	});
+}
+
+module.exports = configure;

@@ -1,4 +1,6 @@
-import { NgController, app } from '../../index';
+import { MutationTree, NgController, app } from '../../index';
+
+console.log(MutationTree);
 
 class ModalController extends NgController {
 	public title = 'Example Modal';
@@ -20,6 +22,11 @@ class AppController extends NgController {
 			.catch(() => this.$log.info('No...'));
 	}
 }
+
+// const tree = new MutationTree(document.body);
+// tree.addAttachElementCallback(el => console.log(`${el} added`));
+// tree.addRemoveElementCallback(el => console.log(`${el} removed`));
+// tree.observe();
 
 app
 	.module
