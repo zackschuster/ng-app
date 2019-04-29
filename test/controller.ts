@@ -1,5 +1,5 @@
 import test from 'ava';
-import { $ctrl, $prefix } from './mocks';
+import { $ctrl, $prefix } from './-mocks';
 
 test('$ctrl.apiPrefix', async t => {
 	t.is($ctrl.apiPrefix, $prefix);

@@ -8,10 +8,43 @@ export interface NgHttpInterceptor {
 	responseError?<T extends Error>(response: Response, err: T): void;
 }
 
+export class NgHttpOptions implements NgHttpInit {
+	public host = this.config.API_HOST;
+	public timeout = this.config.IS_PROD ? 10000 : undefined;
+
+	public ssl = location.protocol === 'https:';
+	public keepalive = false;
+
+	public cache = 'no-store' as const;
+	public credentials = 'include' as const;
+	public mode = 'cors' as const;
+	public redirect = 'manual' as const;
+	public referrerPolicy = 'origin-when-cross-origin' as const;
+
+	public interceptors: NgHttpInterceptor[];
+	public body?: BodyInit | null;
+	public headers?: HeadersInit;
+	public integrity?: string;
+	public method?: string;
+	public window?: any;
+
+	public referrer?: never;
+	public signal?: never;
+
+	public onFinally: () => void;
+
+	constructor(private config: NgAppConfig, init: NgHttpInit) {
+		for (const [key, value] of Object.entries(init)) {
+			if (typeof value === typeof this[key as keyof NgHttpOptions]) {
+				this[key as keyof NgHttpOptions] = value;
+			}
+		}
+	}
+}
+
 // tslint:disable:no-redundant-jsdoc
-export interface NgHttpOptions extends RequestInit {
+export interface NgHttpInit extends RequestInit {
 	/**
-	 *
 	 * @default `location.host`
 	 */
 	host?: string;
@@ -41,7 +74,6 @@ export interface NgHttpOptions extends RequestInit {
 	signal?: never;
 
 	onFinally?(): void;
-	getConfig(): NgAppConfig;
 }
 // tslint:enable:no-redundant-jsdoc
 
@@ -55,24 +87,24 @@ export class NgHttp extends NgService {
 		) => void)[];
 	};
 
-	constructor(private options: NgHttpOptions) {
+	constructor(private options: NgHttpInit) {
 		super();
 		const { interceptors = [] } = options;
 		this.interceptors = {
 			request: interceptors
 				.map(x => x.request)
 				.filter(x => typeof x === 'function') as ((
-				config: Request,
-			) => Request | Promise<Request>)[],
+					config: Request,
+				) => Request | Promise<Request>)[],
 			response: interceptors
 				.map(x => x.response)
 				.filter(x => typeof x === 'function') as ((response: any) => any)[],
 			responseError: interceptors
 				.map(x => x.responseError)
 				.filter(x => typeof x === 'function') as (<T extends Error>(
-				response: Response,
-				err: T,
-			) => void)[],
+					response: Response,
+					err: T,
+				) => void)[],
 		};
 	}
 
@@ -101,7 +133,7 @@ export class NgHttp extends NgService {
 	}
 
 	public getFullUrl(uri: string, host: string, ssl: boolean) {
-		return new URL(uri, `http${ssl ? 's' : ''}://${host}`).toJSON();
+		return new URL(`http${ssl ? 's' : ''}://${host}/${uri}`).toJSON();
 	}
 
 	private async fetch<T>(
@@ -112,17 +144,17 @@ export class NgHttp extends NgService {
 		let response = new Response();
 		try {
 			const {
-				host = this.options.getConfig().API_HOST,
-				ssl = location.protocol === 'https:',
-				cache = 'no-store',
-				credentials = 'include',
+				host = '',
+				ssl = false,
+				cache,
+				credentials,
 				headers,
 				integrity,
-				keepalive = false,
-				mode = 'cors',
-				redirect = 'manual',
-				referrerPolicy = 'origin-when-cross-origin',
-				timeout = 10000,
+				keepalive,
+				mode,
+				redirect,
+				referrerPolicy,
+				timeout,
 				window,
 			} = this.options;
 

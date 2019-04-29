@@ -3,18 +3,21 @@ import { StateService } from '@uirouter/core';
 import { StateProvider } from '@uirouter/angularjs';
 import { autobind } from 'core-decorators';
 
+import { Injector } from '@angular/core';
+
 import { NgController, makeInjectableCtrl } from './controller';
 import { NgHttp, NgHttpInterceptor, NgHttpOptions } from './http';
 import { InputService, NgInputOptions } from './inputs';
-import { NgLogger } from './logger';
+import { NgConsole, NgLogger } from './logger';
 import { NgModal } from './modal';
 import { NgInjector, bootstrap, injector, module } from './ng';
 import { NgAppConfig, NgComponentOptions } from './options';
 import { NgRenderer } from './renderer';
 import { NgRouter } from './router';
+import { NgService } from './service';
 
 @autobind
-export class NgApp {
+export class NgApp extends NgService {
 	public get module() {
 		return this.$module;
 	}
@@ -40,52 +43,73 @@ export class NgApp {
 	}
 
 	public get http() {
-		if (this._http == null) {
-			this._http = this.$http({ timeout: this.$config.IS_PROD ? 10000 : undefined, getConfig: () => this.$config });
-		}
-		return this._http;
+		return this.$injector2.get<NgHttp>(NgHttp);
+	}
+
+	public get console() {
+		return this.$injector2.get<NgConsole>(NgConsole);
 	}
 
 	public get log() {
-		if (this._log == null) {
-			this._log = this.$logger();
-		}
-		return this._log;
+		return this.$injector2.get<NgLogger>(NgLogger);
 	}
 
 	public get modal() {
-		if (this._modal == null) {
-			this._modal = this.$modal();
-		}
-		return this._modal;
+		return this.$injector2.get<NgModal>(NgModal);
 	}
 
 	public get renderer() {
-		if (this._renderer == null) {
-			this._renderer = this.$renderer();
-		}
-		return this._renderer;
+		return this.$injector2.get<NgRenderer>(NgRenderer);
 	}
 
 	public readonly $id = '$core';
-	public $injector = injector(['ng']);
+	public readonly $injector = injector(['ng']);
+	public readonly $injector2 = Injector.create({
+		name: this.$id,
+		providers: [
+			{ provide: HTMLDocument, useValue: document },
+			{ provide: NgAppConfig, useFactory: () => this.$config, deps: [] },
+			{ provide: NgRenderer, deps: [HTMLDocument] },
+			{ provide: NgConsole, deps: [] },
+			{
+				provide: NgLogger,
+				useFactory: (r: NgRenderer, c: NgAppConfig) =>
+					new NgLogger(r, c.IS_PROD),
+				deps: [NgRenderer, NgAppConfig],
+			},
+			{
+				provide: NgHttpOptions,
+				useFactory: (config: NgAppConfig) =>
+					new NgHttpOptions(config, {
+						interceptors: this.$httpInterceptors,
+						onFinally: this.forceUpdate,
+					}),
+				deps: [NgAppConfig],
+			},
+			{ provide: NgHttp, deps: [NgHttpOptions] },
+			{
+				provide: NgModal,
+				deps: [NgRenderer, NgLogger, NgHttp, NgAppConfig],
+				useFactory: (r: NgRenderer, l: NgLogger, h: NgHttp, c: NgAppConfig) =>
+					new NgModal(r, l, h, c, this.$injector),
+			},
+		],
+	});
 
-	protected $dependencies: string[] = [];
+	// protected readonly $platform = createPlatform(this.$injector2);
+	protected readonly $components = new Map<string, NgComponentOptions>();
+	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
+	protected readonly $dependencies: string[] = [];
 
 	protected readonly $module = module(this.$id, this.$dependencies);
 	protected readonly $bootstrap = bootstrap;
-	protected readonly $components = new Map<string, NgComponentOptions>();
-	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
 
 	protected $router: NgRouter;
 	protected $config: NgAppConfig;
 
-	private _http: NgHttp;
-	private _log: NgLogger;
-	private _modal: NgModal;
-	private _renderer: NgRenderer;
-
 	constructor() {
+		super();
+
 		this.configure({ })
 			.$module
 			.config([
@@ -133,6 +157,7 @@ export class NgApp {
 						enabled(active: boolean): any,
 					},
 				) => {
+					// @ts-ignore
 					this.$injector = $injector;
 					$animate.enabled(true);
 				},
@@ -224,37 +249,5 @@ export class NgApp {
 				'$injector',
 				typeof componentCtrl
 			];
-	}
-
-	protected $modal() {
-		return new NgModal(
-			this.renderer,
-			this.log,
-			this.http,
-			this.config,
-			this.$injector,
-		);
-	}
-
-	protected $http(options: NgHttpOptions) {
-		if ((typeof options.onFinally === 'function') === false) {
-			options.onFinally = this.forceUpdate;
-		}
-		if (Array.isArray(options.interceptors)) {
-			for (const interceptor of options.interceptors) {
-				this.addHttpInterceptor(interceptor);
-			}
-		}
-		// allow all dataservice instances to share the same interceptor queue
-		options.interceptors = this.$httpInterceptors;
-
-		return new NgHttp(options);
-	}
-
-	protected $logger() {
-		return new NgLogger(this.renderer, this.$config.IS_PROD);
-	}
-	protected $renderer() {
-		return new NgRenderer();
 	}
 }

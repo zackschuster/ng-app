@@ -8,11 +8,9 @@ import { ExecutionContext } from 'ava';
 // @ts-ignore
 import pretty = require('pretty');
 
-import { $element, $http, $invokeTemplate, $log, $renderer, $scope, $svc } from '../mocks';
+import { $element, $invokeTemplate, $scope, app } from '../-mocks';
 import { InputService } from '../../src/inputs';
 import { NgController, makeInjectableCtrl } from '../../src/controller';
-import { $config } from '../mocks/-config';
-import { $injector } from '../mocks/--injector';
 import { Indexed } from '@ledge/types';
 import { NgComponentOptions } from '../../src/options';
 
@@ -23,13 +21,13 @@ export function mockCtrl<T extends NgController>(
 	$attrs: Indexed = { },
 ) {
 	const Controller = makeInjectableCtrl(ctrl, {
-		log: $log,
-		http: $http,
-		renderer: $renderer,
+		log: app.log,
+		http: app.http,
+		renderer: app.renderer,
 		attrs: $attrs,
-		config: () => $config,
+		config: () => app.config,
 	});
-	return new Controller($element, $scope, $injector);
+	return new Controller($element, $scope, app.$injector);
 }
 
 export function makeTpl(
@@ -106,7 +104,7 @@ export function testLabel(tpl: Element, t: ExecutionContext) {
 
 		const transclude = label.querySelector('ng-transclude') as HTMLUnknownElement;
 		t.is(transclude.tagName, 'NG-TRANSCLUDE');
-		t.is(transclude.innerHTML, $svc.splitByCapitalLetter(ngAttrFor.split('_')[0]));
+		t.is(transclude.innerHTML, app.splitByCapitalLetter(ngAttrFor.split('_')[0]));
 	}
 
 	return label;

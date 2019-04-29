@@ -75,7 +75,7 @@
   "ava": {
     "files": [
       "test/**/*.ts",
-      "!test/mocks/**"
+      "!test/-mocks.ts"
     ],
     "compileEnhancements": false,
     "extensions": [

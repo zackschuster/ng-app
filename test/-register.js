@@ -2,6 +2,7 @@ require('ts-node').register({ transpileOnly: true, ignore: [] });
 require('browser-env')({ pretendToBeVisual: true });
 // @ts-ignore
 require('angular/angular.js');
+// @ts-ignore
 require('angular-mocks');
 
 const defineGlobal = /**

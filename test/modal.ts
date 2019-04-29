@@ -1,8 +1,8 @@
 import test from 'ava';
-import { $modal } from './mocks';
+import { app } from './-mocks';
 
 test('modal has appropriate methods', async t => {
-	const modal = $modal.open({ });
+	const modal = app.modal.open({ });
 
 	t.is(typeof modal.close, 'function');
 	t.is(typeof modal.dismiss, 'function');

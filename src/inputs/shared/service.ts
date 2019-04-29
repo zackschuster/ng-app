@@ -103,7 +103,7 @@ export class InputService extends NgService {
 	 */
 	public static defineInputComponent(component: NgInputOptions) {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
-		const h = new NgRenderer();
+		const h = new NgRenderer(document);
 
 		const $component = Object.assign(InputService.makeBaseComponent(), component);
 		const $definition = Object.assign(InputService.makeBaseOptions(), { controller: $component.controller });

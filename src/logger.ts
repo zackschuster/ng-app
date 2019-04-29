@@ -232,7 +232,7 @@ export class NgLogger extends NgConsole {
 	protected readonly container: HTMLDivElement;
 	protected readonly toasts: NgToast[] = [];
 
-	constructor(private $renderer: NgRenderer, private isProd = false) {
+	constructor(private $renderer: NgRenderer, private readonly isProd = false) {
 		super();
 
 		this.container = this.$renderer.createHtmlElement('div', ['position-fixed']);

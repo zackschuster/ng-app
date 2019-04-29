@@ -1,22 +1,9 @@
 import test from 'ava';
-import { NgHttp, NgLogger, NgModal, app, inputs, misc } from '..';
-import { $prefix } from './mocks';
-
-app.configure({ API_HOST: $prefix });
+import { NgHttp, NgLogger, NgModal, inputs, misc } from '..';
+import { $prefix, app } from './-mocks';
 
 test('app.module.name is app.$id', async t => {
 	t.is(app.$id, app.module.name);
-});
-
-test('app.bootstrap() throws without base tag', async t => {
-	await t.throwsAsync(app.bootstrap);
-});
-
-test(`app.bootstrap() doesn't throw with base tag`, async t => {
-	const base = document.createElement('base');
-	base.href = '/';
-	(document.head as HTMLHeadElement).appendChild(base);
-	await t.notThrowsAsync(app.bootstrap);
 });
 
 test('app has default input components', async t => {

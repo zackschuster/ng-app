@@ -10,6 +10,8 @@ export class NgRenderer extends Renderer2 {
 		['ng-model-options', '$ctrl.ngModelOptions'],
 	];
 
+	constructor(private document: HTMLDocument) { super(); }
+
 	public createHtmlElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(
 		tagName: T,
 		classes: string[] = [],
@@ -157,15 +159,15 @@ export class NgRenderer extends Renderer2 {
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T): HTMLElementTagNameMap[T];
 	public createElement(tagName: string): HTMLUnknownElement;
 	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T) {
-		return document.createElement(tagName);
+		return this.document.createElement(tagName);
 	}
 
 	public createText(value: string) {
-		return document.createTextNode(value);
+		return this.document.createTextNode(value);
 	}
 
 	public createComment(value: string) {
-		return document.createComment(value);
+		return this.document.createComment(value);
 	}
 
 	public appendChild(parent: HTMLElement, newChild: HTMLElement) {
@@ -222,7 +224,7 @@ export class NgRenderer extends Renderer2 {
 
 	public selectRootElement(selectorOrNode: string | HTMLElement, preserveContent = false): HTMLElement {
 		const el: HTMLElement | null = typeof selectorOrNode === 'string'
-			? document.querySelector(selectorOrNode)
+			? this.document.querySelector(selectorOrNode)
 			: selectorOrNode;
 
 		if (el == null) {

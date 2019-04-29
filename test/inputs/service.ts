@@ -1,5 +1,5 @@
 import test from 'ava';
-import { makeAttrs } from '../mocks';
+import { makeAttrs } from '../-mocks';
 import { InputService, NgInputController } from '../../src/inputs';
 
 test('InputService.$validationAttrs', async t => {
