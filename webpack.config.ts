@@ -1,31 +1,20 @@
-// tslint:disable:no-var-requires no-redundant-jsdoc
-
-/** @type {typeof import('fs')} */
-const fs = require('fs');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import fs = require('fs');
+import path = require('path');
+import HtmlWebpackPlugin = require('html-webpack-plugin');
+import merge = require('@ledge/configs/webpack.merge');
 
 const docs = path.join(process.cwd(), 'docs');
 
 class NgAppDocsPlugin {
-	// @ts-ignore
-	constructor(isDev) {
-		// @ts-ignore
-		this.isDev = isDev;
-	}
+	constructor(private isDev: boolean) { }
 
-	// @ts-ignore
-	// tslint:disable-next-line:member-access
-	apply(compiler) {
-		// @ts-ignore
+	public apply(compiler: import('webpack').Compiler) {
 		if (this.isDev === false) {
 			compiler.hooks.emit.tap(this.constructor.name, () => {
 				const files = fs
 					.readdirSync(docs, { withFileTypes: true })
-					// @ts-ignore
 					.filter(x => x.isFile());
 
-				// @ts-ignore
 				files.forEach(x => fs.unlinkSync(path.join(docs, x.name)));
 			});
 		}
@@ -37,7 +26,7 @@ class NgAppDocsPlugin {
 }
 
 function configure(env = 'development') {
-	return require('@ledge/configs/webpack.merge')(env, {
+	return merge(env, {
 		entry: {
 			app: ['app.ts', 'styles.scss'].map(x => path.join(docs, 'src', x)),
 			polyfills: path.join(docs, 'src', 'polyfills.ts'),
