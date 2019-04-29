@@ -1,6 +1,7 @@
 import fs = require('fs');
 import path = require('path');
 import HtmlWebpackPlugin = require('html-webpack-plugin');
+// @ts-ignore
 import merge = require('@ledge/configs/webpack.merge');
 
 const docs = path.join(process.cwd(), 'docs');
