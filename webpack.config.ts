@@ -44,13 +44,11 @@ function configure(env = 'development') {
 		},
 		output: {
 			path: docs,
-			publicPath: '/',
 		},
 		plugins: [
 			new HtmlWebpackPlugin({
 				template: '!!pug-loader?!docs/src/index.pug',
 				title: '@ledge/ng-app docs',
-				chunks: ['app'],
 			}),
 			new NgAppDocsPlugin(env === 'development'),
 		],

@@ -61,7 +61,6 @@ export * from './src/options';
 export * from './src/renderer';
 export * from './src/router';
 export * from './src/service';
-export * from './src/tree';
 
 export * from './src/inputs';
 export * from './src/misc';
