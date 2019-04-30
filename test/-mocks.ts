@@ -1,4 +1,4 @@
-import { NgController, makeInjectableCtrl } from '../src/controller';
+import { NgController, makeNg1Controller } from '../src/controller';
 import { NgAttributes } from '../src/attributes';
 import { makeDefaultApp } from '../index';
 
@@ -12,7 +12,7 @@ base.href = '/';
 
 app.bootstrap();
 
-const Ctrl = makeInjectableCtrl(NgController, {
+const Ng1Ctrl = makeNg1Controller(NgController, {
 	log: app.log,
 	http: app.http,
 	renderer: app.renderer,
@@ -21,7 +21,7 @@ const Ctrl = makeInjectableCtrl(NgController, {
 
 export const $scope = app.$injector.get('$rootScope').$new();
 export const $element = app.$injector.get('$compile')(document.createElement('div'))($scope);
-export const $ctrl = new Ctrl($element, $scope, app.$injector);
+export const $ctrl = new Ng1Ctrl($element, $scope, app.$injector);
 
 export function $invokeTemplate(template: any, $attrs: Partial<NgAttributes>) {
 	return app.$injector.invoke(template, { }, { $element, $attrs });

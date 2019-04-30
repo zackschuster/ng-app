@@ -78,7 +78,7 @@ export class NgController extends NgService {
 	public $postLink?(): void;
 }
 
-export function makeInjectableCtrl<T extends NgController>(ctrl: new () => T, locals: {
+export function makeNg1Controller<T extends NgController>(ctrl: new () => T, locals: {
 	log: NgLogger,
 	http: NgHttp,
 	renderer: NgRenderer,

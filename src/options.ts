@@ -2,7 +2,7 @@ import { IConfig, Indexed } from '@ledge/types';
 import { autobind } from 'core-decorators';
 
 import { NgAttributes } from './attributes';
-import { NgController, makeInjectableCtrl } from './controller';
+import { NgController, makeNg1Controller } from './controller';
 
 @autobind
 export class NgAppConfig implements IConfig {
@@ -58,7 +58,7 @@ export interface NgComponentOptions<T = typeof NgController> {
 	 * controller if passed as a string. Empty function by default.
 	 * Use the array form to define dependencies (necessary if strictDi is enabled and you require dependency injection)
 	 */
-	controller?: T | ['$element', '$scope', '$injector', ReturnType<typeof makeInjectableCtrl>];
+	controller?: T | ['$element', '$scope', '$injector', ReturnType<typeof makeNg1Controller>];
 
 	/**
 	 * @deprecated For consistency this will always be the historical default `$ctrl`. ng-app's architecture ensures all scopes are isolates, so there's no risk of scope leakage.

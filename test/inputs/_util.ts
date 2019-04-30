@@ -10,7 +10,7 @@ import pretty = require('pretty');
 
 import { $element, $invokeTemplate, $scope, app } from '../-mocks';
 import { InputService } from '../../src/inputs';
-import { NgController, makeInjectableCtrl } from '../../src/controller';
+import { NgController, makeNg1Controller } from '../../src/controller';
 import { Indexed } from '@ledge/types';
 import { NgComponentOptions } from '../../src/options';
 
@@ -20,14 +20,14 @@ export function mockCtrl<T extends NgController>(
 	ctrl: new () => T,
 	$attrs: Indexed = { },
 ) {
-	const Controller = makeInjectableCtrl(ctrl, {
+	const Ng1Ctrl = makeNg1Controller(ctrl, {
 		log: app.log,
 		http: app.http,
 		renderer: app.renderer,
 		attrs: $attrs,
 		config: () => app.config,
 	});
-	return new Controller($element, $scope, app.$injector);
+	return new Ng1Ctrl($element, $scope, app.$injector);
 }
 
 export function makeTpl(

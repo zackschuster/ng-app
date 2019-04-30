@@ -5,7 +5,7 @@ import { autobind } from 'core-decorators';
 
 import { Injector } from '@angular/core';
 
-import { NgController, makeInjectableCtrl } from './controller';
+import { NgController, makeNg1Controller } from './controller';
 import { NgHttp, NgHttpInterceptor, NgHttpOptions } from './http';
 import { InputService, NgInputOptions } from './inputs';
 import { NgConsole, NgLogger } from './logger';
@@ -230,24 +230,20 @@ export class NgApp extends NgService {
 		return this;
 	}
 
-	public makeComponentController<T extends NgController>(ctrl: new () => T) {
-		const componentCtrl = makeInjectableCtrl<T>(ctrl, {
-			log: this.log,
-			http: this.http,
-			renderer: this.renderer,
-			config: () => this.config,
-		});
-
-		return [
+	public makeComponentController<T extends NgController>(rawCtrl: new () => T) {
+		const controller = [
 			'$element',
 			'$scope',
 			'$injector',
-			componentCtrl,
-		] as [
-				'$element',
-				'$scope',
-				'$injector',
-				typeof componentCtrl
-			];
+			makeNg1Controller<T>(rawCtrl, {
+				log: this.log,
+				http: this.http,
+				renderer: this.renderer,
+				config: () => this.config,
+			}),
+		] as const;
+
+		type Writeable<Y> = { -readonly [P in keyof Y]-?: Y[P] };
+		return controller as Writeable<typeof controller>;
 	}
 }

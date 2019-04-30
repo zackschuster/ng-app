@@ -1,4 +1,4 @@
-import { NgController, makeInjectableCtrl } from './controller';
+import { NgController, makeNg1Controller } from './controller';
 import { NgLogger } from './logger';
 import { NgService } from './service';
 import { NgHttp } from './http';
@@ -109,7 +109,7 @@ export class NgModal extends NgService {
 
 		const $scope = this.$rootScope.$new(true) as Parameters<NgModal['hide']>[1];
 		const $element = this.$compile(this.container)($scope);
-		const $ctrl = makeInjectableCtrl(controller, {
+		const $ctrl = makeNg1Controller(controller, {
 			log: this.$log,
 			http: this.$http,
 			renderer: this.$renderer,
