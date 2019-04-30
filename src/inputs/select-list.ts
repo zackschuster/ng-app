@@ -1,9 +1,9 @@
 import Fuse from 'fuse.js';
 import cloneDeep from 'lodash/cloneDeep';
+import { isMobile } from '@ledge/is-mobile';
 
 import { NgInputController, NgInputOptions } from './shared';
 import { NgAttributes } from '../attributes';
-import { NgService } from '../service';
 
 class SelectController extends NgInputController {
 	public static readonly SinglePlaceholder = '----Select One----';
@@ -217,7 +217,7 @@ export const selectList: NgInputOptions = {
 			select.appendChild(placeholder);
 		}
 
-		if (NgService.IsMobile()) {
+		if (isMobile()) {
 			select.classList.remove('d-none');
 			select.setAttribute(
 				'ng-options',

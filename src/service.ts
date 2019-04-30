@@ -1,18 +1,21 @@
-import isIE11 from '@ledge/is-ie-11';
+import { isIE11 } from '@ledge/is-ie-11';
+import { isMobile } from '@ledge/is-mobile';
 
 export class NgService {
-	public static IsMobile() {
-		return typeof window === 'object' && window.innerWidth < 767;
+	public readonly uniqueId = this.UUIDv4().replace(/[-]|[,]/g, '');
+
+	protected get isMobile() {
+		return isMobile();
 	}
 
-	public static IsIE11() {
+	protected get isIE11() {
 		return isIE11();
 	}
 
 	/**
 	 * @see https://stackoverflow.com/a/2117523
 	 */
-	public static UUIDv4() {
+	public UUIDv4() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
 			// tslint:disable:no-bitwise
 			const r = Math.random() * 16 | 0;
@@ -20,20 +23,6 @@ export class NgService {
 			// tslint:enable:no-bitwise
 			return v.toString(16);
 		});
-	}
-
-	public readonly uniqueId = this.UUIDv4().replace(/[-]|[,]/g, '');
-
-	public UUIDv4() {
-		return NgService.UUIDv4();
-	}
-
-	protected get isMobile() {
-		return NgService.IsMobile();
-	}
-
-	protected get isIE11() {
-		return NgService.IsIE11();
 	}
 
 	/**
