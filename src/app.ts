@@ -107,10 +107,11 @@ export class NgApp extends NgService {
 	protected $router: NgRouter;
 	protected $config: NgAppConfig;
 
-	constructor() {
+	constructor(config: Partial<NgAppConfig>) {
 		super();
 
-		this.configure({ })
+		this
+			.configure(config)
 			.$module
 			.config([
 				'$compileProvider',
