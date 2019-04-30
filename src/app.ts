@@ -7,7 +7,7 @@ import { Injector } from '@angular/core';
 
 import { NgController, makeNg1Controller } from './controller';
 import { NgHttp, NgHttpInterceptor, NgHttpOptions } from './http';
-import { InputService, NgInputOptions } from './inputs';
+import { NgInputFactory, NgInputOptions } from './inputs';
 import { NgConsole, NgLogger } from './logger';
 import { NgModal } from './modal';
 import { NgInjector, bootstrap, injector, module } from './ng';
@@ -62,6 +62,10 @@ export class NgApp extends NgService {
 		return this.$injector2.get<NgRenderer>(NgRenderer);
 	}
 
+	public get inputs() {
+		return this.$injector2.get<NgInputFactory>(NgInputFactory);
+	}
+
 	public readonly $id = '$core';
 	public readonly $injector = injector(['ng']);
 	public readonly $injector2 = Injector.create({
@@ -70,6 +74,7 @@ export class NgApp extends NgService {
 			{ provide: HTMLDocument, useValue: document },
 			{ provide: NgAppConfig, useFactory: () => this.$config, deps: [] },
 			{ provide: NgRenderer, deps: [HTMLDocument] },
+			{ provide: NgInputFactory, deps: [NgRenderer] },
 			{ provide: NgConsole, deps: [] },
 			{
 				provide: NgLogger,
@@ -199,9 +204,11 @@ export class NgApp extends NgService {
 				? components.entries()
 				: Object.entries(components);
 
+		const { inputs } = this;
+
 		for (let [name, component] of entries) {
 			if (this.isInputComponent(component)) {
-				component = InputService.defineInputComponent(component);
+				component = inputs.defineInputComponent(component);
 			}
 
 			if (typeof component.controller === 'function') {

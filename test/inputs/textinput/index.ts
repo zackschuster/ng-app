@@ -1,10 +1,11 @@
 import test from 'ava';
 import { htmlInput, textInput } from '../../../src/inputs/text-input';
-import { InputService, NgInputController } from '../../../src/inputs';
+import { NgInputController } from '../../../src/inputs';
+import { app } from '../../-mocks';
 import * as util from '../-util';
 
-const definedTextInput = InputService.defineInputComponent(textInput);
-const definedHtmlInput = InputService.defineInputComponent(htmlInput);
+const definedTextInput = app.inputs.defineInputComponent(textInput);
+const definedHtmlInput = app.inputs.defineInputComponent(htmlInput);
 
 test('textinput -> htmlinput alias', async t => {
 	// should be separate objects with the same layout

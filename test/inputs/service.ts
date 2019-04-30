@@ -1,17 +1,17 @@
 import test from 'ava';
-import { makeAttrs } from '../-mocks';
-import { InputService, NgInputController } from '../../src/inputs';
+import { app, makeAttrs } from '../-mocks';
+import { NgInputController } from '../../src/inputs';
 
-test('InputService.$validationAttrs', async t => {
-	t.deepEqual(InputService.$validationAttrs, [
+test('app.inputs.$validationAttrs', async t => {
+	t.deepEqual(app.inputs.$validationAttrs, [
 		'required', 'ngRequired',
 		'disabled', 'ngDisabled',
 		'readonly', 'ngReadonly',
 	]);
 });
 
-test('InputService.$validationMessages', async t => {
-	t.deepEqual(InputService.$validationMessages, new Map<string, string>([
+test('app.inputs.$validationMessages', async t => {
+	t.deepEqual(app.inputs.$validationMessages, new Map<string, string>([
 		['email', 'Email address must be in the following form: email@address.com'],
 		['required', 'This field is required'],
 		['minlength', 'Input is not long enough'],
@@ -19,8 +19,8 @@ test('InputService.$validationMessages', async t => {
 	]));
 });
 
-test('InputService.$baseDefinition', async t => {
-	t.deepEqual(InputService.makeBaseOptions(), {
+test('app.inputs.$baseDefinition', async t => {
+	t.deepEqual(app.inputs.makeBaseOptions(), {
 		transclude: {
 			contain: '?contain',
 		},
@@ -37,8 +37,8 @@ test('InputService.$baseDefinition', async t => {
 	});
 });
 
-test('InputService.$baseComponent', async t => {
-	const $baseComponent = InputService.makeBaseComponent();
+test('app.inputs.$baseComponent', async t => {
+	const $baseComponent = app.inputs.makeBaseComponent();
 	t.true(typeof $baseComponent.renderLabel === 'function');
 	t.true(typeof $baseComponent.postRender === 'function');
 
@@ -55,14 +55,14 @@ test('InputService.$baseComponent', async t => {
 
 });
 
-test('InputService.modelIdentifier', async t => {
-	t.is(InputService.modelIdentifier(makeAttrs('$ctrl.model.item1')), 'item1');
-	t.is(InputService.modelIdentifier(makeAttrs('$ctrl.model')), 'model');
-	t.is(InputService.modelIdentifier(makeAttrs('model')), 'model');
+test('app.inputs.modelIdentifier', async t => {
+	t.is(app.inputs.modelIdentifier(makeAttrs('$ctrl.model.item1')), 'item1');
+	t.is(app.inputs.modelIdentifier(makeAttrs('$ctrl.model')), 'model');
+	t.is(app.inputs.modelIdentifier(makeAttrs('model')), 'model');
 });
 
-test('InputService.getDefaultLabelText', async t => {
-	t.is(InputService.getDefaultLabelText(makeAttrs('$ctrl.model.item1')), 'Item 1');
-	t.is(InputService.getDefaultLabelText(makeAttrs('$ctrl.model')), 'Model');
-	t.is(InputService.getDefaultLabelText(makeAttrs('model')), 'Model');
+test('app.inputs.getDefaultLabelText', async t => {
+	t.is(app.inputs.getDefaultLabelText(makeAttrs('$ctrl.model.item1')), 'Item 1');
+	t.is(app.inputs.getDefaultLabelText(makeAttrs('$ctrl.model')), 'Model');
+	t.is(app.inputs.getDefaultLabelText(makeAttrs('model')), 'Model');
 });

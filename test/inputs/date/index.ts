@@ -1,9 +1,10 @@
 import test from 'ava';
 import { dateInput } from '../../../src/inputs/date-input';
-import { InputService, NgInputController } from '../../../src/inputs';
+import { NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
+import { app } from '../../-mocks';
 
-const definedDateInput = InputService.defineInputComponent(dateInput);
+const definedDateInput = app.inputs.defineInputComponent(dateInput);
 
 test('date bindings', async t => {
 	t.deepEqual(definedDateInput.bindings, {

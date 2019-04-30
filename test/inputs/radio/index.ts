@@ -1,9 +1,10 @@
 import test from 'ava';
 import { radioList } from '../../../src/inputs/radio-list';
-import { InputService, NgInputController } from '../../../src/inputs';
+import { NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
+import { app } from '../../-mocks';
 
-const definedRadioList = InputService.defineInputComponent(radioList);
+const definedRadioList = app.inputs.defineInputComponent(radioList);
 const radioNgIdRe = /\w([_]{{\$ctrl.uniqueId}}[_]{{\$index}})/;
 
 test('radio bindings', async t => {

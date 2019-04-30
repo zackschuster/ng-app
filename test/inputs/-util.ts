@@ -6,7 +6,6 @@ import { ExecutionContext } from 'ava';
 import pretty = require('pretty');
 
 import { $element, $invokeTemplate, $scope, app } from '../-mocks';
-import { InputService } from '../../src/inputs';
 import { NgController, makeNg1Controller } from '../../src/controller';
 import { Indexed } from '@ledge/types';
 import { NgComponentOptions } from '../../src/options';
@@ -79,7 +78,7 @@ export function testInput(
 		}
 		t.is(input.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 		t.is(input.getAttribute('ng-blur'), '$ctrl.ngModelCtrl.$setTouched()');
-		t.is(input.getAttribute('ng-class'), `{ 'is-invalid': ${InputService.$validationExps.$isInvalid} }`);
+		t.is(input.getAttribute('ng-class'), `{ 'is-invalid': ${app.inputs.$validationExps.$isInvalid} }`);
 	}
 
 	t.regex(input.getAttribute('ng-attr-id') as string, idRe);
@@ -111,8 +110,8 @@ export function testNgMessages(tpl: Element, t: ExecutionContext) {
 	const ngMessages = tpl.querySelector('[ng-messages]') as HTMLDivElement;
 	t.is(ngMessages.tagName, 'DIV');
 	t.is(ngMessages.getAttribute('role'), 'alert');
-	t.is(ngMessages.getAttribute('ng-messages'), InputService.$validationExps.$error);
-	t.is(ngMessages.getAttribute('ng-show'), InputService.$validationExps.$isInvalid);
+	t.is(ngMessages.getAttribute('ng-messages'), app.inputs.$validationExps.$error);
+	t.is(ngMessages.getAttribute('ng-show'), app.inputs.$validationExps.$isInvalid);
 
 	const required = ngMessages.querySelector('[ng-message="required"]') as HTMLDivElement;
 	t.true(required.classList.contains('text-danger'));

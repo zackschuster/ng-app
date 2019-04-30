@@ -1,9 +1,10 @@
 import test from 'ava';
 import { checkBox } from '../../../src/inputs/check-box';
-import { InputService, NgInputController } from '../../../src/inputs';
+import { NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
+import { app } from '../../-mocks';
 
-const definedCheckBox = InputService.defineInputComponent(checkBox);
+const definedCheckBox = app.inputs.defineInputComponent(checkBox);
 
 test('checkbox bindings', async t => {
 	t.deepEqual(definedCheckBox.bindings, {

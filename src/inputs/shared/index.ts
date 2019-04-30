@@ -1,3 +1,3 @@
 export * from './controller';
 export * from './options';
-export * from './service';
+export * from './factory';

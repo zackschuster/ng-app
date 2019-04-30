@@ -1,9 +1,10 @@
 import test from 'ava';
 import { textBox } from '../../../src/inputs/text-box';
-import { InputService, NgInputController } from '../../../src/inputs';
+import { NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
+import { app } from '../../-mocks';
 
-const definedTextBox = InputService.defineInputComponent(textBox);
+const definedTextBox = app.inputs.defineInputComponent(textBox);
 
 test('textbox bindings', async t => {
 	t.deepEqual(definedTextBox.bindings, {
