@@ -1,7 +1,7 @@
 import test from 'ava';
 import { selectList } from '../../../src/inputs/select-list';
 import { InputService, NgInputController } from '../../../src/inputs';
-import * as util from '../_util';
+import * as util from '../-util';
 
 const definedSelectList = InputService.defineInputComponent(selectList);
 

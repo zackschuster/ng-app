@@ -1,7 +1,7 @@
 import test from 'ava';
 import { checkBox } from '../../../src/inputs/check-box';
 import { InputService, NgInputController } from '../../../src/inputs';
-import * as util from '../_util';
+import * as util from '../-util';
 
 const definedCheckBox = InputService.defineInputComponent(checkBox);
 

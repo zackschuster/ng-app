@@ -1,6 +1,3 @@
-// tslint:disable:file-name-casing
-	// required for ava to ignore
-
 import { existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ExecutionContext } from 'ava';

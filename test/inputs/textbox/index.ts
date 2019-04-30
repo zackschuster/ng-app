@@ -1,7 +1,7 @@
 import test from 'ava';
 import { textBox } from '../../../src/inputs/text-box';
 import { InputService, NgInputController } from '../../../src/inputs';
-import * as util from '../_util';
+import * as util from '../-util';
 
 const definedTextBox = InputService.defineInputComponent(textBox);
 
