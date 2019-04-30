@@ -86,7 +86,7 @@ export function makeNg1Controller<T extends NgController>(ctrl: new () => T, loc
 	config(): NgAppConfig;
 }) {
 	autobind(ctrl);
-	return class InternalController extends (ctrl as new () => any) {
+	return class Ng1Controller extends (ctrl as new () => any) {
 		public $log = locals.log;
 		public $http = locals.http;
 		public $renderer = locals.renderer;
