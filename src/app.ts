@@ -26,10 +26,6 @@ export class NgApp extends NgService {
 		return this.$router;
 	}
 
-	public get config() {
-		return this.$config;
-	}
-
 	public get components() {
 		return new Set(this.$components.keys());
 	}
@@ -40,6 +36,10 @@ export class NgApp extends NgService {
 
 	public get state() {
 		return this.$injector.get<StateService>('$state');
+	}
+
+	public get config() {
+		return this.$injector2.get<NgAppConfig>(NgAppConfig);
 	}
 
 	public get http() {
@@ -96,7 +96,6 @@ export class NgApp extends NgService {
 		],
 	});
 
-	// protected readonly $platform = createPlatform(this.$injector2);
 	protected readonly $components = new Map<string, NgComponentOptions>();
 	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
 	protected readonly $dependencies: string[] = [];
