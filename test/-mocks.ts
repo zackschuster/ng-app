@@ -1,16 +1,14 @@
 import { NgController, makeInjectableCtrl } from '../src/controller';
 import { NgAttributes } from '../src/attributes';
-import { app as ngApp } from '../index';
-
-const base = ngApp.renderer.createElement('base');
-base.href = '/';
-(document.head as HTMLHeadElement).appendChild(base);
+import { makeDefaultApp } from '../index';
 
 export const $prefix = 'localhost:2323';
-
-export const app = ngApp
-	.configure({ API_HOST: $prefix })
+export const app = makeDefaultApp({ API_HOST: $prefix })
 	.addDependencies('ngMock', 'ui.router');
+
+const base = app.renderer.createElement('base');
+base.href = '/';
+(document.head as HTMLHeadElement).appendChild(base);
 
 app.bootstrap();
 

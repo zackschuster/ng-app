@@ -10,7 +10,7 @@ export interface NgHttpInterceptor {
 
 export class NgHttpOptions implements NgHttpInit {
 	public host = this.config.API_HOST;
-	public timeout = this.config.IS_PROD ? 10000 : undefined;
+	public timeout = 10000;
 
 	public ssl = location.protocol === 'https:';
 	public keepalive = false;
@@ -77,34 +77,33 @@ export interface NgHttpInit extends RequestInit {
 }
 // tslint:enable:no-redundant-jsdoc
 
+export type NgRequestInterceptor = (config: Request) => Request | Promise<Request>;
+export type NgResponseInterceptor = (response: any) => any;
+export type NgResponseErrorInterceptor = <T extends Error>(response: Response, err: T) => void;
+
 export class NgHttp extends NgService {
 	private interceptors: {
-		request: ((config: Request) => Request | Promise<Request>)[];
-		response: ((response: any) => any)[];
-		responseError: (<T extends Error>(
-			response: Response,
-			err: T,
-		) => void)[];
+		request: NgRequestInterceptor[];
+		response: NgResponseInterceptor[];
+		responseError: NgResponseErrorInterceptor[];
 	};
 
 	constructor(private options: NgHttpInit) {
 		super();
 		const { interceptors = [] } = options;
+
 		this.interceptors = {
 			request: interceptors
 				.map(x => x.request)
-				.filter(x => typeof x === 'function') as ((
-					config: Request,
-				) => Request | Promise<Request>)[],
+				.filter(x => typeof x === 'function') as NgRequestInterceptor[],
+
 			response: interceptors
 				.map(x => x.response)
-				.filter(x => typeof x === 'function') as ((response: any) => any)[],
+				.filter(x => typeof x === 'function') as NgResponseInterceptor[],
+
 			responseError: interceptors
 				.map(x => x.responseError)
-				.filter(x => typeof x === 'function') as (<T extends Error>(
-					response: Response,
-					err: T,
-				) => void)[],
+				.filter(x => typeof x === 'function') as NgResponseErrorInterceptor[],
 		};
 	}
 
@@ -144,43 +143,25 @@ export class NgHttp extends NgService {
 		let response = new Response();
 		try {
 			const {
-				host = '',
+				host = location.host,
 				ssl = false,
-				cache,
-				credentials,
-				headers,
-				integrity,
-				keepalive,
-				mode,
-				redirect,
-				referrerPolicy,
 				timeout,
-				window,
 			} = this.options;
 
 			const url = this.getFullUrl(uri, host, ssl);
 			const abortCtrl = new AbortController();
 
-			let request = new Request(url, {
+			let request = new Request(url, Object.assign({
 				method,
-				cache,
-				credentials,
-				headers,
-				integrity,
-				keepalive,
-				mode,
-				redirect,
-				referrerPolicy,
 				signal: abortCtrl.signal,
-				window,
 				body: JSON.stringify(data),
-			});
+			}, this.options));
 
 			for (const onRequest of this.interceptors.request) {
 				request = await onRequest(request);
 			}
 
-			const abortTimer = setTimeout(abortCtrl.abort, timeout);
+			const abortTimer = setTimeout(() => abortCtrl.abort(), timeout);
 			response = await fetch(request);
 			clearTimeout(abortTimer);
 
