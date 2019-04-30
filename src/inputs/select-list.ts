@@ -109,9 +109,9 @@ class SelectController extends NgInputController {
 		};
 
 		input.onblur = e => {
-			let { explicitOriginalTarget: target } = e as any;
+			let target = e.target as HTMLElement;
 			if (target.nodeName === '#text') {
-				target = target.parentElement;
+				target = target.parentElement as HTMLElement;
 			}
 
 			const targetIsItem =
