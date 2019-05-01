@@ -19,12 +19,12 @@ const Ng1Ctrl = makeNg1Controller(NgController, {
 	config: () => app.config,
 });
 
-export const $scope = app.$injector.get('$rootScope').$new();
-export const $element = app.$injector.get('$compile')(document.createElement('div'))($scope);
-export const $ctrl = new Ng1Ctrl($element, $scope, app.$injector);
+export const $scope = app.ng1injector.get('$rootScope').$new();
+export const $element = app.ng1injector.get('$compile')(document.createElement('div'))($scope);
+export const $ctrl = new Ng1Ctrl($element, $scope, app.ng1injector);
 
 export function $invokeTemplate(template: any, $attrs: Partial<NgAttributes>) {
-	return app.$injector.invoke(template, { }, { $element, $attrs });
+	return app.ng1injector.invoke(template, { }, { $element, $attrs });
 }
 
 export function makeAttrs(ngModel: string) {

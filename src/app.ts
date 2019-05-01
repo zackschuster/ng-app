@@ -3,7 +3,7 @@ import { StateService } from '@uirouter/core';
 import { StateProvider } from '@uirouter/angularjs';
 import { autobind } from 'core-decorators';
 
-import { Injector } from '@angular/core';
+import { Injector, PlatformRef } from '@angular/core';
 
 import { NgController, makeNg1Controller } from './controller';
 import { NgHttp, NgHttpInterceptor, NgHttpOptions } from './http';
@@ -17,7 +17,7 @@ import { NgRouter } from './router';
 import { NgService } from './service';
 
 @autobind
-export class NgApp extends NgService {
+export class NgApp extends PlatformRef {
 	public get module() {
 		return this.$module;
 	}
@@ -35,44 +35,64 @@ export class NgApp extends NgService {
 	}
 
 	public get state() {
-		return this.$injector.get<StateService>('$state');
+		return this.ng1injector.get<StateService>('$state');
 	}
 
 	public get config() {
-		return this.$injector2.get<NgAppConfig>(NgAppConfig);
+		return this.injector.get<NgAppConfig>(NgAppConfig);
 	}
 
 	public get http() {
-		return this.$injector2.get<NgHttp>(NgHttp);
+		return this.injector.get<NgHttp>(NgHttp);
 	}
 
 	public get console() {
-		return this.$injector2.get<NgConsole>(NgConsole);
+		return this.injector.get<NgConsole>(NgConsole);
 	}
 
 	public get log() {
-		return this.$injector2.get<NgLogger>(NgLogger);
+		return this.injector.get<NgLogger>(NgLogger);
 	}
 
 	public get modal() {
-		return this.$injector2.get<NgModal>(NgModal);
+		return this.injector.get<NgModal>(NgModal);
 	}
 
 	public get renderer() {
-		return this.$injector2.get<NgRenderer>(NgRenderer);
+		return this.injector.get<NgRenderer>(NgRenderer);
 	}
 
 	public get inputs() {
-		return this.$injector2.get<NgInputFactory>(NgInputFactory);
+		return this.injector.get<NgInputFactory>(NgInputFactory);
+	}
+
+	public get util() {
+		return this.injector.get<NgService>(NgService);
+	}
+
+	public get injector() {
+		return this.$injector;
 	}
 
 	public readonly $id = '$core';
-	public readonly $injector = injector(['ng']);
-	public readonly $injector2 = Injector.create({
+	public readonly ng1injector = injector(['ng']);
+
+	protected readonly $components = new Map<string, NgComponentOptions>();
+	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
+	protected readonly $dependencies: string[] = [];
+
+	protected readonly $module = module(this.$id, this.$dependencies);
+	protected readonly $bootstrap = bootstrap;
+
+	protected $router: NgRouter;
+	protected $config: NgAppConfig;
+
+	protected readonly $injector = Injector.create({
 		name: this.$id,
 		providers: [
 			{ provide: HTMLDocument, useValue: document },
 			{ provide: NgAppConfig, useFactory: () => this.$config, deps: [] },
+			{ provide: NgService, deps: [] },
 			{ provide: NgRenderer, deps: [HTMLDocument] },
 			{ provide: NgInputFactory, deps: [NgRenderer] },
 			{ provide: NgConsole, deps: [] },
@@ -96,20 +116,10 @@ export class NgApp extends NgService {
 				provide: NgModal,
 				deps: [NgRenderer, NgLogger, NgHttp, NgAppConfig],
 				useFactory: (r: NgRenderer, l: NgLogger, h: NgHttp, c: NgAppConfig) =>
-					new NgModal(r, l, h, c, this.$injector),
+					new NgModal(r, l, h, c, this.ng1injector),
 			},
 		],
 	});
-
-	protected readonly $components = new Map<string, NgComponentOptions>();
-	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
-	protected readonly $dependencies: string[] = [];
-
-	protected readonly $module = module(this.$id, this.$dependencies);
-	protected readonly $bootstrap = bootstrap;
-
-	protected $router: NgRouter;
-	protected $config: NgAppConfig;
 
 	constructor(config: Partial<NgAppConfig>) {
 		super();
@@ -163,7 +173,7 @@ export class NgApp extends NgService {
 					},
 				) => {
 					// @ts-ignore
-					this.$injector = $injector;
+					this.ng1injector = $injector;
 					$animate.enabled(true);
 				},
 			]);
@@ -173,7 +183,7 @@ export class NgApp extends NgService {
 	 * Force the application to run an update cycle
 	 */
 	public async forceUpdate() {
-		this.$injector.get('$rootScope').$applyAsync();
+		this.ng1injector.get('$rootScope').$applyAsync();
 	}
 
 	public async bootstrap({ strictDi }: { strictDi?: boolean; } = { strictDi: true }) {

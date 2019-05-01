@@ -23,7 +23,7 @@ export function mockCtrl<T extends NgController>(
 		attrs: $attrs,
 		config: () => app.config,
 	});
-	return new Ng1Ctrl($element, $scope, app.$injector);
+	return new Ng1Ctrl($element, $scope, app.ng1injector);
 }
 
 export function makeTpl(
@@ -100,7 +100,7 @@ export function testLabel(tpl: Element, t: ExecutionContext) {
 
 		const transclude = label.querySelector('ng-transclude') as HTMLUnknownElement;
 		t.is(transclude.tagName, 'NG-TRANSCLUDE');
-		t.is(transclude.innerHTML, app.splitByCapitalLetter(ngAttrFor.split('_')[0]));
+		t.is(transclude.innerHTML, app.util.splitByCapitalLetter(ngAttrFor.split('_')[0]));
 	}
 
 	return label;
