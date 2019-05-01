@@ -3,7 +3,7 @@ import { StateService } from '@uirouter/core';
 import { StateProvider } from '@uirouter/angularjs';
 import { autobind } from 'core-decorators';
 
-import { Injector, PlatformRef } from '@angular/core';
+import { Injector } from '@angular/core';
 
 import { NgController, makeNg1Controller } from './controller';
 import { NgHttp, NgHttpInterceptor, NgHttpOptions } from './http';
@@ -17,7 +17,7 @@ import { NgRouter } from './router';
 import { NgService } from './service';
 
 @autobind
-export class NgApp extends PlatformRef {
+export class NgApp {
 	public get module() {
 		return this.$module;
 	}
@@ -122,8 +122,6 @@ export class NgApp extends PlatformRef {
 	});
 
 	constructor(config: Partial<NgAppConfig>) {
-		super();
-
 		this
 			.configure(config)
 			.$module
