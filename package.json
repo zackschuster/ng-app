@@ -1,64 +1,65 @@
 {
-  "name": "@ledge/ng-app",
-  "version": "5.4.1",
-  "description": "An ESM-friendly shim layer for Angular.js, written & distributed in TypeScript",
-  "homepage": "https://github.com/zackschuster/ng-app",
-  "author": "Zack Schuster (https://github.com/zackschuster)",
-  "repository": "zackschuster/ng-app",
-  "bugs": {
-    "url": "https://github.com/zackschuster/ng-app/issues"
-  },
-  "license": "GPL-3.0",
-  "files": [
-    "index.ts",
-    "src"
-  ],
-  "main": "index.ts",
-  "types": "index.ts",
-  "scripts": {
-    "pretest": "node ./test/_teardown.js",
-    "test": "ava"
-  },
-  "dependencies": {
-    "@ledge/is-ie-11": "2.0.0",
-    "@ledge/types": "5.0.0",
-    "@types/angular-animate": "1.5.10",
-    "@types/angular-ui-bootstrap": "0.13.47",
-    "@uirouter/angularjs": "1.0.19",
-    "angular": "1.7.8",
-    "angular-animate": "1.7.8",
-    "angular-elastic": "2.5.1",
-    "angular-messages": "1.7.8",
-    "angular-ui-bootstrap": "2.5.6",
-    "choices.js": "7.0.0",
-    "core-decorators": "0.20.0",
-    "element-closest": "3.0.1",
-    "noty": "3.1.4"
-  },
-  "devDependencies": {
-    "@ledge/configs": "14.7.0",
-    "@types/angular-mocks": "1.7.0",
-    "angular-mocks": "1.7.8",
-    "ava": "1.4.1",
-    "browser-env": "3.2.6",
-    "esm": "3.2.25",
-    "pretty": "2.0.0",
-    "ts-node": "8.1.0",
-    "tslint": "5.16.0",
-    "typescript": "3.4.5"
-  },
-  "ava": {
-    "files": [
-      "test/**/*.ts",
-      "!test/inputs/-util.ts",
-      "!test/mocks/**"
-    ],
-    "compileEnhancements": false,
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "./test/_register.js"
-    ]
-  }
+	"name": "@ledge/ng-app",
+	"version": "5.4.1",
+	"description": "An ESM-friendly shim layer for Angular.js, written & distributed in TypeScript",
+	"homepage": "https://github.com/zackschuster/ng-app",
+	"author": "Zack Schuster (https://github.com/zackschuster)",
+	"repository": "zackschuster/ng-app",
+	"bugs": {
+		"url": "https://github.com/zackschuster/ng-app/issues"
+	},
+	"license": "GPL-3.0",
+	"files": [
+		"index.ts",
+		"src"
+	],
+	"main": "index.ts",
+	"types": "index.ts",
+	"scripts": {
+		"pretest": "node ./test/_teardown.js",
+		"test": "ava"
+	},
+	"dependencies": {
+		"@ledge/is-ie-11": "2.0.0",
+		"@ledge/is-mobile": "1.0.0",
+		"@ledge/types": "5.0.0",
+		"@types/angular-animate": "1.5.10",
+		"@types/angular-ui-bootstrap": "0.13.47",
+		"@uirouter/angularjs": "1.0.19",
+		"angular": "1.7.8",
+		"angular-animate": "1.7.8",
+		"angular-elastic": "2.5.1",
+		"angular-messages": "1.7.8",
+		"angular-ui-bootstrap": "2.5.6",
+		"choices.js": "7.0.0",
+		"core-decorators": "0.20.0",
+		"element-closest": "3.0.1",
+		"noty": "3.1.4"
+	},
+	"devDependencies": {
+		"@ledge/configs": "14.7.0",
+		"@types/angular-mocks": "1.7.0",
+		"angular-mocks": "1.7.8",
+		"ava": "1.4.1",
+		"browser-env": "3.2.6",
+		"esm": "3.2.25",
+		"pretty": "2.0.0",
+		"ts-node": "8.1.0",
+		"tslint": "5.16.0",
+		"typescript": "3.4.5"
+	},
+	"ava": {
+		"files": [
+			"test/**/*.ts",
+			"!test/inputs/-util.ts",
+			"!test/mocks/**"
+		],
+		"compileEnhancements": false,
+		"extensions": [
+			"ts"
+		],
+		"require": [
+			"./test/_register.js"
+		]
+	}
 }

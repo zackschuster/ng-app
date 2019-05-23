@@ -1,11 +1,12 @@
 import { isIE11 } from '@ledge/is-ie-11';
+import { isMobile } from '@ledge/is-mobile';
 
 export class NgService {
 	public static IsMobile() {
-		return typeof window === 'object' && window.innerWidth < 767;
+		return isMobile();
 	}
 	protected get isMobile() {
-		return NgService.IsMobile();
+		return isMobile();
 	}
 	protected get isIE11() {
 		return isIE11();

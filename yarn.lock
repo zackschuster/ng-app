@@ -335,6 +335,11 @@
   resolved "https://registry.npmjs.org/@ledge/is-ie-11/-/is-ie-11-2.0.0.tgz#6e8250a37d752974f9559f3125c6faf0d50a09f5"
   integrity sha512-ZuVfXcZ4laLhUPGcy+Y7zcOSTaA9wOkVPemlGVc7gBmle0p6q8pnkyCZlVueKlg9RS1LILA1JTEOV3Tp6a6U3A==
 
+"@ledge/is-mobile@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/@ledge/is-mobile/-/is-mobile-1.0.0.tgz#1dc6dd7a91b7dbffa54b66687f4e2a627e4fa03d"
+  integrity sha512-Ct/G5iIhKs0cl02YWpQg2J0/4aax/avCzHKqK2PB17i51qD8b6x9G3k+P8Lc1YLCWaAAqu1nLGl2UvjYxKGt+Q==
+
 "@ledge/types@5.0.0":
   version "5.0.0"
   resolved "https://registry.npmjs.org/@ledge/types/-/types-5.0.0.tgz#12033fc684a287bcef208905ba44bda6f2f936f9"

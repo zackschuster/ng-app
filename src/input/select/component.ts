@@ -1,5 +1,7 @@
 import Choices, { Choices as _Choices } from 'choices.js';
+import { isMobile } from '@ledge/is-mobile';
 import { IAttributes } from 'angular';
+
 import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
 
@@ -150,7 +152,7 @@ export const selectList: InputComponentOptions = {
 			input.appendChild(placeholder);
 		}
 
-		if (NgComponentController.IsMobile()) {
+		if (isMobile()) {
 			const text = this.$attrs.text || 'Text';
 			const value = this.$attrs.value || 'Value';
 			input.classList.add('form-control');
