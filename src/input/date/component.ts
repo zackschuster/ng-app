@@ -29,12 +29,8 @@ class DateInputController extends NgComponentController {
 		this.$scope.$watch(
 			_ => this.ngModel,
 			_ => {
-				if (!(_ instanceof Date)) {
-					if (typeof _ !== 'object') {
-						this.ngModel = new Date(_);
-					} else if (_ == null) {
-						this.ngModel = new Date(Date.now());
-					}
+				if ((_ instanceof Date) === false && typeof _ !== 'object') {
+					this.ngModel = new Date(_);
 				}
 			},
 		);
@@ -104,6 +100,7 @@ export const dateInput: InputComponentOptions = {
 
 		return h.createIconInput(input, 'calendar', [
 			['ng-click', '$ctrl.toggleDatepicker($event)'],
+			['ng-model-options', '{ allowInvalid: true }'],
 			['style', 'cursor:pointer'],
 		]);
 	},
