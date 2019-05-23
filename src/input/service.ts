@@ -1,4 +1,4 @@
-import isIE11 from '@ledge/is-ie-11';
+import { isIE11 } from '@ledge/is-ie-11';
 import { IAttributes, copy, equals } from 'angular';
 
 import { InputComponentOptions } from './options';
