@@ -1,4 +1,4 @@
-import isIE11 from '@ledge/is-ie-11';
+import { isIE11 } from '@ledge/is-ie-11';
 
 export class NgService {
 	public static IsMobile() {
