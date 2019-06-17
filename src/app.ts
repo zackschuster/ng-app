@@ -214,6 +214,8 @@ export class NgApp {
 			public isDevelopment = IS_DEV;
 			public isStaging = IS_STAGING;
 
+			protected apiPrefix: string;
+
 			constructor(
 				$element: JQLite,
 				public $scope: angular.IScope,
