@@ -26,6 +26,7 @@ export class NgModalService extends NgService {
 		function makeModalCtrl() {
 			return class extends (controller as typeof NgController) {
 				public close: (...args: any[]) => void;
+				public dismiss: () => void;
 				public $log = $log;
 
 				protected onclose: typeof onClose;
@@ -45,21 +46,26 @@ export class NgModalService extends NgService {
 
 						this.onclose = onClose.bind({ $log: this.$log });
 
-						const close = (...args: any[]) => {
+						const teardown = () => {
 							modal.classList.remove('show');
 							window.removeEventListener('keydown', listener);
 
 							backdrop.classList.remove('modal-backdrop');
 							appendTo.removeChild(backdrop);
+						};
 
+						const close = (...args: any[]) => {
+							teardown();
 							setTimeout(() => $modal.close(...args), 100);
+						};
+						const dismiss = () => {
+							teardown();
+							setTimeout(() => $modal.dismiss(), 100);
 						};
 
 						const listener = (e: KeyboardEvent) => {
 							if (e.key === 'Escape' || e.key === 'Esc') {
-								if (this.onclose({ isDismiss: true, close })) {
-									this.close();
-								}
+								this.dismiss();
 							}
 						};
 
@@ -67,18 +73,20 @@ export class NgModalService extends NgService {
 
 						this.close = (...args: any[]) => {
 							const param = {
-								isDismiss: args.length === 0,
+								isDismiss: false,
 								close,
 								item: null,
 							};
 
-							if (param.isDismiss === false) {
-								param.item = args.length === 1 ? args[0] : args;
-								if (this.onclose(param)) {
-									close(...args);
-								}
-							} else if (this.onclose(param)) {
-								close();
+							param.item = args.length === 1 ? args[0] : args;
+							if (this.onclose(param)) {
+								close(...args);
+							}
+						};
+
+						this.dismiss = () => {
+							if (this.onclose({ isDismiss: true, close })) {
+								dismiss();
 							}
 						};
 					});
