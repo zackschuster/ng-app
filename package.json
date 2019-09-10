@@ -21,11 +21,11 @@
 	},
 	"dependencies": {
 		"@ledge/is-ie-11": "2.0.0",
-		"@ledge/is-mobile": "1.0.0",
-		"@ledge/types": "5.0.0",
+		"@ledge/is-mobile": "2.0.0",
+		"@ledge/types": "6.0.0",
 		"@types/angular-animate": "1.5.10",
-		"@types/angular-ui-bootstrap": "0.13.47",
-		"@uirouter/angularjs": "1.0.19",
+		"@types/angular-ui-bootstrap": "1.0.0",
+		"@uirouter/angularjs": "1.0.22",
 		"angular": "1.7.8",
 		"angular-animate": "1.7.8",
 		"angular-elastic": "2.5.1",
@@ -37,16 +37,16 @@
 		"noty": "3.1.4"
 	},
 	"devDependencies": {
-		"@ledge/configs": "14.7.0",
+		"@ledge/configs": "15.1.0",
 		"@types/angular-mocks": "1.7.0",
 		"angular-mocks": "1.7.8",
-		"ava": "2.2.0",
+		"ava": "2.3.0",
 		"browser-env": "3.2.6",
 		"esm": "3.2.25",
 		"pretty": "2.0.0",
 		"ts-node": "8.3.0",
-		"tslint": "5.18.0",
-		"typescript": "3.5.3"
+		"tslint": "5.20.0",
+		"typescript": "3.6.3"
 	},
 	"ava": {
 		"files": [
