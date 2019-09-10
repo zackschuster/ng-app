@@ -1,3 +1,4 @@
+// tslint:disable:no-async-without-await no-magic-numbers
 import test from 'ava';
 import { textInput } from '../../../src/input';
 import { InputService } from '../../../src/input/service';

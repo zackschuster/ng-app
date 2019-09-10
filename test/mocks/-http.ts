@@ -1,6 +1,7 @@
 // import { module } from 'angular';
 import { NgDataService } from '../../src/http';
 import { $injector } from './--injector';
+import { HttpStatusCode } from '@ledge/types/http';
 
 export const $prefix = 'http://localhost:2323';
 export const $http = new NgDataService(
@@ -22,7 +23,7 @@ export async function pingTestUrl(
 	endpoint: string,
 ) {
 	const url = $http.getFullUrl(endpoint);
-	$backend.when(method, url).respond(200, endpoint);
+	$backend.when(method, url).respond(HttpStatusCode.Ok, endpoint);
 
 	// flush requests at end of event loop
 	// skips an assignment dance in switch/case

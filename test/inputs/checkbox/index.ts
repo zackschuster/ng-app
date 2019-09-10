@@ -1,3 +1,4 @@
+// tslint:disable:no-async-without-await
 import test from 'ava';
 import { checkBox } from '../../../src/input';
 import { InputService } from '../../../src/input/service';

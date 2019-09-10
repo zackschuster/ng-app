@@ -11,13 +11,10 @@ export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 	}
 
 	public registerRoute(partial: Partial<T>) {
-		const { name, parent, url } = this.generateRouteMeta(partial);
-
-		const state = Object.assign({
-			name,
-			parent,
-			url,
-		}, partial);
+		const state = {
+			...this.generateRouteMeta(partial),
+			...partial,
+		};
 
 		if (this.isNgTransitionFn(state.onEnter)) {
 			state.onEnter = ['$transition$', state.onEnter];
@@ -87,7 +84,7 @@ export abstract class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 	}
 
 	protected annotateResolveFunctions({ resolve = { } }: NgRoute) {
-		for (const [ id, resolveFn ] of Object.entries(resolve)) {
+		for (const [id, resolveFn] of Object.entries(resolve)) {
 			if (Array.isArray(resolve)) {
 				continue;
 			}

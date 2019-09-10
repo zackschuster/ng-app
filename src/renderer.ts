@@ -25,7 +25,7 @@ export class NgRenderer {
 			: HTMLUnknownElement;
 	}
 
-	public createInput(type: string = 'text', attrs: [string, string][] = []) {
+	public createInput(type = 'text', attrs: [string, string][] = []) {
 		const $isRadio = type === 'radio';
 		const $isCheckbox = type === 'checkbox';
 		const $isFormCheck = $isRadio || $isCheckbox;

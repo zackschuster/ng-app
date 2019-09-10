@@ -17,6 +17,8 @@ export interface NgConfig extends IConfig {
 	readonly IS_STAGING: boolean;
 }
 
+const REQUEST_TIMEOUT = 10000;
+
 @autobind
 export class NgApp {
 	public get module() {
@@ -103,7 +105,7 @@ export class NgApp {
 
 					$locationProvider.html5Mode(true);
 					$qProvider.errorOnUnhandledRejections(false);
-			}])
+				}])
 			.run([
 				'$injector', '$animate', '$templateCache',
 				(
@@ -128,7 +130,7 @@ export class NgApp {
 	 * Force the application to run an update cycle
 	 */
 	public async forceUpdate() {
-		this.$injector.get('$rootScope').$applyAsync();
+		await this.$injector.get('$rootScope').$applyAsync();
 	}
 
 	public bootstrap({ strictDi }: angular.IAngularBootstrapConfig = { strictDi: true }) {
@@ -143,12 +145,13 @@ export class NgApp {
 	public configure(ngConfig: Partial<NgConfig>) {
 		const env = process.env.NODE_ENV;
 
-		this.$config = Object.assign(ngConfig, {
+		this.$config = {
 			ENV: env,
 			IS_PROD: env === 'production',
 			IS_DEV: env === 'development',
 			IS_STAGING: env === 'staging',
-		} as NgConfig);
+			...ngConfig,
+		} as NgConfig;
 
 		return this;
 	}
@@ -179,8 +182,8 @@ export class NgApp {
 
 	public isInputComponent(component: angular.IComponentOptions & { type?: 'input' }):
 		component is InputComponentOptions {
-			return component.type === 'input';
-		}
+		return component.type === 'input';
+	}
 
 	public addDependency(moduleName: string) {
 		this.$dependencies.push(moduleName);
@@ -201,7 +204,7 @@ export class NgApp {
 		const { config, http, $logger, getApiPrefix } = this;
 		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
 
-		// Force `this` to always refer to the class instance, no matter what
+		// force `this` to always refer to the class instance, no matter what
 		autobind($controller);
 
 		class InternalController extends ($controller as new (...args: any[]) => angular.IController) {
@@ -246,7 +249,7 @@ export class NgApp {
 	}
 
 	protected $http(options: angular.IRequestShortcutConfig = {
-		timeout: this.$config.IS_PROD ? 10000 : undefined,
+		timeout: this.$config.IS_PROD ? REQUEST_TIMEOUT : undefined,
 		withCredentials: true,
 	}) {
 		return new NgDataService(

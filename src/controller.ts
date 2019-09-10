@@ -35,5 +35,6 @@ export class NgController extends NgService {
 export class NgComponentController extends NgController {
 	public ngModel: any;
 	public ngModelCtrl: angular.INgModelController;
+	// tslint:disable-next-line: no-magic-numbers
 	public uniqueId = crypto.getRandomValues(new Int8Array(2)).toLocaleString().replace(/[-]|[,]/g, '');
 }

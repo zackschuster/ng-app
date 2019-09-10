@@ -1,8 +1,10 @@
 import { InputComponentOptions } from '../options';
 import { NgComponentController } from '../../controller';
 
+const INTERACTION_BUFFER = 50;
+
 class DateInputController extends NgComponentController {
-	private hasFocus: boolean = false;
+	private hasFocus = false;
 	private lastClick: number;
 	private minDate: Date | number | string | null;
 	private maxDate: Date | number | string | null;
@@ -67,7 +69,7 @@ class DateInputController extends NgComponentController {
 	}
 
 	public toggleDatepicker($event: any) {
-		if ($event.timeStamp - this.lastClick < 50) {
+		if (($event.timeStamp - this.lastClick) < INTERACTION_BUFFER) {
 			return;
 		}
 		this.lastClick = $event.timeStamp;

@@ -29,9 +29,7 @@ export class NgLogger extends NgService {
 	 * Prompt the user to confirm intent for a previous action
 	 */
 	public confirm(action: (_?: any) => void, msg = 'Please confirm your action') {
-		const text = '<p class="h5 mb-0 ml-0">\
-		<i class="fa fa-exclamation-triangle text-warning mr-1"></i>' + msg + '</p>';
-
+		const text = `<p class="h5 mb-0 ml-0"><i class="fa fa-exclamation-triangle text-warning mr-1"></i>${msg}</p>`;
 		const noty = this.notify(text, 'alert', false, [
 			Noty.button('No', 'btn btn-outline-danger mb-2 pull-right', () => noty.close()),
 			Noty.button('Yes', 'btn btn-outline-success mr-1 pull-right', () => {

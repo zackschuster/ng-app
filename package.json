@@ -16,6 +16,7 @@
 	"main": "index.ts",
 	"types": "index.ts",
 	"scripts": {
+		"lint": "tslint --project .",
 		"pretest": "node ./test/_teardown.js",
 		"test": "ava"
 	},

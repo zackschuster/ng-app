@@ -3,6 +3,8 @@ import { NgController } from './controller';
 import { NgLogger } from './logger';
 import { NgService } from './service';
 
+const TIMEOUT = 100;
+
 export class NgModalService extends NgService {
 	constructor(
 		private $uibModal: angular.ui.bootstrap.IModalService,
@@ -56,11 +58,11 @@ export class NgModalService extends NgService {
 
 						const close = (...args: any[]) => {
 							teardown();
-							setTimeout(() => $modal.close(...args), 100);
+							setTimeout(() => $modal.close(...args), TIMEOUT);
 						};
 						const dismiss = () => {
 							teardown();
-							setTimeout(() => $modal.dismiss(), 100);
+							setTimeout(() => $modal.dismiss(), TIMEOUT);
 						};
 
 						const listener = (e: KeyboardEvent) => {

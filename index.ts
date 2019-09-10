@@ -1,4 +1,5 @@
 import { StateProvider } from '@uirouter/angularjs';
+import { HttpStatusCode } from '@ledge/types/http';
 
 import * as inputs from './src/input';
 import { NgApp } from './src/app';
@@ -27,19 +28,19 @@ const app = new NgApp()
 			const { url = '' } = config;
 
 			switch (status) {
-				case 404:
+				case HttpStatusCode.NotFound:
 					app.log.error(`Route '${url}' not found`);
 					break;
-				case 400:
+				case HttpStatusCode.BadRequest:
 					if (typeof data === 'string') {
 						app.log.error(data);
 					} else if (data != null && data.toString() === '[object Object]') {
 						app.log.error(Object.keys(data).map(x => `${x}: ${data[x]}`).join('\n\n'));
 					}
 					break;
-				case 401:
-				case 403:
-				case 500:
+				case HttpStatusCode.Unauthorized:
+				case HttpStatusCode.Forbidden:
+				case HttpStatusCode.InternalServerError:
 					app.log.warning(statusText);
 					break;
 				case -1:

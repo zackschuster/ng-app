@@ -61,13 +61,14 @@ export class NgDataService extends NgService {
 	}
 
 	private async getRequestConfig(method: string, url: string) {
-		let options = Object.assign({
+		let options = {
 			method,
 			url,
 			params: {
 				timestamp: (this.isIE11 ? Date.now() : null),
 			},
-		}, this.options);
+			...this.options,
+		};
 
 		for (const onRequest of this.interceptors.map(x => x.request)) {
 			if (isFunction(onRequest)) {

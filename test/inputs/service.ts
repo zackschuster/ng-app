@@ -1,3 +1,4 @@
+// tslint:disable:no-async-without-await
 import test from 'ava';
 import { copy, isFunction } from 'angular';
 import { makeAttrs } from '../mocks';

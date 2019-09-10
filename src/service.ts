@@ -30,7 +30,9 @@ export class NgService {
 			: split
 					.map(x => x.trim())
 					.map(x =>
+						// tslint:disable-next-line: no-magic-numbers
 						x.length === 1 || (x.length === 2 && x.charAt(1) === '.')
+							// tslint:disable-next-line: prefer-template
 							? (x.toUpperCase() + '\uFFFF')
 							: (x.charAt(0).toUpperCase() + x.substring(1)),
 					)
