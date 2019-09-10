@@ -302,10 +302,10 @@
   resolved "https://registry.npmjs.org/@ledge/is-mobile/-/is-mobile-2.0.0.tgz#44b71c01ad7d014ea70a5a54f3b54f70d5d1b2e7"
   integrity sha512-dFF+RUOXnVAH3wwN9B1cf7qtDAVsZ1wt1z0mSsaHDZ7wQAL/+RVd7KZaGd1UzXq5S7DEl97Ao74tJfgxeh8dEA==
 
-"@ledge/types@6.0.0":
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/@ledge/types/-/types-6.0.0.tgz#f39657b8c841286acac80b018ea1e3c838612054"
-  integrity sha512-IG1qyzm85ZkdZPEnGpYZ5n50kqHNMevv+AqvsZhzTQr7MCXmC5hb8KDZbL122prrWml0oxrn8K221wiZBmodpQ==
+"@ledge/types@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.npmjs.org/@ledge/types/-/types-6.1.0.tgz#f142a36c57c37e241560439652d7615d47151727"
+  integrity sha512-v52fE43n/RmRH1DV7qUqWs71lE5sRO2+lret2rTvf0B85MUVoiifkKCD7U1SeGt/GUvSGNVGx6NUvXjTV73V0Q==
   dependencies:
     "@types/node" "*"
 
@@ -392,17 +392,17 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-12.7.4.tgz#64db61e0359eb5a8d99b55e05c729f130a678b04"
   integrity sha512-W0+n1Y+gK/8G2P/piTkBBN38Qc5Q1ZSO6B5H3QmPCUewaiXOo2GCAWZ4ElZCcNhjJuBSUSLGFUJnmlCn5+nxOQ==
 
-"@uirouter/angularjs@1.0.22":
-  version "1.0.22"
-  resolved "https://registry.npmjs.org/@uirouter/angularjs/-/angularjs-1.0.22.tgz#581ab38794a2d7c2790851087072c4066b2b6c46"
-  integrity sha512-d0SvdbXAav+Z6gCJd7gmn2eXEUtO3RvYcSLwtPaE8+7QiWHpSKNfGdD4D3noXhO2yUTz/AwaxsiRFMCwgVI0UQ==
+"@uirouter/angularjs@1.0.19":
+  version "1.0.19"
+  resolved "https://registry.npmjs.org/@uirouter/angularjs/-/angularjs-1.0.19.tgz#f9595f972c50b90c487f2c7ea6ddcc44d95f04bf"
+  integrity sha512-O+M3CB4en9OPMKqSrMC6hZsuMbtttYpGlALZoqAYqUmqdw1CJ5WBnuj7s/40svhZG338SfqxXN/Y2uKh5x+gPQ==
   dependencies:
-    "@uirouter/core" "5.0.23"
+    "@uirouter/core" "5.0.20"
 
-"@uirouter/core@5.0.23":
-  version "5.0.23"
-  resolved "https://registry.npmjs.org/@uirouter/core/-/core-5.0.23.tgz#363b4bea635a1b48900dc7e65793a65a3b58a79e"
-  integrity sha512-rwFOH++z/KY8y+h0IOpQ5uC8Nim6E0EBCQrIjhVCr+XKYXgpK+VdtuOLFdogvbJ3AAi5Z7ei00qdEr7Did5CAg==
+"@uirouter/core@5.0.20":
+  version "5.0.20"
+  resolved "https://registry.npmjs.org/@uirouter/core/-/core-5.0.20.tgz#9c27d8d14d50358040840fd00e9d38c36be1adc5"
+  integrity sha512-7MwtORbMF0UFCgMb+KcBAx+7EsYn/6sP5mEAjLNQq14AkHOJom5pPRE0N3nxduFbK3V2TXfsOX2UjtbkuXql+A==
 
 abab@^2.0.0:
   version "2.0.1"
