@@ -241,7 +241,7 @@ export class NgRenderer extends Renderer2 {
 	public listen<T extends keyof GlobalEventHandlersEventMap>(
 		target: HTMLElement,
 		eventName: T,
-		callback: (event: GlobalEventHandlersEventMap[T]) => boolean | void,
+		callback: (event: GlobalEventHandlersEventMap[T]) => boolean | undefined,
 	) {
 		target.addEventListener(eventName, callback);
 		return () => target.removeEventListener(eventName, callback);

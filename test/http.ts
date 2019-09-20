@@ -1,3 +1,4 @@
+// tslint:disable: no-async-without-await no-magic-numbers
 import http from 'http';
 import test from 'ava';
 

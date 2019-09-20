@@ -1,3 +1,4 @@
+// tslint:disable: no-async-without-await
 import test from 'ava';
 import { radioList } from '../../../src/inputs/radio-list';
 import { NgInputController } from '../../../src/inputs';

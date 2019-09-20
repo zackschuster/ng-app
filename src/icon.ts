@@ -1,8 +1,8 @@
 import { Indexed } from '@ledge/types';
-import data = require('@primer/octicons/build/data.json');
+import octicons from '@primer/octicons/build/data.json';
 
 const icons = { } as {
-	[K in keyof typeof data]: (typeof data)[K] &
+	[K in keyof typeof octicons]: (typeof octicons)[K] &
 	{
 		symbol: string;
 		options: {
@@ -17,9 +17,9 @@ const icons = { } as {
 	}
 };
 
-for (const key of Object.keys(data) as (keyof typeof data)[]) {
+for (const key of Object.keys(octicons) as (keyof typeof octicons)[]) {
 	const icon = {
-		...data[key],
+		...octicons[key],
 		symbol: '',
 		options: {
 			version: '1.1',

@@ -1,3 +1,4 @@
+// tslint:disable: no-async-without-await
 import test from 'ava';
 import { NgHttp, NgLogger, NgModal, inputs, misc } from '..';
 import { $prefix, app } from './-mocks';

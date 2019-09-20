@@ -1,3 +1,4 @@
+// tslint:disable: no-async-without-await no-magic-numbers
 import test from 'ava';
 import { app } from './-mocks';
 
@@ -116,7 +117,7 @@ test('renderer creates icon', async t => {
 });
 
 test('renderer throws on unsupported icon', async t => {
-	t.throws(() => app.renderer.createIcon('an-unsupported-icon-name'));
+	t.throws(() => app.renderer.createIcon('an-unsupported-icon-name' as any));
 });
 
 test('renderer creates label', async t => {

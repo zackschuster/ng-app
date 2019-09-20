@@ -13,11 +13,12 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 	public registerRoute(partial: Partial<T>) {
 		const { name, parent, url } = this.generateRouteMeta(partial);
 
-		const state = Object.assign({
+		const state = {
 			name,
 			parent,
 			url,
-		}, partial);
+			...partial,
+		};
 
 		if (this.isNgTransitionFn(state.onEnter)) {
 			state.onEnter = ['$transition$', state.onEnter];

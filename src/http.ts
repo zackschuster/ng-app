@@ -34,9 +34,9 @@ export class NgHttpOptions implements NgHttpInit {
 	public onFinally: () => void;
 
 	constructor(private config: NgAppConfig, init: NgHttpInit) {
-		for (const [key, value] of Object.entries(init)) {
-			if (typeof value === typeof this[key as keyof NgHttpOptions]) {
-				this[key as keyof NgHttpOptions] = value;
+		for (const [key, value] of Object.entries(init) as ([keyof NgHttpInit, any])[]) {
+			if (typeof value === typeof this[key]) {
+				Reflect.set(this, key, value);
 			}
 		}
 	}
@@ -151,11 +151,12 @@ export class NgHttp extends NgService {
 			const url = this.getFullUrl(uri, host, ssl);
 			const abortCtrl = new AbortController();
 
-			let request = new Request(url, Object.assign({
+			let request = new Request(url, {
 				method,
 				signal: abortCtrl.signal,
 				body: JSON.stringify(data),
-			}, this.options));
+				...this.options,
+			});
 
 			for (const onRequest of this.interceptors.request) {
 				request = await onRequest(request);

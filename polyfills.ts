@@ -1,4 +1,4 @@
-// tslint:disable:no-var-keyword prefer-const
+// tslint:disable:no-var-keyword prefer-const no-this-assignment
 import 'core-js/es6/symbol';
 import 'core-js/es6/map';
 import 'core-js/es6/set';
@@ -22,7 +22,6 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 /**
  * @package element-closest
  * @license CC0-1.0
- * @author Jonathan T Neal
  * @see https://github.com/jonathantneal/closest
  */
 

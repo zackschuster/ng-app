@@ -17,7 +17,7 @@ export class NgService {
 	 */
 	public UUIDv4() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-			// tslint:disable:no-bitwise
+			// tslint:disable:no-bitwise no-magic-numbers
 			const r = Math.random() * 16 | 0;
 			const v = c === 'x' ? r : (r & 0x3 | 0x8);
 			// tslint:enable:no-bitwise
@@ -44,8 +44,8 @@ export class NgService {
 				.map(x => x.trim())
 				.map(x =>
 					x.length === 1 || (x.length === 2 && x.charAt(1) === '.')
-						? (x.toUpperCase() + '\uFFFF')
-						: (x.charAt(0).toUpperCase() + x.substring(1)),
+						? `${x.toUpperCase()}\uFFFF`
+						: `${x.charAt(0).toUpperCase()}${x.substring(1)}`,
 				)
 				.join(' ')
 				.replace(

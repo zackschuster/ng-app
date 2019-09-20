@@ -1,3 +1,4 @@
+// tslint:disable: no-async-without-await
 import test from 'ava';
 import { app, makeAttrs } from '../-mocks';
 import { NgInputController } from '../../src/inputs';
@@ -42,15 +43,14 @@ test('app.inputs.$baseComponent', async t => {
 	t.true(typeof $baseComponent.renderLabel === 'function');
 	t.true(typeof $baseComponent.postRender === 'function');
 
-	Reflect.deleteProperty($baseComponent, 'renderLabel');
-	Reflect.deleteProperty($baseComponent, 'postRender');
-
 	t.deepEqual($baseComponent, {
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: { },
 		isRadioOrCheckbox: false,
 		controller: NgInputController,
+		renderLabel: $baseComponent.renderLabel,
+		postRender: $baseComponent.postRender,
 	});
 
 });

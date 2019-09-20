@@ -70,4 +70,4 @@ export const textInput: NgInputOptions = {
 	controller: TextInputController,
 };
 
-export const htmlInput = Object.assign({ }, textInput);
+export const htmlInput = { ...textInput };

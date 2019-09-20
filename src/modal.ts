@@ -6,6 +6,11 @@ import { NgAppConfig } from './options';
 import { NgRenderer } from './renderer';
 import { NgInjector, NgScope } from './ng';
 
+export const enum NgModalAnimationLength {
+	Show = 23,
+	Hide = 150,
+}
+
 export class NgModal extends NgService {
 	protected readonly backdrop: HTMLDivElement;
 	protected readonly container: HTMLDivElement;
@@ -168,7 +173,7 @@ export class NgModal extends NgService {
 		setTimeout(() => {
 			this.backdrop.classList.add('show');
 			this.container.classList.add('show');
-		}, 23);
+		}, NgModalAnimationLength.Show);
 	}
 
 	protected hide(
@@ -180,7 +185,7 @@ export class NgModal extends NgService {
 		setTimeout(() => {
 			this.container.style.setProperty('display', 'none');
 			this.backdrop.style.setProperty('display', 'none');
-		}, 150);
+		}, NgModalAnimationLength.Hide);
 
 		scope.$destroy();
 		window.removeEventListener('keydown', escapeKeyListener);

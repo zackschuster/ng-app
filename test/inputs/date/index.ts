@@ -1,3 +1,4 @@
+// tslint:disable: no-async-without-await
 import test from 'ava';
 import { dateInput } from '../../../src/inputs/date-input';
 import { NgInputController } from '../../../src/inputs';

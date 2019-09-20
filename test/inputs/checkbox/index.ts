@@ -1,3 +1,4 @@
+// tslint:disable: no-async-without-await
 import test from 'ava';
 import { checkBox } from '../../../src/inputs/check-box';
 import { NgInputController } from '../../../src/inputs';

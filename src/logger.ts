@@ -2,6 +2,8 @@ import anime from 'animejs';
 import { NgService } from './service';
 import { NgRenderer } from './renderer';
 
+const TRANSLATE_X_BOUND = 500;
+
 type LogType = '$log' | '$warn' | '$error' | '$info' | '$success';
 enum LogTypeToastBackgrounds {
 	$log = 'white',
@@ -98,7 +100,7 @@ export class NgToast {
 
 		anime({
 			targets: this.toast,
-			translateX: [500, 0],
+			translateX: [TRANSLATE_X_BOUND, 0],
 			duration: 1000,
 			easing: 'easeOutQuint(0.5, 1)',
 			begin: () => {
@@ -110,7 +112,7 @@ export class NgToast {
 		return new Promise(resolve => {
 			const hideAnimation = anime({
 				targets: this.toast,
-				translateX: [0, 500],
+				translateX: [0, TRANSLATE_X_BOUND],
 				duration: 1000,
 				autoplay: false,
 				easing: 'easeInQuint(0.5, 1)',

@@ -180,7 +180,7 @@ export class NgApp {
 	/**
 	 * Force the application to run an update cycle
 	 */
-	public async forceUpdate() {
+	public forceUpdate() {
 		this.ng1injector.get('$rootScope').$applyAsync();
 	}
 
