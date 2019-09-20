@@ -1,6 +1,6 @@
 import { Indexed, WritableKeysOf } from '@ledge/types';
 import { Renderer2, RendererStyleFlags2 } from '@angular/core';
-import { octicons } from './icon';
+import { icons } from './icon';
 
 export class NgRenderer extends Renderer2 {
 	public baseInputAttrs: [string, string][] = [
@@ -32,7 +32,7 @@ export class NgRenderer extends Renderer2 {
 			: HTMLUnknownElement;
 	}
 
-	public createInput(type: string = 'text', attrs: [string, string][] = []) {
+	public createInput(type = 'text', attrs: [string, string][] = []) {
 		const $isRange = type === 'range';
 		const $isRadio = type === 'radio';
 		const $isCheckbox = type === 'checkbox';
@@ -68,14 +68,14 @@ export class NgRenderer extends Renderer2 {
 		]);
 	}
 
-	public createIcon(iconName: string, options: Indexed = { }) {
-		if (octicons.hasOwnProperty(iconName) === false) {
+	public createIcon(iconName: keyof typeof icons, options: Indexed = { }) {
+		if (icons.hasOwnProperty(iconName) === false) {
 			throw new Error(`
-				Icon not supported: ${iconName}.\nSupported icons: ${Object.keys(octicons).sort().join(', ')}
+				Icon not supported: ${iconName}.\nSupported icons: ${Object.keys(icons).sort().join(', ')}
 			`.trim());
 		}
 
-		const svg = octicons[iconName].toSVG(Object.assign(options, { 'aria-label': iconName }));
+		const svg = icons[iconName].toSvg({ ...options,  'aria-label': iconName });
 		const container = this.createHtmlElement('div', ['d-inline-flex', 'px-1']);
 		container.setAttribute('aria-hidden', 'true');
 		container.setAttribute('title', iconName);
@@ -123,7 +123,7 @@ export class NgRenderer extends Renderer2 {
 			: this.createHtmlElement('ng-transclude') as HTMLDivElement;
 	}
 
-	public createIconInput($input: HTMLElement, icon?: string, inputGroupAttrs: [string, string][] = []) {
+	public createIconInput($input: HTMLElement, icon?: keyof typeof icons, inputGroupAttrs: [string, string][] = []) {
 		if (icon == null) {
 			return $input;
 		}
@@ -147,7 +147,7 @@ export class NgRenderer extends Renderer2 {
 	 */
 
 	// tslint:disable-next-line: member-ordering
-	public data: {  [key: string]: any} = Object.create(null);
+	public data: { [key: string]: any } = Object.create(null);
 
 	// tslint:disable-next-line: member-ordering
 	public destroyNode: null;
