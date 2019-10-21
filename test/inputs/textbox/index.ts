@@ -40,6 +40,10 @@ test('textbox controllerAs', async t => {
 	t.is(definition.controllerAs, undefined);
 });
 
+test('textbox element', async t => {
+	t.is((controller as any).$element, template);
+});
+
 test('textbox template', async t => {
 	const input = util.testInput(template, t, 'TEXTAREA');
 	t.true(input.classList.contains('form-control'));

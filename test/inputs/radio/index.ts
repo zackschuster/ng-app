@@ -44,6 +44,10 @@ test('radio controllerAs', async t => {
 	t.is(definition.controllerAs, undefined);
 });
 
+test('radio element', async t => {
+	t.is((controller as any).$element, template);
+});
+
 test('radio template', async t => {
 	const tpl = util.makeTpl(definition.template, t);
 	t.true(tpl.classList.contains('form-group'));

@@ -41,6 +41,10 @@ test('checkbox controllerAs', async t => {
 	t.is(definition.controllerAs, undefined);
 });
 
+test('checkbox element', async t => {
+	t.is((controller as any).$element, template);
+});
+
 test('checkbox template', async t => {
 	const tpl = util.makeTpl(definition.template, t);
 

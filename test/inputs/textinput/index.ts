@@ -68,6 +68,10 @@ test('textinput controllerAs', async t => {
 	t.is(definition.controllerAs, undefined);
 });
 
+test('textinput element', async t => {
+	t.is((controller as any).$element, template);
+});
+
 test('textinput template', async t => {
 	const input = util.testInput(template, t);
 	t.true(input.classList.contains('form-control'));

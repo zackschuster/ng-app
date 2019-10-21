@@ -41,6 +41,10 @@ test('select controllerAs', async t => {
 	t.is(definition.controllerAs, undefined);
 });
 
+test('select element', async t => {
+	t.is((controller as any).$element, template);
+});
+
 test('select template', async t => {
 	const tpl = util.makeTpl(definition.template, t);
 	const input = util.testInput(tpl, t, 'SELECT');
