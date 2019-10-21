@@ -6,5 +6,6 @@ t.*
 *.html
 *.js
 *.log
+test/**/snapshots
 !test/_register.js
 !test/_teardown.js

@@ -1,12 +1,7 @@
-import { existsSync, writeFileSync } from 'fs';
-import { join } from 'path';
 import { ExecutionContext } from 'ava';
 
-// @ts-ignore
-import pretty = require('pretty');
-
 import { NgComponentController, makeNgCtrl } from '../..';
-import { $controller, $ctrl, $invokeTemplate, $scope, $toJqlite } from '../mocks';
+import { $controller, $ctrl, $invokeTemplate, $scope } from '../mocks';
 import { InputService } from '../../src/input/service';
 import { element } from 'angular';
 
@@ -44,17 +39,7 @@ export function makeTpl(
 
 	const el = document.createElement('div');
 	el.innerHTML = $invokeTemplate(template, el, attrs);
-
-	let path = join(__dirname, (t.title.includes('hook for') ? t.title.split(' hook for ')[1] : t.title).split(' ')[0], 'snapshot.html');
-	let exists = existsSync(path);
-	let i = 1;
-	while (exists) {
-		path = path.replace(/snapshot([-]\d)?/, `snapshot-${i}`);
-		exists = existsSync(path);
-		i++;
-	}
-
-	writeFileSync(path, pretty(el.innerHTML));
+	t.snapshot(el.innerHTML);
 
 	return el.firstElementChild as Element;
 }

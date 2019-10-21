@@ -17,7 +17,6 @@
 	"types": "index.ts",
 	"scripts": {
 		"lint": "tslint --project .",
-		"pretest": "node ./test/_teardown.js",
 		"test": "ava"
 	},
 	"dependencies": {
@@ -44,7 +43,6 @@
 		"ava": "2.4.0",
 		"browser-env": "3.2.6",
 		"esm": "3.2.25",
-		"pretty": "2.0.0",
 		"ts-node": "8.4.1",
 		"tslint": "5.20.0",
 		"typescript": "3.6.4"
