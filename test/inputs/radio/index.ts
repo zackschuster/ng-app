@@ -5,11 +5,19 @@ import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
-const definedRadioList = InputService.defineInputComponent(radioList, document);
+const definition = InputService.defineInputComponent(radioList, document);
+
+let template: Element;
+let controller: NgComponentController;
+test.beforeEach(async t => {
+	template = util.makeTpl(definition.template, t);
+	controller = util.mockCtrl(definition.controller, { }, template);
+});
+
 const radioNgIdRe = /\w([_]{{\$ctrl.uniqueId}}[_]{{\$index}})/;
 
 test('radio bindings', async t => {
-	t.deepEqual(definedRadioList.bindings, {
+	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngChecked: '<',
 		ngModelOptions: '<',
@@ -21,23 +29,23 @@ test('radio bindings', async t => {
 });
 
 test('radio transclude', async t => {
-	t.deepEqual(definedRadioList.transclude, { contain: '?contain' });
+	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
 test('radio require', async t => {
-	t.deepEqual(definedRadioList.require, { ngModelCtrl: 'ngModel' });
+	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
 test('radio controller', async t => {
-	t.true(util.mockCtrl(definedRadioList.controller) instanceof NgComponentController);
+	t.true(controller instanceof NgComponentController);
 });
 
 test('radio controllerAs', async t => {
-	t.is(definedRadioList.controllerAs, undefined);
+	t.is(definition.controllerAs, undefined);
 });
 
 test('radio template', async t => {
-	const tpl = util.makeTpl(definedRadioList.template, t);
+	const tpl = util.makeTpl(definition.template, t);
 	t.true(tpl.classList.contains('form-group'));
 
 	const formCheck = tpl.firstElementChild as Element;
@@ -63,7 +71,7 @@ test('radio template', async t => {
 });
 
 test('radio template (inlined)', async t => {
-	const tpl = util.makeTpl(definedRadioList.template, t, { inline: true });
+	const tpl = util.makeTpl(definition.template, t, { inline: true });
 	t.true(tpl.classList.contains('form-group'));
 
 	const formCheck = tpl.firstElementChild as Element;

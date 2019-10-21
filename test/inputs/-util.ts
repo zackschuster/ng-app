@@ -6,19 +6,21 @@ import { ExecutionContext } from 'ava';
 import pretty = require('pretty');
 
 import { NgComponentController, makeNgCtrl } from '../..';
-import { $controller, $ctrl, $element, $invokeTemplate, $scope } from '../mocks';
+import { $controller, $ctrl, $invokeTemplate, $scope, $toJqlite } from '../mocks';
 import { InputService } from '../../src/input/service';
+import { element } from 'angular';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
 export function mockCtrl<T = NgComponentController>(
 	ctrl: any,
 	$attrs: Partial<angular.IAttributes> = { },
+	$element: Element,
 ) {
 	return $controller<T>(
 		makeNgCtrl(ctrl) as any, {
 			$scope,
-			$element,
+			$element: element($element),
 			$attrs,
 			$timeout: { },
 			$injector: { },
@@ -31,9 +33,9 @@ export function mockCtrl<T = NgComponentController>(
 export function makeTpl(
 	template: angular.IComponentOptions['template'],
 	t: ExecutionContext,
-	$attrs: Partial<angular.IAttributes> = { },
+	attrs: Partial<angular.IAttributes> = { },
 ) {
-	Object.assign($attrs, {
+	Object.assign(attrs, {
 		ngModel: 'ngModel',
 		required: true, ngRequired: true,
 		disabled: true, ngDisabled: true,
@@ -41,9 +43,9 @@ export function makeTpl(
 	});
 
 	const el = document.createElement('div');
-	el.innerHTML = $invokeTemplate(template, $attrs);
+	el.innerHTML = $invokeTemplate(template, el, attrs);
 
-	let path = join(__dirname, t.title.split(' ')[0], 'snapshot.html');
+	let path = join(__dirname, (t.title.includes('hook for') ? t.title.split(' hook for ')[1] : t.title).split(' ')[0], 'snapshot.html');
 	let exists = existsSync(path);
 	let i = 1;
 	while (exists) {

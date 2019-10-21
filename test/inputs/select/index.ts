@@ -5,10 +5,17 @@ import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
-const definedSelectList = InputService.defineInputComponent(selectList, document);
+const definition = InputService.defineInputComponent(selectList, document);
+
+let template: Element;
+let controller: NgComponentController;
+test.beforeEach(async t => {
+	template = util.makeTpl(definition.template, t);
+	controller = util.mockCtrl(definition.controller, { }, template);
+});
 
 test('select bindings', async t => {
-	t.deepEqual(definedSelectList.bindings, {
+	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngModelOptions: '<',
 		ngDisabled: '<',
@@ -19,23 +26,23 @@ test('select bindings', async t => {
 });
 
 test('select transclude', async t => {
-	t.deepEqual(definedSelectList.transclude, { contain: '?contain' });
+	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
 test('select require', async t => {
-	t.deepEqual(definedSelectList.require, { ngModelCtrl: 'ngModel' });
+	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
 test('select controller', async t => {
-	t.true(util.mockCtrl(definedSelectList.controller) instanceof NgComponentController);
+	t.true(controller instanceof NgComponentController);
 });
 
 test('select controllerAs', async t => {
-	t.is(definedSelectList.controllerAs, undefined);
+	t.is(definition.controllerAs, undefined);
 });
 
 test('select template', async t => {
-	const tpl = util.makeTpl(definedSelectList.template, t);
+	const tpl = util.makeTpl(definition.template, t);
 	const input = util.testInput(tpl, t, 'SELECT');
 
 	const placeholder = input.firstElementChild as HTMLOptionElement;
@@ -48,7 +55,7 @@ test('select template', async t => {
 });
 
 test('select template (multiple)', async t => {
-	const tpl = util.makeTpl(definedSelectList.template, t, { multiple: true });
+	const tpl = util.makeTpl(definition.template, t, { multiple: true });
 	const input = util.testInput(tpl, t, 'SELECT');
 
 	t.is(input.getAttribute('multiple'), 'true');

@@ -5,10 +5,17 @@ import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
-const definedCheckBox = InputService.defineInputComponent(checkBox, document);
+const definition = InputService.defineInputComponent(checkBox, document);
+
+let template: Element;
+let controller: NgComponentController;
+test.beforeEach(async t => {
+	template = util.makeTpl(definition.template, t);
+	controller = util.mockCtrl(definition.controller, { }, template);
+});
 
 test('checkbox bindings', async t => {
-	t.deepEqual(definedCheckBox.bindings, {
+	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngChecked: '<',
 		ngModelOptions: '<',
@@ -19,23 +26,23 @@ test('checkbox bindings', async t => {
 });
 
 test('checkbox transclude', async t => {
-	t.deepEqual(definedCheckBox.transclude, { contain: '?contain' });
+	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
 test('checkbox require', async t => {
-	t.deepEqual(definedCheckBox.require, { ngModelCtrl: 'ngModel' });
+	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
 test('checkbox controller', async t => {
-	t.true(util.mockCtrl(definedCheckBox.controller) instanceof NgComponentController);
+	t.true(controller instanceof NgComponentController);
 });
 
 test('checkbox controllerAs', async t => {
-	t.is(definedCheckBox.controllerAs, undefined);
+	t.is(definition.controllerAs, undefined);
 });
 
 test('checkbox template', async t => {
-	const tpl = util.makeTpl(definedCheckBox.template, t);
+	const tpl = util.makeTpl(definition.template, t);
 
 	t.true(tpl.classList.contains('form-check'));
 
@@ -51,7 +58,7 @@ test('checkbox template', async t => {
 });
 
 test('checkbox template (inlined)', async t => {
-	const tpl = util.makeTpl(definedCheckBox.template, t, { inline: true });
+	const tpl = util.makeTpl(definition.template, t, { inline: true });
 
 	t.true(tpl.classList.contains('form-check-inline'));
 

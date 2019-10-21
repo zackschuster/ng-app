@@ -5,10 +5,17 @@ import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
-const definedDateInput = InputService.defineInputComponent(dateInput, document);
+const definition = InputService.defineInputComponent(dateInput, document);
+
+let template: Element;
+let controller: NgComponentController;
+test.beforeEach(async t => {
+	template = util.makeTpl(definition.template, t);
+	controller = util.mockCtrl(definition.controller, { }, template);
+});
 
 test('date bindings', async t => {
-	t.deepEqual(definedDateInput.bindings, {
+	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngModelOptions: '<',
 		ngDisabled: '<',
@@ -20,23 +27,23 @@ test('date bindings', async t => {
 });
 
 test('date transclude', async t => {
-	t.deepEqual(definedDateInput.transclude, { contain: '?contain' });
+	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
 test('date require', async t => {
-	t.deepEqual(definedDateInput.require, { ngModelCtrl: 'ngModel' });
+	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
 test('date controller', async t => {
-	t.true(util.mockCtrl(definedDateInput.controller) instanceof NgComponentController);
+	t.true(controller instanceof NgComponentController);
 });
 
 test('date controllerAs', async t => {
-	t.is(definedDateInput.controllerAs, undefined);
+	t.is(definition.controllerAs, undefined);
 });
 
 test('date template', async t => {
-	const tpl = util.makeTpl(definedDateInput.template, t);
+	const tpl = util.makeTpl(definition.template, t);
 	t.true(tpl.classList.contains('form-group'));
 
 	const inputGroup = tpl.querySelector('.input-group') as HTMLDivElement;

@@ -5,10 +5,17 @@ import { InputService } from '../../../src/input/service';
 import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
-const definedTextInput = InputService.defineInputComponent(textInput, document);
+const definition = InputService.defineInputComponent(textInput, document);
+
+let template: Element;
+let controller: NgComponentController;
+test.beforeEach(async t => {
+	template = util.makeTpl(definition.template, t);
+	controller = util.mockCtrl(definition.controller, { }, template);
+});
 
 test('textinput bindings', async t => {
-	t.deepEqual(definedTextInput.bindings, {
+	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngModelOptions: '<',
 		ngDisabled: '<',
@@ -21,18 +28,17 @@ test('textinput bindings', async t => {
 });
 
 test('textinput transclude', async t => {
-	t.deepEqual(definedTextInput.transclude, { contain: '?contain' });
+	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
 test('textinput require', async t => {
-	t.deepEqual(definedTextInput.require, { ngModelCtrl: 'ngModel' });
+	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
 test('textinput controller', async t => {
-	const textCtrl = util.mockCtrl(definedTextInput.controller);
-	t.true(textCtrl instanceof NgComponentController);
+	t.true(controller instanceof NgComponentController);
 
-	const numberCtrl = util.mockCtrl(definedTextInput.controller, { min: 1, max: 3, type: 'number' });
+	const numberCtrl = util.mockCtrl(definition.controller, { min: 1, max: 3, type: 'number' }, template);
 	t.true(numberCtrl instanceof NgComponentController);
 	t.is((numberCtrl as any).$attrs.type, 'number');
 
@@ -59,31 +65,28 @@ test('textinput controller', async t => {
 });
 
 test('textinput controllerAs', async t => {
-	t.is(definedTextInput.controllerAs, undefined);
+	t.is(definition.controllerAs, undefined);
 });
 
 test('textinput template', async t => {
-	const tpl = util.makeTpl(definedTextInput.template, t);
-
-	const input = util.testInput(tpl, t);
+	const input = util.testInput(template, t);
 	t.true(input.classList.contains('form-control'));
 	t.is(input.type, 'text');
 	t.is(input.getAttribute('placeholder'), '');
 	t.is(input.getAttribute('maxlength'), '3000');
 
-	const label = util.testLabel(tpl, t);
+	const label = util.testLabel(template, t);
 	t.true(label.classList.contains('form-control-label'));
 
-	const ngMessages = util.testNgMessages(tpl, t);
+	const ngMessages = util.testNgMessages(template, t);
 	const maxlength = ngMessages.querySelector('[ng-message="maxlength"]') as HTMLDivElement;
 	t.true(maxlength.classList.contains('text-danger'));
 
-	util.testNgTranscludeContain(tpl, t);
+	util.testNgTranscludeContain(template, t);
 });
 
 test('textinput template (number)', async t => {
-	const tpl = util.makeTpl(definedTextInput.template, t, { type: 'number' });
-
+	const tpl = util.makeTpl(definition.template, t, { type: 'number' });
 	const input = util.testInput(tpl, t);
 	t.true(input.classList.contains('form-control'));
 	t.is(input.type, 'number');

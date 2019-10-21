@@ -8,10 +8,9 @@ export * from './-modal';
 export * from './-renderer';
 
 export const $scope = $injector.get('$rootScope').$new();
-export const $element = $injector.get('$compile')
-	(document.createElement('div'))
-	($scope);
+export const $compile = $injector.get('$compile');
+export const $toJqlite = (el: Element, scope = $scope) => $compile(el)(scope);
 
-export function $invokeTemplate(template: any, $attrs: Partial<angular.IAttributes>) {
-	return $injector.invoke(template, { }, { $element, $attrs });
+export function $invokeTemplate(template: any, $element: Element, $attrs: Partial<angular.IAttributes>) {
+	return $injector.invoke(template, { }, { $element: $toJqlite($element), $attrs });
 }
