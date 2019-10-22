@@ -1,13 +1,7 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { NgDataService, NgLogger, NgModalService, app } from '..';
-import { $prefix } from './mocks';
-
-app.configure({
-	PREFIX: {
-		API: $prefix,
-	},
-});
+import { NgDataService, NgLogger, NgModalService } from '..';
+import { app } from './mocks';
 
 test('app.module.name is app.$id', async t => {
 	t.is(app.$id, app.module.name);

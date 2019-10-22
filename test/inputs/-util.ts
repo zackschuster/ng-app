@@ -1,9 +1,9 @@
 import { ExecutionContext } from 'ava';
+import { element } from 'angular';
 
 import { NgComponentController, makeNgCtrl } from '../..';
-import { $controller, $ctrl, $invokeTemplate, $scope } from '../mocks';
+import { $controller, $ctrl, $injector } from '../mocks';
 import { InputService } from '../../src/input/service';
-import { element } from 'angular';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
@@ -14,7 +14,7 @@ export function mockCtrl<T = NgComponentController>(
 ) {
 	return $controller<T>(
 		makeNgCtrl(ctrl) as any, {
-			$scope,
+			$scope: $injector.get('$rootScope').$new(),
 			$element: element($element),
 			$attrs,
 			$timeout: { },
@@ -38,7 +38,11 @@ export function makeTpl(
 	});
 
 	const el = document.createElement('div');
-	el.innerHTML = $invokeTemplate(template, el, attrs);
+	el.innerHTML = $injector.invoke(
+		template as angular.Injectable<(...args: any[]) => string>,
+		{ },
+		{ $element: element(el), $attrs: attrs },
+	);
 	t.snapshot(el.innerHTML);
 
 	return el.firstElementChild as Element;

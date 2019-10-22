@@ -1,9 +1,13 @@
 // import { module } from 'angular';
-import { NgDataService } from '../../src/http';
-import { $injector } from './--injector';
 import { HttpStatusCode } from '@ledge/types/http';
+import { injector } from 'angular';
 
-export const $prefix = 'http://localhost:2323';
+import { NgDataService } from '../../src/http';
+import { app } from './--app';
+
+const $injector = injector(['ngMock']);
+
+export const $prefix = app.config.PREFIX.API;
 export const $http = new NgDataService(
 	$injector.get('$http'),
 	[],
@@ -12,6 +16,7 @@ export const $http = new NgDataService(
 );
 
 // doesn't work, never gotten $sceDelegateProvider code to make a difference
+// pROBABLY BECAUSE INJECTOR DOESN'T COME FROM HERE, DUDE
 // module('ngMock')
 // 	.config(['$sceDelegateProvider', ($sceDelegateProvider: angular.ISCEDelegateProvider) => {
 // 		$sceDelegateProvider.resourceUrlWhitelist(['self', `${$prefix}/**`]);
@@ -47,8 +52,8 @@ export async function pingTestUrl(
 		case 'DELETE':
 			return $http.Delete<string>(endpoint);
 		case 'JSONP':
+			// return $http.Jsonp<string>(endpoint);
 			throw new Error('Currently unable to test JSONP');
-		// 	return $http.Jsonp<string>(endpoint);
 		default:
 			throw new Error('Bad method');
 	}
