@@ -6,12 +6,10 @@ import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(checkBox, document);
+const { controller, template } = util.mockCtrl(definition);
 
-let template: Element;
-let controller: NgComponentController;
-test.beforeEach(async t => {
-	template = util.makeTpl(definition.template, t);
-	controller = util.mockCtrl(definition.controller, { }, template);
+test.after(async t => {
+	t.snapshot(template.outerHTML);
 });
 
 test('checkbox bindings', async t => {
@@ -46,19 +44,17 @@ test('checkbox element', async t => {
 });
 
 test('checkbox template', async t => {
-	const tpl = util.makeTpl(definition.template, t);
+	t.true(template.classList.contains('form-check'));
 
-	t.true(tpl.classList.contains('form-check'));
-
-	const input = util.testInput(tpl, t);
+	const input = util.testInput(template, t);
 	t.is(input.type, 'checkbox');
 	t.true(input.classList.contains('form-check-input'));
 
-	const label = util.testLabel(tpl, t);
+	const label = util.testLabel(template, t);
 	t.true(label.classList.contains('form-check-label'));
 
-	util.testNgMessages(tpl, t);
-	util.testNgTranscludeContain(tpl, t);
+	util.testNgMessages(template, t);
+	util.testNgTranscludeContain(template, t);
 });
 
 test('checkbox template (inlined)', async t => {

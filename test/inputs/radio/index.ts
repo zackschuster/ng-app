@@ -6,12 +6,10 @@ import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(radioList, document);
+const { controller, template } = util.mockCtrl(definition);
 
-let template: Element;
-let controller: NgComponentController;
-test.beforeEach(async t => {
-	template = util.makeTpl(definition.template, t);
-	controller = util.mockCtrl(definition.controller, { }, template);
+test.after(async t => {
+	t.snapshot(template.outerHTML);
 });
 
 const radioNgIdRe = /\w([_]{{\$ctrl.uniqueId}}[_]{{\$index}})/;
@@ -49,29 +47,28 @@ test('radio element', async t => {
 });
 
 test('radio template', async t => {
-	const tpl = util.makeTpl(definition.template, t);
-	t.true(tpl.classList.contains('form-group'));
+	t.true(template.classList.contains('form-group'));
 
-	const formCheck = tpl.firstElementChild as Element;
+	const formCheck = template.firstElementChild as Element;
 	t.true(formCheck.classList.contains('form-check'));
 	t.is(formCheck.getAttribute('ng-repeat'), 'item in $ctrl.list');
 
-	const input = util.testInput(tpl, t);
+	const input = util.testInput(template, t);
 	t.true(input.classList.contains('form-check-input'));
 	t.is(input.type, 'radio');
 	t.is(input.style.cursor, 'pointer');
 	t.is(input.getAttribute('ng-value'), 'item.Value');
 	t.regex(input.getAttribute('ng-attr-id') as string, radioNgIdRe);
 
-	const label = util.testLabel(tpl, t);
+	const label = util.testLabel(template, t);
 	t.true(label.classList.contains('form-check-label'));
 	t.is(label.getAttribute('ng-click'), '$ctrl.ngModel === item.Value');
 	t.is(label.style.cursor, 'pointer');
 	t.is(label.innerHTML, '{{item.Text}}');
 	t.regex(label.getAttribute('ng-attr-for') as string, radioNgIdRe);
 
-	util.testNgMessages(tpl, t);
-	util.testNgTranscludeContain(tpl, t);
+	util.testNgMessages(template, t);
+	util.testNgTranscludeContain(template, t);
 });
 
 test('radio template (inlined)', async t => {

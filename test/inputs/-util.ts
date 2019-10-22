@@ -7,15 +7,28 @@ import { InputService } from '../../src/input/service';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
-export function mockCtrl<T = NgComponentController>(
-	ctrl: any,
-	$attrs: Partial<angular.IAttributes> = { },
-	$element: Element,
-) {
-	return $controller<T>(
-		makeNgCtrl(ctrl) as any, {
-			$scope: $injector.get('$rootScope').$new(),
-			$element: element($element),
+export function mockCtrl<T = NgComponentController>(definition: angular.IComponentOptions, $attrs: Partial<angular.IAttributes> = { }) {
+	const $scope = $injector.get('$rootScope').$new();
+
+	Object.assign($attrs, {
+		ngModel: '$ctrl.ngModel',
+		required: true, ngRequired: true,
+		disabled: true, ngDisabled: true,
+		readonly: true, ngReadonly: true,
+	});
+
+	const el = document.createElement('div');
+	const html = $injector.invoke(
+		definition.template as angular.Injectable<(...args: any[]) => string>,
+		{ },
+		{ $element: element(el), $attrs },
+	);
+
+	const $element = element(html);
+	const controller = $controller<T>(
+		makeNgCtrl(definition.controller as new () => any) as any, {
+			$scope,
+			$element,
 			$attrs,
 			$timeout: { },
 			$injector: { },
@@ -23,6 +36,8 @@ export function mockCtrl<T = NgComponentController>(
 			$http: { },
 		},
 	);
+
+	return { controller, template: $element[0] };
 }
 
 export function makeTpl(
@@ -31,21 +46,23 @@ export function makeTpl(
 	attrs: Partial<angular.IAttributes> = { },
 ) {
 	Object.assign(attrs, {
-		ngModel: 'ngModel',
+		ngModel: '$ctrl.ngModel',
 		required: true, ngRequired: true,
 		disabled: true, ngDisabled: true,
 		readonly: true, ngReadonly: true,
 	});
 
-	const el = document.createElement('div');
-	el.innerHTML = $injector.invoke(
+	const child = document.createElement('div');
+
+	const html = $injector.invoke(
 		template as angular.Injectable<(...args: any[]) => string>,
 		{ },
-		{ $element: element(el), $attrs: attrs },
+		{ $element: element(child), $attrs: attrs },
 	);
-	t.snapshot(el.innerHTML);
+	t.snapshot(html);
 
-	return el.firstElementChild as Element;
+	child.innerHTML = html;
+	return child.firstElementChild as Element;
 }
 
 export function testInput(

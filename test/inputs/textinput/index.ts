@@ -6,12 +6,10 @@ import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(textInput, document);
+const { controller, template } = util.mockCtrl(definition);
 
-let template: Element;
-let controller: NgComponentController;
-test.beforeEach(async t => {
-	template = util.makeTpl(definition.template, t);
-	controller = util.mockCtrl(definition.controller, { }, template);
+test.after(async t => {
+	t.snapshot(template.outerHTML);
 });
 
 test('textinput bindings', async t => {
@@ -38,7 +36,7 @@ test('textinput require', async t => {
 test('textinput controller', async t => {
 	t.true(controller instanceof NgComponentController);
 
-	const numberCtrl = util.mockCtrl(definition.controller, { min: 1, max: 3, type: 'number' }, template);
+	const { controller: numberCtrl } = util.mockCtrl(definition, { min: 1, max: 3, type: 'number' });
 	t.true(numberCtrl instanceof NgComponentController);
 	t.is((numberCtrl as any).$attrs.type, 'number');
 

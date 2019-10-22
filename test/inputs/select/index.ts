@@ -6,12 +6,10 @@ import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(selectList, document);
+const { controller, template } = util.mockCtrl(definition);
 
-let template: Element;
-let controller: NgComponentController;
-test.beforeEach(async t => {
-	template = util.makeTpl(definition.template, t);
-	controller = util.mockCtrl(definition.controller, { }, template);
+test.after(async t => {
+	t.snapshot(template.outerHTML);
 });
 
 test('select bindings', async t => {
@@ -46,16 +44,15 @@ test('select element', async t => {
 });
 
 test('select template', async t => {
-	const tpl = util.makeTpl(definition.template, t);
-	const input = util.testInput(tpl, t, 'SELECT');
+	const input = util.testInput(template, t, 'SELECT');
 
 	const placeholder = input.firstElementChild as HTMLOptionElement;
 	t.is(placeholder.getAttribute('placeholder'), 'true');
 	t.is(placeholder.getAttribute('value'), '');
 
-	util.testLabel(tpl, t);
-	util.testNgMessages(tpl, t);
-	util.testNgTranscludeContain(tpl, t);
+	util.testLabel(template, t);
+	util.testNgMessages(template, t);
+	util.testNgTranscludeContain(template, t);
 });
 
 test('select template (multiple)', async t => {

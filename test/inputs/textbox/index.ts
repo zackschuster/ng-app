@@ -6,12 +6,10 @@ import { NgComponentController } from '../../mocks';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(textBox, document);
+const { controller, template } = util.mockCtrl(definition);
 
-let template: Element;
-let controller: NgComponentController;
-test.beforeEach(async t => {
-	template = util.makeTpl(definition.template, t);
-	controller = util.mockCtrl(definition.controller, { }, template);
+test.after(async t => {
+	t.snapshot(template.outerHTML);
 });
 
 test('textbox bindings', async t => {
