@@ -1,4 +1,4 @@
-// tslint:disable:file-name-casing
+// tslint:disable:file-name-casing no-magic-numbers
 require('esm');
 require('ts-node').register({ transpileOnly: true, ignore: [] });
 require('browser-env')({ resources: 'usable' });
