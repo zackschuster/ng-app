@@ -196,7 +196,29 @@ export class NgApp {
 	}
 
 	public addHttpInterceptor(interceptor: angular.IHttpInterceptor) {
-		this.$httpInterceptors.push(interceptor);
+		if (this.$httpInterceptors.every(x => x != null)) {
+			this.$httpInterceptors.push(interceptor);
+		} else {
+			for (let i = 0; i < this.$httpInterceptors.length; i++) {
+				const current = this.$httpInterceptors[i];
+				if (current == null) {
+					this.$httpInterceptors[i] = interceptor;
+					break;
+				}
+			}
+		}
+		return this;
+	}
+
+	public removeHttpInterceptor(interceptor: angular.IHttpInterceptor) {
+		const i = this.$httpInterceptors.findIndex(x => x === interceptor);
+		if (i > -1) {
+			if (i === (this.$httpInterceptors.length - 1)) {
+				this.$httpInterceptors.pop();
+			} else {
+				this.$httpInterceptors.splice(i, 1);
+			}
+		}
 		return this;
 	}
 
