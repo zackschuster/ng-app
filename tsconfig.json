@@ -1,8 +1,7 @@
 {
-	"extends": "./node_modules/@ledge/configs/tsconfig.browser.json",
+	"extends": "@ledge/configs/tsconfig.browser.json",
 	"compilerOptions": {
 		"module": "commonjs",
-		"strictPropertyInitialization": false
 	},
 	"include": [
 		"index.ts",

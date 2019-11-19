@@ -58,10 +58,7 @@ class SelectController extends NgComponentController {
 
 		if (Array.isArray(list)) {
 			this.$timeout().finally(() => {
-				const opts: _Choices.Options = {
-					classNames: {
-						hiddenState: 'ng-hide',
-					},
+				const opts: Partial<_Choices.Options> = {
 					removeItemButton: true,
 					itemSelectText: '',
 					addItemText: '',
@@ -74,7 +71,7 @@ class SelectController extends NgComponentController {
 				this.choices = new Choices(el, opts);
 				this.choices.setChoices(list, this.value, this.text);
 
-				this.choices.passedElement.element.addEventListener('addItem', ({ detail: { value } }) => {
+				this.choices.passedElement.element.addEventListener<'addItem'>('addItem', ({ detail: { value } }) => {
 					if (this.ngModel != null && (this.isMultiple ? this.ngModel.includes(value) : this.ngModel === value)) {
 						return;
 					}
@@ -86,7 +83,7 @@ class SelectController extends NgComponentController {
 					this.$timeout();
 				});
 
-				this.choices.passedElement.element.addEventListener('removeItem', ({ detail: { value } }) => {
+				this.choices.passedElement.element.addEventListener<'removeItem'>('removeItem', ({ detail: { value } }) => {
 					if (this.isMultiple) {
 						if (this.ngModel.length === 0) return;
 
