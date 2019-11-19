@@ -17,6 +17,7 @@
 	"types": "index.ts",
 	"scripts": {
 		"lint": "tslint --project .",
+		"compile": "tsc --noEmit",
 		"test": "ava"
 	},
 	"dependencies": {
