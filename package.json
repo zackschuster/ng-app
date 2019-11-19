@@ -26,26 +26,26 @@
 		"@types/angular-animate": "1.5.10",
 		"@types/angular-ui-bootstrap": "1.0.0",
 		"@uirouter/angularjs": "1.0.19",
-		"angular": "1.7.8",
-		"angular-animate": "1.7.8",
+		"angular": "1.7.9",
+		"angular-animate": "1.7.9",
 		"angular-elastic": "2.5.1",
-		"angular-messages": "1.7.8",
+		"angular-messages": "1.7.9",
 		"angular-ui-bootstrap": "2.5.6",
-		"choices.js": "7.0.0",
+		"choices.js": "9.0.1",
 		"core-decorators": "0.20.0",
-		"element-closest": "3.0.1",
+		"element-closest": "3.0.2",
 		"noty": "3.1.4"
 	},
 	"devDependencies": {
-		"@ledge/configs": "15.1.0",
+		"@ledge/configs": "17.0.0",
 		"@types/angular-mocks": "1.7.0",
-		"angular-mocks": "1.7.8",
+		"angular-mocks": "1.7.9",
 		"ava": "2.4.0",
-		"browser-env": "3.2.6",
+		"browser-env": "3.3.0",
 		"esm": "3.2.25",
-		"ts-node": "8.4.1",
-		"tslint": "5.20.0",
-		"typescript": "3.6.4"
+		"ts-node": "8.5.2",
+		"tslint": "5.20.1",
+		"typescript": "3.7.2"
 	},
 	"ava": {
 		"files": [
