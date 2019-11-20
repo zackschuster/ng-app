@@ -22,7 +22,7 @@
 	},
 	"dependencies": {
 		"@ledge/is-ie-11": "2.0.0",
-		"@ledge/is-mobile": "2.0.0",
+		"@ledge/is-mobile": "3.0.0",
 		"@ledge/types": "6.1.0",
 		"@types/angular-animate": "1.5.10",
 		"@types/angular-ui-bootstrap": "1.0.0",

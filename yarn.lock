@@ -291,10 +291,10 @@
   resolved "https://registry.npmjs.org/@ledge/is-ie-11/-/is-ie-11-2.0.0.tgz#6e8250a37d752974f9559f3125c6faf0d50a09f5"
   integrity sha512-ZuVfXcZ4laLhUPGcy+Y7zcOSTaA9wOkVPemlGVc7gBmle0p6q8pnkyCZlVueKlg9RS1LILA1JTEOV3Tp6a6U3A==
 
-"@ledge/is-mobile@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@ledge/is-mobile/-/is-mobile-2.0.0.tgz#44b71c01ad7d014ea70a5a54f3b54f70d5d1b2e7"
-  integrity sha512-dFF+RUOXnVAH3wwN9B1cf7qtDAVsZ1wt1z0mSsaHDZ7wQAL/+RVd7KZaGd1UzXq5S7DEl97Ao74tJfgxeh8dEA==
+"@ledge/is-mobile@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/@ledge/is-mobile/-/is-mobile-3.0.0.tgz#f4b086dc827e407704e1ed99dbf3603c66ee2de2"
+  integrity sha512-Bf8xRz7Nmj2ybIWsVBiBfARcCbAPDuC3aE3VaEFEMCpinia9uA5PW0UILChb882v/V+Jc0S64kOt0fO29I00rQ==
 
 "@ledge/types@6.1.0":
   version "6.1.0"
