@@ -1,6 +1,9 @@
 import { NgComponentController } from '../../../controller';
 import { InputComponentOptions } from '../../options';
 
+const MAX_FRAME_LENGTH = 16;
+const DEFAULT_MAX_HEIGHT = 9e4;
+
 class TextBoxController extends NgComponentController {
 	public $element: HTMLTextAreaElement;
 	public $mirror = document.createElement('textarea');
@@ -49,9 +52,9 @@ class TextBoxController extends NgComponentController {
 		const heightValue = parseInt(computedStyle.getPropertyValue('height'), 10);
 		const minHeight = Math.max(minHeightValue, heightValue) - boxOuter.height;
 
-		// Opera returns max-height of -1 if not set
+		// opera returns max-height of -1 if not set
 		let maxHeight = parseInt(computedStyle.getPropertyValue('max-height'), 10);
-		maxHeight = maxHeight && maxHeight > 0 ? maxHeight : 9e4;
+		maxHeight = maxHeight && maxHeight > 0 ? maxHeight : DEFAULT_MAX_HEIGHT;
 
 		// append mirror to the DOM
 
@@ -63,13 +66,13 @@ class TextBoxController extends NgComponentController {
 
 		function adjust() {
 			requestAnimationFrame(time => {
-				if ((time - lastTime) < 16) {
+				if ((time - lastTime) < MAX_FRAME_LENGTH) {
 					return;
 				}
 				lastTime = time;
 				computedStyle = window.getComputedStyle(element);
 
-				const width = (parseInt(computedStyle.getPropertyValue('width'), 10) - boxOuter.width) + 'px';
+				const width = `${parseInt(computedStyle.getPropertyValue('width'), 10) - boxOuter.width}px`;
 				mirror.style.setProperty('width', width);
 				mirror.style.setProperty('overflow-y', computedStyle.getPropertyValue('overflow-y'));
 
@@ -89,7 +92,7 @@ class TextBoxController extends NgComponentController {
 
 				scrollHeight += boxOuter.height;
 				if (parseInt(computedStyle.getPropertyValue('height'), 10) !== scrollHeight) {
-					element.style.setProperty('height', scrollHeight + 'px');
+					element.style.setProperty('height', `${scrollHeight}px`);
 				}
 			});
 		}
