@@ -16,10 +16,10 @@ import 'core-js/fn/string/starts-with';
 /**
  * @package element-closest
  * @license CC0-1.0
- * @author Jonathan T Neal
  * @see https://github.com/jonathantneal/closest
+ *
+ * author: Jonathan T Neal
  */
-
 Element.prototype.matches = function matches(selector: string) {
 	// tslint:disable-next-line: no-this-assignment
 	var element = this;
