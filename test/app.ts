@@ -1,21 +1,10 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { NgDataService, NgLogger, NgModalService } from '..';
 import { app } from './mocks';
+import { NgDataService, NgLogger, NgModalService } from '../src/services';
 
 test('app.module.name is app.$id', async t => {
 	t.is(app.$id, app.module.name);
-});
-
-test(`app.bootstrap() throws without base tag`, async t => {
-	t.throws(app.bootstrap);
-});
-
-test(`app.bootstrap() doesn't throw with base tag`, async t => {
-	const base = document.createElement('base');
-	base.href = '/';
-	(document.head as HTMLHeadElement).appendChild(base);
-	t.notThrows(app.bootstrap);
 });
 
 test('app has default input components', async t => {
