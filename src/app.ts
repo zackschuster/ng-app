@@ -263,7 +263,7 @@ export class NgApp {
 	}
 
 	protected $modal() {
-		return new NgModalService({ open() { return { close() {}, dismiss() {} }; } } as any, this.$logger());
+		return new NgModalService({ open() { return { close() { return; }, dismiss() { return; } }; } } as any, this.$logger());
 	}
 
 	protected $timeout() {

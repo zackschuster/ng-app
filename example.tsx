@@ -1,11 +1,11 @@
 /// <reference lib="dom" />
 /// <reference lib="es2018" />
 
-function h(name: string, props: { [index: string]: any } = {}, ...childNodes: Node[]) {
+function h(name: string, props: { [index: string]: any } = { }, ...childNodes: Node[]) {
 	const element = document.createElement(name);
 
 	if (props === null) {
-		props = {};
+		props = { };
 	}
 
 	const properties = Object.entries(props)
@@ -34,6 +34,7 @@ const container: HTMLElement =
 
 const tbody = <tbody></tbody>;
 
+// tslint:disable-next-line: no-magic-numbers
 for (let i = 0; i < 10; i++) {
 	tbody.appendChild(
 		<tr>
@@ -47,7 +48,7 @@ container.appendChild(
 		<thead>
 			<th>Row</th>
 		</thead>
-		{tbody}
+		{ tbody}
 	</table>,
 );
 

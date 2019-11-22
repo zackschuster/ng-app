@@ -15,10 +15,10 @@ export class NgService {
 	 */
 	public static UUIDv4() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-			// tslint:disable:no-bitwise
+			// tslint:disable:no-bitwise no-magic-numbers
 			const r = Math.random() * 16 | 0;
 			const v = c === 'x' ? r : (r & 0x3 | 0x8);
-			// tslint:enable:no-bitwise
+			// tslint:enable:no-bitwise no-magic-numbers
 			return v.toString(16);
 		});
 	}
