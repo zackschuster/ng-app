@@ -63,13 +63,11 @@ export class NgApp {
 	public $injector = injector(['ng']);
 
 	protected $dependencies: string[] = [];
-
-	protected readonly $module = module(this.$id, this.$dependencies);
-	protected readonly $bootstrap = bootstrap;
-
 	protected $router: NgRouter;
 	protected $config: NgAppConfig;
 
+	protected readonly $module = module(this.$id, this.$dependencies);
+	protected readonly $bootstrap = bootstrap;
 	protected readonly $components: Map<string, NgComponentOptions> = new Map();
 	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
 
