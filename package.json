@@ -79,7 +79,7 @@
 			"ts"
 		],
 		"require": [
-			"./test/_register.js"
+			"./test/-register.js"
 		]
 	}
 }

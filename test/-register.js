@@ -10,5 +10,8 @@ Object.defineProperty(global, 'angular', {
 	configurable: false,
 	enumerable: true,
 	writable: false,
+	// tslint:disable-next-line:object-literal-sort-keys
 	value: /** @type {*} */(window).angular,
 });
+
+require('@uirouter/angularjs');

@@ -10,7 +10,6 @@ t.*
 
 node_modules
 
-!test/_register.js
-!test/_teardown.js
+!test/-register.js
 !docs/*.js
 !docs/*.html
