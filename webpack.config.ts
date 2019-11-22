@@ -20,8 +20,8 @@ class NgAppDocsPlugin {
 	}
 }
 
-// @ts-ignore
-module.exports = (env = 'development') => {
+// tslint:disable-next-line: no-inferrable-types
+module.exports = (env: string = 'development') => {
 	const config = require('@ledge/configs/webpack.merge')(env, {
 		output: {
 			path: docs,
