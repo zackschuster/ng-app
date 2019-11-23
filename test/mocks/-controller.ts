@@ -1,7 +1,7 @@
 import { NgController } from '../../src/controller';
 import { NgInputController } from '../../src/inputs';
 
-import { $prefix } from './-http';
+import { $prefix } from './--app';
 import { $injector } from './--injector';
 
 export { NgInputController };

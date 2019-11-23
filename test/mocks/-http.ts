@@ -3,15 +3,16 @@ import { HttpStatusCode } from '@ledge/types/http';
 import { injector } from 'angular';
 
 import { NgDataService } from '../../src/services/http';
+import { $config } from './--app';
 
 const $injector = injector(['ngMock']);
-export const $prefix = 'http://localhost:2323';
+
 export const $http = new NgDataService($injector.get('$http'), {
 	onFinally() {
 		$injector.get('$rootScope').$applyAsync();
 	},
-	getApiPrefix() {
-		return $prefix;
+	getConfig() {
+		return $config;
 	},
 });
 

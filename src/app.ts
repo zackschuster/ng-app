@@ -1,6 +1,6 @@
 import { Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
-import { bootstrap, copy, injector, isFunction, module } from 'angular';
+import { bootstrap, injector, isFunction, module } from 'angular';
 import { autobind } from 'core-decorators';
 
 import { NgDataService, NgDataServiceOptions, NgLogger, NgModal, NgRouter, NgStateService } from './services';
@@ -21,9 +21,7 @@ export class NgApp {
 	}
 
 	public get config() {
-		return this.$config != null
-			? copy(this.$config)
-			: Object.create(null) as NgAppConfig;
+		return this.$config;
 	}
 
 	public get components() {
@@ -43,6 +41,7 @@ export class NgApp {
 			this._http = this.$http({
 				timeout: this.$config.IS_PROD ? REQUEST_TIMEOUT : undefined,
 				withCredentials: true,
+				getConfig: () => this.$config,
 			});
 		}
 		return this._http;
@@ -134,19 +133,15 @@ export class NgApp {
 		return this.$bootstrap(document.body, [this.$id], { strictDi });
 	}
 
-	public configure(config: Partial<NgAppConfig>) {
-		const { NODE_ENV } = process.env;
-
-		this.$config = {
-			...config,
-			...{
-				ENV: NODE_ENV,
-				IS_PROD: NODE_ENV === 'production',
-				IS_DEV: NODE_ENV === 'development',
-				IS_STAGING: NODE_ENV === 'staging',
-			},
-		};
-
+	public configure(config: {
+		NAME?: string,
+		ENV?: string,
+		PREFIX?: {
+			API: string,
+			TEMPLATE?: string,
+		},
+	}) {
+		this.$config = new NgAppConfig(config);
 		return this;
 	}
 
@@ -224,7 +219,7 @@ export class NgApp {
 	}
 
 	public _makeNgComponentController($controller: new (...args: any[]) => NgController) {
-		const { config, http, log, getApiPrefix } = this;
+		const { config, http, log } = this;
 		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
 
 		// force `this` to always refer to the class instance, no matter what
@@ -253,7 +248,7 @@ export class NgApp {
 				super();
 
 				this.$element = $element[0];
-				this.apiPrefix = getApiPrefix();
+				this.apiPrefix = config.getApiPrefix();
 			}
 		}
 
@@ -276,8 +271,8 @@ export class NgApp {
 		if (isFunction(options.onFinally) === false) {
 			options.onFinally = this.forceUpdate;
 		}
-		if (isFunction(options.getApiPrefix) === false) {
-			options.getApiPrefix = this.getApiPrefix;
+		if (isFunction(options.getConfig) === false) {
+			options.getConfig = () => this.config;
 		}
 		if (Array.isArray(options.interceptors)) {
 			for (const interceptor of options.interceptors) {
@@ -292,16 +287,5 @@ export class NgApp {
 
 	protected $logger() {
 		return new NgLogger(this.$injector.get('$log'), this.$config.IS_PROD);
-	}
-
-	protected getApiPrefix() {
-		const { PREFIX = { } } = this.$config;
-		const { API = '' } = PREFIX;
-
-		if (typeof API !== 'string') {
-			this.log.devWarning('config.PREFIX.API not set to a string.');
-		}
-
-		return API;
 	}
 }
