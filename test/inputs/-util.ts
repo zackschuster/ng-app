@@ -1,16 +1,14 @@
 import { ExecutionContext } from 'ava';
 import { element } from 'angular';
 
-import { NgController, makeNgCtrl } from '../..';
-import { $controller, $injector, $svc } from '../mocks';
+import { $config, $http, $injector, $invokeTemplate, $log, $svc } from '../mocks';
+import { NgController, makeInjectableCtrl } from '../../src/controller';
 import { InputService } from '../../src/inputs';
 import { NgComponentOptions } from '../../src/options';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
 export function mockCtrl<T = NgController>(definition: NgComponentOptions, $attrs: Partial<angular.IAttributes> = { }) {
-	const $scope = $injector.get('$rootScope').$new();
-
 	Object.assign($attrs, {
 		ngModel: '$ctrl.ngModel',
 		required: true, ngRequired: true,
@@ -25,20 +23,19 @@ export function mockCtrl<T = NgController>(definition: NgComponentOptions, $attr
 		{ $element: element(el), $attrs },
 	);
 
-	const $element = element(html);
-	const controller = $controller<T>(
-		makeNgCtrl(definition.ctrl as new () => any) as any, {
-			$scope,
-			$element,
-			$attrs,
-			$timeout: { },
-			$injector: { },
-			$state: { },
-			$http: { },
-		},
-	);
+	const controller = makeInjectableCtrl(definition.ctrl as any, {
+		log: $log,
+		http: $http,
+		config: () => $config,
+		attrs: $attrs,
+	});
 
-	return { controller, template: $element[0] };
+	const $element = element(html);
+
+	return {
+		controller: new controller($element, $injector.get('$rootScope').$new(true), $injector) as unknown as T,
+		template: $element[0],
+	};
 }
 
 export function makeTpl(
@@ -55,10 +52,9 @@ export function makeTpl(
 
 	const child = document.createElement('div');
 
-	const html = $injector.invoke(
+	const html = $invokeTemplate(
 		template as angular.Injectable<(...args: any[]) => string>,
-		{ },
-		{ $element: element(child), $attrs: attrs },
+		attrs,
 	);
 	t.snapshot(html);
 

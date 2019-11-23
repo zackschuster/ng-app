@@ -3,10 +3,16 @@ import { StateService } from '@uirouter/core';
 import { bootstrap, injector, isFunction, module } from 'angular';
 import { autobind } from 'core-decorators';
 
-import { NgDataService, NgDataServiceOptions, NgLogger, NgModal, NgRouter, NgStateService } from './services';
+import { NgController, makeInjectableCtrl } from './controller';
 import { InputService, NgInputOptions } from './inputs';
 import { NgAppConfig, NgComponentOptions } from './options';
-import { NgController } from './controller';
+import {
+	NgDataService,
+	NgDataServiceOptions,
+	NgLogger,
+	NgModal,
+	NgRouter,
+} from './services';
 
 const REQUEST_TIMEOUT = 10000;
 
@@ -150,9 +156,7 @@ export class NgApp {
 		return this;
 	}
 
-	public addComponents(
-		components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>,
-	) {
+	public addComponents(components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>) {
 		const entries = components instanceof Map
 			? components.entries()
 			: Object.entries(components);
@@ -167,7 +171,7 @@ export class NgApp {
 			}
 			if (typeof component.ctrl === 'function') {
 				// i like the explicit typecasting over `as never` or `as any`
-				component.controller = this._makeNgComponentController(component.ctrl) as unknown as undefined;
+				component.controller = this.makeComponentController(component.ctrl) as unknown as undefined;
 			}
 
 			this.$components.set(name, component);
@@ -218,52 +222,32 @@ export class NgApp {
 		return this;
 	}
 
-	public _makeNgComponentController($controller: new (...args: any[]) => NgController) {
-		const { config, http, log } = this;
-		const { IS_PROD, IS_DEV, IS_STAGING } = this.$config;
-
-		// force `this` to always refer to the class instance, no matter what
-		autobind($controller);
-
-		class InternalController extends $controller {
-			public $log = log;
-			public $http = http;
-			public $config = config as Required<NgAppConfig>;
-			public $element: HTMLElement;
-
-			public isProduction = IS_PROD;
-			public isDevelopment = IS_DEV;
-			public isStaging = IS_STAGING;
-
-			public apiPrefix: string;
-
-			constructor(
-				$element: JQLite,
-				public $scope: angular.IScope,
-				public $attrs: angular.IAttributes,
-				public $timeout: angular.ITimeoutService,
-				public $injector: angular.auto.IInjectorService,
-				public $state: NgStateService,
-			) {
-				super();
-
-				this.$element = $element[0];
-				this.apiPrefix = config.getApiPrefix();
-			}
-		}
+	public makeComponentController($controller: new () => NgController): [
+		'$element',
+		'$scope',
+		'$injector',
+		ReturnType<typeof makeInjectableCtrl>
+	] {
+		const componentCtrl = makeInjectableCtrl($controller, {
+			log: this.log,
+			http: this.http,
+			config: () => this.config,
+		});
 
 		return [
-			'$element', '$scope', '$attrs', '$timeout', '$injector', '$state',
-			InternalController,
+			'$element',
+			'$scope',
+			'$injector',
+			componentCtrl,
 		];
 	}
 
 	protected $modal() {
 		return new NgModal(
-			this.$logger(),
-			this.$injector.get('$compile'),
-			this.$injector.get('$controller'),
-			this.$injector.get('$rootScope'),
+			this.log,
+			this.http,
+			this.config,
+			this.$injector,
 		);
 	}
 

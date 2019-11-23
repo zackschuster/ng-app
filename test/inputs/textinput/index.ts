@@ -48,6 +48,8 @@ test('textinput controller (number)', async t => {
 	const { controller: numberCtrl } = util.mockCtrl(definition, { min: 1, max: 3, type: 'number' });
 	t.true(numberCtrl instanceof NgInputController);
 	t.is(numberCtrl.$attrs.type, 'number');
+	t.is(numberCtrl.$attrs.min, 1);
+	t.is(numberCtrl.$attrs.max, 3);
 
 	numberCtrl.ngModelCtrl = { $validators: { } } as any;
 

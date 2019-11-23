@@ -1,12 +1,15 @@
-import { NgController } from '../../src/controller';
+import { NgController, makeInjectableCtrl } from '../../src/controller';
 import { NgInputController } from '../../src/inputs';
 
-import { $prefix } from './--app';
 import { $injector } from './--injector';
+import { $config } from './--app';
+import { $http } from './-http';
+import { $log } from './-logger';
 
 export { NgInputController };
-export const $controller = $injector.get('$controller');
-export const $ctrl = new NgController();
 export const $inputCtrl = new NgInputController();
 
-($ctrl as any).apiPrefix = $prefix;
+const Ctrl = makeInjectableCtrl(NgController, { log: $log, http: $http, config: () => $config });
+export const $scope = $injector.get('$rootScope').$new();
+export const $element = $injector.get('$compile')(document.createElement('div'))($scope);
+export const $ctrl = new Ctrl($element, $scope, $injector);

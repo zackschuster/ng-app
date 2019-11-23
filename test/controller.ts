@@ -2,8 +2,8 @@
 import test from 'ava';
 import { $ctrl, $inputCtrl, $prefix } from './mocks';
 
-test('$ctrl.getApiPrefix', async t => {
-	t.is($ctrl.getApiPrefix(), $prefix);
+test('$ctrl.apiPrefix', async t => {
+	t.is($ctrl.apiPrefix, $prefix);
 });
 
 test('$compCtrl.uniqueId', async t => {

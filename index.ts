@@ -65,7 +65,7 @@ app
 export { app };
 
 export function makeNgCtrl(controller: new() => any) {
-	return app._makeNgComponentController(controller);
+	return app.makeComponentController(controller);
 }
 
 export * from './src/app';
