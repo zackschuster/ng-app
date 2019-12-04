@@ -46,7 +46,7 @@ export class NgApp {
 		if (this._http == null) {
 			this._http = this.$http({
 				timeout: this.$config.IS_PROD ? DEFAULT_REQUEST_TIMEOUT : undefined,
-				getConfig: () => this.$config
+				getConfig: () => this.$config,
 			});
 		}
 		return this._http;
