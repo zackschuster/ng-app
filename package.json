@@ -19,8 +19,7 @@
 	"scripts": {
 		"build:docs": "webpack --env production",
 		"start": "webpack-dev-server",
-		"lint": "tslint --project .",
-		"compile": "tsc --noEmit",
+		"vet": "tslint --project . && tsc --noEmit",
 		"test": "ava"
 	},
 	"dependencies": {
