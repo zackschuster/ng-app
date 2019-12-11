@@ -1,5 +1,5 @@
 - var colors = require('./colors.json')
-- var icons = require('./icons.json')
+//- - var icons = require('./icons.json')
 - var toasts = colors.filter(function(x) { return ['info', 'success', 'warning', 'danger'].includes(x) }).map(function(x) { return x === 'danger' ? 'error' : x})
 
 html(lang="en")
@@ -21,7 +21,7 @@ html(lang="en")
 
 		.container-fluid
 			.row.no-gutters
-				.col-12
+				//- .col-12
 					.card.shadow
 						.card-body
 							fieldset
