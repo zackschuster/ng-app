@@ -216,17 +216,9 @@ export class NgApp {
 			config: () => this.config,
 		});
 
-		return [
-			'$element',
-			'$scope',
-			'$injector',
-			componentCtrl,
-		] as [
-				'$element',
-				'$scope',
-				'$injector',
-				typeof componentCtrl
-			];
+		type NonReadonly<R> = { -readonly [P in keyof R] : R[P] };
+		const injectable = ['$element', '$scope', '$injector', componentCtrl] as const;
+		return injectable as NonReadonly<typeof injectable>;
 	}
 
 	protected $modal() {
