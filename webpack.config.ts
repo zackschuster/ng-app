@@ -1,19 +1,21 @@
+import { readdirSync, unlinkSync, writeFileSync } from 'fs';
+import { join, resolve } from 'path';
 import { Compiler } from 'webpack';
 
-import fs = require('fs');
-import path = require('path');
-import HtmlWebpackPlugin = require('html-webpack-plugin');
+import HtmlPlugin = require('html-webpack-plugin');
+// tslint:disable-next-line: no-var-requires
+const { BundleStatsWebpackPlugin } = require('bundle-stats');
 
 const cwd = process.cwd();
-const docs = path.join(cwd, 'docs');
+const docs = join(cwd, 'docs');
 
 class NgAppDocsPlugin {
 	constructor(private isDev: boolean) { }
 	public apply(compiler: Compiler) {
 		if (this.isDev === false) {
 			compiler.hooks.emit.tap(this.constructor.name, () => {
-				const files = fs.readdirSync(docs, { withFileTypes: true }).filter(x => x.isFile());
-				files.forEach(x => fs.unlinkSync(path.join(docs, x.name)));
+				const files = readdirSync(docs, { withFileTypes: true }).filter(x => x.isFile());
+				files.forEach(x => unlinkSync(join(docs, x.name)));
 			});
 		}
 
@@ -22,15 +24,20 @@ class NgAppDocsPlugin {
 			const polyfillKey = Object.keys(cmp.assets).find(x => x.startsWith('polyfills'));
 
 			cmp.assets['index.html'].source = function indexSourceFn() {
-				return source().replace(
-					'<head>',
-					`<head><script type="text/javascript" src="/${polyfillKey}" nomodule></script>`,
-				);
+				return source()
+					.replace(
+						'</head>',
+						`<script type="text/javascript" src="/${polyfillKey}" nomodule></script></head>`,
+					)
+					.replace(
+						`<script type="text/javascript" src="/${polyfillKey}"></script>`,
+						'',
+					);
 			};
 		});
 
 		compiler.hooks.afterEmit.tap(this.constructor.name, () => {
-			fs.writeFileSync(path.join(docs, 'CNAME'), 'ng-app.js.org');
+			writeFileSync(join(docs, 'CNAME'), 'ng-app.js.org');
 		});
 	}
 }
@@ -45,22 +52,29 @@ module.exports = (env: string = 'development') => {
 			path: docs,
 			publicPath: '/',
 		},
-	 });
+	});
 
 	config.entry.app = [
-		path.resolve(cwd, 'docs', 'src', 'app.ts'),
-		path.resolve(cwd, 'docs', 'src', 'styles.scss'),
+		resolve(cwd, 'docs', 'src', 'app.ts'),
+		resolve(cwd, 'docs', 'src', 'styles.scss'),
 	];
 
 	config.resolve.modules = ['.', 'docs', 'node_modules'];
 
 	config.plugins.push(
-		new HtmlWebpackPlugin({
+		new HtmlPlugin({
 			template: '!!pug-loader?!docs/src/index.pug',
 			title: '@ledge/ng-app docs',
 		}),
 		new NgAppDocsPlugin(env === 'development'),
 	);
+
+	if (env === 'production') {
+		delete config.devServer;
+		config.plugins.push(
+			new BundleStatsWebpackPlugin(),
+		);
+	}
 
 	return config;
 };
