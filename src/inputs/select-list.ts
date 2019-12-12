@@ -52,6 +52,11 @@ class SelectController extends NgInputController {
 	}
 
 	public $onInit() {
+		if (this.isMobile) {
+			this.searchList = this.list;
+			return;
+		}
+
 		const container = this.$element.querySelector('.select-container') as HTMLDivElement;
 		const dropdown = this.$element.querySelector('.select-dropdown') as HTMLDivElement;
 		const dropdownlist = this.$element.querySelector('.select-dropdown-list') as HTMLDivElement;
