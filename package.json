@@ -8,7 +8,7 @@
 	"bugs": {
 		"url": "https://github.com/zackschuster/ng-app/issues"
 	},
-	"license": "GPL-3.0",
+	"license": "EUPL-1.2",
 	"files": [
 		"index.ts",
 		"polyfills.ts",
