@@ -51,13 +51,13 @@ export class NgAppConfig implements IConfig {
 /**
  * Component definition object (a simplified directive definition object)
  */
-export interface NgComponentOptions<T = typeof NgController> {
+export interface NgComponentOptions<T = NgController> {
 	/**
 	 * Controller constructor function that should be associated with newly created scope or the name of a registered
 	 * controller if passed as a string. Empty function by default.
 	 * Use the array form to define dependencies (necessary if strictDi is enabled and you require dependency injection)
 	 */
-	controller?: T | ['$element', '$scope', '$injector', ReturnType<typeof makeInjectableCtrl>];
+	controller?: (new (...args: any[]) => T) | ['$element', '$scope', '$injector', ReturnType<typeof makeInjectableCtrl>];
 
 	/**
 	 * @deprecated For consistency this will always be the historical default `$ctrl`. ng-app's architecture ensures all scopes are isolates, so there's no risk of scope leakage.

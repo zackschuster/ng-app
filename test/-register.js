@@ -1,31 +1,22 @@
-// tslint:disable:file-name-casing no-magic-numbers
-require('esm');
-require('ts-node').register({ transpileOnly: true, ignore: [] });
-require('browser-env')({ pretendToBeVisual: true });
-// @ts-ignore
-require('angular/angular.js');
-require('angular-mocks');
+import { createRequire } from 'module';
+import { join } from 'path';
+import browserenv from 'browser-env';
+import fetch from 'node-fetch';
+import tsnode from 'ts-node';
 
-const defineGlobal = /**
- * @param {string} name
- * @param {any} value
- */
-	(name, value) => {
-		Object.defineProperty(global, name, {
-			configurable: false,
-			enumerable: true,
-			writable: false,
-			value
-		});
-	}
+tsnode.register({ transpileOnly: true, ignore: [] });
 
-const angular = /** @type {Window & { angular: import('angular') }} */(window).angular;
-const fetch = require('node-fetch');
-const { Request, Response } = fetch;
+Object.defineProperty(globalThis, 'window', { configurable: false, enumerable: true, writable: false, value: browserenv() });
 
-defineGlobal('angular', angular);
-defineGlobal('fetch', fetch);
-defineGlobal('Request', Request);
-defineGlobal('Response', Response);
+const ørequirePath = join(process.cwd(), 'node_modules');
+const ørequire = createRequire(ørequirePath);
 
-require('@uirouter/angularjs');
+ørequire('angular/angular.js');
+ørequire('angular-mocks');
+
+globalThis.angular = window.angular;
+globalThis.fetch = fetch;
+globalThis.Request = /** @type {never} */(fetch.Request);
+globalThis.Response = /** @type {never} */(fetch.Response);
+
+ørequire('@uirouter/angularjs');

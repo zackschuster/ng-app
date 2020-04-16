@@ -103,7 +103,7 @@ export class InputService extends NgService {
 	 * Transform an input component definition into an ng component definition
 	 * @param component An object representing the requested component definition
 	 */
-	public static defineInputComponent(component: NgInputOptions) {
+	public static defineInputComponent<T extends NgInputOptions>(component: T) {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer();
 
@@ -242,6 +242,6 @@ export class InputService extends NgService {
 			return $html;
 		}];
 
-		return $definition;
+		return $definition as T;
 	}
 }

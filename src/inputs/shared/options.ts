@@ -5,7 +5,7 @@ import { NgAttributes } from '../../attributes';
 import { NgComponentOptions } from '../../options';
 import { NgRenderer } from '../../renderer';
 
-export interface NgInputOptions extends NgComponentOptions<typeof NgInputController> {
+export interface NgInputOptions<T extends NgInputController = NgInputController> extends NgComponentOptions<T> {
 	/**
 	 * Set this so the app knows how to register your definition
 	 */
@@ -38,7 +38,7 @@ export interface NgInputOptions extends NgComponentOptions<typeof NgInputControl
 	 */
 	validators?: Indexed<string>;
 
-	ctrl?: new () => NgInputController;
+	controller?: new (...args: any[]) => T;
 
 	/**
 	 * Run after container & label creation, before label manipulation

@@ -1,10 +1,8 @@
 import { readdirSync, unlinkSync, writeFileSync } from 'fs';
-import { join, resolve } from 'path';
+import { join } from 'path';
 import { Compiler } from 'webpack';
-
-import HtmlPlugin = require('html-webpack-plugin');
-// tslint:disable-next-line: no-var-requires
-const { BundleStatsWebpackPlugin } = require('bundle-stats');
+import { BundleStatsWebpackPlugin } from 'bundle-stats-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const cwd = process.cwd();
 const docs = join(cwd, 'docs');
@@ -19,23 +17,6 @@ class NgAppDocsPlugin {
 			});
 		}
 
-		compiler.hooks.emit.tap(this.constructor.name, cmp => {
-			const { source } = cmp.assets['index.html'];
-			const polyfillKey = Object.keys(cmp.assets).find(x => x.startsWith('polyfills'));
-
-			cmp.assets['index.html'].source = function indexSourceFn() {
-				return source()
-					.replace(
-						'</head>',
-						`<script type="text/javascript" src="/${polyfillKey}" nomodule></script></head>`,
-					)
-					.replace(
-						`<script type="text/javascript" src="/${polyfillKey}"></script>`,
-						'',
-					);
-			};
-		});
-
 		compiler.hooks.afterEmit.tap(this.constructor.name, () => {
 			writeFileSync(join(docs, 'CNAME'), 'ng-app.js.org');
 		});
@@ -46,6 +27,8 @@ class NgAppDocsPlugin {
 module.exports = (env: string = 'development') => {
 	const config = require('@ledge/configs/webpack.merge')(env, {
 		entry: {
+			app: 'docs/src/app.ts',
+			styles: 'docs/src/styles.scss',
 			polyfills: 'polyfills.ts',
 		},
 		output: {
@@ -54,18 +37,10 @@ module.exports = (env: string = 'development') => {
 		},
 	});
 
-	config.entry.app = [
-		resolve(cwd, 'docs', 'src', 'app.ts'),
-		resolve(cwd, 'docs', 'src', 'styles.scss'),
-	];
-
 	config.resolve.modules = ['.', 'docs', 'node_modules'];
 
 	config.plugins.push(
-		new HtmlPlugin({
-			template: '!!pug-loader?!docs/src/index.pug',
-			title: '@ledge/ng-app docs',
-		}),
+		new HtmlWebpackPlugin({ template: 'docs/src/index.pug', title: '@ledge/ng-app docs' }),
 		new NgAppDocsPlugin(env === 'development'),
 	);
 

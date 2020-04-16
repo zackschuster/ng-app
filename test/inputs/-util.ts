@@ -3,13 +3,13 @@ import { ExecutionContext } from 'ava';
 import { element } from 'angular';
 
 import { $config, $http, $injector, $invokeTemplate, $log, $renderer, $svc } from '../mocks';
-import { NgController, makeInjectableCtrl } from '../../src/controller';
-import { InputService } from '../../src/inputs';
+import { makeInjectableCtrl } from '../../src/controller';
+import { InputService, NgInputOptions } from '../../src/inputs';
 import { NgComponentOptions } from '../../src/options';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
-export function mockCtrl<T = NgController>(definition: NgComponentOptions, $attrs: Partial<angular.IAttributes> = { }) {
+export function mockInputCtrl<T extends NgInputOptions>(definition: T, $attrs: Partial<angular.IAttributes> = { }) {
 	Object.assign($attrs, {
 		ngModel: '$ctrl.ngModel',
 		required: true, ngRequired: true,
@@ -35,7 +35,7 @@ export function mockCtrl<T = NgController>(definition: NgComponentOptions, $attr
 	const $element = element(html);
 
 	return {
-		controller: new controller($element, $injector.get('$rootScope').$new(true), $injector) as unknown as T,
+		controller: new controller($element, $injector.get('$rootScope').$new(true), $injector) as InstanceType<NonNullable<T['controller']>>,
 		template: $element[0],
 	};
 }

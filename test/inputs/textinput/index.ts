@@ -5,7 +5,7 @@ import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
 
 const definition = InputService.defineInputComponent(textInput);
-const { controller, template } = util.mockCtrl(definition);
+const { controller, template } = util.mockInputCtrl(definition);
 
 test.after(async t => {
 	t.snapshot(template.outerHTML);
@@ -44,7 +44,7 @@ test('textinput controller', async t => {
 });
 
 test('textinput controller (number)', async t => {
-	const { controller: numberCtrl } = util.mockCtrl(definition, { min: 1, max: 3, type: 'number' });
+	const { controller: numberCtrl } = util.mockInputCtrl(definition, { min: 1, max: 3, type: 'number' });
 	t.true(numberCtrl instanceof NgInputController);
 	t.is(numberCtrl.$attrs.type, 'number');
 	t.is(numberCtrl.$attrs.min, 1);

@@ -1,20 +1,20 @@
 // tslint:disable:no-var-keyword prefer-const
-import 'core-js/es6/symbol';
-import 'core-js/es6/map';
-import 'core-js/es6/set';
-import 'core-js/es6/promise';
-import 'core-js/es6/reflect';
-import 'core-js/fn/array/find';
-import 'core-js/fn/array/find-index';
-import 'core-js/fn/array/from';
-import 'core-js/fn/array/includes';
-import 'core-js/fn/number/is-integer';
-import 'core-js/fn/number/is-nan';
-import 'core-js/fn/object/assign';
-import 'core-js/fn/object/entries';
-import 'core-js/fn/object/is';
-import 'core-js/fn/string/includes';
-import 'core-js/fn/string/starts-with';
+import 'core-js/es/symbol';
+import 'core-js/es/map';
+import 'core-js/es/set';
+import 'core-js/es/promise';
+import 'core-js/es/reflect';
+import 'core-js/features/array/find';
+import 'core-js/features/array/find-index';
+import 'core-js/features/array/from';
+import 'core-js/features/array/includes';
+import 'core-js/features/number/is-integer';
+import 'core-js/features/number/is-nan';
+import 'core-js/features/object/assign';
+import 'core-js/features/object/entries';
+import 'core-js/features/object/is';
+import 'core-js/features/string/includes';
+import 'core-js/features/string/starts-with';
 import 'whatwg-fetch';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
