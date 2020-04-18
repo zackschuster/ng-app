@@ -3,6 +3,8 @@ import { join } from 'path';
 import { Compiler } from 'webpack';
 import { BundleStatsWebpackPlugin } from 'bundle-stats-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+// @ts-ignore
+import webpackConfigMerge from '@ledge/configs/webpack.merge';
 
 const cwd = process.cwd();
 const docs = join(cwd, 'docs');
@@ -23,9 +25,8 @@ class NgAppDocsPlugin {
 	}
 }
 
-// tslint:disable-next-line: no-inferrable-types
-module.exports = (env: string = 'development') => {
-	const config = require('@ledge/configs/webpack.merge')(env, {
+export default (env = 'development') => {
+	const config = webpackConfigMerge(env, {
 		entry: {
 			app: 'docs/src/app.ts',
 			styles: 'docs/src/styles.scss',
@@ -35,20 +36,18 @@ module.exports = (env: string = 'development') => {
 			path: docs,
 			publicPath: '/',
 		},
+		resolve: {
+			modules: ['.', 'docs', 'node_modules'],
+		},
+		plugins: [
+			new HtmlWebpackPlugin({ template: 'docs/src/index.pug', title: '@ledge/ng-app docs' }),
+			new NgAppDocsPlugin(env === 'development'),
+		],
 	});
-
-	config.resolve.modules = ['.', 'docs', 'node_modules'];
-
-	config.plugins.push(
-		new HtmlWebpackPlugin({ template: 'docs/src/index.pug', title: '@ledge/ng-app docs' }),
-		new NgAppDocsPlugin(env === 'development'),
-	);
 
 	if (env === 'production') {
 		delete config.devServer;
-		config.plugins.push(
-			new BundleStatsWebpackPlugin(),
-		);
+		config.plugins.push(new BundleStatsWebpackPlugin());
 	}
 
 	return config;
