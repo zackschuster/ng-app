@@ -1,4 +1,4 @@
-# @ledge/ng-app [![Build Status](https://github.com/zackschuster/ng-app/workflows/.github/workflows/test.yml/badge.svg)](https://github.com/zackschuster/ng-app/actions)
+# @ledge/ng-app [![test status](https://builds.sr.ht/~ledge/ng-app.svg)](https://builds.sr.ht/~ledge/ng-app?)
 
 > A modern, groovy shim layer for Angular.js, written & distributed in TypeScript. Supports IE11.
 
