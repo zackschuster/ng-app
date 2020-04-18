@@ -187,10 +187,10 @@
     "@types/tapable" "*"
     "@types/webpack" "*"
 
-"@types/lodash@4.14.149":
-  version "4.14.149"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
-  integrity sha512-ijGqzZt/b7BfzcK9vTrS6MFljQRPn5BFWOx8oE0GYxribu6uV+aA9zZuXI1zc/etK9E8nrgdoF2+LgUw7+9tJQ==
+"@types/lodash@4.14.150":
+  version "4.14.150"
+  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.150.tgz#649fe44684c3f1fcb6164d943c5a61977e8cf0bd"
+  integrity sha512-kMNLM5JBcasgYscD9x/Gvr6lTAv2NVgsKtet/hm93qMyf/D1pt+7jeEZklKJKxMVmXjxbRVQQGfqDSfipYCO6w==
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -198,9 +198,9 @@
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
 "@types/node@*":
-  version "13.11.1"
-  resolved "https://registry.npmjs.org/@types/node/-/node-13.11.1.tgz#49a2a83df9d26daacead30d0ccc8762b128d53c7"
-  integrity sha512-eWQGP3qtxwL8FGneRrC5DwrJLGN4/dH1clNTuLfN81HCrxVtxRjygDTUoZJ5ASlDEeo0ppYFQjQIlXhtXpOn6g==
+  version "13.13.0"
+  resolved "https://registry.npmjs.org/@types/node/-/node-13.13.0.tgz#30d2d09f623fe32cde9cb582c7a6eda2788ce4a8"
+  integrity sha512-WE4IOAC6r/yBZss1oQGM5zs2D7RuKR6Q+w+X2SouPofnWn+LbCqClRyhO3ZE7Ix8nmFgo/oVuuE01cJT2XB13A==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -2334,9 +2334,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.380:
-  version "1.3.408"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.408.tgz#e6a3a2b8f87c875dfd6e16501abe7a28f079bbb3"
-  integrity sha512-vn1zWIxIdyl0MR72lr81/7kHYTRlDRjJT4ocp8dtb85VhH46J3lNqDMEBljAKPKgguqjK0+WAbf3IL6ZKw72kQ==
+  version "1.3.413"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.413.tgz#9c457a4165c7b42e59d66dff841063eb9bfe5614"
+  integrity sha512-Jm1Rrd3siqYHO3jftZwDljL2LYQafj3Kki5r+udqE58d0i91SkjItVJ5RwlJn9yko8i7MOcoidVKjQlgSdd1hg==
 
 elliptic@^6.0.0:
   version "6.5.2"
@@ -6139,9 +6139,9 @@ resolve-url@^0.2.1:
   integrity sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
 
 resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.3.2:
-  version "1.15.1"
-  resolved "https://registry.npmjs.org/resolve/-/resolve-1.15.1.tgz#27bdcdeffeaf2d6244b95bb0f9f4b4653451f3e8"
-  integrity sha512-84oo6ZTtoTUpjgNEr5SJyzQhzL72gaRodsSfyxC/AXRvwu0Yse9H8eF9IpGo7b8YetZhlI6v7ZQ6bKBFV/6S7w==
+  version "1.16.1"
+  resolved "https://registry.npmjs.org/resolve/-/resolve-1.16.1.tgz#49fac5d8bacf1fd53f200fa51247ae736175832c"
+  integrity sha512-rmAglCSqWWMrrBv/XM6sW0NuRFiKViw/W4d9EbC4pt+49H8JwHy+mcGmALTEg504AUDcLTvb1T2q3E9AnmY+ig==
   dependencies:
     path-parse "^1.0.6"
 
@@ -6288,9 +6288,9 @@ schema-utils@^1.0.0:
     ajv-keywords "^3.1.0"
 
 schema-utils@^2.6.1, schema-utils@^2.6.5:
-  version "2.6.5"
-  resolved "https://registry.npmjs.org/schema-utils/-/schema-utils-2.6.5.tgz#c758f0a7e624263073d396e29cd40aa101152d8a"
-  integrity sha512-5KXuwKziQrTVHh8j/Uxz+QUbxkaLW9X/86NBlx/gnKgtsZA2GIVMUn17qWhRFwF8jdYb3Dig5hRO/W5mZqy6SQ==
+  version "2.6.6"
+  resolved "https://registry.npmjs.org/schema-utils/-/schema-utils-2.6.6.tgz#299fe6bd4a3365dc23d99fd446caff8f1d6c330c"
+  integrity sha512-wHutF/WPSbIi9x6ctjGGk2Hvl0VOz5l3EKEuKbjPlB30mKZUzb9A5k9yEXRX3pwyqVLPvpfZZEllaFq/M718hA==
   dependencies:
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
@@ -7538,13 +7538,6 @@ webpack-log@^2.0.0:
     ansi-colors "^3.0.0"
     uuid "^3.3.2"
 
-webpack-merge@4.2.2:
-  version "4.2.2"
-  resolved "https://registry.npmjs.org/webpack-merge/-/webpack-merge-4.2.2.tgz#a27c52ea783d1398afd2087f547d7b9d2f43634d"
-  integrity sha512-TUE1UGoTX2Cd42j3krGYqObZbOD+xF7u28WB7tfUordytSjbWTIjK/8V0amkBfTYN4/pB/GIDlJZZ657BGG19g==
-  dependencies:
-    lodash "^4.17.15"
-
 webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
   version "1.4.3"
   resolved "https://registry.npmjs.org/webpack-sources/-/webpack-sources-1.4.3.tgz#eedd8ec0b928fbf1cbfe994e22d2d890f330a933"
@@ -7778,9 +7771,9 @@ yargs-parser@^13.1.0:
     decamelize "^1.2.0"
 
 yargs-parser@^18.1.1:
-  version "18.1.2"
-  resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-18.1.2.tgz#2f482bea2136dbde0861683abea7756d30b504f1"
-  integrity sha512-hlIPNR3IzC1YuL1c2UwwDKpXlNFBqD1Fswwh1khz5+d8Cq/8yc/Mn0i+rQXduu8hcrFKvO7Eryk+09NecTQAAQ==
+  version "18.1.3"
+  resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-18.1.3.tgz#be68c4975c6b2abf469236b0c870362fab09a7b0"
+  integrity sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==
   dependencies:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
