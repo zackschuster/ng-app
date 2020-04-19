@@ -40,7 +40,7 @@ export class NgModal extends NgService {
 		this.backdrop = this.$renderer.createHtmlElement('div', ['modal-backdrop', 'fade']);
 		this.title = this.$renderer.createHtmlElement('h5', ['modal-title'], [['id', `modal-title-${this.uniqueId}`]]);
 
-		this.headerCloseButton = this.$renderer.createHtmlElement('button', ['close'], [['type', 'button'], ['aria-label', 'close']]);
+		this.headerCloseButton = this.$renderer.createHtmlElement('button', ['close'], [['type', 'button'], ['title', 'close']]);
 		this.headerCloseButton.innerHTML = '&times;';
 
 		this.header = this.$renderer.createHtmlElement('div', ['modal-header']);

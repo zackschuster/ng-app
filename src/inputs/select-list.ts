@@ -290,7 +290,7 @@ export const selectList: NgInputOptions = {
 				['role', 'textbox'],
 				['aria-autocomplete', 'list'],
 				['placeholder', ''],
-				['aria-label', 'Select List'],
+				['title', 'Select List'],
 				['hidden', 'true'],
 			],
 		);

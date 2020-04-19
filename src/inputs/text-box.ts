@@ -10,7 +10,7 @@ class TextBoxController extends NgInputController {
 		super();
 
 		this.$mirror.setAttribute('aria-hidden', 'true');
-		this.$mirror.setAttribute('aria-label', 'Hidden TextArea');
+		this.$mirror.setAttribute('title', 'Hidden TextArea');
 		this.$mirror.setAttribute('tabindex', '-1');
 
 		this.$mirror.style.setProperty('position', 'absolute');
