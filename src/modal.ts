@@ -10,17 +10,16 @@ const MODAL_SHOW_DELAY = 23;
 const MODAL_HIDE_DELAY = 150;
 
 export class NgModal extends NgService {
-	protected readonly backdrop: HTMLDivElement;
-	protected readonly container: HTMLDivElement;
-	protected readonly content: HTMLDivElement;
-	protected readonly dialog: HTMLDivElement;
-	protected readonly header: HTMLDivElement;
-	protected readonly headerCloseButton: HTMLButtonElement;
-	protected readonly title: HTMLHeadingElement;
-	protected readonly body: HTMLDivElement;
-	protected readonly footer: HTMLDivElement;
-	protected readonly footerCancelButton: HTMLButtonElement;
-	protected readonly footerOkButton: HTMLButtonElement;
+	protected readonly $backdrop: HTMLDivElement;
+	protected readonly $container: HTMLDivElement;
+	protected readonly $dialog: HTMLDivElement;
+	protected readonly $form: HTMLFormElement;
+	protected readonly $header: HTMLElement;
+	protected readonly $title: HTMLHeadingElement;
+	protected readonly $main: HTMLElement;
+	protected readonly $footer: HTMLElement;
+	protected readonly $cancelBtn: HTMLButtonElement;
+	protected readonly $submitBtn: HTMLInputElement;
 
 	protected readonly $compile: (element: Element) => (scope: NgScope) => { [i: number]: HTMLElement };
 	protected readonly $rootScope: NgScope;
@@ -37,42 +36,36 @@ export class NgModal extends NgService {
 		this.$compile = this.$injector.get('$compile');
 		this.$rootScope = this.$injector.get('$rootScope');
 
-		this.backdrop = this.$renderer.createHtmlElement('div', ['modal-backdrop', 'fade']);
-		this.title = this.$renderer.createHtmlElement('h5', ['modal-title'], [['id', `modal-title-${this.uniqueId}`]]);
+		this.$backdrop = this.$renderer.createHtmlElement('div', ['modal-backdrop', 'fade']);
+		this.$dialog = this.$renderer.createHtmlElement('div', ['modal-dialog'], [['role', 'dialog']]);
+		this.$form = this.$renderer.createHtmlElement('form', ['modal-content'], [['role', 'document']]);
+		this.$header = this.$renderer.createHtmlElement('header', ['modal-header']);
+		this.$title = this.$renderer.createHtmlElement('h5', ['modal-title'], [['id', `modal-title-${this.uniqueId}`]]);
+		this.$main = this.$renderer.createHtmlElement('main', ['modal-body']);
+		this.$footer = this.$renderer.createHtmlElement('footer', ['modal-footer']);
+		this.$cancelBtn = this.$renderer.createHtmlElement('button', ['btn', 'btn-info'], [['type', 'button']]);
+		this.$submitBtn = this.$renderer.createHtmlElement('input', ['btn', 'btn-success'], [['type', 'submit']]);
 
-		this.headerCloseButton = this.$renderer.createHtmlElement('button', ['close'], [['type', 'button'], ['title', 'close']]);
-		this.headerCloseButton.innerHTML = '&times;';
+		this.$title.id = `modal-title-${this.uniqueId}`;
+		this.$cancelBtn.innerText = 'Cancel';
 
-		this.header = this.$renderer.createHtmlElement('div', ['modal-header']);
-		this.body = this.$renderer.createHtmlElement('div', ['modal-body']);
-		this.footer = this.$renderer.createHtmlElement('div', ['modal-footer']);
-		this.content = this.$renderer.createHtmlElement('div', ['modal-content']);
-
-		this.header.appendChild(this.title);
-		this.header.appendChild(this.headerCloseButton);
-
-		this.content.appendChild(this.header);
-		this.content.appendChild(this.body);
-		this.content.appendChild(this.footer);
-
-		this.footerCancelButton = this.$renderer.createHtmlElement('button', ['btn', 'btn-info'], [['type', 'button']]);
-		this.footerOkButton = this.$renderer.createHtmlElement('button', ['btn', 'btn-success'], [['type', 'button']]);
-
-		this.footer.appendChild(this.footerCancelButton);
-		this.footer.appendChild(this.footerOkButton);
-
-		this.dialog = this.$renderer.createHtmlElement('div', ['modal-dialog'], [['role', 'document']]);
-		this.dialog.appendChild(this.content);
-
-		this.container = this.$renderer.createHtmlElement('div', ['fade', 'modal'], [
-			['aria-hidden', 'true'],
-			['aria-labelledby', 'modal-title'],
+		this.$container = this.$renderer.createHtmlElement('div', ['fade', 'modal'], [
+			['aria-labelledby', this.$title.id],
+			['aria-live', 'polite'],
+			['aria-modal', 'true'],
 			['role', 'dialog'],
-			['tabindex', '-1'],
 		]);
-		this.container.appendChild(this.dialog);
 
-		document.body.appendChild(this.container);
+		this.$header.appendChild(this.$title);
+		this.$footer.appendChild(this.$cancelBtn);
+		this.$footer.appendChild(this.$submitBtn);
+		this.$form.appendChild(this.$header);
+		this.$form.appendChild(this.$main);
+		this.$form.appendChild(this.$footer);
+		this.$dialog.appendChild(this.$form);
+		this.$container.appendChild(this.$dialog);
+
+		document.body.appendChild(this.$container);
 	}
 
 	public open<T extends typeof NgController>(options: NgModalOptions<T> = { }) {
@@ -97,21 +90,21 @@ export class NgModal extends NgService {
 			if (cancelBtnText === true) {
 				cancelBtnText = defaultCancelBtnText;
 			}
-			this.footerCancelButton.innerText = cancelBtnText;
+			this.$cancelBtn.innerText = cancelBtnText;
 		}
 		if (okBtnText !== false) {
 			if (okBtnText === true) {
 				okBtnText = defaultOkBtnText;
 			}
-			this.footerOkButton.innerText = okBtnText;
+			this.$submitBtn.value = okBtnText;
 		}
 
-		this.title.innerHTML = typeof title === 'function' ? title() : title;
-		this.body.innerHTML =
+		this.$title.innerHTML = typeof title === 'function' ? title() : title;
+		this.$main.innerHTML =
 			typeof template === 'function' ? template() : template;
 
 		const $scope = this.$rootScope.$new(true) as Parameters<NgModal['hideModal']>[1];
-		const $element = this.$compile(this.container)($scope);
+		const $element = this.$compile(this.$container)($scope);
 		const $ctrl = makeInjectableCtrl(controller, {
 			log: this.$log,
 			http: this.$http,
@@ -135,10 +128,9 @@ export class NgModal extends NgService {
 		this.showModal(escapeKeyListener);
 
 		const removeEventListeners = () => {
-			this.headerCloseButton.removeEventListener('click', dismiss);
-			this.footerCancelButton.removeEventListener('click', dismiss);
-			this.footerOkButton.removeEventListener('click', close);
-			this.backdrop.removeEventListener('click', close);
+			this.$cancelBtn.removeEventListener('click', dismiss);
+			this.$submitBtn.removeEventListener('click', close);
+			this.$backdrop.removeEventListener('click', close);
 		};
 
 		const close = () => {
@@ -146,31 +138,30 @@ export class NgModal extends NgService {
 				dismiss();
 			}
 		};
-		this.headerCloseButton.addEventListener('click', dismiss);
-		this.footerCancelButton.addEventListener('click', dismiss);
-		this.footerOkButton.addEventListener('click', close);
-		this.backdrop.addEventListener('click', close);
+		this.$cancelBtn.addEventListener('click', dismiss);
+		this.$submitBtn.addEventListener('click', close);
+		this.$backdrop.addEventListener('click', close);
 
 		return { close, dismiss };
 	}
 
 	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
-		this.backdrop.style.setProperty('display', 'block');
+		this.$backdrop.style.setProperty('display', 'block');
 
-		this.container.style.setProperty('display', 'block');
-		this.container.classList.remove('show');
-		this.container.removeAttribute('aria-hidden');
-		this.container.setAttribute('aria-modal', 'true');
-		this.container.style.setProperty('padding-right', '17px');
-		this.container.style.setProperty('pointer-events', 'none');
+		this.$container.style.setProperty('display', 'block');
+		this.$container.classList.remove('show');
+		this.$container.removeAttribute('aria-hidden');
+		this.$container.setAttribute('aria-modal', 'true');
+		this.$container.style.setProperty('padding-right', '17px');
+		this.$container.style.setProperty('pointer-events', 'none');
 
 		window.addEventListener('keydown', escapeKeyListener);
-		document.body.appendChild(this.backdrop);
+		document.body.appendChild(this.$backdrop);
 		document.body.classList.add('modal-open');
 
 		setTimeout(() => {
-			this.backdrop.classList.add('show');
-			this.container.classList.add('show');
+			this.$backdrop.classList.add('show');
+			this.$container.classList.add('show');
 		}, MODAL_SHOW_DELAY);
 	}
 
@@ -178,12 +169,12 @@ export class NgModal extends NgService {
 		escapeKeyListener: (e: KeyboardEvent) => void,
 		scope: NgScope & { $ctrl: NgController; },
 	) {
-		this.backdrop.classList.remove('show');
-		this.container.classList.remove('show');
+		this.$backdrop.classList.remove('show');
+		this.$container.classList.remove('show');
 
 		setTimeout(() => {
-			this.container.style.setProperty('display', 'none');
-			this.backdrop.style.setProperty('display', 'none');
+			this.$container.style.setProperty('display', 'none');
+			this.$backdrop.style.setProperty('display', 'none');
 		}, MODAL_HIDE_DELAY);
 
 		scope.$destroy();
