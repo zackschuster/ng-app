@@ -11,14 +11,13 @@ class SpinnerController extends NgController {
 			throw new Error(`Color not supported: ${color}.\nSupported colors: ${this.colors.join(', ')}`);
 		}
 
-		const srDesc = this.$renderer.createHtmlElement('span', ['sr-only']);
-		srDesc.innerText = 'Loading...';
+		this.$attrs.$set('role', 'status');
+		this.$attrs.$set('title', 'Loading...');
 
-		const spinner = this.$renderer.createHtmlElement('div', ['spinner-border', `text-${color}`, 'mx-1'], [['role', 'status']]);
-		spinner.appendChild(srDesc);
-		spinner.style.setProperty('margin-top', '0.23rem');
-
-		this.$element.appendChild(spinner);
+		this.$element.classList.add('spinner-border');
+		this.$element.classList.add(`text-${color}`);
+		this.$element.classList.add('mx-1');
+		this.$element.style.setProperty('margin-top', '0.23rem');
 	}
 }
 
