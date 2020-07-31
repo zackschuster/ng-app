@@ -65,14 +65,14 @@ export class NgRenderer {
 	}
 
 	public createLabel(classList: string[], {
-			isRequired = false,
-			isSrOnly = false,
-			isRadio = false,
-		}: {
-			isRequired?: boolean,
-			isSrOnly?: boolean,
-			isRadio?: boolean,
-		} = {
+		isRequired = false,
+		isSrOnly = false,
+		isRadio = false,
+	}: {
+		isRequired?: boolean,
+		isSrOnly?: boolean,
+		isRadio?: boolean,
+	} = {
 			isRequired: false,
 			isSrOnly: false,
 			isRadio: false,
