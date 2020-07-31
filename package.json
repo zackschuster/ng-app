@@ -50,16 +50,15 @@
 	},
 	"ava": {
 		"files": [
-			"test/**/*.ts",
+			"test/**",
 			"!test/inputs/-util.ts",
-			"!test/mocks/**"
+			"!test/mocks/*"
 		],
-		"compileEnhancements": false,
 		"extensions": [
 			"ts"
 		],
 		"require": [
-			"./test/_register.js"
+			"./test/_register.ts"
 		]
 	}
 }
