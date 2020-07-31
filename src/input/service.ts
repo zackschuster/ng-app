@@ -11,7 +11,7 @@ const BaseComponent = Object.seal({
 	type: 'input',
 	labelClass: 'form-control-label',
 	templateClass: 'form-group',
-	attrs: { },
+	attrs: {},
 	ctrl: NgComponentController,
 	render(_h) {
 		return this.$template;
@@ -97,9 +97,9 @@ export class InputService {
 		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 	}
 
-	public static wrapComponentCtrl($ctrl: new(...args: any[]) => angular.IController) {
+	public static wrapComponentCtrl($ctrl: new (...args: any[]) => angular.IController) {
 		return class extends $ctrl {
-			private ngModelCtrl: angular.INgModelController;
+			private ngModelCtrl!: angular.INgModelController;
 			constructor() {
 				super();
 				setTimeout(() => {

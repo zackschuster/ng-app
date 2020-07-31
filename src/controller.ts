@@ -5,21 +5,21 @@ import { NgStateService } from './router';
 import { NgConfig } from './app';
 
 export class NgController extends NgService {
-	protected readonly $scope: angular.IScope;
-	protected readonly $attrs: angular.IAttributes;
-	protected readonly $timeout: angular.ITimeoutService;
-	protected readonly $injector: angular.auto.IInjectorService;
+	protected readonly $scope!: angular.IScope;
+	protected readonly $attrs!: angular.IAttributes;
+	protected readonly $timeout!: angular.ITimeoutService;
+	protected readonly $injector!: angular.auto.IInjectorService;
 
-	protected readonly $config: NgConfig;
-	protected readonly $log: NgLogger;
-	protected readonly $http: NgDataService;
-	protected readonly $state: NgStateService;
-	protected readonly $element: HTMLElement;
+	protected readonly $config!: NgConfig;
+	protected readonly $log!: NgLogger;
+	protected readonly $http!: NgDataService;
+	protected readonly $state!: NgStateService;
+	protected readonly $element!: HTMLElement;
 
-	protected readonly isProduction: boolean;
-	protected readonly isDevelopment: boolean;
-	protected readonly isStaging: boolean;
-	protected readonly apiPrefix: string;
+	protected readonly isProduction!: boolean;
+	protected readonly isDevelopment!: boolean;
+	protected readonly isStaging!: boolean;
+	protected readonly apiPrefix!: string;
 
 	public openWebAddress(address: string) {
 		this.$log.confirm(_ => {
@@ -34,7 +34,7 @@ export class NgController extends NgService {
 
 export class NgComponentController extends NgController {
 	public ngModel: any;
-	public ngModelCtrl: angular.INgModelController;
+	public ngModelCtrl!: angular.INgModelController;
 	// tslint:disable-next-line: no-magic-numbers
 	public uniqueId = crypto.getRandomValues(new Int8Array(2)).toLocaleString().replace(/[-]|[,]/g, '');
 }

@@ -5,9 +5,9 @@ const INTERACTION_BUFFER = 50;
 
 class DateInputController extends NgComponentController {
 	private hasFocus = false;
-	private lastClick: number;
-	private minDate: Date | number | string | null;
-	private maxDate: Date | number | string | null;
+	private lastClick!: number;
+	private minDate!: Date | number | string | null;
+	private maxDate!: Date | number | string | null;
 
 	public $onInit() {
 		function isNumber(n: any): n is number {

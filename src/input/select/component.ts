@@ -18,12 +18,12 @@ class SelectController extends NgComponentController {
 			: SelectController.SinglePlaceholder;
 	}
 
-	protected list: any[];
-	protected choices: Choices;
+	protected list!: any[];
+	protected choices!: Choices;
 
-	private text: string;
-	private value: string;
-	private destroyCurrentWatcher: () => void;
+	private text!: string;
+	private value!: string;
+	private destroyCurrentWatcher!: () => void;
 
 	private get isMultiple() {
 		return SelectController.IsMultiple(this.$attrs);

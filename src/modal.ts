@@ -22,16 +22,16 @@ export class NgModalService extends NgService {
 		onClose = () => {
 			return true;
 		},
-	}: NgModalOptions = { }) {
+	}: NgModalOptions = {}) {
 		const { $log } = this;
 
 		function makeModalCtrl() {
 			return class extends (controller as typeof NgController) {
-				public close: (...args: any[]) => void;
-				public dismiss: () => void;
+				public close!: (...args: any[]) => void;
+				public dismiss!: () => void;
 				public $log = $log;
 
-				protected onclose: typeof onClose;
+				protected onclose!: typeof onClose;
 
 				constructor(public $scope: angular.IScope) {
 					super();

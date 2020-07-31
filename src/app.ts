@@ -76,18 +76,18 @@ export class NgApp {
 	protected readonly $module = module(this.$id, this.$dependencies);
 	protected readonly $bootstrap = bootstrap;
 
-	protected $router: NgRouter;
-	protected $config: NgConfig;
+	protected $router!: NgRouter;
+	protected $config!: NgConfig;
 
 	protected readonly $components: Map<string, angular.IComponentOptions> = new Map();
 	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
 
-	private _http: ReturnType<NgApp['$http']>;
-	private _log: ReturnType<NgApp['$logger']>;
-	private _modal: ReturnType<NgApp['$modal']>;
+	private _http!: ReturnType<NgApp['$http']>;
+	private _log!: ReturnType<NgApp['$logger']>;
+	private _modal!: ReturnType<NgApp['$modal']>;
 
 	constructor() {
-		this.configure({ })
+		this.configure({})
 			.$module
 			.config([
 				'$compileProvider', '$locationProvider', '$qProvider',
@@ -288,7 +288,7 @@ export class NgApp {
 	}
 
 	protected getApiPrefix() {
-		const { PREFIX = { } } = this.$config;
+		const { PREFIX = {} } = this.$config;
 		const { API = '' } = PREFIX;
 
 		if (typeof API !== 'string') {
