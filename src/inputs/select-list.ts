@@ -122,7 +122,7 @@ class SelectController extends NgInputController {
 			}
 		};
 
-		let fuzzer: Fuse<any, any>;
+		let fuzzer: Fuse<any>;
 		this.$scope.$watchCollection(
 			() => this.list,
 			_ => {
@@ -131,7 +131,6 @@ class SelectController extends NgInputController {
 					threshold: 0.3,
 					location: 0,
 					distance: 100,
-					maxPatternLength: 32,
 					minMatchCharLength: 1,
 					keys: [this.text],
 				});
