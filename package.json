@@ -86,7 +86,7 @@
 			"ts"
 		],
 		"require": [
-			"./test/-register.js"
+			"./test/-register.cjs"
 		]
 	}
 }
