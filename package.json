@@ -3,7 +3,7 @@
 	"version": "5.4.12",
 	"description": "An ESM-friendly shim layer for Angular.js, written & distributed in TypeScript",
 	"homepage": "https://ng-app.js.org",
-	"author": "Zack Schuster",
+	"author": "Zack Schuster <email@zackschuster.com> (http://so.completely.online/)",
 	"repository": "https://git.sr.ht/~ledge/ng-app",
 	"bugs": {
 		"url": "https://github.com/zackschuster/ng-app/issues"
