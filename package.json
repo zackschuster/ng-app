@@ -2,9 +2,9 @@
 	"name": "@ledge/ng-app",
 	"version": "6.0.1",
 	"description": "A modern, groovy shim layer for Angular.js, written & distributed in TypeScript. Supports IE11.",
-	"homepage": "https://github.com/zackschuster/ng-app",
-	"author": "Zack Schuster (https://github.com/zackschuster)",
-	"repository": "zackschuster/ng-app",
+	"homepage": "https://ng-app.js.org",
+	"author": "Zack Schuster",
+	"repository": "https://git.sr.ht/~ledge/ng-app",
 	"bugs": {
 		"url": "https://github.com/zackschuster/ng-app/issues"
 	},
