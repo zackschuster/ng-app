@@ -1,13 +1,12 @@
 image: alpine/edge
 packages:
   - nodejs-current
-  - yarn
 sources:
   - https://git.sr.ht/~ledge/ng-app
 tasks:
   - install: |
       cd ng-app
-      yarn
+      npm install
   - test: |
       cd ng-app
-      yarn test
+      npm test
