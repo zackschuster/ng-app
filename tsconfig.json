@@ -1,7 +1,8 @@
 {
 	"extends": "@ledge/configs/tsconfig.browser.json",
 	"compilerOptions": {
-		"strictPropertyInitialization": false
+		"jsx": "react",
+		"jsxFactory": "h"
 	},
 	"ts-node": {
 		"compilerOptions": {
@@ -12,7 +13,7 @@
 		"index.ts",
 		"polyfills.ts",
 		"src/**/*.ts",
-		"docs/**/*.ts",
+		"docs/**/*.tsx",
 		"test/**/*.ts"
 	]
 }

@@ -23,8 +23,9 @@ body {
 		left: 0;
 		right: 0;
 		bottom: 0;
+		z-index: -1;
 
-		> [role=status] {
+		> [role='status'] {
 			@extend .spinner-border;
 			@extend .text-danger;
 			@extend .display-4;
@@ -40,41 +41,40 @@ body {
 		> #loading-spinner {
 			opacity: 0;
 		}
-
 	}
 }
 
 .octicon {
-  fill: currentColor;
+	fill: currentColor;
 }
 
 $select-border-radius: 0.23rem !default;
 $select-border-radius-item: 0.5rem !default;
-$select-keyline-color: #CED4DA !default;
+$select-keyline-color: #ced4da !default;
 
 .select-container {
-  border: 1px solid $select-keyline-color;
+	border: 1px solid $select-keyline-color;
 	cursor: pointer;
 	position: relative;
 
-  &:last-child {
-    margin-bottom: 0;
+	&:last-child {
+		margin-bottom: 0;
 	}
 
-  &.is-disabled {
-    .select-input {
-      background-color: #EAEAEA;
-      cursor: not-allowed;
-      user-select: none;
+	&.is-disabled {
+		.select-input {
+			background-color: #eaeaea;
+			cursor: not-allowed;
+			user-select: none;
 		}
 
-    .select-item {
-      cursor: not-allowed;
-    }
+		.select-item {
+			cursor: not-allowed;
+		}
 	}
 
-	&[data-type="select-one"]:after {
-		content: "";
+	&[data-type='select-one']:after {
+		content: '';
 		height: 0;
 		width: 0;
 		border-style: solid;
@@ -91,7 +91,6 @@ $select-keyline-color: #CED4DA !default;
 			margin-top: -7.5px;
 		}
 	}
-
 
 	> .select-inner-container {
 		display: inline-block;
@@ -199,8 +198,8 @@ $select-keyline-color: #CED4DA !default;
 				}
 
 				.is-disabled & {
-					background-color: darken(#EAEAEA, 25%);
-					border: 1px solid darken(#EAEAEA, 35%);
+					background-color: darken(#eaeaea, 25%);
+					border: 1px solid darken(#eaeaea, 35%);
 				}
 
 				> .select-button {
@@ -224,7 +223,7 @@ $select-keyline-color: #CED4DA !default;
 		z-index: 1;
 		position: absolute;
 		width: 100%;
-		background-color: #FFFFFF;
+		background-color: #ffffff;
 		border: 1px solid $select-keyline-color;
 		margin-top: -1px;
 		border-bottom-left-radius: $select-border-radius;
@@ -258,9 +257,9 @@ $select-keyline-color: #CED4DA !default;
 				}
 
 				&.is-highlighted {
-					background-color: mix(#000000, #FFFFFF, 5%);
+					background-color: mix(#000000, #ffffff, 5%);
 					&:after {
-						opacity: .5;
+						opacity: 0.5;
 					}
 				}
 			}

@@ -1,5 +1,5 @@
 import { Indexed } from '@ledge/types';
-import { copy } from 'angular';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
@@ -13,7 +13,7 @@ const BaseComponent = Object.seal({
 	type: 'input',
 	labelClass: 'form-control-label',
 	templateClass: 'form-group',
-	attrs: { },
+	attrs: {},
 	controller: class extends NgInputController { },
 	render(_h) {
 		return this.$template;
@@ -95,7 +95,7 @@ export class InputService extends NgService {
 		return (
 			['INPUT', 'TEXTAREA', 'SELECT'].includes($input.tagName)
 				? $input
-				:	$input.querySelector('select') || $input.querySelector('input')
+				: $input.querySelector('select') || $input.querySelector('input')
 		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 	}
 
@@ -107,10 +107,10 @@ export class InputService extends NgService {
 		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
 		const h = new NgRenderer();
 
-		const $component = copy({ ...InputService.$BaseComponent, ...component });
+		const $component = cloneDeep({ ...InputService.$BaseComponent, ...component });
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
-		const $definition = copy(InputService.$baseDefinition);
+		const $definition = cloneDeep(InputService.$baseDefinition);
 
 		// assign child objects
 		Object.assign($definition.bindings, $component.bindings);
@@ -199,7 +199,7 @@ export class InputService extends NgService {
 				['role', 'alert'],
 			]);
 
-			const { validators = { } } = $component;
+			const { validators = {} } = $component;
 			const attrs = Object.keys($component.attrs as Indexed);
 
 			for (const [key, value] of Object.entries(validators)) {

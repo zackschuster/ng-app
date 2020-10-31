@@ -28,7 +28,7 @@ class NgAppDocsPlugin {
 export default (env = 'development') => {
 	const config = webpackConfigMerge(env, {
 		entry: {
-			app: 'docs/src/app.ts',
+			app: 'docs/src/app.tsx',
 			styles: 'docs/src/styles.scss',
 			polyfills: 'polyfills.ts',
 		},
@@ -46,7 +46,6 @@ export default (env = 'development') => {
 	});
 
 	if (env === 'production') {
-		delete config.devServer;
 		config.plugins.push(new BundleStatsWebpackPlugin());
 	}
 
