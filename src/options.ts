@@ -33,7 +33,8 @@ export class NgAppConfig implements IConfig {
 		NAME = 'ng-app',
 		ENV = '',
 		API_HOST = '',
-	}: Partial<NgAppConfig> = { }) {
+		VERSION = '',
+	}: Partial<NgAppConfig> = {}) {
 		if (ENV == null || ENV.length === 0) {
 			ENV = process.env.NODE_ENV as string;
 		}
@@ -45,6 +46,7 @@ export class NgAppConfig implements IConfig {
 
 		this.NAME = NAME;
 		this.API_HOST = API_HOST;
+		this.VERSION = VERSION;
 	}
 }
 

@@ -21,13 +21,11 @@ class SelectController extends NgInputController {
 	}
 
 	protected isListOpen = false;
-	protected list: any[];
-	protected searchList: any[];
+	protected list!: any[];
+	protected searchList!: any[];
 
-	// tslint:disable:variable-name
-	private _text: string;
-	private _value: string;
-	// tslint:enable:variable-name
+	private _text!: string;
+	private _value!: string;
 
 	public get text() {
 		if (typeof this._text !== 'string') {
@@ -45,7 +43,7 @@ class SelectController extends NgInputController {
 		return this._value;
 	}
 
-	private destroyCurrentWatcher: () => void;
+	private destroyCurrentWatcher!: () => void;
 
 	private get isMultiple() {
 		return SelectController.IsMultiple(this.$attrs);

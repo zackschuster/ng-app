@@ -13,7 +13,7 @@ enum LogTypeToastBackgrounds {
 }
 
 export class NgToast {
-	protected type: LogType;
+	protected type!: LogType;
 	protected readonly toast: HTMLDivElement;
 	protected readonly toastHeader: HTMLDivElement;
 	protected readonly toastBody: HTMLDivElement;

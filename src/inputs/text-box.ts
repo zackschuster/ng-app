@@ -3,7 +3,7 @@ import { NgInputController, NgInputOptions } from './shared';
 const DEFAULT_MAX_HEIGHT = 9e4;
 
 class TextBoxController extends NgInputController {
-	public $element: HTMLTextAreaElement;
+	public $element!: HTMLTextAreaElement;
 	public $mirror = document.createElement('textarea');
 
 	constructor() {

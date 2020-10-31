@@ -190,7 +190,7 @@ export class NgRenderer {
 	public data: { [key: string]: any } = Object.create(null);
 
 	// tslint:disable-next-line: member-ordering
-	public destroyNode: null;
+	public destroyNode = null;
 
 	public destroy() {
 		return;

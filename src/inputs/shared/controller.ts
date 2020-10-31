@@ -4,7 +4,7 @@ import { NgController } from '../../controller';
 
 export class NgInputController<T = any> extends NgController {
 	public ngModel: any;
-	public ngModelCtrl: NgModelController<T>;
+	public ngModelCtrl!: NgModelController<T>;
 
 	constructor() {
 		super();

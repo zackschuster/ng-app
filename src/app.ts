@@ -74,18 +74,18 @@ export class NgApp {
 	public $injector = injector(['ng']);
 
 	protected $dependencies: string[] = [];
-	protected $router: NgRouter;
-	protected $config: NgAppConfig;
+	protected $router!: NgRouter;
+	protected $config!: NgAppConfig;
 
 	protected readonly $module = module(this.$id, this.$dependencies);
 	protected readonly $bootstrap = bootstrap;
 	protected readonly $components = new Map<string, NgComponentOptions>();
 	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
 
-	private _http: NgHttp;
-	private _log: NgLogger;
-	private _modal: NgModal;
-	private _renderer: NgRenderer;
+	private _http!: NgHttp;
+	private _log!: NgLogger;
+	private _modal!: NgModal;
+	private _renderer!: NgRenderer;
 
 	constructor() {
 		this.configure({})

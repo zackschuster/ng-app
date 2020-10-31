@@ -11,21 +11,21 @@ import { NgRenderer } from './renderer';
 import { NgStateService } from './router';
 
 export class NgController extends NgService {
-	public readonly $scope: NgScope;
-	public readonly $attrs: NgAttributes;
-	public readonly $injector: NgInjector;
+	public readonly $scope!: NgScope;
+	public readonly $attrs!: NgAttributes;
+	public readonly $injector!: NgInjector;
 
-	public readonly $config: NgAppConfig;
-	public readonly $log: NgLogger;
-	public readonly $http: NgHttp;
-	public readonly $state: NgStateService;
-	public readonly $renderer: NgRenderer;
-	public readonly $element: HTMLElement;
+	public readonly $config!: NgAppConfig;
+	public readonly $log!: NgLogger;
+	public readonly $http!: NgHttp;
+	public readonly $state!: NgStateService;
+	public readonly $renderer!: NgRenderer;
+	public readonly $element!: HTMLElement;
 
-	public readonly isProduction: boolean;
-	public readonly isDevelopment: boolean;
-	public readonly isStaging: boolean;
-	public readonly apiPrefix: string;
+	public readonly isProduction!: boolean;
+	public readonly isDevelopment!: boolean;
+	public readonly isStaging!: boolean;
+	public readonly apiPrefix!: string;
 
 	public openWebAddress(address: string) {
 		this.$log.confirm(`You are being sent to ${address}. Continue?`).then(() => window.open(`http://${address}`));

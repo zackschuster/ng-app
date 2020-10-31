@@ -9,7 +9,7 @@ class DateInputController extends NgInputController {
 	private readonly SUPPORTED_MODES = ['single', 'multiple', 'range'];
 	private minDate?: Date | number | string;
 	private maxDate?: Date | number | string;
-	private flatpickr: flatpickr.Instance;
+	private flatpickr!: flatpickr.Instance;
 
 	public $onInit() {
 		this.ngModelCtrl.$validators.minDate = modelVal => {
