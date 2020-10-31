@@ -1,12 +1,13 @@
 image: alpine/edge
 packages:
   - nodejs-current
+  - npm
 sources:
   - https://git.sr.ht/~ledge/ng-app
 tasks:
   - install: |
       cd ng-app
-      npm install
+      npx npm@7 install
   - test: |
       cd ng-app
       npm test
