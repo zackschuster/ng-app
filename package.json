@@ -19,8 +19,8 @@
 	"type": "module",
 	"scripts": {
 		"start": "webpack serve",
-		"build:docs": "webpack --env production",
-		"vet": "tslint --project . && tsc --noEmit",
+		"docs": "webpack --env production",
+		"lint": "tslint -p . -t msbuild --fix",
 		"test": "ava"
 	},
 	"dependencies": {
