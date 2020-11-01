@@ -33,15 +33,16 @@
 		"@uirouter/angularjs": "1.0.19",
 		"abortcontroller-polyfill": "1.5.0",
 		"angular": "1.8.2",
-		"angular-animate": "1.8.2",
 		"angular-messages": "1.8.2",
 		"animejs": "3.2.1",
-		"bootstrap": "4.5.3",
-		"core-decorators": "0.20.0",
 		"flatpickr": "4.6.6",
 		"fuse.js": "6.4.3",
 		"lodash": "4.17.20",
 		"whatwg-fetch": "3.4.1"
+	},
+	"peerDependencies": {
+		"bootstrap": "4.5.3",
+		"font-awesome": "4.7.0"
 	},
 	"devDependencies": {
 		"@ledge/configs": "23.0.32",
@@ -52,9 +53,7 @@
 		"bundle-stats-webpack-plugin": "2.3.0",
 		"copy-webpack-plugin": "6.2.1",
 		"css-loader": "5.0.0",
-		"esm": "3.2.25",
 		"file-loader": "6.2.0",
-		"font-awesome": "4.7.0",
 		"html-webpack-plugin": "4.5.0",
 		"mini-css-extract-plugin": "1.2.1",
 		"node-fetch": "2.6.1",

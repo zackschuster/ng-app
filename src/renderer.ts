@@ -116,7 +116,7 @@ export class NgRenderer {
 		]);
 	}
 
-	public createIcon(icon: string, isFixedWidth = false) {
+	public createIcon(icon: string, isFixedWidth = /^fw!/.test(icon)) {
 		const $iconClasses = ['fa', `fa-${icon.replace(/^fw!/, '')}`];
 		if (isFixedWidth) {
 			$iconClasses.push('fa-fw');
@@ -171,7 +171,7 @@ export class NgRenderer {
 		const $inputGroup = this.createHtmlElement('div', ['input-group']);
 		const $inputGroupPrepend = this.createHtmlElement('div', ['input-group-prepend'], inputGroupAttrs);
 		const $inputGroupText = this.createHtmlElement('span', ['input-group-text']);
-		const $icon = this.createIcon(icon, icon.startsWith('fw!'));
+		const $icon = this.createIcon(icon);
 
 		$inputGroupText.appendChild($icon);
 		$inputGroupPrepend.appendChild($inputGroupText);

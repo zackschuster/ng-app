@@ -154,7 +154,7 @@ class SelectController extends NgInputController {
 		}
 
 		// tslint:disable-next-line:triple-equals
-		const item = this.list.find(x => x[this.value] == value);
+		const [item] = this.list.filter(x => x[this.value] == value);
 		return item == null ? this.clear() : item[this.text];
 	}
 
@@ -174,7 +174,7 @@ class SelectController extends NgInputController {
 	public select(value: any) {
 		if (this.isMultiple) {
 			this.ngModel = Array.isArray(this.ngModel)
-				? this.ngModel.includes(value)
+				? this.ngModel.indexOf(value) !== -1
 					? this.ngModel
 					: this.ngModel.concat(value)
 				: [value];

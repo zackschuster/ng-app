@@ -2,7 +2,7 @@ import flatpickr from 'flatpickr';
 import { NgInputController, NgInputOptions } from './shared';
 
 function isNumber(n: any): n is number {
-	return Number.isInteger(n);
+	return typeof n === 'number' && !isNaN(n);
 }
 
 class DateInputController extends NgInputController {
@@ -37,7 +37,7 @@ class DateInputController extends NgInputController {
 		};
 
 		const { inline, mode = 'single' } = this.$attrs;
-		if (this.SUPPORTED_MODES.includes(mode) === false) {
+		if (this.SUPPORTED_MODES.indexOf(mode) === -1) {
 			this.$log.devWarning(`Unsupported date-input \`mode\` ('${mode}') for #${this.$element.id}. Expected one of ${this.SUPPORTED_MODES.join(', ')}.`);
 		}
 
@@ -54,11 +54,11 @@ class DateInputController extends NgInputController {
 			enable: [
 				d => {
 					const maxDate = Date.parse(this.maxDate as any);
-					return Number.isNaN(maxDate) || d.valueOf() < maxDate;
+					return isNaN(maxDate) || d.valueOf() < maxDate;
 				},
 				d => {
 					const minDate = Date.parse(this.minDate as any);
-					return Number.isNaN(minDate) || d.valueOf() > minDate;
+					return isNaN(minDate) || d.valueOf() > minDate;
 				},
 			],
 			onChange: selected => {

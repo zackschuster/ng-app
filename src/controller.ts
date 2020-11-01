@@ -1,5 +1,4 @@
 import { Indexed } from '@ledge/types';
-import { autobind } from 'core-decorators';
 
 import { NgAttributes } from './attributes';
 import { NgHttp } from './http';
@@ -85,7 +84,6 @@ export function makeInjectableCtrl<T extends NgController>(ctrl: new () => T, lo
 	attrs?: Indexed,
 	config(): NgAppConfig;
 }) {
-	autobind(ctrl);
 	return class InternalController extends (ctrl as new () => any) {
 		public $log = locals.log;
 		public $http = locals.http;

@@ -2,13 +2,13 @@ import { Indexed } from '@ledge/types';
 
 export class NgAttributes {
 	[name: string]: any;
-	public readonly $attr: Indexed<string> = { };
+	public readonly $attr: Indexed<string> = {};
 
 	public PREFIX_REGEXP = /^((?:x|data)[:\-_])/i;
 	public SPECIAL_CHARS_REGEXP = /[:\-_]+(.)/g;
 
-	constructor(private readonly $$element: Element, attrs: Indexed = { }) {
-		for (const { name: key, value } of Array.from($$element.attributes)) {
+	constructor(private readonly $$element: Element, attrs: Indexed = {}) {
+		for (const { name: key, value } of [...$$element.attributes]) {
 			this.$record(key, value);
 		}
 
@@ -69,7 +69,7 @@ export class NgAttributes {
 		const old = oldClasses.split(/\s/g).filter(x => x.length > 0);
 
 		for (const o of old) {
-			if (nu.includes(o)) {
+			if (nu.indexOf(o) !== -1) {
 				continue;
 			}
 			this.$removeClass(o);

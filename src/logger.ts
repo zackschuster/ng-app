@@ -124,7 +124,7 @@ export class NgToast {
 				},
 			});
 
-			const isAutoClose = typeof timeout === 'number' && Number.isInteger(timeout);
+			const isAutoClose = typeof timeout === 'number' && !isNaN(timeout);
 			const makeTimeout = () => (setTimeout as typeof window['setTimeout'])(hideAnimation.play, timeout as number);
 
 			let autoCloseId = isAutoClose ? makeTimeout() : undefined;
@@ -357,7 +357,7 @@ export class NgLogger extends NgConsole {
 
 		const toast = new NgToast(this.$renderer, { text, type, container: this.container });
 		toast.show(timeout).then(() => {
-			const index = this.toasts.findIndex(x => Object.is(x, toast));
+			const index = this.toasts.findIndex(x => x === toast);
 			this.toasts.splice(index, 1);
 		});
 

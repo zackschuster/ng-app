@@ -1,9 +1,7 @@
 import { IConfig, Indexed } from '@ledge/types';
-import { autobind } from 'core-decorators';
 import { NgController, makeInjectableCtrl } from './controller';
 import { NgAttributes } from './attributes';
 
-@autobind
 export class NgAppConfig implements IConfig {
 	public readonly IS_PROD: boolean;
 	public readonly IS_DEV: boolean;

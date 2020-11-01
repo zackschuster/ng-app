@@ -5,8 +5,6 @@ import { inputs } from './src/inputs';
 import { misc } from './src/misc';
 
 // @ts-ignore
-import ngAnimate from 'angular-animate';
-// @ts-ignore
 import ngMessages from 'angular-messages';
 import uirouter from '@uirouter/angularjs';
 
@@ -14,7 +12,6 @@ export const app = new NgApp()
 	.addComponents(inputs)
 	.addComponents(misc)
 	.addDependencies([
-		ngAnimate,
 		ngMessages,
 		uirouter,
 	])

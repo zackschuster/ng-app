@@ -7,7 +7,7 @@ class SpinnerController extends NgController {
 	public $onInit() {
 		const { color = 'primary' } = this.$attrs;
 
-		if (this.colors.includes(color) === false) {
+		if (this.colors.indexOf(color) === -1) {
 			throw new Error(`Color not supported: ${color}.\nSupported colors: ${this.colors.join(', ')}`);
 		}
 

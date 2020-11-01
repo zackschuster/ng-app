@@ -1,7 +1,6 @@
 import { Indexed } from '@ledge/types';
 import { StateService } from '@uirouter/core';
 import { StateProvider } from '@uirouter/angularjs';
-import { autobind } from 'core-decorators';
 
 import { NgController, makeInjectableCtrl } from './controller';
 import { DEFAULT_REQUEST_TIMEOUT, NgHttp, NgHttpInterceptor, NgHttpOptions } from './http';
@@ -13,7 +12,6 @@ import { NgAppConfig, NgComponentOptions } from './options';
 import { NgRenderer } from './renderer';
 import { NgRouter } from './router';
 
-@autobind
 export class NgApp {
 	public get module() {
 		return this.$module;

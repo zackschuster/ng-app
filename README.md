@@ -2,12 +2,6 @@
 
 > Powerful, easy-to-use app container for Angular.js with ES Modules. TypeScript required. Supports IE11.
 
-## Some batteries included
-
-- [Animation](https://www.npmjs.com/package/angular-animate)
-- [Validation](https://www.npmjs.com/package/angular-messages)
-- [Routing](https://www.npmjs.com/package/@uirouter/angularjs)
-
 ## Designed for native modules
 
 ```js
@@ -101,6 +95,7 @@ const log = app.log; // using bootstrap toasts + $log service
 - Compatible with Bootstrap 4
 - Supports `disabled`, `required` and `readonly` attributes, as well as their `ng-`equivalents
 - Generates well-formed & accessible HTML structures with labels, ids, names, etc.
+- Validation applied via `angular-messages`
 
 ```html
 <text-input ng-model="model1">

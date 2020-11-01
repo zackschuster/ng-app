@@ -93,7 +93,7 @@ export class InputService extends NgService {
 	 */
 	public static getInputInput($input: HTMLElement) {
 		return (
-			['INPUT', 'TEXTAREA', 'SELECT'].includes($input.tagName)
+			['INPUT', 'TEXTAREA', 'SELECT'].indexOf($input.tagName) !== -1
 				? $input
 				: $input.querySelector('select') || $input.querySelector('input')
 		) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
@@ -184,7 +184,7 @@ export class InputService extends NgService {
 				.forEach(x => {
 					$inputInput.setAttribute(
 						x.replace(/[A-Z]/, s => `-${s.toLowerCase()}`),
-						x.startsWith('ng') ? `$ctrl.${x}` : 'true',
+						/^ng/.test(x) ? `$ctrl.${x}` : 'true',
 					);
 				});
 
@@ -209,7 +209,7 @@ export class InputService extends NgService {
 
 			InputService.$validationAttrs
 				.concat(...attrs, 'email')
-				.filter(x => x.startsWith('ng') === false)
+				.filter(x => /^ng/.test(x) === false)
 				.filter(x => InputService.$validationMessages.has(x) === true)
 				.filter(x => x !== 'email' || $inputInput.type === x)
 				.forEach(x => {

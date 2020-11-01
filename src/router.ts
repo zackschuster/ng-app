@@ -48,7 +48,8 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 					return this.is(a) && a === b;
 				},
 				is(value) {
-					return Number.isInteger(this.decode(value));
+					const n = this.decode(value);
+					return typeof n === 'number' && !isNaN(n);
 				},
 			}),
 		};
@@ -70,7 +71,8 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 					return this.is(a) && a === b;
 				},
 				is(value) {
-					return Number.isInteger(this.decode(value));
+					const n = this.decode(value);
+					return typeof n === 'number' && !isNaN(n);
 				},
 			}),
 		};
@@ -83,7 +85,7 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 		return typeof item === 'function';
 	}
 
-	protected annotateResolveFunctions({ resolve = { } }: NgRoute) {
+	protected annotateResolveFunctions({ resolve = {} }: NgRoute) {
 		for (const [id, resolveFn] of Object.entries(resolve)) {
 			if (Array.isArray(resolve)) {
 				continue;
@@ -98,8 +100,8 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 
 	protected generateRouteMeta(
 		{
-			params = { },
-			data = { },
+			params = {},
+			data = {},
 			name = '',
 			component = '',
 			parent = '',
@@ -110,8 +112,8 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 		let url = `/${data.isBase ? name : name.split(/(?=[A-Z])/).join('/').toLowerCase()}`
 			.replace(/View$/, '');
 
-		for (const [key, { type = { } }] of Object.entries<any>(params)) {
-			url += type.name === 'path' ? '/:' : (url.includes('?') ? '&' : '?');
+		for (const [key, { type = {} }] of Object.entries<any>(params)) {
+			url += type.name === 'path' ? '/:' : (url.indexOf('?') !== -1 ? '&' : '?');
 			url += key;
 		}
 
