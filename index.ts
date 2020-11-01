@@ -4,15 +4,14 @@ import { NgApp } from './src/app';
 import { inputs } from './src/inputs';
 import { misc } from './src/misc';
 
-// @ts-ignore
-import ngMessages from 'angular-messages';
+import 'angular-messages';
 import uirouter from '@uirouter/angularjs';
 
 export const app = new NgApp()
 	.addComponents(inputs)
 	.addComponents(misc)
 	.addDependencies([
-		ngMessages,
+		'ngMessages',
 		uirouter,
 	])
 	.addHttpInterceptor({

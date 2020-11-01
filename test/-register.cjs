@@ -5,7 +5,8 @@ const tsnode = require('ts-node');
 
 tsnode.register({ transpileOnly: true, ignore: [] });
 
-Object.defineProperty(globalThis, 'window', { configurable: false, enumerable: true, writable: false, value: browserenv() });
+Object.defineProperty(globalThis, 'window',
+	{ configurable: false, enumerable: true, writable: false, value: browserenv() });
 
 // @ts-ignore
 require('angular/angular.js');

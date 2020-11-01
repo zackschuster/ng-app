@@ -9,7 +9,7 @@ import { NgComponentOptions } from '../../src/options';
 
 const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
 
-export function mockInputCtrl<T extends NgInputOptions>(definition: T, $attrs: Partial<angular.IAttributes> = { }) {
+export function mockInputCtrl<T extends NgInputOptions>(definition: T, $attrs: Partial<angular.IAttributes> = {}) {
 	Object.assign($attrs, {
 		ngModel: '$ctrl.ngModel',
 		required: true, ngRequired: true,
@@ -20,7 +20,7 @@ export function mockInputCtrl<T extends NgInputOptions>(definition: T, $attrs: P
 	const el = document.createElement('div');
 	const html = $injector.invoke(
 		definition.template as angular.Injectable<(...args: any[]) => string>,
-		{ },
+		{},
 		{ $element: element(el), $attrs },
 	);
 
@@ -43,7 +43,7 @@ export function mockInputCtrl<T extends NgInputOptions>(definition: T, $attrs: P
 export function makeTpl(
 	template: NgComponentOptions['template'],
 	t: ExecutionContext,
-	$attrs: Indexed = { },
+	$attrs: Indexed = {},
 ) {
 	Object.assign($attrs, {
 		ngModel: '$ctrl.ngModel',

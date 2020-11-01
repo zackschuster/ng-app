@@ -3,8 +3,6 @@ import { join } from 'path';
 import { Compiler } from 'webpack';
 import { BundleStatsWebpackPlugin } from 'bundle-stats-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-// @ts-ignore
-import webpackConfigMerge from '@ledge/configs/webpack.merge';
 
 const cwd = process.cwd();
 const docs = join(cwd, 'docs');
@@ -26,7 +24,7 @@ class NgAppDocsPlugin {
 }
 
 export default (env = 'development') => {
-	const config = webpackConfigMerge(env, {
+	const config = require('@ledge/configs/webpack.merge')(env, {
 		entry: {
 			app: 'docs/src/app.tsx',
 			styles: 'docs/src/styles.scss',
@@ -45,7 +43,7 @@ export default (env = 'development') => {
 		],
 	});
 
-	if (env === 'production') {
+	if (typeof env !== 'string') {
 		config.plugins.push(new BundleStatsWebpackPlugin());
 	}
 

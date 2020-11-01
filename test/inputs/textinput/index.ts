@@ -50,7 +50,7 @@ test('textinput controller (number)', async t => {
 	t.is(numberCtrl.$attrs.min, 1);
 	t.is(numberCtrl.$attrs.max, 3);
 
-	numberCtrl.ngModelCtrl = { $validators: { } } as any;
+	numberCtrl.ngModelCtrl = { $validators: {} } as any;
 
 	if (typeof numberCtrl.$onInit === 'function') {
 		numberCtrl.$onInit();
