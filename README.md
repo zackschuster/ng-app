@@ -1,6 +1,6 @@
 # @ledge/ng-app [![test status](https://builds.sr.ht/~ledge/ng-app.svg)](https://builds.sr.ht/~ledge/ng-app?)
 
-> Powerful, easy-to-use app container for Angular.js with ES Modules. TypeScript required. Supports IE11.
+> Powerful, easy-to-use app container for Angular.js with ES Modules. TypeScript required. IE11 supported.
 
 ## Designed for native modules
 
