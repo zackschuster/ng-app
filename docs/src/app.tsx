@@ -50,27 +50,30 @@ const jsxExampleSection =
 			<div className='col-12'>
 				<div class='card'>
 					<div className='card-body'>
-						<h2>This section was made using ng-app's built-in JSX support</h2>
-						<h3>It enables working directly with DOM elements in a declarative manner</h3>
-						<custom-element-example>Custom Elements are also supported</custom-element-example>
+						<h2>This section was made using ng-app's DOM-in-JSX feature</h2>
+						<h3>DOM-in-JSX lets you work directly with DOM elements using JSX's declarative syntax</h3>
+						<custom-element-example>Custom Elements?</custom-element-example>
 						<br />
-						<CustomElementExample>Work with them in whichever manner you prefer</CustomElementExample>
+						<CustomElementExample>Fully Supported!</CustomElementExample>
 						<br />
 						<button id='native-onlick' class='btn btn-dark my-4'
 							onclick={() => app.log.info(`Clicked ${++clickCounter} times`)}>
 							Try clicking this button!
 						</button>
 						<pre class='bg-light p-3 mt-3'>
-							{`<h2>This section was made using ng-app's built-in JSX support</h2>
-<h3>It enables working directly with DOM elements in a declarative manner</h3>
-<custom-element-example>Custom Elements are also supported</custom-element-example>
-<br />
-<CustomElementExample>Work with them in whichever manner you prefer</CustomElementExample>
-<br />
-<button id='native-onlick' class='btn btn-dark my-4'
-	onclick={() => app.log.info(\`Clicked \${++clickCounter} times\`)}>
-	Try clicking this button!
-</button>`.trim()
+							{`const jsxExample =
+	<section class='card'>
+		<h2>This section was made using ng-app's DOM-in-JSX feature</h2>
+		<h3>DOM-in-JSX lets you work directly with DOM elements using JSX's declarative syntax</h3>
+		<custom-element-example>Custom Elements?</custom-element-example>
+		<br />
+		<CustomElementExample>Fully Supported!</CustomElementExample>
+		<br />
+		<button id='native-onlick' class='btn btn-dark my-4'
+			onclick={() => app.log.info(\`Clicked \${++clickCounter} times\`)}>
+			Try clicking this button!
+		</button>
+	</section>;`.trim()
 							}
 						</pre>
 					</div>
@@ -83,7 +86,7 @@ jsxExampleSection.querySelector('.card-body')?.appendChild(
 	<table>
 		<thead>
 			<th>
-				This table was generated programmatically:
+				This table was generated programmatically
 			</th>
 		</thead>
 		<tbody>
@@ -92,18 +95,22 @@ jsxExampleSection.querySelector('.card-body')?.appendChild(
 	</table>,
 ).parentNode?.appendChild(
 	<pre class='bg-light p-3 mt-3'>
-		{`<table>
-	<thead>
-		<th>
-			This table was generated programmatically:
-		</th>
-	</thead>
-	<tbody>
-		{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(x => <tr><td>{x}</td></tr>)}
-	</tbody>
-</table>`.trim()
+		{`const jsxTable =
+	<table>
+		<thead>
+			<th>
+				This table was generated programmatically
+			</th>
+		</thead>
+		<tbody>
+			{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(x => <tr><td>{x}</td></tr>)}
+		</tbody>
+	</table>;
+
+jsxExample.appendChild(jsxTable);
+	`.trim()
 		}
 	</pre>,
 );
 
-document.body.appendChild(jsxExampleSection);
+document.body.querySelector('main')?.appendChild(jsxExampleSection);

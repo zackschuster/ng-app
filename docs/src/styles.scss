@@ -11,6 +11,10 @@ body {
 		transition: opacity 232ms;
 	}
 
+	> main {
+		margin-top: 0.23rem;
+	}
+
 	> #loading-spinner {
 		@extend .bg-dark;
 		@extend .d-flex;
