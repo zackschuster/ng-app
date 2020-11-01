@@ -1,4 +1,5 @@
 import flatpickr from 'flatpickr';
+import { h } from '../renderer';
 import { NgInputController, NgInputOptions } from './shared';
 
 function isNumber(n: any): n is number {
@@ -88,30 +89,34 @@ class DateInputController extends NgInputController {
 
 export const dateInput: NgInputOptions = {
 	type: 'input',
-	render(h) {
-		const input = h.createInput('text');
+	render() {
+		// no ng-model as flatpickr requires control of the input element
+		const input =
+			<input class='form-control'
+				ng-attr-id='ngModel_{{$ctrl.uniqueId}}'
+				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-model-options='$ctrl.ngModelOptions'
+				type='text'
+				maxLength={'{{maxlength}}' as never}
+				placeholder='{{placeholder}}'
+				data-input='true'
+			/>;
 
-		// flatpickr requires control of the input element
-		input.removeAttribute('ng-model');
-		input.setAttribute('data-input', 'true');
-
-		const iconInput = h.createIconInput(input, 'calendar', [
-			['data-toggle', 'true'],
-			['style', 'cursor: pointer;'],
-		]);
-
-		const inputGroupAppend = h.createHtmlElement('div', ['input-group-append']);
-		inputGroupAppend.setAttribute('data-clear', 'true');
-		inputGroupAppend.style.setProperty('cursor', 'pointer');
-
-		const inputGroupText = h.createHtmlElement('span', ['input-group-text']);
-		const clearIcon = h.createIcon('times');
-
-		inputGroupText.appendChild(clearIcon);
-		inputGroupAppend.appendChild(inputGroupText);
-		iconInput.appendChild(inputGroupAppend);
-
-		return iconInput;
+		return (
+			<div class='input-group'>
+				<div class='input-group-prepend' data-toggle='true' style={'cursor: pointer;' as never}>
+					<span class='input-group-text'>
+						<span class='fa fa-calendar' aria-hidden='true'></span>
+					</span>
+				</div>
+				{input}
+				<div class='input-group-append' data-clear='true' style={'cursor: pointer;' as never}>
+					<span class='input-group-text'>
+						<span class='fa fa-times' aria-hidden='true'></span>
+					</span>
+				</div>
+			</div>
+		);
 	},
 	bindings: {
 		minDate: '<',

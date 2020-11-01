@@ -3,6 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { NgInputController, NgInputOptions } from './shared';
 import { NgAttributes } from '../attributes';
+import { h } from '../renderer';
 import { NgService } from '../service';
 
 class SelectController extends NgInputController {
@@ -199,23 +200,19 @@ class SelectController extends NgInputController {
 
 export const selectList: NgInputOptions = {
 	type: 'input',
-	render(h) {
-		const select = h.createHtmlElement(
-			'select',
-			['form-control', 'select-input', 'd-none'],
-			[
-				['ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}'],
-				['ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}'],
-				['ng-model', '$ctrl.ngModel'],
-			],
-		);
+	render() {
+		const select =
+			<select class='form-control select-input d-none'
+				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
+				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
+				ng-model='$ctrl.ngModel'>
+			</select>;
 
 		const isMultiple = SelectController.IsMultiple(this.$attrs);
 		if (isMultiple) {
 			select.setAttribute('multiple', 'true');
 		} else {
-			const placeholder = h.createHtmlElement('option');
-
+			const placeholder = <option></option> as HTMLOptionElement;
 			placeholder.setAttribute('placeholder', 'true');
 			placeholder.text = SelectController.GetPlaceholder(this.$attrs);
 			placeholder.value = '';
@@ -232,16 +229,15 @@ export const selectList: NgInputOptions = {
 			return select;
 		}
 
-		const inner = h.createHtmlElement('div', ['select-inner-container']);
-		const innerlist = h.createHtmlElement('div', ['select-list', isMultiple ? 'multiple' : 'single']);
-		const selected = h.createHtmlElement('div', ['select-item']);
+		const innerlist = <div class={`select-list ${isMultiple ? 'multiple' : 'single'}`}></div>;
+		const inner = <div class='select-inner-container'>{select}{innerlist}</div>;
+		const selected = <div class='select-item'></div>;
 
-		const btn = h.createHtmlElement('button', ['select-button'],
-			[
-				['ng-attr-aria-label', 'Remove item: \'{{$ctrl.getDisplayText($ctrl.ngModel)}}\''],
-				['ng-click', '$ctrl.clear()'],
-			],
-		);
+		const btn =
+			<button class='select-button'
+				ng-attr-aria-label="Remove item: '{{$ctrl.getDisplayText($ctrl.ngModel)}}'"
+				ng-click='$ctrl.clear()'>
+			</button>;
 
 		if (isMultiple) {
 			const sbtn = btn.cloneNode() as HTMLButtonElement;
@@ -252,7 +248,8 @@ export const selectList: NgInputOptions = {
 			selected.setAttribute('aria-selected', 'true');
 			selected.innerHTML = `{{$ctrl.getDisplayText(item)}}${sbtn.outerHTML}`;
 
-			const placeholder = h.createHtmlElement('div', ['select-item', 'placeholder'], [['ng-if', '$ctrl.ngModel == null || $ctrl.ngModel.length === 0']]);
+			const placeholder = <div class='select-item placeholder'
+				ng-if='$ctrl.ngModel == null || $ctrl.ngModel.length === 0'></div>;
 			placeholder.innerText = SelectController.GetPlaceholder(this.$attrs);
 
 			innerlist.appendChild(placeholder);
@@ -261,66 +258,48 @@ export const selectList: NgInputOptions = {
 			selected.innerText = '{{$ctrl.getDisplayText($ctrl.ngModel)}}';
 		}
 
-		const item = h.createHtmlElement('div', ['select-item'],
-			[
-				['ng-repeat', 'item in $ctrl.searchList track by $index'],
-				['ng-attr-data-value', '{{item[$ctrl.value]}}'],
-				['role', 'option'],
-			],
-		);
+		const item = <div class='select-item' ng-repeat='item in $ctrl.searchList track by $index'
+			ng-attr-data-value='{{item[$ctrl.value]}}' role='option'></div>;
 		item.innerText = '{{item[$ctrl.text]}}';
 
-		const list = h.createHtmlElement('div', ['select-dropdown-list'],
-			[
-				['dir', 'ltr'],
-				['role', 'listbox'],
-				['hidden', 'true'],
-			],
-		);
+		const list = <div class='select-dropdown-list' dir='ltr' role='listbox' hidden={true}></div>;
 
-		const input = h.createHtmlElement('input', ['select-input'],
-			[
-				['type', 'text'],
-				['autocomplete', 'off'],
-				['autocapitalize', 'off'],
-				['spellcheck', 'false'],
-				['role', 'textbox'],
-				['aria-autocomplete', 'list'],
-				['placeholder', ''],
-				['title', 'Select List'],
-				['hidden', 'true'],
-			],
-		);
+		const input = <input class='select-input'
+			type='text'
+			autocomplete='off'
+			autocapitalize='off'
+			spellcheck={false}
+			role='textbox'
+			aria-autocomplete='list'
+			placeholder=''
+			title='Select List'
+			hidden={true}
+		/>;
 
 		const type = `select-${isMultiple ? 'multiple' : 'one'}`;
-		const container = h.createHtmlElement('div', ['select-container'],
-			[
-				['data-type', type],
-				['role', 'combobox'],
-				['tabindex', '0'],
-				['aria-autocomplete', 'list'],
-				['aria-haspopup', 'true'],
-				['aria-expanded', 'false'],
-				['dir', 'ltr'],
-				['ng-attr-name', `${type}_{{$ctrl.uniqueId}}`],
-				['ng-attr-id', `${type}_{{$ctrl.uniqueId}}`],
-			],
-		);
-
-		const dropdown = h.createHtmlElement('div', ['select-dropdown', 'border-bottom-0', 'border-top-0'], [['aria-expanded', 'false']]);
+		const container =
+			<div class='select-container'
+				data-type={type}
+				role='combobox'
+				tabIndex={0}
+				aria-autocomplete='list'
+				aria-haspopup='true'
+				aria-expanded='false'
+				dir='ltr'
+				ng-attr-name={`${type}_{{$ctrl.uniqueId}}`}
+				ng-attr-id={`${type}_{{$ctrl.uniqueId}}`}>
+				{inner}
+				<div class='select-dropdown border-bottom-0 border-top-0'
+					aria-expanded='false'>
+					{input}
+					{list}
+				</div>
+			</div>;
 
 		innerlist.appendChild(selected);
 		innerlist.appendChild(btn);
-		inner.appendChild(select);
-		inner.appendChild(innerlist);
 
 		list.appendChild(item);
-
-		dropdown.appendChild(input);
-		dropdown.appendChild(list);
-
-		container.appendChild(inner);
-		container.appendChild(dropdown);
 
 		return container;
 	},

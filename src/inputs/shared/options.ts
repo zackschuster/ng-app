@@ -51,7 +51,6 @@ export interface NgInputOptions<T extends NgInputController = NgInputController>
 			$template: HTMLDivElement;
 			$attrs: NgAttributes;
 		},
-		h: NgRenderer,
 	): HTMLElement;
 
 	/**

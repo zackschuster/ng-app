@@ -1,17 +1,17 @@
+import { h } from '../renderer';
 import { NgInputController, NgInputOptions } from './shared';
 
 const DEFAULT_MAX_HEIGHT = 9e4;
 
 class TextBoxController extends NgInputController {
 	public $element!: HTMLTextAreaElement;
-	public $mirror = document.createElement('textarea');
+	public $mirror;
 
 	constructor() {
 		super();
 
-		this.$mirror.setAttribute('aria-hidden', 'true');
-		this.$mirror.setAttribute('title', 'Hidden TextArea');
-		this.$mirror.setAttribute('tabindex', '-1');
+		this.$mirror =
+			<textarea aria-hidden='true' title='Hidden TextArea' tabIndex={-1} /> as HTMLTextAreaElement;
 
 		this.$mirror.style.setProperty('position', 'absolute');
 		this.$mirror.style.setProperty('top', '-999px');
@@ -125,8 +125,17 @@ class TextBoxController extends NgInputController {
 export const textBox: NgInputOptions = {
 	type: 'input',
 	attrs: { maxlength: 3000, placeholder: '' },
-	render(h) {
-		const textArea = h.createTextArea();
+	render() {
+		const textArea =
+			<textarea class='form-control'
+				ng-attr-id='ngModel_{{$ctrl.uniqueId}}'
+				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-model='$ctrl.ngModel'
+				ng-model-options='$ctrl.ngModelOptions'
+			/> as HTMLTextAreaElement;
+
+		textArea.maxLength = 3000;
+		textArea.placeholder = '{{placeholder}}';
 
 		textArea.style.setProperty('overflow', 'hidden');
 		textArea.style.setProperty('overflow-y', 'hidden');

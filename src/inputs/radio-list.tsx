@@ -1,21 +1,13 @@
+import { h } from '../renderer';
 import { NgInputController, NgInputOptions } from './shared';
 
 class RadioListController extends NgInputController {
 	public $postLink() {
 		setTimeout(() => {
 			if (this.$attrs.hasOwnProperty('required')) {
-				const fieldset = this.$element.closest('fieldset');
-
-				if (fieldset != null) {
-					const legend = fieldset.querySelector('legend');
-
-					if (legend != null) {
-						const span = document.createElement('span');
-						span.classList.add('text-danger');
-						span.innerText = ' *';
-						legend.appendChild(span);
-					}
-				}
+				this.$element.closest('fieldset')
+					?.querySelector('legend')
+					?.appendChild(<span class='text-danger'> *</span>);
 			}
 		});
 	}
@@ -25,13 +17,18 @@ export const radioList: NgInputOptions = {
 	type: 'input',
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',
-	render(h) {
-		const radio = h.createInput('radio');
+	render() {
 		const { value = 'Value' } = this.$attrs;
-
-		radio.setAttribute('ng-value', `item.${value}`);
-		radio.setAttribute('ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}_{{$index}}');
-		radio.style.setProperty('cursor', 'pointer');
+		const radio =
+			<input class='form-check-input'
+				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-model='$ctrl.ngModel'
+				ng-model-options='$ctrl.ngModelOptions'
+				type='radio'
+				ng-value={`item.${value}`}
+				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}_{{$index}}'
+				style={'cursor: pointer;' as never}
+			/>;
 
 		if (this.$attrs.hasOwnProperty('inline')) {
 			this.$template.classList.remove('form-check');

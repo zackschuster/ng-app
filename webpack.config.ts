@@ -35,6 +35,7 @@ export default (env = 'development') => {
 			publicPath: '/',
 		},
 		resolve: {
+			extensions: ['.js', '.ts', '.tsx'],
 			modules: ['.', 'docs', 'node_modules'],
 		},
 		plugins: [

@@ -12,8 +12,8 @@
 	"include": [
 		"index.ts",
 		"polyfills.ts",
-		"src/**/*.ts",
-		"docs/**/*.tsx",
-		"test/**/*.ts"
+		"src",
+		"docs",
+		"test"
 	]
 }

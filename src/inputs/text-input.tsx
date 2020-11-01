@@ -1,4 +1,5 @@
 import { Indexed } from '@ledge/types';
+import { h } from '../renderer';
 import { NgInputController, NgInputOptions } from './shared';
 
 class TextInputController extends NgInputController {
@@ -34,13 +35,26 @@ export const textInput: NgInputOptions<TextInputController> = {
 	type: 'input',
 	canHaveIcon: true,
 	attrs: { maxlength: 3000, placeholder: '' },
-	render(h) {
-		const { type, minlength } = this.$attrs;
-
-		const input = h.createInput(type);
+	render() {
+		const { type = 'text', minlength } = this.$attrs;
+		const input =
+			<input class='form-control'
+				ng-attr-id='ngModel_{{$ctrl.uniqueId}}'
+				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-model='$ctrl.ngModel'
+				ng-model-options='$ctrl.ngModelOptions'
+				type={type}
+				maxLength={'{{maxlength}}' as never}
+				placeholder='{{placeholder}}' />;
 
 		const isRange = type === 'range';
 		if (type === 'number' || isRange) {
+			if (isRange) {
+				input.classList.remove('form-control');
+				input.classList.add('custom-range');
+				input.removeAttribute('maxlength');
+				input.removeAttribute('placeholder');
+			}
 			input.setAttribute('ng-attr-min', '{{$ctrl.min}}');
 			input.setAttribute('ng-attr-max', '{{$ctrl.max}}');
 			input.setAttribute('ng-attr-step', `{{$ctrl.step || '${isRange ? 1 : 'any'}'}}`);
@@ -53,11 +67,11 @@ export const textInput: NgInputOptions<TextInputController> = {
 
 		return input;
 	},
-	postRender(h) {
+	postRender() {
 		if (this.$attrs.type === 'range') {
-			const text = h.createHtmlElement('p', ['text-center', 'lead']);
-			text.textContent = '{{$ctrl.ngModel}}';
-			this.$template.appendChild(text);
+			this.$template.appendChild(
+				<p class='text-center lead'>{'{{$ctrl.ngModel}}'}</p>,
+			);
 		}
 		return this.$template;
 	},

@@ -15,7 +15,7 @@ const BaseComponent = Object.seal({
 	templateClass: 'form-group',
 	attrs: {},
 	controller: class extends NgInputController { },
-	render(_h) {
+	render() {
 		return this.$template;
 	},
 	renderLabel(h) {
@@ -129,7 +129,7 @@ export class InputService extends NgService {
 			const $template = h.createHtmlElement('div', [$component.templateClass as string]);
 
 			// allow consumer to access $template and $attrs attributes from `this`
-			const $input = $component.render.call({ $template, $attrs }, h);
+			const $input = $component.render.call({ $template, $attrs });
 
 			const isRadio = ($input as HTMLInputElement).type === 'radio';
 			const isRequired = $attrs.hasOwnProperty('required');
