@@ -5,7 +5,7 @@
 *.html
 *.js
 *.log
-test/**/snapshots
+test/**/snapshots/*.md
 t.*
 
 node_modules
