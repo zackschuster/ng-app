@@ -1,4 +1,4 @@
-// tslint:disable: no-redundant-jsdoc
+// tslint:disable:no-redundant-jsdoc
 import { Indexed } from '@ledge/types';
 import { NgInputController } from './controller';
 import { NgAttributes } from '../../attributes';

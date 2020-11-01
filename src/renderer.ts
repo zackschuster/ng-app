@@ -142,10 +142,11 @@ export function h<T extends keyof HTMLElementTagNameMap, E extends HTMLElement &
 		props = {};
 	}
 
-	const properties = Object.entries(props)
-		.filter(([_, v]) => v != null && typeof v !== 'object');
-
 	const setProperty = (key: string, value: any) => {
+		if (value == null) {
+			return;
+		}
+
 		if (typeof value === 'function') {
 			element[key as keyof typeof element] = value;
 		} else if (key === 'className') {
@@ -155,8 +156,8 @@ export function h<T extends keyof HTMLElementTagNameMap, E extends HTMLElement &
 		}
 	};
 
-	for (const [key, value] of properties) {
-		setProperty(key, value);
+	for (const key of Object.keys(props)) {
+		setProperty(key, props[key]);
 	}
 
 	const appendChild = (node: unknown) => {

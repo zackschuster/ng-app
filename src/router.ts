@@ -86,10 +86,11 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 	}
 
 	protected annotateResolveFunctions({ resolve = {} }: NgRoute) {
-		for (const [id, resolveFn] of Object.entries(resolve)) {
+		for (const id of Object.keys(resolve)) {
 			if (Array.isArray(resolve)) {
 				continue;
 			}
+			const resolveFn = resolve[id];
 			if (this.isNgTransitionFn(resolveFn)) {
 				resolve[id] = ['$transition$', resolveFn];
 			}
@@ -112,7 +113,7 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 		let url = `/${data.isBase ? name : name.split(/(?=[A-Z])/).join('/').toLowerCase()}`
 			.replace(/View$/, '');
 
-		for (const [key, { type = {} }] of Object.entries<any>(params)) {
+		for (const [key, { type = {} }] of Object.keys(params).map(x => ([x, params[x]]))) {
 			url += type.name === 'path' ? '/:' : (url.indexOf('?') !== -1 ? '&' : '?');
 			url += key;
 		}

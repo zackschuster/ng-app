@@ -166,7 +166,7 @@ export class NgApp {
 	public addComponents(components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>) {
 		const entries = components instanceof Map
 			? components.entries()
-			: Object.entries(components);
+			: Object.keys(components).map(x => ([x, components[x]] as const));
 
 		for (let [name, component] of entries) {
 			if (this.isInputComponent(component)) {

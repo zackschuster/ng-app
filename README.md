@@ -132,3 +132,13 @@ const log = app.log; // using bootstrap toasts + $log service
 	<radio-list ng-model="model5" list="[{Text: 'Item 1', Value: 1}, {Text: 'Item 2', Value: 2}]"></radio-list>
 </fieldset>
 ```
+
+# IE11 Support
+
+Currently only the following APIs need to be polyfilled for ng-app to work in IE11:
+
+- `Map`
+- `Set`
+- `Promise`
+- `fetch`
+- `AbortController`

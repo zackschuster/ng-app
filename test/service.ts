@@ -1,7 +1,7 @@
+// tslint:disable:no-async-without-await
 import test from 'ava';
 import { $svc } from './mocks';
 
-// tslint:disable-next-line: no-async-without-await
 test('$svc.splitByCapitalLetter', async t => {
 	t.is($svc.splitByCapitalLetter('splitByCapitalLetter'), 'Split By Capital Letter');
 	t.is($svc.splitByCapitalLetter('splitBy CapitalLetter'), 'Split By Capital Letter');

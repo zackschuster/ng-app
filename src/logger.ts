@@ -356,8 +356,13 @@ export class NgLogger extends NgConsole {
 
 		const toast = new NgToast(this.$renderer, { text, type, container: this.container });
 		toast.show(timeout).then(() => {
-			const index = this.toasts.findIndex(x => x === toast);
-			this.toasts.splice(index, 1);
+			let i = this.toasts.length;
+			for (; i > -1; --i) {
+				if (this.toasts[i] === toast) {
+					break;
+				}
+			}
+			this.toasts.splice(i, 1);
 		});
 
 		this.toasts.push(toast);

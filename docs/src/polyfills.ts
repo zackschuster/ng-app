@@ -2,9 +2,6 @@
 import 'core-js/es/map';
 import 'core-js/es/set';
 import 'core-js/es/promise';
-import 'core-js/features/array/find-index';
-import 'core-js/features/object/assign';
-import 'core-js/features/object/entries';
 import 'whatwg-fetch';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 

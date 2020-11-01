@@ -113,8 +113,16 @@ export class InputService extends NgService {
 		const $definition = cloneDeep(InputService.$baseDefinition);
 
 		// assign child objects
-		Object.assign($definition.bindings, $component.bindings);
-		Object.assign($definition.transclude, $component.transclude);
+		if ($definition.bindings != null && $component.bindings != null) {
+			for (const key of Object.keys($component.bindings)) {
+				$definition.bindings[key] = $component.bindings[key];
+			}
+		}
+		if ($definition.transclude != null && $component.transclude != null) {
+			for (const key of Object.keys($component.transclude)) {
+				($definition.transclude as Indexed<string>)[key] = ($component.transclude as Indexed<string>)[key];
+			}
+		}
 
 		// assign controller
 		if ($component.controller === undefined) {
@@ -202,7 +210,7 @@ export class InputService extends NgService {
 			const { validators = {} } = $component;
 			const attrs = Object.keys($component.attrs as Indexed);
 
-			for (const [key, value] of Object.entries(validators)) {
+			for (const [key, value] of Object.keys(validators).map(x => [x, validators[x]])) {
 				InputService.$validationMessages.set(key, value);
 				attrs.push(key);
 			}

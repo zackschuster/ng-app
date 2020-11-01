@@ -12,7 +12,7 @@ export class NgAttributes {
 			this.$record(key, value);
 		}
 
-		for (const [key, value] of Object.entries(attrs)) {
+		for (const [key, value] of Object.keys(attrs).map(x => ([x, attrs[x]] as const))) {
 			this.$record(key, value);
 		}
 	}
