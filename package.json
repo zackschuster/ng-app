@@ -73,12 +73,13 @@
 	},
 	"ava": {
 		"files": [
-			"test/**/*.ts",
+			"test/**",
 			"!test/inputs/-util.ts",
 			"!test/mocks/**"
 		],
 		"extensions": [
-			"ts"
+			"ts",
+			"tsx"
 		],
 		"require": [
 			"./test/-register.cjs"

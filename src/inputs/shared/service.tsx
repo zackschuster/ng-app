@@ -5,8 +5,8 @@ import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
 import { NgAttributes } from '../../attributes';
 import { NgComponentOptions } from '../../options';
-import { NgRenderer } from '../../renderer';
 import { NgService } from '../../service';
+import { h } from '../../render';
 
 const BaseComponent = Object.seal({
 	isRadioOrCheckbox: false,
@@ -18,12 +18,12 @@ const BaseComponent = Object.seal({
 	render() {
 		return this.$template;
 	},
-	renderLabel(h) {
-		const $transclude = h.createSlot();
+	renderLabel() {
+		const $transclude = <ng-transclude></ng-transclude>;
 		$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
 		this.$label.appendChild($transclude);
 	},
-	postRender(_h) {
+	postRender() {
 		return this.$template;
 	},
 }) as NgInputOptions & { isRadioOrCheckbox: boolean };
@@ -104,9 +104,6 @@ export class InputService extends NgService {
 	 * @param component An object representing the requested component definition
 	 */
 	public static defineInputComponent<T extends NgInputOptions>(component: T) {
-		// 'h' identifier (and many other ideas) taken from the virtual-dom ecosystem
-		const h = new NgRenderer();
-
 		const $component = cloneDeep({ ...InputService.$BaseComponent, ...component });
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
@@ -131,10 +128,11 @@ export class InputService extends NgService {
 		$definition.controller = $component.controller;
 
 		// assign template
+		// tslint:disable-next-line: cyclomatic-complexity
 		$definition.template = ['$element', '$attrs', ($element: [HTMLElement], $attrs: NgAttributes) => {
 			const $el = $element[0];
 
-			const $template = h.createHtmlElement('div', [$component.templateClass as string]);
+			const $template = <div class={$component.templateClass as string}></div> as HTMLDivElement;
 
 			// allow consumer to access $template and $attrs attributes from `this`
 			const $input = $component.render.call({ $template, $attrs });
@@ -144,14 +142,29 @@ export class InputService extends NgService {
 			const isSrOnly = $attrs.hasOwnProperty('srOnly');
 
 			// all inputs must have labels
-			const $label = h.createLabel([$component.labelClass as string], { isRequired, isSrOnly, isRadio });
+			const $label =
+				<label class={`${$component.labelClass}${isSrOnly ? ' sr-only' : ''}`}
+					ng-attr-for='{{id}}_{{$ctrl.uniqueId}}'></label> as HTMLLabelElement;
+
+			if (isRequired === true && !isRadio) {
+				$label.appendChild(<span class='text-danger'> *</span>);
+			}
 
 			if ($component.isRadioOrCheckbox === false) {
 				$template.appendChild($label);
 			}
 
-			if ($component.canHaveIcon === true) {
-				$template.appendChild(h.createIconInput($input, $attrs.icon));
+			if ($component.canHaveIcon === true && $attrs.icon != null) {
+				$template.appendChild(
+					<div class='input-group'>
+						<div class='input-group-prepend'>
+							<span class='input-group-text'>
+								<span class={`fa fa-${$attrs.icon}`} aria-hidden='true'></span>
+							</span>
+						</div>
+						{$input}
+					</div>,
+				);
 			} else {
 				$template.appendChild($input);
 			}
@@ -166,23 +179,21 @@ export class InputService extends NgService {
 				$label.removeChild(requiredTag);
 			}
 
-			($component.renderLabel as NonNullable<NgInputOptions['renderLabel']>)
-				.call({ $label, $attrs }, h);
+			$component.renderLabel?.call({ $label, $attrs });
 
 			if (requiredTag != null) {
 				$label.appendChild(requiredTag);
 			}
 
 			// add a transclusion slot for e.g. nesting inputs
-			$template.appendChild(h.createSlot('contain'));
+			$template.appendChild(<div ng-transclude='contain'></div>);
 
 			if ($component.isRadioOrCheckbox === true) {
 				$label.style.setProperty('cursor', 'pointer');
 				$template.appendChild($label);
 			}
 
-			($component.postRender as NonNullable<NgInputOptions['postRender']>)
-				.call({ $template, $attrs }, h);
+			$component.postRender?.call({ $template, $attrs });
 
 			// that's right, i named it after filterFilter. fight me.
 			const $inputInput = InputService.getInputInput($input);
@@ -201,11 +212,10 @@ export class InputService extends NgService {
 				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 			}
 
-			const $validationBlock = h.createHtmlElement('div', [], [
-				['ng-messages', InputService.$ValidationExpressions.$Error],
-				['ng-show', InputService.$ValidationExpressions.$IsInvalid],
-				['role', 'alert'],
-			]);
+			const $validationBlock =
+				<div ng-messages={InputService.$ValidationExpressions.$Error}
+					ng-show={InputService.$ValidationExpressions.$IsInvalid}
+					role='alert'></div>;
 
 			const { validators = {} } = $component;
 			const attrs = Object.keys($component.attrs as Indexed);
@@ -221,17 +231,14 @@ export class InputService extends NgService {
 				.filter(x => InputService.$validationMessages.has(x) === true)
 				.filter(x => x !== 'email' || $inputInput.type === x)
 				.forEach(x => {
-					const $message = h.createHtmlElement('div', ['text-danger'], [['ng-message', x]]);
+					const $message = <div class='text-danger' ng-message={x}></div>;
 					$message.innerText = InputService.$validationMessages.get(x) as string;
 					$validationBlock.appendChild($message);
 				});
 
 			let $html: string;
 			if (isRadio === true) {
-				const $newTpl = h.createHtmlElement('div', ['form-group']);
-				$newTpl.appendChild($template);
-				$newTpl.appendChild($validationBlock);
-				$html = $newTpl.outerHTML;
+				$html = (<div class='form-group'>{$template}{$validationBlock}</div>).outerHTML;
 			} else {
 				$template.appendChild($validationBlock);
 				$html = $template.outerHTML;

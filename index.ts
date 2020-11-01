@@ -55,7 +55,7 @@ export * from './src/logger';
 export * from './src/modal';
 export * from './src/ng';
 export * from './src/options';
-export * from './src/renderer';
+export * from './src/render';
 export * from './src/router';
 export * from './src/service';
 

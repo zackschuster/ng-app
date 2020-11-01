@@ -1,4 +1,4 @@
-import { h } from '../renderer';
+import { h } from '../render';
 import { NgInputController, NgInputOptions } from './shared';
 
 const DEFAULT_MAX_HEIGHT = 9e4;
@@ -128,8 +128,8 @@ export const textBox: NgInputOptions = {
 	render() {
 		const textArea =
 			<textarea class='form-control'
-				ng-attr-id='ngModel_{{$ctrl.uniqueId}}'
-				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
+				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
 				ng-model='$ctrl.ngModel'
 				ng-model-options='$ctrl.ngModelOptions'
 			/> as HTMLTextAreaElement;

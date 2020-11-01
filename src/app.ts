@@ -9,7 +9,6 @@ import { NgLogger } from './logger';
 import { NgModal } from './modal';
 import { NgInjector, bootstrap, injector, module } from './ng';
 import { NgAppConfig, NgComponentOptions } from './options';
-import { NgRenderer } from './renderer';
 import { NgRouter } from './router';
 
 export class NgApp {
@@ -61,13 +60,6 @@ export class NgApp {
 		return this._modal;
 	}
 
-	public get renderer() {
-		if (this._renderer == null) {
-			this._renderer = this.$renderer();
-		}
-		return this._renderer;
-	}
-
 	public readonly $id = '$core';
 	public $injector = injector(['ng']);
 
@@ -83,7 +75,6 @@ export class NgApp {
 	private _http!: NgHttp;
 	private _log!: NgLogger;
 	private _modal!: NgModal;
-	private _renderer!: NgRenderer;
 
 	constructor() {
 		this.configure({})
@@ -230,7 +221,6 @@ export class NgApp {
 		const componentCtrl = makeInjectableCtrl<T>(ctrl, {
 			log: this.log,
 			http: this.http,
-			renderer: this.renderer,
 			config: () => this.config,
 		});
 
@@ -241,7 +231,6 @@ export class NgApp {
 
 	protected $modal() {
 		return new NgModal(
-			this.renderer,
 			this.log,
 			this.http,
 			this.config,
@@ -268,9 +257,6 @@ export class NgApp {
 	}
 
 	protected $logger() {
-		return new NgLogger(this.renderer, this.$config.IS_PROD);
-	}
-	protected $renderer() {
-		return new NgRenderer();
+		return new NgLogger(this.$config.IS_PROD);
 	}
 }

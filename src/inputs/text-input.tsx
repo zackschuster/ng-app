@@ -1,5 +1,5 @@
 import { Indexed } from '@ledge/types';
-import { h } from '../renderer';
+import { h } from '../render';
 import { NgInputController, NgInputOptions } from './shared';
 
 class TextInputController extends NgInputController {
@@ -39,8 +39,8 @@ export const textInput: NgInputOptions<TextInputController> = {
 		const { type = 'text', minlength } = this.$attrs;
 		const input =
 			<input class='form-control'
-				ng-attr-id='ngModel_{{$ctrl.uniqueId}}'
-				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
+				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
 				ng-model='$ctrl.ngModel'
 				ng-model-options='$ctrl.ngModelOptions'
 				type={type}

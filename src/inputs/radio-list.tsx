@@ -1,4 +1,4 @@
-import { h } from '../renderer';
+import { h } from '../render';
 import { NgInputController, NgInputOptions } from './shared';
 
 class RadioListController extends NgInputController {
@@ -21,7 +21,7 @@ export const radioList: NgInputOptions = {
 		const { value = 'Value' } = this.$attrs;
 		const radio =
 			<input class='form-check-input'
-				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
 				ng-model='$ctrl.ngModel'
 				ng-model-options='$ctrl.ngModelOptions'
 				type='radio'

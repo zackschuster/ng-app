@@ -4,12 +4,10 @@ import { $injector } from './--injector';
 import { $config } from './--app';
 import { $http } from './-http';
 import { $log } from './-logger';
-import { $renderer } from './-renderer';
 
 const Ctrl = makeInjectableCtrl(NgController, {
 	log: $log,
 	http: $http,
-	renderer: $renderer,
 	config: () => $config,
 });
 export const $scope = $injector.get('$rootScope').$new();

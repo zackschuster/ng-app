@@ -1,5 +1,5 @@
 import flatpickr from 'flatpickr';
-import { h } from '../renderer';
+import { h } from '../render';
 import { NgInputController, NgInputOptions } from './shared';
 
 function isNumber(n: any): n is number {
@@ -93,8 +93,8 @@ export const dateInput: NgInputOptions = {
 		// no ng-model as flatpickr requires control of the input element
 		const input =
 			<input class='form-control'
-				ng-attr-id='ngModel_{{$ctrl.uniqueId}}'
-				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
+				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
 				ng-model-options='$ctrl.ngModelOptions'
 				type='text'
 				maxLength={'{{maxlength}}' as never}

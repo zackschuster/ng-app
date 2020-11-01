@@ -2,30 +2,41 @@ import { NgController, makeInjectableCtrl } from './controller';
 import { NgLogger } from './logger';
 import { NgService } from './service';
 import { NgHttp } from './http';
-import { NgAppConfig } from './options';
-import { NgRenderer } from './renderer';
 import { NgInjector, NgScope } from './ng';
+import { NgAppConfig } from './options';
+import { h } from './render';
 
 const MODAL_SHOW_DELAY = 23;
 const MODAL_HIDE_DELAY = 150;
 
 export class NgModal extends NgService {
-	protected readonly $backdrop: HTMLDivElement;
-	protected readonly $container: HTMLDivElement;
-	protected readonly $dialog: HTMLDivElement;
-	protected readonly $form: HTMLFormElement;
-	protected readonly $header: HTMLElement;
-	protected readonly $title: HTMLHeadingElement;
-	protected readonly $main: HTMLElement;
-	protected readonly $footer: HTMLElement;
-	protected readonly $cancelBtn: HTMLButtonElement;
-	protected readonly $submitBtn: HTMLInputElement;
-
+	protected readonly $backdrop = <div class='modal-backdrop fade'></div>;
+	protected readonly $title =
+		<h5 class='modal-title' id={`modal-title-${this.uniqueId}`}></h5> as HTMLHeadingElement;
+	protected readonly $header = <header class='modal-header'>{this.$title}</header>;
+	protected readonly $main = <main class='modal-body'></main>;
+	protected readonly $cancelBtn =
+		<button class='btn btn-info' type='button'>Cancel</button> as HTMLButtonElement;
+	protected readonly $submitBtn = <input class='btn btn-success' type='submit' /> as HTMLInputElement;
+	protected readonly $footer =
+		<footer class='modal-footer'>{this.$cancelBtn}{this.$submitBtn}</footer>;
+	protected readonly $form =
+		<form class='modal-content' role='document'>
+			{this.$header}
+			{this.$main}
+			{this.$footer}
+		</form> as HTMLFormElement;
+	protected readonly $dialog = <div class='modal-dialog' role='dialog'>{this.$form}</div>;
+	protected readonly $container =
+		<div class='fade modal'
+			aria-labelledby={this.$title.id}
+			aria-live='polite'
+			aria-modal='true'
+			role='dialog'>{this.$dialog}</div>;
 	protected readonly $compile: (element: Element) => (scope: NgScope) => { [i: number]: HTMLElement };
 	protected readonly $rootScope: NgScope;
 
 	constructor(
-		protected readonly $renderer: NgRenderer,
 		protected readonly $log: NgLogger,
 		protected readonly $http: NgHttp,
 		protected readonly $config: NgAppConfig,
@@ -36,39 +47,10 @@ export class NgModal extends NgService {
 		this.$compile = this.$injector.get('$compile');
 		this.$rootScope = this.$injector.get('$rootScope');
 
-		this.$backdrop = this.$renderer.createHtmlElement('div', ['modal-backdrop', 'fade']);
-		this.$dialog = this.$renderer.createHtmlElement('div', ['modal-dialog'], [['role', 'dialog']]);
-		this.$form = this.$renderer.createHtmlElement('form', ['modal-content'], [['role', 'document']]);
-		this.$header = this.$renderer.createHtmlElement('header', ['modal-header']);
-		this.$title = this.$renderer.createHtmlElement('h5', ['modal-title'], [['id', `modal-title-${this.uniqueId}`]]);
-		this.$main = this.$renderer.createHtmlElement('main', ['modal-body']);
-		this.$footer = this.$renderer.createHtmlElement('footer', ['modal-footer']);
-		this.$cancelBtn = this.$renderer.createHtmlElement('button', ['btn', 'btn-info'], [['type', 'button']]);
-		this.$submitBtn = this.$renderer.createHtmlElement('input', ['btn', 'btn-success'], [['type', 'submit']]);
-
-		this.$title.id = `modal-title-${this.uniqueId}`;
-		this.$cancelBtn.innerText = 'Cancel';
-
-		this.$container = this.$renderer.createHtmlElement('div', ['fade', 'modal'], [
-			['aria-labelledby', this.$title.id],
-			['aria-live', 'polite'],
-			['aria-modal', 'true'],
-			['role', 'dialog'],
-		]);
-
-		this.$header.appendChild(this.$title);
-		this.$footer.appendChild(this.$cancelBtn);
-		this.$footer.appendChild(this.$submitBtn);
-		this.$form.appendChild(this.$header);
-		this.$form.appendChild(this.$main);
-		this.$form.appendChild(this.$footer);
-		this.$dialog.appendChild(this.$form);
-		this.$container.appendChild(this.$dialog);
-
 		document.body.appendChild(this.$container);
 	}
 
-	public open<T extends typeof NgController>(options: NgModalOptions<T> = { }) {
+	public open<T extends typeof NgController>(options: NgModalOptions<T> = {}) {
 		const { $log } = this;
 		const {
 			title = 'Set the <code>title</code> property to replace me :)',
@@ -108,7 +90,6 @@ export class NgModal extends NgService {
 		const $ctrl = makeInjectableCtrl(controller, {
 			log: this.$log,
 			http: this.$http,
-			renderer: this.$renderer,
 			config: () => this.$config,
 		});
 

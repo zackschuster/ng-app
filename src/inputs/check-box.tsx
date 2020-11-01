@@ -1,4 +1,4 @@
-import { h } from '../renderer';
+import { h } from '../render';
 import { NgInputOptions } from './shared';
 
 export const checkBox: NgInputOptions = {
@@ -8,8 +8,8 @@ export const checkBox: NgInputOptions = {
 	render() {
 		const input =
 			<input class='form-check-input'
-				ng-attr-id='ngModel_{{$ctrl.uniqueId}}'
-				ng-attr-name='ngModel_{{$ctrl.uniqueId}}'
+				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
+				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
 				ng-model='$ctrl.ngModel'
 				ng-model-options='$ctrl.ngModelOptions'
 				type='checkbox'

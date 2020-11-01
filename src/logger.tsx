@@ -1,6 +1,6 @@
 import anime from 'animejs';
 import { NgService } from './service';
-import { NgRenderer } from './renderer';
+import { h } from './render';
 
 type LogType = '$log' | '$warn' | '$error' | '$info' | '$success';
 enum LogTypeToastBackgrounds {
@@ -13,28 +13,25 @@ enum LogTypeToastBackgrounds {
 
 export class NgToast {
 	protected type!: LogType;
-	protected readonly toast: HTMLDivElement;
-	protected readonly toastHeader: HTMLDivElement;
-	protected readonly toastBody: HTMLDivElement;
-	protected readonly toastHeaderTimestamp: HTMLElement;
+	protected readonly toastHeaderTimestamp = <strong class='text-dark'></strong>;
+	protected readonly toastHeader = <div class='toast-header'>{this.toastHeaderTimestamp}</div>;
+	protected readonly toastBody = <div class='toast-body h5 col mb-0 pb-3'></div>;
+	protected readonly toast =
+		<div class='toast row justify-content-between w-100'
+			role='alert'
+			aria-live='assertive'
+			aria-atomic='true'>
+			{this.toastHeader}
+			{this.toastBody}
+		</div>;
 
-	constructor(protected readonly $renderer: NgRenderer, options: {
+	constructor(options: {
 		text: string,
 		type: LogType,
 		container: HTMLElement,
 	}) {
-		this.toast = this.$renderer.createHtmlElement('div', ['toast', 'row', 'justify-content-between', 'w-100'], [['role', 'alert'], ['aria-live', 'assertive'], ['aria-atomic', 'true']]);
 		this.toast.style.setProperty('cursor', 'pointer');
-
-		this.toastBody = this.$renderer.createHtmlElement('div', ['toast-body', 'h5', 'col', 'mb-0', 'pb-3']);
-		this.toastHeader = this.$renderer.createHtmlElement('div', ['toast-header']);
 		this.toastHeader.style.setProperty('border-bottom', 'none');
-
-		this.toastHeaderTimestamp = this.$renderer.createHtmlElement('strong', ['text-dark']);
-
-		this.toastHeader.appendChild(this.toastHeaderTimestamp);
-		this.toast.appendChild(this.toastHeader);
-		this.toast.appendChild(this.toastBody);
 
 		this.setBodyText(options.text);
 		this.setType(options.type);
@@ -229,13 +226,12 @@ export class NgConsole extends NgService {
 // tslint:enable:no-console
 
 export class NgLogger extends NgConsole {
-	protected readonly container: HTMLDivElement;
+	protected readonly container = <div class='position-fixed'></div>;
 	protected readonly toasts: NgToast[] = [];
 
-	constructor(private $renderer: NgRenderer, private isProd = false) {
+	constructor(private isProd = false) {
 		super();
 
-		this.container = this.$renderer.createHtmlElement('div', ['position-fixed']);
 		this.container.style.setProperty('top', '0.5rem');
 		this.container.style.setProperty('right', '-1.5rem');
 		this.container.style.setProperty('width', '100%');
@@ -257,14 +253,9 @@ export class NgLogger extends NgConsole {
 	 * @param msg Confirmation message
 	 */
 	public confirm(msg = 'Please confirm your action') {
-		const okBtn = this.$renderer.createHtmlElement('button', ['btn', 'w-50', 'btn-success', 'rounded-0']);
-		okBtn.innerText = 'Yes';
-		const cancelBtn = this.$renderer.createHtmlElement('button', ['btn', 'w-50', 'btn-dark', 'rounded-0']);
-		cancelBtn.innerText = 'No';
-
-		const footer = this.$renderer.createHtmlElement('div', ['w-100']);
-		footer.appendChild(cancelBtn);
-		footer.appendChild(okBtn);
+		const okBtn = <button class='btn w-50 btn-success rounded-0'>Yes</button>;
+		const cancelBtn = <button class='btn w-50 btn-dark rounded-0'>No</button>;
+		const footer = <div class='w-100'>{cancelBtn}{okBtn}</div>;
 
 		const toast = this.notify(msg, '$log', false);
 		toast.appendChild(footer);
@@ -354,7 +345,7 @@ export class NgLogger extends NgConsole {
 	public notify(text: string, type: LogType, timeout: false | number = 2323) {
 		this[type](`${type}: ${text}`);
 
-		const toast = new NgToast(this.$renderer, { text, type, container: this.container });
+		const toast = new NgToast({ text, type, container: this.container });
 		toast.show(timeout).then(() => {
 			let i = this.toasts.length;
 			for (; i > -1; --i) {

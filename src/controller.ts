@@ -6,7 +6,6 @@ import { NgLogger } from './logger';
 import { NgService } from './service';
 import { NgInjector, NgScope } from './ng';
 import { NgAppConfig } from './options';
-import { NgRenderer } from './renderer';
 import { NgStateService } from './router';
 
 export class NgController extends NgService {
@@ -18,7 +17,6 @@ export class NgController extends NgService {
 	public readonly $log!: NgLogger;
 	public readonly $http!: NgHttp;
 	public readonly $state!: NgStateService;
-	public readonly $renderer!: NgRenderer;
 	public readonly $element!: HTMLElement;
 
 	public readonly isProduction!: boolean;
@@ -80,14 +78,12 @@ export class NgController extends NgService {
 export function makeInjectableCtrl<T extends NgController>(ctrl: new () => T, locals: {
 	log: NgLogger,
 	http: NgHttp,
-	renderer: NgRenderer,
 	attrs?: Indexed,
 	config(): NgAppConfig;
 }) {
 	return class InternalController extends (ctrl as new () => any) {
 		public $log = locals.log;
 		public $http = locals.http;
-		public $renderer = locals.renderer;
 		public $state: NgStateService;
 		public $attrs: NgAttributes;
 		public $element: HTMLElement;
