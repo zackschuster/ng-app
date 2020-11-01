@@ -1,5 +1,3 @@
-import { WritableKeysOf } from '@ledge/types';
-
 export class NgRenderer {
 	public baseInputAttrs: [string, string][] = [
 		['ng-attr-id', '{{id}}_{{$ctrl.uniqueId}}'],
@@ -7,58 +5,6 @@ export class NgRenderer {
 		['ng-model', '$ctrl.ngModel'],
 		['ng-model-options', '$ctrl.ngModelOptions'],
 	];
-
-	public static createElement
-		<T extends keyof HTMLElementTagNameMap, E extends HTMLElement & (new () => E)>(
-			TagOrElement: T | E,
-			props: { [index: string]: any } = {},
-			...childNodes: unknown[]
-		): HTMLElementTagNameMap[T] | E {
-
-		const element = typeof TagOrElement === 'string'
-			? document.createElement(TagOrElement)
-			: new TagOrElement();
-
-		if (props === null) {
-			props = {};
-		}
-
-		const properties = Object.entries(props)
-			.filter(([_, v]) => v != null && typeof v !== 'object');
-
-		const setProperty = (key: string, value: any) => {
-			if (typeof value === 'function') {
-				element[key as keyof typeof element] = value;
-			} else if (key === 'className') {
-				element.setAttribute('class', value.toString());
-			} else {
-				element.setAttribute(key, value.toString());
-			}
-		};
-
-		for (const [key, value] of properties) {
-			setProperty(key, value);
-		}
-
-		const appendChild = (node: unknown) => {
-			if (node instanceof Node) {
-				element.appendChild(node);
-			} else if (node != null) {
-				element.appendChild(document.createTextNode(String(node)));
-			}
-		};
-		for (const node of childNodes) {
-			if (Array.isArray(node) && node.some(x => x instanceof Node)) {
-				for (const n of node) {
-					appendChild(n);
-				}
-			} else {
-				appendChild(node);
-			}
-		}
-
-		return element;
-	}
 
 	public createHtmlElement<T extends keyof HTMLElementTagNameMap | 'ng-transclude'>(
 		tagName: T,
@@ -181,111 +127,54 @@ export class NgRenderer {
 
 		return $inputGroup;
 	}
-
-	/**
-	 * Renderer2 implementations
-	 */
-
-	// tslint:disable-next-line: member-ordering
-	public data: { [key: string]: any } = Object.create(null);
-
-	// tslint:disable-next-line: member-ordering
-	public destroyNode = null;
-
-	public destroy() {
-		return;
-	}
-
-	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T): HTMLElementTagNameMap[T];
-	public createElement(tagName: string): HTMLUnknownElement;
-	public createElement<T extends keyof HTMLElementTagNameMap>(tagName: T) {
-		return document.createElement(tagName);
-	}
-
-	public createText(value: string) {
-		return document.createTextNode(value);
-	}
-
-	public createComment(value: string) {
-		return document.createComment(value);
-	}
-
-	public appendChild(parent: HTMLElement, newChild: HTMLElement) {
-		parent.appendChild(newChild);
-	}
-
-	public removeChild(parent: HTMLElement, newChild: HTMLElement) {
-		parent.removeChild(newChild);
-	}
-
-	public insertBefore(parent: HTMLElement, newChild: HTMLElement, refChild: HTMLElement) {
-		parent.insertBefore(newChild, refChild);
-	}
-
-	public addClass<T extends HTMLElement>(el: T, name: string) {
-		el.classList.add(name);
-	}
-
-	public removeClass<T extends HTMLElement>(el: T, name: string) {
-		el.classList.remove(name);
-	}
-
-	public setStyle<T extends HTMLElement>(el: T, style: string, value: any, important?: boolean) {
-		el.style.setProperty(style, value, important ? 'important' : '');
-	}
-
-	public removeStyle<T extends HTMLElement>(el: T, style: string) {
-		el.style.removeProperty(style);
-	}
-
-	public setAttribute<T extends HTMLElement>(el: T, name: string, value: string) {
-		el.setAttribute(name, value);
-	}
-
-	public removeAttribute<T extends HTMLElement>(el: T, name: string) {
-		el.removeAttribute(name);
-	}
-
-	public setProperty<T extends HTMLElement, U extends Exclude<WritableKeysOf<T>, number | symbol>>(el: T, name: U, value: any) {
-		el[name] = value;
-	}
-
-	public setValue<T extends HTMLElement>(node: T, value: string) {
-		node.nodeValue = value;
-	}
-
-	public parentNode(node: HTMLElement) {
-		return node.parentNode;
-	}
-
-	public nextSibling(node: HTMLElement) {
-		return node.nextSibling;
-	}
-
-	public selectRootElement(selectorOrNode: string | HTMLElement, preserveContent = false): HTMLElement {
-		const el: HTMLElement | null = typeof selectorOrNode === 'string'
-			? document.querySelector(selectorOrNode)
-			: selectorOrNode;
-
-		if (el == null) {
-			throw new Error(`The selector "${selectorOrNode}" did not match any elements`);
-		}
-
-		if (preserveContent === false) {
-			el.textContent = '';
-		}
-
-		return el;
-	}
-
-	public listen<T extends keyof GlobalEventHandlersEventMap>(
-		target: HTMLElement,
-		eventName: T,
-		callback: (event: GlobalEventHandlersEventMap[T]) => boolean | undefined,
-	) {
-		target.addEventListener(eventName, callback);
-		return () => target.removeEventListener(eventName, callback);
-	}
 }
 
-export const h = NgRenderer.createElement;
+export function h<T extends keyof HTMLElementTagNameMap, E extends HTMLElement & (new () => E)>(
+	TagOrElement: T | E,
+	props: { [index: string]: any } = {},
+	...childNodes: unknown[]
+): HTMLElementTagNameMap[T] | E {
+	const element = typeof TagOrElement === 'string'
+		? document.createElement(TagOrElement)
+		: new TagOrElement();
+
+	if (props === null) {
+		props = {};
+	}
+
+	const properties = Object.entries(props)
+		.filter(([_, v]) => v != null && typeof v !== 'object');
+
+	const setProperty = (key: string, value: any) => {
+		if (typeof value === 'function') {
+			element[key as keyof typeof element] = value;
+		} else if (key === 'className') {
+			element.setAttribute('class', value.toString());
+		} else {
+			element.setAttribute(key, value.toString());
+		}
+	};
+
+	for (const [key, value] of properties) {
+		setProperty(key, value);
+	}
+
+	const appendChild = (node: unknown) => {
+		if (node instanceof Node) {
+			element.appendChild(node);
+		} else if (node != null) {
+			element.appendChild(document.createTextNode(String(node)));
+		}
+	};
+	for (const node of childNodes) {
+		if (Array.isArray(node) && node.some(x => x instanceof Node)) {
+			for (const n of node) {
+				appendChild(n);
+			}
+		} else {
+			appendChild(node);
+		}
+	}
+
+	return element;
+}
