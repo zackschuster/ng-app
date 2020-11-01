@@ -21,20 +21,6 @@ class AppController extends NgController {
 	}
 }
 
-app
-	.module
-	.controller(
-		'AppController',
-		app.makeComponentController(AppController),
-	);
-
-app
-	.configure({ API_HOST: 'api.ng-app.js.org' })
-	.bootstrap()
-	.then(() => {
-		app.log.success('Welcome... to The World...');
-	});
-
 class CustomElementExample extends HTMLElement {
 	public connectedCallback() {
 		this.classList.add('lead');
@@ -85,12 +71,10 @@ const jsxExampleSection =
 jsxExampleSection.querySelector('.card-body')?.appendChild(
 	<table>
 		<thead>
-			<th>
-				This table was generated programmatically
-			</th>
+			<th>This table was generated programmatically</th>
 		</thead>
 		<tbody>
-			{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(x => <tr><td>{x}</td></tr>)}
+			{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(x => <tr><td>Row {x}</td></tr>)}
 		</tbody>
 	</table>,
 ).parentNode?.appendChild(
@@ -98,12 +82,10 @@ jsxExampleSection.querySelector('.card-body')?.appendChild(
 		{`const jsxTable =
 	<table>
 		<thead>
-			<th>
-				This table was generated programmatically
-			</th>
+			<th>This table was generated programmatically</th>
 		</thead>
 		<tbody>
-			{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(x => <tr><td>{x}</td></tr>)}
+			{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(x => <tr><td>Row {x}</td></tr>)}
 		</tbody>
 	</table>;
 
@@ -113,4 +95,17 @@ jsxExample.appendChild(jsxTable);
 	</pre>,
 );
 
-document.body.querySelector('main')?.appendChild(jsxExampleSection);
+app
+	.module
+	.controller(
+		'AppController',
+		app.makeComponentController(AppController),
+	);
+
+app
+	.configure({ API_HOST: 'api.ng-app.js.org' })
+	.bootstrap()
+	.then(() => {
+		document.body.querySelector('main')?.appendChild(jsxExampleSection);
+		app.log.success('Welcome... to The World...');
+	});
