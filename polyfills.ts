@@ -9,34 +9,23 @@ import 'whatwg-fetch';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 /**
- * @package element-closest
- * @license CC0-1.0
- * @see https://github.com/jonathantneal/closest
- *
- * author: Jonathan T Neal
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
  */
-Element.prototype.matches = function matches(selector: string) {
-	var element = this;
-	var elements = (element.ownerDocument as Document).querySelectorAll(selector);
-	var index = 0;
 
-	while (elements[index] && elements[index] !== element) {
-		++index;
-	}
+if (!Element.prototype.matches) {
+	Element.prototype.matches =
+		(Element.prototype as any).msMatchesSelector ||
+		Element.prototype.webkitMatchesSelector;
+}
 
-	return Boolean(elements[index]);
-};
+if (!Element.prototype.closest) {
+	Element.prototype.closest = function closest(s: string) {
+		var el = this;
 
-Element.prototype.closest = function closest(selector: string) {
-	var element = this;
-
-	while (element && element.nodeType === 1) {
-		if (element.matches(selector)) {
-			return element;
-		}
-
-		element = element.parentElement as Element;
-	}
-
-	return null;
-};
+		do {
+			if (Element.prototype.matches.call(el, s)) return el;
+			el = el.parentElement || el.parentNode as typeof el;
+		} while (el !== null && el.nodeType === 1);
+		return null;
+	};
+}
