@@ -11,7 +11,6 @@
 	"license": "EUPL-1.2",
 	"files": [
 		"index.ts",
-		"polyfills.ts",
 		"src"
 	],
 	"main": "index.ts",
@@ -31,14 +30,12 @@
 		"@types/animejs": "3.1.2",
 		"@types/lodash": "4.14.164",
 		"@uirouter/angularjs": "1.0.19",
-		"abortcontroller-polyfill": "1.5.0",
 		"angular": "1.8.2",
 		"angular-messages": "1.8.2",
 		"animejs": "3.2.1",
 		"flatpickr": "4.6.6",
 		"fuse.js": "6.4.3",
-		"lodash": "4.17.20",
-		"whatwg-fetch": "3.4.1"
+		"lodash": "4.17.20"
 	},
 	"peerDependencies": {
 		"bootstrap": "4.5.3",
@@ -47,6 +44,7 @@
 	"devDependencies": {
 		"@ledge/configs": "23.0.32",
 		"@types/html-webpack-plugin": "3.2.4",
+		"abortcontroller-polyfill": "1.5.0",
 		"angular-mocks": "1.8.2",
 		"ava": "3.13.0",
 		"browser-env": "3.3.0",
@@ -70,7 +68,8 @@
 		"url-loader": "4.1.1",
 		"webpack": "5.3.2",
 		"webpack-cli": "4.1.0",
-		"webpack-dev-server": "3.11.0"
+		"webpack-dev-server": "3.11.0",
+		"whatwg-fetch": "3.4.1"
 	},
 	"ava": {
 		"files": [
