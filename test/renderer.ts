@@ -1,4 +1,4 @@
-// tslint:disable:no-async-without-await no-magic-numbers
+// tslint:disable:no-async-without-await
 import test from 'ava';
 import { $renderer } from './mocks';
 

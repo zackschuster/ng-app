@@ -15,10 +15,10 @@ export class NgService {
 	 */
 	public static UUIDv4() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-			// tslint:disable:no-bitwise no-magic-numbers
+			// tslint:disable:no-bitwise
 			const r = Math.random() * 16 | 0;
 			const v = c === 'x' ? r : (r & 0x3 | 0x8);
-			// tslint:enable:no-bitwise no-magic-numbers
+			// tslint:enable:no-bitwise
 			return v.toString(16);
 		});
 	}
@@ -53,27 +53,26 @@ export class NgService {
 		return split.every(x => x.length === 1)
 			? item
 			: split
-					.map(x => x.trim())
-					.map(x =>
-						// tslint:disable-next-line: no-magic-numbers
-						x.length === 1 || (x.length === 2 && x.charAt(1) === '.')
-							// tslint:disable-next-line: prefer-template
-							? (x.toUpperCase() + '\uFFFF')
-							: (x.charAt(0).toUpperCase() + x.substring(1)),
-					)
-					.join(' ')
-					.replace(
-						/\w{1}\.?(\uFFFF){1}\s?/g,
-						([first, second]) =>
-							second === '.'
-								? first + second
-								: first,
-					)
-					.replace(
-						/\.{1}\w{2,}/g,
-						([first, second, ...rest]) =>
-							`${first} ${second.toUpperCase()}${rest.join('')}`,
-					)
-					.replace(/- /g, '-');
+				.map(x => x.trim())
+				.map(x =>
+					x.length === 1 || (x.length === 2 && x.charAt(1) === '.')
+						// tslint:disable-next-line: prefer-template
+						? (x.toUpperCase() + '\uFFFF')
+						: (x.charAt(0).toUpperCase() + x.substring(1)),
+				)
+				.join(' ')
+				.replace(
+					/\w{1}\.?(\uFFFF){1}\s?/g,
+					([first, second]) =>
+						second === '.'
+							? first + second
+							: first,
+				)
+				.replace(
+					/\.{1}\w{2,}/g,
+					([first, second, ...rest]) =>
+						`${first} ${second.toUpperCase()}${rest.join('')}`,
+				)
+				.replace(/- /g, '-');
 	}
 }

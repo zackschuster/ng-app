@@ -1,4 +1,3 @@
-// tslint:disable:no-magic-numbers
 import anime from 'animejs';
 import { NgService } from './service';
 import { NgRenderer } from './renderer';

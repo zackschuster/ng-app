@@ -1,3 +1,6 @@
 {
-	"extends": "@ledge/configs/tslint.json"
+	"extends": "@ledge/configs/tslint.json",
+	"rules": {
+		"no-magic-numbers": false
+	}
 }

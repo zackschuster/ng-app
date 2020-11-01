@@ -1,4 +1,4 @@
-// tslint:disable:no-async-without-await no-magic-numbers
+// tslint:disable:no-async-without-await
 import test from 'ava';
 import { htmlInput, textInput } from '../../../src/inputs/text-input';
 import { InputService, NgInputController } from '../../../src/inputs';
