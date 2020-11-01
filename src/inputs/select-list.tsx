@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { NgInputController, NgInputOptions } from './shared';
 import { NgAttributes } from '../attributes';
-import { h } from '../render';
+import { h } from '../dom';
 import { NgService } from '../service';
 
 class SelectController extends NgInputController {

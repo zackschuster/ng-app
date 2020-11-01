@@ -1,6 +1,6 @@
 import anime from 'animejs';
 import { NgService } from './service';
-import { h } from './render';
+import { h } from './dom';
 
 type LogType = '$log' | '$warn' | '$error' | '$info' | '$success';
 enum LogTypeToastBackgrounds {

@@ -1,4 +1,4 @@
-import { h } from '../render';
+import { h } from '../dom';
 import { NgInputOptions } from './shared';
 
 export const checkBox: NgInputOptions = {

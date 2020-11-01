@@ -1,5 +1,5 @@
 import { Indexed } from '@ledge/types';
-import { h } from '../render';
+import { h } from '../dom';
 import { NgInputController, NgInputOptions } from './shared';
 
 class TextInputController extends NgInputController {

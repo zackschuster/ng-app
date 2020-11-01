@@ -4,7 +4,7 @@ import { NgService } from './service';
 import { NgHttp } from './http';
 import { NgInjector, NgScope } from './ng';
 import { NgAppConfig } from './options';
-import { h } from './render';
+import { h } from './dom';
 
 const MODAL_SHOW_DELAY = 23;
 const MODAL_HIDE_DELAY = 150;

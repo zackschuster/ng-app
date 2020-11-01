@@ -25,11 +25,11 @@ export class NgApp {
 	}
 
 	public get components() {
-		return new Set(this.$components.keys());
+		return Object.keys(this.$components);
 	}
 
 	public get dependencies() {
-		return new Set(this.$dependencies);
+		return [...this.$dependencies];
 	}
 
 	public get state() {
@@ -69,7 +69,7 @@ export class NgApp {
 
 	protected readonly $module = module(this.$id, this.$dependencies);
 	protected readonly $bootstrap = bootstrap;
-	protected readonly $components = new Map<string, NgComponentOptions>();
+	protected readonly $components: Indexed<NgComponentOptions> = {};
 	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
 
 	private _http!: NgHttp;
@@ -133,8 +133,8 @@ export class NgApp {
 	}
 
 	public async bootstrap({ strictDi }: { strictDi?: boolean; } = { strictDi: true }) {
-		for (const [name, definition] of this.$components) {
-			this.$module.component(name, definition);
+		for (const name of Object.keys(this.$components)) {
+			this.$module.component(name, this.$components[name]);
 		}
 		if (this.$router == null) {
 			this.$router = new (class extends NgRouter { })();
@@ -154,12 +154,10 @@ export class NgApp {
 		return this;
 	}
 
-	public addComponents(components: Map<string, NgComponentOptions> | Indexed<NgComponentOptions>) {
-		const entries = components instanceof Map
-			? components.entries()
-			: Object.keys(components).map(x => ([x, components[x]] as const));
+	public addComponents(components: Indexed<NgComponentOptions>) {
+		for (const name of Object.keys(components)) {
+			let component = components[name];
 
-		for (let [name, component] of entries) {
 			if (this.isInputComponent(component)) {
 				component = InputService.defineInputComponent(component);
 			}
@@ -168,15 +166,14 @@ export class NgApp {
 				component.controller = this.makeComponentController(component.controller);
 			}
 
-			this.$components.set(name, component);
+			this.$components[name] = component;
 		}
 
 		return this;
 	}
 
-	public isInputComponent(
-		component: NgComponentOptions & { type?: 'input' },
-	): component is NgInputOptions {
+	public isInputComponent(component: NgComponentOptions & { type?: 'input' })
+		: component is NgInputOptions {
 		return component.type === 'input';
 	}
 

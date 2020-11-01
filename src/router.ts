@@ -128,12 +128,11 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
  *
  * Used to reset typings to `any` so the NgRoute interface can then narrow them
  */
-// tslint:disable-next-line:class-name
-interface _NgStateService extends StateService {
+interface $NgStateService$ extends StateService {
 	current: any;
 }
 
-export interface NgStateService extends _NgStateService {
+export interface NgStateService extends $NgStateService$ {
 	current: NgRoute;
 	label: string;
 	parent: string;
@@ -145,8 +144,7 @@ export interface NgStateService extends _NgStateService {
  *
  * Used to reset typings to `any` so the NgRoute interface can then narrow them
  */
-// tslint:disable-next-line:class-name
-interface _NgRoute extends StateDeclaration {
+interface $NgRoute$ extends StateDeclaration {
 	onExit?: any;
 	onRetain?: any;
 	onEnter?: any;
@@ -158,7 +156,7 @@ export type NgResolveFn<T = any> = ($trans: Transition) => Promise<T>;
 export type NgAnnotatedResolveFn<T = any> = [string, NgResolveFn<T>];
 export type NgTransition = NgResolveFn<TargetState | Transition> | NgAnnotatedResolveFn<TargetState | Transition>;
 
-export interface NgRoute extends _NgRoute {
+export interface NgRoute extends $NgRoute$ {
 	/**
 	 * The name of the component to use for this view.
 	 */

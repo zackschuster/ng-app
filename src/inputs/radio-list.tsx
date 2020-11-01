@@ -1,11 +1,11 @@
-import { h } from '../render';
+import { closest, h } from '../dom';
 import { NgInputController, NgInputOptions } from './shared';
 
 class RadioListController extends NgInputController {
 	public $postLink() {
 		setTimeout(() => {
 			if (this.$attrs.hasOwnProperty('required')) {
-				this.$element.closest('fieldset')
+				closest(this.$element, 'fieldset')
 					?.querySelector('legend')
 					?.appendChild(<span class='text-danger'> *</span>);
 			}

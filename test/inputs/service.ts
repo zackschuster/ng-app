@@ -13,12 +13,12 @@ test('InputService.$validationAttrs', async t => {
 });
 
 test('InputService.$validationMessages', async t => {
-	t.deepEqual(InputService.$validationMessages, new Map<string, string>([
-		['email', 'Email address must be in the following form: email@address.com'],
-		['required', 'This field is required'],
-		['minlength', 'Input is not long enough'],
-		['maxlength', 'Input is too long'],
-	]));
+	t.deepEqual(InputService.$validationMessages, {
+		email: 'Email address must be in the following form: email@address.com',
+		required: 'This field is required',
+		minlength: 'Input is not long enough',
+		maxlength: 'Input is too long',
+	});
 });
 
 test('InputService.$baseDefinition', async t => {
@@ -47,12 +47,7 @@ test('InputService.$baseComponent', async t => {
 	t.true($baseComponent.render instanceof Function);
 	t.true(($baseComponent.controller as any).prototype instanceof NgInputController);
 
-	Reflect.deleteProperty($baseComponent, 'renderLabel');
-	Reflect.deleteProperty($baseComponent, 'postRender');
-	Reflect.deleteProperty($baseComponent, 'render');
-	Reflect.deleteProperty($baseComponent, 'controller');
-
-	t.deepEqual($baseComponent, {
+	t.like($baseComponent, {
 		isRadioOrCheckbox: false,
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',

@@ -48,3 +48,17 @@ export function h<T extends keyof HTMLElementTagNameMap, E extends HTMLElement &
 
 	return element;
 }
+
+/**
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+ */
+export function closest(el: HTMLElement, s: string) {
+	if (typeof Element.prototype.closest === 'function') {
+		return el.closest(s);
+	}
+	do {
+		if (el.matches(s)) return el;
+		el = el.parentElement || el.parentNode as typeof el;
+	} while (el !== null && el.nodeType === 1);
+	return null;
+}

@@ -1,5 +1,5 @@
 import flatpickr from 'flatpickr';
-import { h } from '../render';
+import { h } from '../dom';
 import { NgInputController, NgInputOptions } from './shared';
 
 function isNumber(n: any): n is number {

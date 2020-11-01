@@ -135,10 +135,9 @@ const log = app.log; // using bootstrap toasts + $log service
 
 # IE11 Support
 
-Currently only the following APIs need to be polyfilled for ng-app to work in IE11:
+ng-app is written in post-ES2015 syntax, so it will need to be compiled to ES5
 
-- `Map`
-- `Set`
-- `Promise`
+ng-app only needs polyfills for the following APIs:
 - `fetch`
 - `AbortController`
+- `Promise`

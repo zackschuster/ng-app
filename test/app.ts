@@ -21,7 +21,7 @@ test(`app.bootstrap() doesn't throw with base tag`, async t => {
 });
 
 test('app has default input components', async t => {
-	t.deepEqual(app.components, new Set([
+	t.deepEqual(app.components, [
 		'checkBox',
 		'dateInput',
 		'radioList',
@@ -30,7 +30,7 @@ test('app has default input components', async t => {
 		'htmlInput',
 		'textInput',
 		'appSpinner',
-	]));
+	]);
 });
 
 test('app.http returns NgDataService', async t => {

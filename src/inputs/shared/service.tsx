@@ -6,7 +6,7 @@ import { NgInputOptions } from './options';
 import { NgAttributes } from '../../attributes';
 import { NgComponentOptions } from '../../options';
 import { NgService } from '../../service';
-import { h } from '../../render';
+import { closest, h } from '../../dom';
 
 const BaseComponent = Object.seal({
 	isRadioOrCheckbox: false,
@@ -19,12 +19,12 @@ const BaseComponent = Object.seal({
 		return this.$template;
 	},
 	renderLabel() {
-		const $transclude = <ng-transclude></ng-transclude>;
-		$transclude.textContent = InputService.getDefaultLabelText(this.$attrs);
-		this.$label.appendChild($transclude);
+		this.$label.appendChild(
+			<ng-transclude>{InputService.getDefaultLabelText(this.$attrs)}</ng-transclude>,
+		);
 	},
 	postRender() {
-		return this.$template;
+		return;
 	},
 }) as NgInputOptions & { isRadioOrCheckbox: boolean };
 
@@ -45,12 +45,12 @@ export class InputService extends NgService {
 		'readonly', 'ngReadonly',
 	];
 
-	public static readonly $validationMessages = new Map<string, string>([
-		['email', 'Email address must be in the following form: email@address.com'],
-		['required', 'This field is required'],
-		['minlength', 'Input is not long enough'],
-		['maxlength', 'Input is too long'],
-	]);
+	public static $validationMessages: Indexed<string> = {
+		email: 'Email address must be in the following form: email@address.com',
+		required: 'This field is required',
+		minlength: 'Input is not long enough',
+		maxlength: 'Input is too long',
+	};
 
 	public static readonly $baseDefinition: NgComponentOptions = {
 		transclude: {
@@ -128,25 +128,20 @@ export class InputService extends NgService {
 		$definition.controller = $component.controller;
 
 		// assign template
-		// tslint:disable-next-line: cyclomatic-complexity
+		// tslint:disable-next-line:cyclomatic-complexity
 		$definition.template = ['$element', '$attrs', ($element: [HTMLElement], $attrs: NgAttributes) => {
+			let $template = <div class={$component.templateClass as string}></div> as HTMLDivElement;
+
 			const $el = $element[0];
-
-			const $template = <div class={$component.templateClass as string}></div> as HTMLDivElement;
-
 			// allow consumer to access $template and $attrs attributes from `this`
 			const $input = $component.render.call({ $template, $attrs });
-
-			const isRadio = ($input as HTMLInputElement).type === 'radio';
-			const isRequired = $attrs.hasOwnProperty('required');
-			const isSrOnly = $attrs.hasOwnProperty('srOnly');
-
 			// all inputs must have labels
 			const $label =
-				<label class={`${$component.labelClass}${isSrOnly ? ' sr-only' : ''}`}
+				<label class={`${$component.labelClass}${$attrs.hasOwnProperty('srOnly') ? ' sr-only' : ''}`}
 					ng-attr-for='{{id}}_{{$ctrl.uniqueId}}'></label> as HTMLLabelElement;
 
-			if (isRequired === true && !isRadio) {
+			const isRadio = ($input as HTMLInputElement).type === 'radio';
+			if ($attrs.hasOwnProperty('required') === true && isRadio === false) {
 				$label.appendChild(<span class='text-danger'> *</span>);
 			}
 
@@ -154,7 +149,7 @@ export class InputService extends NgService {
 				$template.appendChild($label);
 			}
 
-			if ($component.canHaveIcon === true && $attrs.icon != null) {
+			if ($component.canHaveIcon === true && $attrs.icon?.length > 0) {
 				$template.appendChild(
 					<div class='input-group'>
 						<div class='input-group-prepend'>
@@ -169,21 +164,15 @@ export class InputService extends NgService {
 				$template.appendChild($input);
 			}
 
-			if ($el.closest('contain') != null) {
+			if (closest($el, 'contain') != null) {
 				$input.style.marginTop = '8px';
 				$label.classList.add('sr-only');
 			}
 
 			const requiredTag = $label.firstElementChild;
-			if (requiredTag != null) {
-				$label.removeChild(requiredTag);
-			}
-
+			requiredTag?.remove();
 			$component.renderLabel?.call({ $label, $attrs });
-
-			if (requiredTag != null) {
-				$label.appendChild(requiredTag);
-			}
+			$label.append(requiredTag ?? '');
 
 			// add a transclusion slot for e.g. nesting inputs
 			$template.appendChild(<div ng-transclude='contain'></div>);
@@ -197,18 +186,19 @@ export class InputService extends NgService {
 
 			// that's right, i named it after filterFilter. fight me.
 			const $inputInput = InputService.getInputInput($input);
+			const $inputValidationAttrs = InputService.$validationAttrs
+				.filter(x => $attrs.hasOwnProperty(x) === true);
 
-			InputService.$validationAttrs
-				.filter(x => $attrs.hasOwnProperty(x) === true)
-				.forEach(x => {
-					$inputInput.setAttribute(
-						x.replace(/[A-Z]/, s => `-${s.toLowerCase()}`),
-						/^ng/.test(x) ? `$ctrl.${x}` : 'true',
-					);
-				});
+			for (const attr of $inputValidationAttrs) {
+				$inputInput.setAttribute(
+					attr.replace(/[A-Z]/, s => `-${s.toLowerCase()}`),
+					/^ng/.test(attr) ? `$ctrl.${attr}` : 'true',
+				);
+			}
 
 			if ($inputInput.tagName !== 'SELECT') {
-				$inputInput.setAttribute('ng-class', `{ 'is-invalid': ${InputService.$ValidationExpressions.$IsInvalid} }`);
+				const ngClass = `{ 'is-invalid': ${InputService.$ValidationExpressions.$IsInvalid} }`;
+				$inputInput.setAttribute('ng-class', ngClass);
 				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
 			}
 
@@ -220,39 +210,37 @@ export class InputService extends NgService {
 			const { validators = {} } = $component;
 			const attrs = Object.keys($component.attrs as Indexed);
 
-			for (const [key, value] of Object.keys(validators).map(x => [x, validators[x]])) {
-				InputService.$validationMessages.set(key, value);
+			for (const key of Object.keys(validators)) {
+				InputService.$validationMessages[key] = validators[key];
 				attrs.push(key);
 			}
 
-			InputService.$validationAttrs
+			const $inputValidationMessages = InputService.$validationAttrs
 				.concat(...attrs, 'email')
 				.filter(x => /^ng/.test(x) === false)
-				.filter(x => InputService.$validationMessages.has(x) === true)
-				.filter(x => x !== 'email' || $inputInput.type === x)
-				.forEach(x => {
-					const $message = <div class='text-danger' ng-message={x}></div>;
-					$message.innerText = InputService.$validationMessages.get(x) as string;
-					$validationBlock.appendChild($message);
-				});
+				.filter(x => InputService.$validationMessages.hasOwnProperty(x) === true)
+				.filter(x => x !== 'email' || $inputInput.type === x);
 
-			let $html: string;
-			if (isRadio === true) {
-				$html = (<div class='form-group'>{$template}{$validationBlock}</div>).outerHTML;
-			} else {
-				$template.appendChild($validationBlock);
-				$html = $template.outerHTML;
+			for (const msg of $inputValidationMessages) {
+				const $message = <div class='text-danger' ng-message={msg}></div>;
+				$message.innerText = InputService.$validationMessages[msg as 'email'];
+				$validationBlock.appendChild($message);
 			}
 
-			$html = $html.replace(/{{id}}/g, InputService.modelIdentifier($attrs));
+			if (isRadio === true) {
+				$template = <div class='form-group'>{$template}{$validationBlock}</div> as HTMLDivElement;
+			} else {
+				$template.appendChild($validationBlock);
+			}
 
-			attrs
-				.forEach(prop => {
-					$html = $html.replace(
-						new RegExp(`{{${prop}}}`, 'g'),
-						$attrs[prop] || ($component.attrs as Indexed)[prop],
-					);
-				});
+			let $html = $template.outerHTML.replace(/{{id}}/g, InputService.modelIdentifier($attrs));
+
+			for (const prop of attrs) {
+				$html = $html.replace(
+					new RegExp(`{{${prop}}}`, 'g'),
+					$attrs[prop] || ($component.attrs as Indexed)[prop],
+				);
+			}
 
 			return $html;
 		}];
