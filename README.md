@@ -1,6 +1,6 @@
 # @ledge/ng-app [![test status](https://builds.sr.ht/~ledge/ng-app.svg)](https://builds.sr.ht/~ledge/ng-app?)
 
-> Powerful, easy-to-use app container for Angular.js with ES Modules. TypeScript required. IE11 supported.
+> Powerful, easy-to-use app container for Angular.js with ES Modules. Types included. IE11 supported.
 
 ## Designed for native modules
 
@@ -136,6 +136,8 @@ const log = app.log; // using bootstrap toasts + $log service
 # IE11 Support
 
 ng-app is written in ES2015+ syntax, so it will need to be compiled to ES5
+
+ng-app bundles are compiled to ES5
 
 ng-app only needs polyfills for the following APIs:
 - `fetch`
