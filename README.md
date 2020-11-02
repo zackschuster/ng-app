@@ -135,9 +135,11 @@ const log = app.log; // using bootstrap toasts + $log service
 
 # IE11 Support
 
-ng-app is written in post-ES2015 syntax, so it will need to be compiled to ES5
+ng-app is written in ES2015+ syntax, so it will need to be compiled to ES5
 
 ng-app only needs polyfills for the following APIs:
 - `fetch`
 - `AbortController`
+- `Map`
 - `Promise`
+- `Set`
