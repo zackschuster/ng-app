@@ -2,7 +2,13 @@
 	"extends": "@ledge/configs/tsconfig.browser.json",
 	"compilerOptions": {
 		"jsx": "react",
-		"jsxFactory": "h"
+		"jsxFactory": "h",
+		"baseUrl": ".",
+		"paths": {
+			"index": [
+				"./index.ts"
+			]
+		}
 	},
 	"ts-node": {
 		"transpileOnly": true,

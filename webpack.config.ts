@@ -5,6 +5,7 @@ import { BundleStatsWebpackPlugin } from 'bundle-stats-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const cwd = process.cwd();
+const build = join(cwd, 'build');
 const docs = join(cwd, 'docs');
 
 class NgAppDocsPlugin {
@@ -35,6 +36,9 @@ export default (env = 'development') => {
 			publicPath: '/',
 		},
 		resolve: {
+			alias: {
+				index: join(build, 'ng-app.mjs'),
+			},
 			extensions: ['.js', '.ts', '.tsx'],
 			modules: ['.', 'docs', 'node_modules'],
 		},

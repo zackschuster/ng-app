@@ -1,4 +1,4 @@
-import { NgController, app, h } from '../../index';
+import { NgController, app, h } from 'index';
 
 class ModalController extends NgController {
 	public title = 'Example Modal';
