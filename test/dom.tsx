@@ -46,14 +46,13 @@ test('h() creates text input by default', async t => {
 			ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
 			ng-model='$ctrl.ngModel'
 			ng-model-options='$ctrl.ngModelOptions'
-			type='text'
 			maxLength={'{{maxlength}}' as never}
 			placeholder='{{placeholder}}' /> as HTMLInputElement;
 
 	t.is(input.classList.length, 1);
 	t.true(input.classList.contains('form-control'));
 
-	t.is(input.attributes.length, 8); // includes "class" attribute
+	t.is(input.attributes.length, 7); // includes "class" attribute
 	t.is(input.type, 'text');
 	t.is(input.getAttribute('ng-attr-id'), '{{id}}_{{$ctrl.uniqueId}}');
 	t.is(input.getAttribute('ng-attr-name'), '{{id}}_{{$ctrl.uniqueId}}');
