@@ -8,6 +8,5 @@ t.*
 *.map
 *.log
 test/**/*.md
-
-!test/*.js
 !docs/*.js
+
