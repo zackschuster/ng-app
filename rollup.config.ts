@@ -4,24 +4,31 @@ import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 
-export default ['development', 'staging', 'production', 'esm'].map(env => ({
-	input: 'index.ts',
-	external: ['angular', 'angular-messages'],
-	context: env === 'esm' ? 'globalThis' : undefined,
-	output: {
-		file: `build/ng-app.${env}.js`,
-		format: env === 'esm' ? env : 'iife',
-		name: 'ngApp',
-		globals: {
-			angular: 'angular',
+export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env => {
+	const isEsm = env === 'esm';
+	const isCjs = env === 'cjs';
+	const isEsmOrCjs = isEsm || isCjs;
+	const isProduction = env === 'production';
+
+	return {
+		input: 'index.ts',
+		external: ['angular', 'angular-messages'],
+		context: isEsmOrCjs ? 'globalThis' : undefined,
+		output: {
+			file: `build/ng-app.${env}${isCjs ? '' : '.js'}`,
+			format: isEsmOrCjs ? env : 'iife',
+			name: 'ngApp',
+			globals: {
+				angular: 'angular',
+			},
+			sourcemap: true,
 		},
-		sourcemap: true,
-	},
-	plugins: [
-		commonjs({ esmExternals: env === 'esm', requireReturnsDefault: 'namespace' }),
-		nodeResolve({ mainFields: [env === 'esm' ? 'module' : undefined, 'main'] }),
-		typescript({ target: `es${env === 'esm' ? 2015 : 5}`, exclude: ['docs', 'test'] }),
-		replace({ 'process.env.NODE_ENV': JSON.stringify(env === 'esm' ? 'production' : env) }),
-		env === 'production' ? terser() : undefined,
-	],
-}));
+		plugins: [
+			commonjs({ esmExternals: isEsm, requireReturnsDefault: 'namespace' }),
+			nodeResolve({ mainFields: [isEsmOrCjs ? 'module' : undefined, 'main'] }),
+			typescript({ target: `es${isEsmOrCjs ? 2015 : 5}`, exclude: ['docs', 'test'] }),
+			replace({ 'process.env.NODE_ENV': JSON.stringify(isEsmOrCjs ? 'production' : env) }),
+			isProduction ? terser() : undefined,
+		],
+	};
+});
