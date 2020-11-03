@@ -26,7 +26,7 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 		plugins: [
 			commonjs({ esmExternals: isEsm, requireReturnsDefault: 'namespace' }),
 			nodeResolve({ mainFields: [isEsmOrCjs ? 'module' : undefined, 'main'] }),
-			typescript({ target: `es${isEsmOrCjs ? 2015 : 5}`, exclude: ['docs', 'test'] }),
+			typescript({ target: `es${isEsmOrCjs ? 2020 : 5}`, exclude: ['docs', 'test'] }),
 			replace({ 'process.env.NODE_ENV': JSON.stringify(isEsmOrCjs ? 'production' : env) }),
 			isProduction ? terser() : undefined,
 		],
