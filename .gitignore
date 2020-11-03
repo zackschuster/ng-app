@@ -1,15 +1,12 @@
-.DS_Store
-.vscode
-
-*.ini
-*.html
-*.js
-*.log
-test/**/snapshots/*.md
-t.*
-
 node_modules
+.DS_Store
 
-!test/-register.js
+t.*
+*.ini
+*.js
+*.map
+*.log
+test/**/*.md
+
+!test/*.js
 !docs/*.js
-!docs/*.html

@@ -7,7 +7,7 @@ import { DEFAULT_REQUEST_TIMEOUT, NgHttp, NgHttpInterceptor, NgHttpOptions } fro
 import { InputService, NgInputOptions } from './inputs';
 import { NgLogger } from './logger';
 import { NgModal } from './modal';
-import { NgInjector, bootstrap, injector, module } from './ng';
+import { NgInjector } from './ng';
 import { NgAppConfig, NgComponentOptions } from './options';
 import { NgRouter } from './router';
 
@@ -61,14 +61,13 @@ export class NgApp {
 	}
 
 	public readonly $id = '$core';
-	public $injector = injector(['ng']);
+	public $injector = window.angular.injector(['ng']);
 
 	protected $dependencies: string[] = [];
 	protected $router!: NgRouter;
 	protected $config!: NgAppConfig;
 
-	protected readonly $module = module(this.$id, this.$dependencies);
-	protected readonly $bootstrap = bootstrap;
+	protected readonly $module = window.angular.module(this.$id, this.$dependencies);
 	protected readonly $components: Indexed<NgComponentOptions> = {};
 	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
 
@@ -141,7 +140,7 @@ export class NgApp {
 		}
 
 		setTimeout(() => document.body.classList.add('bootstrapped'));
-		return this.$bootstrap(document.body, [this.$id], { strictDi });
+		return window.angular.bootstrap(document.body, [this.$id], { strictDi });
 	}
 
 	public configure(config: Partial<NgAppConfig>) {

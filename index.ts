@@ -1,11 +1,12 @@
+import 'angular';
+import 'angular-messages';
+
+import uirouter from '@uirouter/angularjs';
 import { HttpStatusCode } from '@ledge/types/http';
 
 import { NgApp } from './src/app';
 import { inputs } from './src/inputs';
 import { misc } from './src/misc';
-
-import 'angular-messages';
-import uirouter from '@uirouter/angularjs';
 
 export const app = new NgApp()
 	.addComponents(inputs)
