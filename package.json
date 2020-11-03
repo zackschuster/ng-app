@@ -28,7 +28,7 @@
 	"scripts": {
 		"start": "webpack serve",
 		"prepare": "rollup -c rollup.config.ts",
-		"prepublishOnly": "npm test",
+		"prepublishOnly": "npm run lint && npm test",
 		"docs": "webpack --env production",
 		"lint": "tslint -p . -t msbuild --fix",
 		"test": "ava"
