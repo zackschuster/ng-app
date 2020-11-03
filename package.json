@@ -3,7 +3,11 @@
 	"version": "6.0.1",
 	"description": "Powerful, easy-to-use app container for Angular.js with ES Modules. Types included. IE11 supported.",
 	"homepage": "https://ng-app.js.org",
-	"author": "Zack Schuster <email@zackschuster.com> (http://so.completely.online)",
+	"author": {
+		"name": "Zack Schuster",
+		"email": "email@zackschuster.com",
+		"url": "http://so.completely.online"
+	},
 	"repository": "https://git.sr.ht/~ledge/ng-app",
 	"bugs": {
 		"url": "https://github.com/zackschuster/ng-app/issues"
@@ -14,9 +18,13 @@
 		"src",
 		"build"
 	],
-	"main": "index.ts",
-	"types": "index.ts",
 	"type": "module",
+	"types": "index.ts",
+	"main": "./build/ng-app.cjs",
+	"exports": {
+		"import": "./build/ng-app.mjs",
+		"require": "./build/ng-app.cjs"
+	},
 	"scripts": {
 		"start": "webpack serve",
 		"prepare": "rollup -c rollup.config.ts",
