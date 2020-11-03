@@ -9,4 +9,3 @@ t.*
 *.log
 test/**/*.md
 !docs/*.js
-

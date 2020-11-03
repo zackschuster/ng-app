@@ -26,12 +26,12 @@
 		"require": "./build/ng-app.cjs"
 	},
 	"scripts": {
-		"start": "webpack serve",
-		"prepare": "rollup -c rollup.config.ts",
-		"prepublishOnly": "npm run lint && npm test",
-		"docs": "webpack --env production",
 		"lint": "tslint -p . -t msbuild --fix",
-		"test": "ava"
+		"docs": "webpack --env production",
+		"start": "webpack serve",
+		"test": "ava",
+		"prepare": "rollup -c rollup.config.ts",
+		"prepublishOnly": "npm run lint && npm test"
 	},
 	"dependencies": {
 		"@ledge/is-ie-11": "5.1.0",
