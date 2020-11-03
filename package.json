@@ -20,6 +20,7 @@
 	"scripts": {
 		"start": "webpack serve",
 		"prepare": "rollup -c rollup.config.ts",
+		"prepublishOnly": "npm test",
 		"docs": "webpack --env production",
 		"lint": "tslint -p . -t msbuild --fix",
 		"test": "ava"
@@ -90,6 +91,7 @@
 			"tsx"
 		],
 		"require": [
+			"ts-node/register",
 			"./test/-register.cjs"
 		]
 	}

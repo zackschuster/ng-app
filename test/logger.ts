@@ -1,7 +1,7 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
+import { NgService } from '..';
 import { $console, $log } from './mocks';
-import { NgService } from '../src/service';
 
 test('console subclasses service', async t => {
 	t.true($console instanceof NgService);

@@ -3,6 +3,6 @@ import { $injector } from './--injector';
 import { $http } from './-http';
 import { $log } from './-logger';
 
-import { NgModal } from '../../src/modal';
+import { NgModal } from '../..';
 
 export const $modal = new NgModal($log, $http, $config, $injector);

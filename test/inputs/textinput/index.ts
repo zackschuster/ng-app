@@ -1,10 +1,9 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { htmlInput, textInput } from '../../../src/inputs/text-input';
-import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
+import { InputService, NgInputController, inputs } from '../../..';
 
-const definition = InputService.defineInputComponent(textInput);
+const definition = InputService.defineInputComponent(inputs.textInput);
 const { controller, template } = util.mockInputCtrl(definition);
 
 test.after(async t => {
@@ -13,7 +12,7 @@ test.after(async t => {
 
 test('textinput -> htmlinput alias', async t => {
 	// should be separate objects with the same layout
-	t.false(definition === InputService.defineInputComponent(htmlInput));
+	t.false(definition === InputService.defineInputComponent(inputs.htmlInput));
 	// TODO: fails, fix
 	// t.deepEqual(definedHtmlInput, definedTextInput);
 });

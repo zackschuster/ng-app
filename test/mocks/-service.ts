@@ -1,2 +1,2 @@
-import { NgService } from '../../src/service';
+import { NgService } from '../..';
 export const $svc = new NgService();

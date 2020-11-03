@@ -5,6 +5,8 @@
 		"jsxFactory": "h"
 	},
 	"ts-node": {
+		"transpileOnly": true,
+		"ignore": [],
 		"compilerOptions": {
 			"module": "commonjs"
 		}

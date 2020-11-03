@@ -1,8 +1,8 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { $http, $prefix, pingTestUrl } from './mocks';
 import http from 'http';
 import { HttpStatusCode } from '@ledge/types/http';
+import { $http, $prefix, pingTestUrl } from './mocks';
 
 const PORT = 2323;
 http

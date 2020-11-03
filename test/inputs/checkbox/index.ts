@@ -1,10 +1,9 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { checkBox } from '../../../src/inputs/check-box';
-import { InputService, NgInputController } from '../../../src/inputs';
 import * as util from '../-util';
+import { InputService, NgInputController, inputs } from '../../..';
 
-const definition = InputService.defineInputComponent(checkBox);
+const definition = InputService.defineInputComponent(inputs.checkBox);
 const { controller, template } = util.mockInputCtrl(definition);
 
 test.after(async t => {

@@ -1,4 +1,4 @@
-import { NgController, makeInjectableCtrl } from '../../src/controller';
+import { NgController, makeInjectableCtrl } from '../..';
 
 import { $injector } from './--injector';
 import { $config } from './--app';

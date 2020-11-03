@@ -2,7 +2,7 @@
 import { injector } from 'angular';
 
 import { $config } from './--app';
-import { NgHttp } from '../../src/http';
+import { NgHttp } from '../..';
 
 const $injector = injector(['ngMock']);
 

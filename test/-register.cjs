@@ -1,21 +1,19 @@
-// tslint:disable:no-redundant-jsdoc no-var-requires
-const browserenv = require('browser-env');
-const fetch = require('node-fetch');
-const tsnode = require('ts-node');
-
-tsnode.register({ transpileOnly: true, ignore: [] });
-
-Object.defineProperty(globalThis, 'window',
-	{ configurable: false, enumerable: true, writable: false, value: browserenv() });
-
+// tslint:disable:no-var-requires
+Object.defineProperty(globalThis, 'window', { value: require('browser-env')() });
 // @ts-ignore
 require('angular/angular.js');
 // @ts-ignore
 require('angular-mocks');
 
-globalThis.angular = window.angular;
-globalThis.fetch = fetch;
-globalThis.Request = /** @type never */(fetch.Request);
-globalThis.Response = /** @type never */(fetch.Response);
+const fetch = require('node-fetch');
 
-require('@uirouter/angularjs');
+Object.assign(globalThis, {
+	fetch,
+	Request: fetch.Request,
+	Response: fetch.Response,
+	angular: window.angular,
+});
+
+// @ts-ignore
+require('../build/ng-app.cjs');
+require.cache[require.resolve('../index.ts')] = require.cache[require.resolve('../build/ng-app.cjs')];
