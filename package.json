@@ -40,7 +40,7 @@
 		"@types/angular": "1.7.4",
 		"@types/animejs": "3.1.2",
 		"@types/lodash": "4.14.164",
-		"@uirouter/angularjs": "1.0.19",
+		"@uirouter/angularjs": "1.0.28",
 		"flatpickr": "4.6.6",
 		"fuse.js": "6.4.3"
 	},
