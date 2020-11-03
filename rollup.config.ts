@@ -15,7 +15,7 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 		external: ['angular', 'angular-messages'],
 		context: isEsmOrCjs ? 'globalThis' : undefined,
 		output: {
-			file: `build/ng-app.${env}${isCjs ? '' : '.js'}`,
+			file: `build/ng-app.${isEsm ? 'mjs' : `${env}${isCjs ? '' : '.js'}`}`,
 			format: isEsmOrCjs ? env : 'iife',
 			name: 'ngApp',
 			globals: {
