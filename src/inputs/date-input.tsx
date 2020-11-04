@@ -165,19 +165,19 @@ export const dateInput: NgInputOptions = {
 
 				input = <section class='w-100 px-2 mt-2 mb-n1'>
 					<div class='form-group row'>
-						<label class='col-lg-3 col-form-label' ng-attr-for='day_{{$ctrl.uniqueId}}'>Day</label>
+						<label class='col-xl-4 col-form-label' ng-attr-for='day_{{$ctrl.uniqueId}}'>Day</label>
 						<div class='col'>
 							<select class='form-control' ng-attr-id='day_{{$ctrl.uniqueId}}'></select>
 						</div>
 					</div>
 					<div class='form-group row'>
-						<label class='col-lg-3 col-form-label' ng-attr-for='month_{{$ctrl.uniqueId}}'>Month</label>
+						<label class='col-xl-4 col-form-label' ng-attr-for='month_{{$ctrl.uniqueId}}'>Month</label>
 						<div class='col'>
 							{monthSelect}
 						</div>
 					</div>
 					<div class='form-group row'>
-						<label class='col-lg-3 col-form-label' ng-attr-for='year_{{$ctrl.uniqueId}}'>Year</label>
+						<label class='col-xl-4 col-form-label' ng-attr-for='year_{{$ctrl.uniqueId}}'>Year</label>
 						<div class='col'>
 							{yearSelect}
 						</div>

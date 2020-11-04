@@ -44,8 +44,7 @@
 	"peerDependencies": {
 		"angular": "^1.8.2",
 		"angular-messages": "^1.8.2",
-		"bootstrap": "^4.5.3",
-		"font-awesome": "^4.7.0"
+		"bootstrap": "^4.5.3"
 	},
 	"devDependencies": {
 		"@ledge/configs": "23.0.32",

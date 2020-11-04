@@ -153,7 +153,7 @@ export class InputService extends NgService {
 					<div class='input-group'>
 						<div class='input-group-prepend'>
 							<span class='input-group-text'>
-								<span class={`fa fa-${$attrs.icon}`} aria-hidden='true'></span>
+								<span class={$attrs.icon} aria-hidden='true'></span>
 							</span>
 						</div>
 						{$input}
