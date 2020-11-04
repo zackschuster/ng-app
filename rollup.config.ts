@@ -22,7 +22,7 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 			sourcemap: true,
 		},
 		plugins: [
-			nodeResolve(),
+			nodeResolve({ modulesOnly: true }),
 			typescript({ target: `es${isEsmOrCjs ? 2019 : 5}` }),
 			replace({ 'process.env.NODE_ENV': JSON.stringify(isEsmOrCjs ? 'production' : env) }),
 			env === 'production' ? terser() : undefined,

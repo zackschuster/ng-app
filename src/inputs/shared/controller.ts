@@ -10,7 +10,7 @@ export class NgInputController<T = any> extends NgController {
 
 		setTimeout(() => {
 			const $contain = this.$element.querySelector('[ng-transclude="contain"]');
-			if ($contain != null && $contain.children.length === 0) {
+			if ($contain?.children.length === 0) {
 				if (this.isIE11) {
 					($contain as any).removeNode(true);
 				} else {

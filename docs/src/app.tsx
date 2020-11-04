@@ -31,7 +31,7 @@ customElements.define('custom-element-example', CustomElementExample);
 
 let clickCounter = 0;
 const jsxExampleSection =
-	<section className='container mt-5'>
+	<section className='container-fluid shadow pb-3'>
 		<div className='row'>
 			<div className='col-12'>
 				<div class='card'>

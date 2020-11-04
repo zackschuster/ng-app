@@ -11,10 +11,7 @@ import { misc } from './src/misc';
 export const app = new NgApp()
 	.addComponents(inputs)
 	.addComponents(misc)
-	.addDependencies([
-		'ngMessages',
-		uirouter,
-	])
+	.addDependencies(['ngMessages', uirouter])
 	.addHttpInterceptor({
 		async responseError(response, err) {
 			const { status, statusText, url } = response;
@@ -27,7 +24,7 @@ export const app = new NgApp()
 				case HttpStatusCode.BadRequest:
 					if (typeof data === 'string') {
 						app.log.error(data);
-					} else if (data != null && data.toString() === '[object Object]') {
+					} else if (data?.toString() === '[object Object]') {
 						app.log.error(Object.keys(data).map(x => `${x}: ${data[x]}`).join('\n\n'));
 					}
 					break;

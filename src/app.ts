@@ -36,27 +36,18 @@ export class NgApp {
 	}
 
 	public get http() {
-		if (this._http == null) {
-			this._http = this.$http({
-				timeout: this.$config.IS_PROD ? DEFAULT_REQUEST_TIMEOUT : undefined,
-				getConfig: () => this.$config,
-			});
-		}
-		return this._http;
+		return this._http ??= this.$http({
+			timeout: this.$config.IS_PROD ? DEFAULT_REQUEST_TIMEOUT : undefined,
+			getConfig: () => this.$config,
+		});
 	}
 
 	public get log() {
-		if (this._log == null) {
-			this._log = this.$logger();
-		}
-		return this._log;
+		return this._log ??= this.$logger();
 	}
 
 	public get modal() {
-		if (this._modal == null) {
-			this._modal = this.$modal();
-		}
-		return this._modal;
+		return this._modal ??= this.$modal();
 	}
 
 	public readonly $id = '$core';
