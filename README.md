@@ -133,7 +133,7 @@ const log = app.log; // using $log service + custom toast targeting bootstrap cs
 </fieldset>
 ```
 
-# IE11 Support
+## IE11 Support
 
 ng-app `.js` bundles are compiled to ES5 & are drop-in ready for IE11
 
@@ -142,3 +142,60 @@ ng-app `.cjs`/`.mjs` bundles are compiled to ES2019 & are NOT drop-in ready for 
 ng-app only needs polyfills for the following APIs in IE11:
 - `fetch`
 - `AbortController`
+
+### Starter HTML
+
+```html
+<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<base href="/">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Document</title>
+	</head>
+	<body ng-controller="AppController as $ctrl">
+		<fieldset>
+			<legend>Modal</legend>
+			<button type="button" ng-click="$ctrl.openModal()">Open</button>
+		</fieldset>
+		<!-- snip -->
+		<script src="https://unpkg.com/angular@1/angular.min.js"></script>
+		<script src="https://unpkg.com/angular-messages@1/angular-messages.min.js"></script>
+		<script src="https://unpkg.com/whatwg-fetch@3/dist/fetch.umd.js" nomodule></script>
+		<script src="https://unpkg.com/abortcontroller-polyfill@1/dist/polyfill-patch-fetch.js" nomodule></script>
+		<script src="https://unpkg.com/@ledge/ng-app@6/build/ng-app.production.js"></script>
+
+		<script>
+			ngApp.app.module
+				.controller(
+					'AppController',
+					ngApp.app.makeComponentController(function AppController() {
+						const $ctrl = this;
+
+						$ctrl.openModal = function openModal() {
+							ngApp.app.modal.open({
+								controller: function ModalController() {
+									this.title = 'Example Modal';
+									this.body = 'Body';
+								},
+								title: '{{$ctrl.title}}',
+								template: '<p class="lead">{{$ctrl.body}}</p>',
+							});
+						};
+
+						$ctrl.openConfirmToast = function openConfirmToast() {
+							$ctrl.$log.confirm('Yes or No?')
+								.then(() => $ctrl.$log.success('Yes!'))
+								.catch(() => $ctrl.$log.info('No...'));
+						};
+					}),
+				);
+
+			ngApp.app.bootstrap().then(function () {
+				ngApp.app.log.success('Welcome... to The World...');
+			});
+		</script>
+	</body>
+</html>
+```
