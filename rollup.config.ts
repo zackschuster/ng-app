@@ -13,7 +13,7 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 	return {
 		input: 'index.ts',
 		external: ['angular', 'angular-messages'],
-		context: isEsmOrCjs ? 'globalThis' : undefined,
+		context: isEsmOrCjs ? 'globalThis' : 'window',
 		output: {
 			file: `build/ng-app.${isEsm ? 'mjs' : `${env}${isCjs ? '' : '.js'}`}`,
 			format: isEsmOrCjs ? env : 'iife',
@@ -25,7 +25,7 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 		},
 		plugins: [
 			commonjs({ esmExternals: isEsm, requireReturnsDefault: 'namespace' }),
-			nodeResolve({ mainFields: [isEsmOrCjs ? 'module' : undefined, 'main'] }),
+			nodeResolve(),
 			typescript({ target: `es${isEsmOrCjs ? 2019 : 5}`, exclude: ['docs', 'test'] }),
 			replace({ 'process.env.NODE_ENV': JSON.stringify(isEsmOrCjs ? 'production' : env) }),
 			isProduction ? terser() : undefined,
