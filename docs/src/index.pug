@@ -1,5 +1,4 @@
 - var colors = require('./colors.json')
-//- - var icons = require('./icons.json')
 - var toasts = colors.filter(function(x) { return ['info', 'success', 'warning', 'danger'].includes(x) }).map(function(x) { return x === 'danger' ? 'error' : x})
 
 html(lang="en")
@@ -112,12 +111,7 @@ html(lang="en")
 											ng-click="$ctrl.list = [{Text: 'Third Choice', Value: 3}, {Text: 'Fourth Choice', Value: 4}]"
 										) List 2
 
-			//- .col-12
-				.card.shadow
-					.card-body
-						fieldset
-							legend.h2.border-bottom.pb-2.mb-3 Icons
-							each icon in icons
-								app-icon(icon=icon height=42 width=42)
-
 			ui-view
+
+		script(src="https://unpkg.com/whatwg-fetch@3/dist/fetch.umd.js" nomodule)
+		script(src="https://unpkg.com/abortcontroller-polyfill@1/dist/polyfill-patch-fetch.js" nomodule)

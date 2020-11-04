@@ -29,7 +29,9 @@ export default (env = 'development') => {
 		entry: {
 			app: 'docs/src/app.tsx',
 			styles: 'docs/src/styles.scss',
-			polyfills: 'docs/src/polyfills.ts',
+		},
+		optimization: {
+			runtimeChunk: false,
 		},
 		output: {
 			path: docs,
