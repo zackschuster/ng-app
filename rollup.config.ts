@@ -8,27 +8,26 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 	const isEsm = env === 'esm';
 	const isCjs = env === 'cjs';
 	const isEsmOrCjs = isEsm || isCjs;
-	const isProduction = env === 'production';
 
 	return {
-		input: 'index.ts',
-		external: ['angular', 'angular-messages'],
 		context: isEsmOrCjs ? 'globalThis' : 'window',
+		external: ['angular', 'angular-messages'],
+		input: 'index.ts',
 		output: {
 			file: `build/ng-app.${isEsm ? 'mjs' : `${env}${isCjs ? '' : '.js'}`}`,
 			format: isEsmOrCjs ? env : 'iife',
-			name: 'ngApp',
 			globals: {
 				angular: 'angular',
 			},
+			name: 'ngApp',
 			sourcemap: true,
 		},
 		plugins: [
-			commonjs({ esmExternals: isEsm, requireReturnsDefault: 'namespace' }),
+			commonjs(),
 			nodeResolve(),
-			typescript({ target: `es${isEsmOrCjs ? 2019 : 5}`, exclude: ['docs', 'test'] }),
+			typescript({ target: `es${isEsmOrCjs ? 2019 : 5}` }),
 			replace({ 'process.env.NODE_ENV': JSON.stringify(isEsmOrCjs ? 'production' : env) }),
-			isProduction ? terser() : undefined,
+			env === 'production' ? terser() : undefined,
 		],
 	};
 });
