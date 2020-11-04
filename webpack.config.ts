@@ -25,6 +25,7 @@ class NgAppDocsPlugin {
 }
 
 export default (env = 'development') => {
+	const isDevelopment = env === 'development' || (env?.hasOwnProperty('WEBPACK_SERVE') ?? true);
 	const config = require('@ledge/configs/webpack.merge')(env, {
 		entry: {
 			app: 'docs/src/app.tsx',
@@ -42,12 +43,12 @@ export default (env = 'development') => {
 			modules: ['.', 'docs', 'node_modules'],
 		},
 		plugins: [
-			new HtmlWebpackPlugin({ template: 'docs/src/index.pug', title: '@ledge/ng-app docs' }),
-			new NgAppDocsPlugin(env === 'development'),
+			new HtmlWebpackPlugin({ template: 'docs/src/index.pug' }),
+			new NgAppDocsPlugin(isDevelopment),
 		],
 	});
 
-	if (typeof env !== 'string') {
+	if (isDevelopment === false) {
 		config.resolve.alias = { index: join(build, 'ng-app.mjs') };
 	}
 
