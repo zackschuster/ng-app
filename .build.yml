@@ -1,4 +1,4 @@
-image: alpine/3.9
+image: alpine/edge
 packages:
   - npm
 sources:
@@ -7,8 +7,11 @@ tasks:
   - install: |
       cd ng-app
       npx npm@7 install
+  - path: |
+      npx -p node@10 /bin/sh -c 'echo $PATH'
   - test: |
       cd ng-app
-      npx node@12 ./node_modules/.bin/ava
-      npx node@14 ./node_modules/.bin/ava
-      npx node@15 ./node_modules/.bin/ava
+      npx -p node@10 npm test
+      npx -p node@12 npm test
+      npx -p node@14 npm test
+      npx -p node@15 npm test
