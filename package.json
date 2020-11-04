@@ -38,7 +38,6 @@
 		"@ledge/is-mobile": "6.2.1",
 		"@ledge/types": "6.1.1",
 		"@types/angular": "1.8.0",
-		"@types/animejs": "3.1.2",
 		"@uirouter/angularjs": "1.0.28",
 		"flatpickr": "4.6.6"
 	},
@@ -57,7 +56,6 @@
 		"@types/html-webpack-plugin": "3.2.4",
 		"abortcontroller-polyfill": "1.5.0",
 		"angular-mocks": "1.8.2",
-		"animejs": "3.2.1",
 		"ava": "3.13.0",
 		"browser-env": "3.3.0",
 		"bundle-stats-webpack-plugin": "2.3.0",

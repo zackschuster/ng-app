@@ -1,4 +1,3 @@
-import anime from 'animejs';
 import { NgService } from './service';
 import { h } from './dom';
 
@@ -31,6 +30,8 @@ export class NgToast {
 		container: HTMLElement,
 	}) {
 		this.toast.style.setProperty('cursor', 'pointer');
+		this.toast.style.setProperty('opacity', '0');
+		this.toast.style.setProperty('transition', '500ms');
 		this.toastHeader.style.setProperty('border-bottom', 'none');
 
 		this.setBodyText(options.text);
@@ -93,60 +94,27 @@ export class NgToast {
 			container.appendChild(this.toast);
 		}
 
-		anime({
-			targets: this.toast,
-			translateX: [500, 0],
-			duration: 1000,
-			easing: 'easeOutQuint(0.5, 1)',
-			begin: () => {
-				this.toastHeaderTimestamp.innerText = new Date().toLocaleTimeString(navigator.language).replace(/(:\d{2})(?=\s[AP]M$)/, '');
-				this.toast.style.setProperty('opacity', '1');
-			},
-		});
+		this.toastHeaderTimestamp.innerText = new Date()
+			.toLocaleTimeString(navigator.language)
+			.replace(/(:\d{2})(?=\s[AP]M$)/, '');
 
 		return new Promise(resolve => {
-			const hideAnimation = anime({
-				targets: this.toast,
-				translateX: [0, 500],
-				duration: 1000,
-				autoplay: false,
-				easing: 'easeInQuint(0.5, 1)',
-				complete: () => {
-					this.toast.removeEventListener('click', hideAnimation.play);
-					this.toast.removeEventListener('mouseover', resetAnimationOnMouseover);
-					this.toast.removeEventListener('mouseout', resumeAnimationOnMouseout);
-					this.remove();
-					resolve();
-				},
-			});
-
-			const isAutoClose = typeof timeout === 'number' && !isNaN(timeout);
-			const makeTimeout = () => (setTimeout as typeof window['setTimeout'])(hideAnimation.play, timeout as number);
-
-			let autoCloseId = isAutoClose ? makeTimeout() : undefined;
-			let wasClosing = false;
-
-			const resetAnimationOnMouseover = () => {
-				wasClosing = hideAnimation.progress > 0;
-
-				clearTimeout(autoCloseId);
-				autoCloseId = undefined;
-
-				hideAnimation.restart();
-				hideAnimation.pause();
+			const onComplete = () => {
+				this.toast.removeEventListener('click', onComplete);
+				this.remove();
+				resolve();
 			};
+			setTimeout(() => {
+				this.toast.addEventListener('click', onComplete);
+				this.toast.style.setProperty('opacity', '1');
 
-			const resumeAnimationOnMouseout = () => {
-				if (wasClosing) {
-					hideAnimation.play();
-				} else if (isAutoClose && autoCloseId === undefined) {
-					autoCloseId = makeTimeout();
+				if (typeof timeout === 'number' && !isNaN(timeout)) {
+					(setTimeout as typeof window['setTimeout'])(() => {
+						this.toast.style.setProperty('opacity', '0');
+						(setTimeout as typeof window['setTimeout'])(onComplete, 300);
+					}, timeout as number);
 				}
-			};
-
-			this.toast.addEventListener('click', hideAnimation.play);
-			this.toast.addEventListener('mouseover', resetAnimationOnMouseover);
-			this.toast.addEventListener('mouseout', resumeAnimationOnMouseout);
+			});
 		});
 	}
 
