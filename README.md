@@ -86,8 +86,8 @@ app.bootstrap();
 import { app } from '@ledge/ng-app';
 
 const http = app.http; // using fetch
-const modal = app.modal; // using bootstrap modals
-const log = app.log; // using bootstrap toasts + $log service
+const modal = app.modal; // using custom modal targeting bootstrap css
+const log = app.log; // using $log service + custom toast targeting bootstrap css
 ```
 
 ## Built-in, zero-config components
@@ -135,13 +135,11 @@ const log = app.log; // using bootstrap toasts + $log service
 
 # IE11 Support
 
-ng-app is written in ES2015+ syntax, so it will need to be compiled to ES5
+ng-app `.js` bundles are compiled to ES5 & are drop-in ready for IE11
 
-ng-app bundles are compiled to ES5
+ng-app `.cjs`/`.mjs` bundles are compiled to ES2019 & are NOT drop-in ready for IE11
 
-ng-app only needs polyfills for the following APIs:
+ng-app only needs polyfills for the following APIs in IE11:
 - `fetch`
 - `AbortController`
-- `Map`
 - `Promise`
-- `Set`
