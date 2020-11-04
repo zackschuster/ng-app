@@ -20,6 +20,8 @@ export function h<T extends keyof HTMLElementTagNameMap, E extends HTMLElement &
 			element[key as keyof typeof element] = value;
 		} else if (key === 'className') {
 			element.setAttribute('class', value.toString());
+		} else if (key === 'htmlFor') {
+			element.setAttribute('for', value.toString());
 		} else {
 			element.setAttribute(key, value.toString());
 		}
