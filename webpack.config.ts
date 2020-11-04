@@ -36,9 +36,6 @@ export default (env = 'development') => {
 			publicPath: '/',
 		},
 		resolve: {
-			alias: {
-				index: join(build, 'ng-app.mjs'),
-			},
 			extensions: ['.js', '.ts', '.tsx'],
 			modules: ['.', 'docs', 'node_modules'],
 		},
@@ -50,6 +47,7 @@ export default (env = 'development') => {
 
 	if (typeof env !== 'string') {
 		config.plugins.push(new BundleStatsWebpackPlugin());
+		config.resolve.alias = { index: join(build, 'ng-app.mjs') };
 	}
 
 	return config;
