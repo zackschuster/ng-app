@@ -34,10 +34,10 @@
 		"prepublishOnly": "npm run lint && npm test"
 	},
 	"dependencies": {
-		"@ledge/is-ie-11": "5.1.0",
-		"@ledge/is-mobile": "6.1.0",
+		"@ledge/is-ie-11": "5.2.1",
+		"@ledge/is-mobile": "6.2.1",
 		"@ledge/types": "6.1.1",
-		"@types/angular": "1.7.4",
+		"@types/angular": "1.8.0",
 		"@types/animejs": "3.1.2",
 		"@types/lodash": "4.14.164",
 		"@uirouter/angularjs": "1.0.28",
