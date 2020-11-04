@@ -1,5 +1,4 @@
 import { Indexed } from '@ledge/types';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { NgInputController } from './controller';
 import { NgInputOptions } from './options';
@@ -104,10 +103,10 @@ export class InputService extends NgService {
 	 * @param component An object representing the requested component definition
 	 */
 	public static defineInputComponent<T extends NgInputOptions>(component: T) {
-		const $component = cloneDeep({ ...InputService.$BaseComponent, ...component });
+		const $component = window.angular.copy({ ...InputService.$BaseComponent, ...component });
 		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
-		const $definition = cloneDeep(InputService.$baseDefinition);
+		const $definition = window.angular.copy(InputService.$baseDefinition);
 
 		// assign child objects
 		if ($definition.bindings != null && $component.bindings != null) {

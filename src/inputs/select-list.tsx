@@ -1,5 +1,4 @@
 import Fuse from 'fuse.js';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { NgInputController, NgInputOptions } from './shared';
 import { NgAttributes } from '../attributes';
@@ -65,7 +64,7 @@ class SelectController extends NgInputController {
 			if (input.value) {
 				this.searchList = this.getSearchList(fuzzer.search(input.value));
 			} else {
-				this.searchList = cloneDeep(this.list);
+				this.searchList = window.angular.copy(this.list);
 			}
 			this.$scope.$applyAsync();
 		};
@@ -192,7 +191,7 @@ class SelectController extends NgInputController {
 		return Array.isArray(this.ngModel)
 			? list.filter(x => this.ngModel.every((y: any) => x[this.value] != y))
 			: this.ngModel == null
-				? cloneDeep(list)
+				? window.angular.copy(list)
 				: list.filter(x => x[this.value] != this.ngModel);
 		// tslint:enable:triple-equals
 	}

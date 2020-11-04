@@ -1,6 +1,5 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import cloneDeep from 'lodash/cloneDeep';
 import { makeAttrs } from '../mocks';
 import { InputService, NgInputController } from '../../src/inputs';
 
@@ -40,7 +39,7 @@ test('InputService.$baseDefinition', async t => {
 });
 
 test('InputService.$baseComponent', async t => {
-	const $baseComponent = cloneDeep(InputService.$BaseComponent);
+	const $baseComponent = window.angular.copy(InputService.$BaseComponent);
 
 	t.true($baseComponent.renderLabel instanceof Function);
 	t.true($baseComponent.postRender instanceof Function);

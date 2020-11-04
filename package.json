@@ -39,7 +39,6 @@
 		"@ledge/types": "6.1.1",
 		"@types/angular": "1.8.0",
 		"@types/animejs": "3.1.2",
-		"@types/lodash": "4.14.164",
 		"@uirouter/angularjs": "1.0.28",
 		"flatpickr": "4.6.6",
 		"fuse.js": "6.4.3"
@@ -67,7 +66,6 @@
 		"css-loader": "5.0.0",
 		"file-loader": "6.2.0",
 		"html-webpack-plugin": "4.5.0",
-		"lodash": "4.17.20",
 		"mini-css-extract-plugin": "1.2.1",
 		"node-fetch": "2.6.1",
 		"optimize-css-assets-webpack-plugin": "5.0.4",

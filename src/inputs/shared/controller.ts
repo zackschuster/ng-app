@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual';
 import { Indexed } from '@ledge/types';
 import { NgController } from '../../controller';
 
@@ -22,7 +21,7 @@ export class NgInputController<T = any> extends NgController {
 			this.$scope.$watchCollection(
 				() => this.ngModel,
 				(curr: any, prev: any) => {
-					if (isEqual(curr, prev)) {
+					if (window.angular.equals(curr, prev)) {
 						return;
 					}
 
