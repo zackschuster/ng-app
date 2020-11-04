@@ -21,6 +21,7 @@
 	"type": "module",
 	"types": "index.ts",
 	"main": "./build/ng-app.cjs",
+	"module": "./build/ng-app.mjs",
 	"exports": {
 		"import": "./build/ng-app.mjs",
 		"require": "./build/ng-app.cjs"
