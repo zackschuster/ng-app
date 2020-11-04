@@ -154,12 +154,13 @@ ng-app only needs polyfills for the following APIs in IE11:
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Document</title>
 	</head>
-	<body ng-controller="AppController as $ctrl">
-		<fieldset>
+	<body>
+		<fieldset ng-controller="AppController as $ctrl">
 			<legend>Modal</legend>
-			<button type="button" ng-click="$ctrl.openModal()">Open</button>
+			<button type="button" ng-click="$ctrl.openModal()">Open Modal</button>
+			<button type="button" ng-click="$ctrl.openConfirmToast()">Open Confirmation Toast</button>
 		</fieldset>
-		<!-- snip -->
+
 		<script src="https://unpkg.com/angular@1/angular.min.js"></script>
 		<script src="https://unpkg.com/angular-messages@1/angular-messages.min.js"></script>
 		<script src="https://unpkg.com/whatwg-fetch@3/dist/fetch.umd.js" nomodule></script>
