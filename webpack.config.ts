@@ -1,7 +1,5 @@
 import { readdirSync, unlinkSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { Compiler } from 'webpack';
-import { BundleStatsWebpackPlugin } from 'bundle-stats-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const cwd = process.cwd();
@@ -10,7 +8,7 @@ const docs = join(cwd, 'docs');
 
 class NgAppDocsPlugin {
 	constructor(private isDev: boolean) { }
-	public apply(compiler: Compiler) {
+	public apply(compiler: import('webpack').Compiler) {
 		if (this.isDev === false) {
 			compiler.hooks.emit.tap(this.constructor.name, () => {
 				const files = readdirSync(docs, { withFileTypes: true }).filter(x => x.isFile());
@@ -20,6 +18,8 @@ class NgAppDocsPlugin {
 
 		compiler.hooks.afterEmit.tap(this.constructor.name, () => {
 			writeFileSync(join(docs, 'CNAME'), 'ng-app.js.org');
+			const files = readdirSync(docs, { withFileTypes: true }).filter(x => x.name.endsWith('.txt'));
+			files.forEach(x => unlinkSync(join(docs, x.name)));
 		});
 	}
 }
@@ -46,7 +46,6 @@ export default (env = 'development') => {
 	});
 
 	if (typeof env !== 'string') {
-		config.plugins.push(new BundleStatsWebpackPlugin());
 		config.resolve.alias = { index: join(build, 'ng-app.mjs') };
 	}
 

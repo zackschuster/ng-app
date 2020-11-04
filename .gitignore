@@ -1,11 +1,13 @@
 build
 node_modules
-.DS_Store
 
-t.*
-*.ini
 *.js
 *.map
+!docs/*
+docs/*.txt
+
+.DS_Store
+t.*
+*.ini
 *.log
 test/**/*.md
-!docs/*.js
