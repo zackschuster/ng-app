@@ -7,7 +7,7 @@ import { makeInjectableCtrl } from '../../src/controller';
 import { InputService, NgInputOptions } from '../../src/inputs';
 import { NgComponentOptions } from '../../src/options';
 
-const idRe = /\w[_]{{\$ctrl.uniqueId}}/;
+const idRe = /(\w[_])?{{\$ctrl.uniqueId}}/;
 
 export function mockInputCtrl<T extends NgInputOptions>(definition: T, $attrs: Partial<angular.IAttributes> = {}) {
 	Object.assign($attrs, {
@@ -80,10 +80,7 @@ export function testInput(
 	t.is(input.getAttribute('ng-readonly'), '$ctrl.ngReadonly');
 
 	if (tagName !== 'SELECT') {
-		// date-input currently uses flatpickr in `wrap` mode, which requires `data-input` to be set on the input
-		if (input.hasAttribute('data-input') === false) {
-			t.is(input.getAttribute('ng-model'), '$ctrl.ngModel');
-		}
+		t.is(input.getAttribute('ng-model'), '$ctrl.ngModel');
 		t.is(input.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 		t.is(input.getAttribute('ng-blur'), '$ctrl.ngModelCtrl.$setTouched()');
 		t.is(input.getAttribute('ng-class'), `{ 'is-invalid': ${InputService.$ValidationExpressions.$IsInvalid} }`);

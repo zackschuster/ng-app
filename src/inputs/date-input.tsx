@@ -1,4 +1,3 @@
-import flatpickr from 'flatpickr';
 import { h } from '../dom';
 import { NgInputController, NgInputOptions } from './shared';
 
@@ -7,10 +6,9 @@ function isNumber(n: any): n is number {
 }
 
 class DateInputController extends NgInputController {
-	private readonly SUPPORTED_MODES = ['single', 'multiple', 'range'];
+	public ngModel: Date | null | undefined;
 	private minDate?: Date | number | string;
 	private maxDate?: Date | number | string;
-	private flatpickr!: flatpickr.Instance;
 
 	public $onInit() {
 		this.ngModelCtrl.$validators.minDate = modelVal => {
@@ -36,85 +34,173 @@ class DateInputController extends NgInputController {
 			}
 			return true;
 		};
+	}
 
-		const { inline, mode = 'single' } = this.$attrs;
-		if (this.SUPPORTED_MODES.indexOf(mode) === -1) {
-			this.$log.devWarning(`Unsupported date-input \`mode\` ('${mode}') for #${this.$element.id}. Expected one of ${this.SUPPORTED_MODES.join(', ')}.`);
-		}
+	public $postLink() {
+		setTimeout(() => {
+			if (document.querySelector('input[type="date"]') == null) {
+				const daySelect = document.querySelector(`#day_${this.uniqueId}`) as HTMLSelectElement;
+				const monthSelect = document.querySelector(`#month_${this.uniqueId}`) as HTMLSelectElement;
+				const yearSelect = document.querySelector(`#year_${this.uniqueId}`) as HTMLSelectElement;
 
-		this.flatpickr = flatpickr(this.$element, {
-			dateFormat: 'M n Y (l)',
-			defaultDate: this.ngModel,
-			inline: inline === 'true',
-			mode,
-			nextArrow: '&raquo;',
-			prevArrow: '&laquo;',
-			allowInput: true,
-			weekNumbers: true,
-			wrap: true,
-			enable: [
-				d => {
-					const maxDate = Date.parse(this.maxDate as any);
-					return isNaN(maxDate) || d.valueOf() < maxDate;
-				},
-				d => {
-					const minDate = Date.parse(this.minDate as any);
-					return isNaN(minDate) || d.valueOf() > minDate;
-				},
-			],
-			onChange: selected => {
-				this.ngModel = selected.length > 1
-					? selected
-					: selected[0];
+				const setNgModel = () => {
+					if (this.ngModel == null) this.ngModel = new Date();
+					this.ngModel.setDate(Number(daySelect.value));
+					this.ngModel.setMonth(Number(monthSelect.value));
+					this.ngModel.setFullYear(Number(yearSelect.value));
+				};
 
+				daySelect.onchange = () => {
+					setNgModel();
+					this.$scope.$applyAsync();
+				};
+
+				monthSelect.onchange = () => {
+					setNgModel();
+					this.update();
+				};
+
+				yearSelect.onchange = () => {
+					setNgModel();
+					this.update();
+				};
+
+				this.update();
 				this.$scope.$applyAsync();
-			},
-		}) as flatpickr.Instance;
+			}
+		});
 	}
 
-	public $onDestroy() {
-		if (this.flatpickr != null && typeof this.flatpickr.destroy === 'function') {
-			this.flatpickr.destroy();
+	public update() {
+		const day = new Date(this.ngModel ?? Date.now());
+		const daySelect = document.querySelector(`#day_${this.uniqueId}`) as HTMLSelectElement;
+		while (daySelect.options.length > 0) {
+			daySelect.options.remove(0);
 		}
+		const currentDay = day.getDate();
+		const day2 = new Date(day);
+		day2.setDate(0);
+		let dayOption = day2.getDate();
+		while (dayOption > 0) {
+			const option = <option value={`${dayOption}`}>{dayOption}</option> as HTMLOptionElement;
+			if (dayOption === currentDay) {
+				option.setAttribute('selected', 'selected');
+			} else {
+				option.removeAttribute('selected');
+			}
+			daySelect.appendChild(option);
+			dayOption--;
+		}
+
+		const currentMonth = day.getMonth();
+		const monthSelect = document.querySelector(`#month_${this.uniqueId}`) as HTMLSelectElement;
+		if (Number(monthSelect.value) !== currentMonth) {
+			for (const option of monthSelect.options) {
+				if (Number(option.value) === currentMonth) {
+					option.setAttribute('selected', 'selected');
+				} else {
+					option.removeAttribute('selected');
+				}
+			}
+		}
+
+		const currentYear = day.getFullYear();
+		const yearSelect = document.querySelector(`#year_${this.uniqueId}`) as HTMLSelectElement;
+		if (Number(yearSelect.value) !== currentYear) {
+			for (const option of yearSelect.options) {
+				if (Number(option.value) === currentYear) {
+					option.setAttribute('selected', 'selected');
+				} else {
+					option.removeAttribute('selected');
+				}
+			}
+		}
+
+		this.$scope.$applyAsync();
 	}
 
-	public getMinDate() {
-		return new Date(this.minDate as number).toLocaleDateString();
-	}
-
-	public getMaxDate() {
-		return new Date(this.maxDate as number).toLocaleDateString();
+	public reset() {
+		this.ngModel = undefined;
+		this.update();
+		this.$scope.$applyAsync();
 	}
 }
 
 export const dateInput: NgInputOptions = {
 	type: 'input',
 	render() {
-		// no ng-model as flatpickr requires control of the input element
-		const input =
+		let input =
 			<input class='form-control'
 				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
 				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
+				ng-attr-min='{{$ctrl.minDate}}'
+				ng-attr-max='{{$ctrl.maxDate}}'
+				ng-model='$ctrl.ngModel'
 				ng-model-options='$ctrl.ngModelOptions'
-				type='text'
-				maxLength={'{{maxlength}}' as never}
-				placeholder='{{placeholder}}'
-				data-input='true'
 			/>;
 
+		try {
+			(input as HTMLInputElement).type = 'date';
+		} finally {
+			if ((input as HTMLInputElement).type !== 'date') {
+				const currentMonth = new Date().getMonth();
+				const currentYear = new Date().getFullYear();
+
+				const monthSelect = <select class='form-control' ng-attr-id='month_{{$ctrl.uniqueId}}'>
+					{['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, i) => {
+						const option = <option value={`${i}`}>{x}</option> as HTMLOptionElement;
+						if (i === currentMonth) option.setAttribute('selected', 'selected');
+						return option;
+					})}
+				</select> as HTMLSelectElement;
+
+				const yearSelect = <select class='form-control' ng-attr-id='year_{{$ctrl.uniqueId}}'></select> as HTMLSelectElement;
+				let yearOption = new Date(0).getFullYear();
+				while (yearOption < (currentYear + 99)) {
+					const option = <option value={`${yearOption}`}>{yearOption}</option> as HTMLOptionElement;
+					if (yearOption === currentYear) option.setAttribute('selected', 'selected');
+					yearSelect.appendChild(option);
+					yearOption++;
+				}
+
+				input = <section class='w-100 px-2 mt-2 mb-n1'>
+					<div class='form-group row'>
+						<label class='col-lg-3 col-form-label' ng-attr-for='day_{{$ctrl.uniqueId}}'>Day</label>
+						<div class='col'>
+							<select class='form-control' ng-attr-id='day_{{$ctrl.uniqueId}}'></select>
+						</div>
+					</div>
+					<div class='form-group row'>
+						<label class='col-lg-3 col-form-label' ng-attr-for='month_{{$ctrl.uniqueId}}'>Month</label>
+						<div class='col'>
+							{monthSelect}
+						</div>
+					</div>
+					<div class='form-group row'>
+						<label class='col-lg-3 col-form-label' ng-attr-for='year_{{$ctrl.uniqueId}}'>Year</label>
+						<div class='col'>
+							{yearSelect}
+						</div>
+					</div>
+				</section>;
+			}
+		}
+
+		const hasNativeDatepicker = (input as HTMLInputElement).type === 'date';
 		return (
-			<div class='input-group'>
-				<div class='input-group-prepend' data-toggle='true' style={'cursor: pointer;' as never}>
-					<span class='input-group-text'>
-						<span class='fa fa-calendar' aria-hidden='true'></span>
-					</span>
+			<div class='input-group border'>
+				<div class='input-group-text border-0 w-100' ng-click='$ctrl.focus()' style={'line-height:1rem;' as never}>
+					<svg aria-hidden='true' style={'width:1rem;margin-right:0.69rem;' as never} role='img' viewBox='0 0 448 512'><path fill='currentColor' d='M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z'></path></svg>
+					{'{{$ctrl.ngModel | date:"MMMM d, yyyy (EEEE)"}}'}
 				</div>
 				{input}
-				<div class='input-group-append' data-clear='true' style={'cursor: pointer;' as never}>
-					<span class='input-group-text'>
-						<span class='fa fa-times' aria-hidden='true'></span>
-					</span>
-				</div>
+				{hasNativeDatepicker
+					? <div class='input-group-append' ng-click='$ctrl.reset()' style={'cursor: pointer;' as never}>
+						<span class='input-group-text'>
+							&times;
+						</span>
+					</div>
+					: undefined}
 			</div>
 		);
 	},

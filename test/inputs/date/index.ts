@@ -50,23 +50,16 @@ test('date template', async t => {
 	t.true(inputGroup.classList.contains('input-group'));
 	t.is(inputGroup.tagName, 'DIV');
 
-	const inputGroupPrepend = inputGroup.firstElementChild as HTMLDivElement;
-	t.true(inputGroupPrepend.classList.contains('input-group-prepend'));
-	t.is(inputGroupPrepend.tagName, 'DIV');
-	t.is(inputGroupPrepend.getAttribute('data-toggle'), 'true');
-	t.is(inputGroupPrepend.style.cursor, 'pointer');
-
-	const inputGroupText = inputGroupPrepend.firstElementChild as HTMLSpanElement;
+	const inputGroupText = inputGroup.firstElementChild as HTMLDivElement;
 	t.true(inputGroupText.classList.contains('input-group-text'));
-	t.is(inputGroupText.tagName, 'SPAN');
+	t.is(inputGroupText.tagName, 'DIV');
 
 	const icon = inputGroupText.firstElementChild as HTMLSpanElement;
-	t.true(icon.classList.contains('fa'));
-	t.true(icon.classList.contains('fa-calendar'));
+	t.is(icon.tagName, 'svg');
 	t.is(icon.getAttribute('aria-hidden'), 'true');
 
 	const input = util.testInput(tpl, t);
-	t.is(input.getAttribute('data-input'), 'true');
+	t.is(input.getAttribute('type'), 'date');
 
 	util.testLabel(tpl, t);
 	util.testNgMessages(tpl, t);

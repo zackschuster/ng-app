@@ -1,6 +1,5 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
-import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 
@@ -23,7 +22,6 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 			sourcemap: true,
 		},
 		plugins: [
-			commonjs(),
 			nodeResolve(),
 			typescript({ target: `es${isEsmOrCjs ? 2019 : 5}` }),
 			replace({ 'process.env.NODE_ENV': JSON.stringify(isEsmOrCjs ? 'production' : env) }),
