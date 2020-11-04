@@ -201,14 +201,9 @@ class SelectController extends NgInputController {
 export const selectList: NgInputOptions = {
 	type: 'input',
 	render() {
-		const select =
-			<select class='form-control select-input d-none'
-				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
-				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
-				ng-model='$ctrl.ngModel'>
-			</select>;
-
+		const select = <select class='form-control select-input d-none'></select>;
 		const isMultiple = SelectController.IsMultiple(this.$attrs);
+
 		if (isMultiple) {
 			select.setAttribute('multiple', 'true');
 		} else {

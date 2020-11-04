@@ -20,7 +20,7 @@ class TextInputController extends NgInputController {
 
 		if (minlength != null) {
 			this.ngModelCtrl.$validators.pattern = val => {
-				return val != null && val.length >= minlength;
+				return val?.length >= minlength;
 			};
 		}
 	}
@@ -37,15 +37,7 @@ export const textInput: NgInputOptions<TextInputController> = {
 	attrs: { maxlength: 3000, placeholder: '' },
 	render() {
 		const { type = 'text', minlength } = this.$attrs;
-		const input =
-			<input class='form-control'
-				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
-				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
-				ng-model='$ctrl.ngModel'
-				ng-model-options='$ctrl.ngModelOptions'
-				type={type}
-				maxLength={'{{maxlength}}' as never}
-				placeholder='{{placeholder}}' />;
+		const input = <input class='form-control' type={type} maxLength={'{{maxlength}}' as never} placeholder='{{placeholder}}' />;
 
 		const isRange = type === 'range';
 		if (type === 'number' || isRange) {

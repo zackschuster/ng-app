@@ -126,16 +126,7 @@ export const textBox: NgInputOptions = {
 	type: 'input',
 	attrs: { maxlength: 3000, placeholder: '' },
 	render() {
-		const textArea =
-			<textarea class='form-control'
-				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
-				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
-				ng-model='$ctrl.ngModel'
-				ng-model-options='$ctrl.ngModelOptions'
-			/> as HTMLTextAreaElement;
-
-		textArea.maxLength = 3000;
-		textArea.placeholder = '{{placeholder}}';
+		const textArea = <textarea class='form-control' maxLength={3000} placeholder='{{placeholder}}' />;
 
 		textArea.style.setProperty('overflow', 'hidden');
 		textArea.style.setProperty('overflow-y', 'hidden');

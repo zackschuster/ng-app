@@ -12,25 +12,15 @@ class DateInputController extends NgInputController {
 
 	public $onInit() {
 		this.ngModelCtrl.$validators.minDate = modelVal => {
-			if (modelVal != null) {
-				if (isNumber(this.minDate)) {
-					return this.minDate <= modelVal.valueOf();
-				}
-				if (this.minDate instanceof Date) {
-					return this.minDate.valueOf() <= modelVal.valueOf();
-				}
+			if (isNumber(this.minDate) || this.minDate instanceof Date) {
+				return this.minDate.valueOf() <= modelVal?.valueOf() ?? 0;
 			}
 			return true;
 		};
 
 		this.ngModelCtrl.$validators.maxDate = modelVal => {
-			if (modelVal != null) {
-				if (isNumber(this.maxDate)) {
-					return this.maxDate >= modelVal.valueOf();
-				}
-				if (this.maxDate instanceof Date) {
-					return this.maxDate.valueOf() >= modelVal.valueOf();
-				}
+			if (isNumber(this.maxDate) || this.maxDate instanceof Date) {
+				return this.maxDate.valueOf() >= modelVal?.valueOf();
 			}
 			return true;
 		};
@@ -43,30 +33,28 @@ class DateInputController extends NgInputController {
 				const monthSelect = document.querySelector(`#month_${this.uniqueId}`) as HTMLSelectElement;
 				const yearSelect = document.querySelector(`#year_${this.uniqueId}`) as HTMLSelectElement;
 
-				const setNgModel = () => {
-					if (this.ngModel == null) this.ngModel = new Date();
-					this.ngModel.setDate(Number(daySelect.value));
-					this.ngModel.setMonth(Number(monthSelect.value));
-					this.ngModel.setFullYear(Number(yearSelect.value));
-				};
-
-				daySelect.onchange = () => {
-					setNgModel();
+				const updateNgModel = () => {
+					this.ngModel = new Date(
+						Number(yearSelect.value),
+						Number(monthSelect.value),
+						Number(daySelect.value),
+					);
 					this.$scope.$applyAsync();
 				};
 
+				daySelect.onchange = () => {
+					updateNgModel();
+				};
 				monthSelect.onchange = () => {
-					setNgModel();
+					updateNgModel();
 					this.update();
 				};
-
 				yearSelect.onchange = () => {
-					setNgModel();
+					updateNgModel();
 					this.update();
 				};
 
 				this.update();
-				this.$scope.$applyAsync();
 			}
 		});
 	}
@@ -80,8 +68,9 @@ class DateInputController extends NgInputController {
 		const currentDay = day.getDate();
 		const day2 = new Date(day);
 		day2.setDate(0);
-		let dayOption = day2.getDate();
-		while (dayOption > 0) {
+		const maxDay = day2.getDate();
+		let dayOption = 1;
+		while (dayOption <= maxDay) {
 			const option = <option value={`${dayOption}`}>{dayOption}</option> as HTMLOptionElement;
 			if (dayOption === currentDay) {
 				option.setAttribute('selected', 'selected');
@@ -89,7 +78,7 @@ class DateInputController extends NgInputController {
 				option.removeAttribute('selected');
 			}
 			daySelect.appendChild(option);
-			dayOption--;
+			dayOption++;
 		}
 
 		const currentMonth = day.getMonth();
@@ -115,44 +104,32 @@ class DateInputController extends NgInputController {
 				}
 			}
 		}
-
-		this.$scope.$applyAsync();
-	}
-
-	public reset() {
-		this.ngModel = undefined;
-		this.update();
-		this.$scope.$applyAsync();
 	}
 }
 
 export const dateInput: NgInputOptions = {
 	type: 'input',
 	render() {
+		const useFallback = this.$attrs.hasOwnProperty('useFallback');
 		let input =
-			<input class='form-control'
-				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
-				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
-				ng-attr-min='{{$ctrl.minDate}}'
-				ng-attr-max='{{$ctrl.maxDate}}'
-				ng-model='$ctrl.ngModel'
-				ng-model-options='$ctrl.ngModelOptions'
-			/>;
+			<input class='form-control' ng-attr-min='{{$ctrl.minDate}}' ng-attr-max='{{$ctrl.maxDate}}' />;
 
 		try {
 			(input as HTMLInputElement).type = 'date';
 		} finally {
-			if ((input as HTMLInputElement).type !== 'date') {
-				const currentMonth = new Date().getMonth();
-				const currentYear = new Date().getFullYear();
+			if ((input as HTMLInputElement).type !== 'date' || useFallback) {
+				const currentDate = new Date();
+				const currentMonth = currentDate.getMonth();
+				const currentYear = currentDate.getFullYear();
 
-				const monthSelect = <select class='form-control' ng-attr-id='month_{{$ctrl.uniqueId}}'>
-					{['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, i) => {
-						const option = <option value={`${i}`}>{x}</option> as HTMLOptionElement;
-						if (i === currentMonth) option.setAttribute('selected', 'selected');
-						return option;
-					})}
-				</select> as HTMLSelectElement;
+				const monthSelect =
+					<select class='form-control' ng-attr-id='month_{{$ctrl.uniqueId}}'>
+						{['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, i) => {
+							const option = <option value={`${i}`}>{x}</option> as HTMLOptionElement;
+							if (i === currentMonth) option.setAttribute('selected', 'selected');
+							return option;
+						})}
+					</select> as HTMLSelectElement;
 
 				const yearSelect = <select class='form-control' ng-attr-id='year_{{$ctrl.uniqueId}}'></select> as HTMLSelectElement;
 				let yearOption = new Date(0).getFullYear();
@@ -186,21 +163,18 @@ export const dateInput: NgInputOptions = {
 			}
 		}
 
-		const hasNativeDatepicker = (input as HTMLInputElement).type === 'date';
+		const usesNativeDatepicker = (input as HTMLInputElement).type === 'date' && !useFallback;
 		return (
-			<div class='input-group border'>
-				<div class='input-group-text border-0 w-100' ng-click='$ctrl.focus()' style={'line-height:1rem;' as never}>
-					<svg aria-hidden='true' style={'width:1rem;margin-right:0.69rem;' as never} role='img' viewBox='0 0 448 512'><path fill='currentColor' d='M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z'></path></svg>
-					{'{{$ctrl.ngModel | date:"MMMM d, yyyy (EEEE)"}}'}
-				</div>
+			<div class={`input-group ${usesNativeDatepicker ? '' : 'border'}`}>
+				{usesNativeDatepicker
+					? undefined
+					: (
+						<p class='p-2 bg-light d-flex align-items-center w-100' style={'line-height:1rem;' as never}>
+							<svg aria-hidden='true' style={'width:1rem;margin-right:0.69rem;' as never} role='img' viewBox='0 0 448 512'><path fill='currentColor' d='M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z'></path></svg>
+							{'{{$ctrl.ngModel | date:"MMMM d, yyyy (EEEE)"}}'}
+						</p>
+					)}
 				{input}
-				{hasNativeDatepicker
-					? <div class='input-group-append' ng-click='$ctrl.reset()' style={'cursor: pointer;' as never}>
-						<span class='input-group-text'>
-							&times;
-						</span>
-					</div>
-					: undefined}
 			</div>
 		);
 	},

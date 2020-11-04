@@ -50,16 +50,31 @@ test('date template', async t => {
 	t.true(inputGroup.classList.contains('input-group'));
 	t.is(inputGroup.tagName, 'DIV');
 
-	const inputGroupText = inputGroup.firstElementChild as HTMLDivElement;
-	t.true(inputGroupText.classList.contains('input-group-text'));
-	t.is(inputGroupText.tagName, 'DIV');
+	const input = util.testInput(tpl, t);
+	t.is(input.getAttribute('type'), 'date');
 
-	const icon = inputGroupText.firstElementChild as HTMLSpanElement;
+	util.testLabel(tpl, t);
+	util.testNgMessages(tpl, t);
+	util.testNgTranscludeContain(tpl, t);
+});
+
+test('date template (fallback)', async t => {
+	const tpl = util.makeTpl(definition.template, t, { useFallback: true });
+	t.true(tpl.classList.contains('form-group'));
+
+	const inputGroup = tpl.querySelector('.input-group') as HTMLDivElement;
+	t.is(inputGroup.tagName, 'DIV');
+
+	const inputGroupText = inputGroup.firstElementChild as HTMLParagraphElement;
+	t.is(inputGroupText.tagName, 'P');
+
+	const icon = inputGroupText.firstElementChild as SVGElement;
 	t.is(icon.tagName, 'svg');
 	t.is(icon.getAttribute('aria-hidden'), 'true');
 
-	const input = util.testInput(tpl, t);
-	t.is(input.getAttribute('type'), 'date');
+	const input = util.testInput(tpl, t, 'SELECT');
+	t.is(input.getAttribute('type'), null);
+	t.is(tpl.querySelectorAll('select').length, 3);
 
 	util.testLabel(tpl, t);
 	util.testNgMessages(tpl, t);

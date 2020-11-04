@@ -195,10 +195,18 @@ export class InputService extends NgService {
 				);
 			}
 
+			if ($inputInput.getAttribute('ng-attr-id') == null) {
+				$inputInput.setAttribute('ng-attr-id', `{{id}}_{{$ctrl.uniqueId}}${isRadio ? '_{{$index}}' : ''}`);
+			}
+			$inputInput.setAttribute('ng-attr-name', '{{id}}_{{$ctrl.uniqueId}}');
+			if (($inputInput.getAttribute('ng-attr-id')?.indexOf('{{id}}') ?? -1) === 0) {
+				$inputInput.setAttribute('ng-model', '$ctrl.ngModel');
+			}
 			if ($inputInput.tagName !== 'SELECT') {
 				const ngClass = `{ 'is-invalid': ${InputService.$ValidationExpressions.$IsInvalid} }`;
 				$inputInput.setAttribute('ng-class', ngClass);
 				$inputInput.setAttribute('ng-blur', '$ctrl.ngModelCtrl.$setTouched()');
+				$inputInput.setAttribute('ng-model-options', '$ctrl.ngModelOptions');
 			}
 
 			const $validationBlock =

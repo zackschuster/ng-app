@@ -54,13 +54,11 @@ test('radio template', async t => {
 	const input = util.testInput(template, t);
 	t.true(input.classList.contains('form-check-input'));
 	t.is(input.type, 'radio');
-	t.is(input.style.cursor, 'pointer');
 	t.is(input.getAttribute('ng-value'), 'item.Value');
 	t.regex(input.getAttribute('ng-attr-id') as string, radioNgIdRe);
 
 	const label = util.testLabel(template, t);
 	t.true(label.classList.contains('form-check-label'));
-	t.is(label.style.cursor, 'pointer');
 	t.is(label.innerHTML, '{{item.Text}}');
 	t.regex(label.getAttribute('ng-attr-for') as string, radioNgIdRe);
 
@@ -79,13 +77,11 @@ test('radio template (inlined)', async t => {
 	const input = util.testInput(tpl, t);
 	t.true(input.classList.contains('form-check-input'));
 	t.is(input.type, 'radio');
-	t.is(input.style.cursor, 'pointer');
 	t.is(input.getAttribute('ng-value'), 'item.Value');
 	t.regex(input.getAttribute('ng-attr-id') as string, radioNgIdRe);
 
 	const label = util.testLabel(tpl, t);
 	t.true(label.classList.contains('form-check-label'));
-	t.is(label.style.cursor, 'pointer');
 	t.is(label.innerHTML, '{{item.Text}}');
 	t.regex(label.getAttribute('ng-attr-for') as string, radioNgIdRe);
 

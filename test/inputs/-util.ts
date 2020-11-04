@@ -7,7 +7,7 @@ import { makeInjectableCtrl } from '../../src/controller';
 import { InputService, NgInputOptions } from '../../src/inputs';
 import { NgComponentOptions } from '../../src/options';
 
-const idRe = /(\w[_])?{{\$ctrl.uniqueId}}/;
+const idRe = /(\w[_]){{\$ctrl.uniqueId}}/;
 
 export function mockInputCtrl<T extends NgInputOptions>(definition: T, $attrs: Partial<angular.IAttributes> = {}) {
 	Object.assign($attrs, {
@@ -98,7 +98,7 @@ export function testLabel(tpl: Element, t: ExecutionContext) {
 	t.regex(ngAttrFor, idRe);
 
 	const input = tpl.querySelector('input');
-	if (input != null && input.type !== 'radio') {
+	if (input?.type !== 'radio') {
 		const required = label.querySelector('span') as HTMLSpanElement;
 		t.is(required.innerHTML, ' *');
 		t.true(required.classList.contains('text-danger'));

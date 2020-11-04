@@ -18,18 +18,6 @@ export const radioList: NgInputOptions = {
 	templateClass: 'form-check',
 	labelClass: 'form-check-label',
 	render() {
-		const { value = 'Value' } = this.$attrs;
-		const radio =
-			<input class='form-check-input'
-				ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
-				ng-model='$ctrl.ngModel'
-				ng-model-options='$ctrl.ngModelOptions'
-				type='radio'
-				ng-value={`item.${value}`}
-				ng-attr-id='{{id}}_{{$ctrl.uniqueId}}_{{$index}}'
-				style={'cursor: pointer;' as never}
-			/>;
-
 		if (this.$attrs.hasOwnProperty('inline')) {
 			this.$template.classList.remove('form-check');
 			this.$template.classList.add('form-check-inline');
@@ -37,13 +25,12 @@ export const radioList: NgInputOptions = {
 
 		this.$template.setAttribute('ng-repeat', 'item in $ctrl.list track by $index');
 
-		return radio;
+		const ngValue = `item.${this.$attrs.value ?? 'Value'}`.replace(/[.]$/, '');
+		return <input class='form-check-input' ng-value={ngValue} type='radio' />;
 	},
 	renderLabel() {
-		const { text = 'Text' } = this.$attrs;
-		const labelText = document.createTextNode(`{{item.${text}}}`);
-
-		this.$label.appendChild(labelText);
+		const labelText = `{{item${`.${this.$attrs.text ?? 'Text'}`.replace(/[.]$/, '')}}}`;
+		this.$label.appendChild(document.createTextNode(labelText));
 		this.$label.setAttribute('ng-attr-for', '{{id}}_{{$ctrl.uniqueId}}_{{$index}}');
 	},
 	bindings: {
