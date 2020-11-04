@@ -1,5 +1,3 @@
-import Fuse from 'fuse.js';
-
 import { NgInputController, NgInputOptions } from './shared';
 import { NgAttributes } from '../attributes';
 import { h } from '../dom';
@@ -62,7 +60,22 @@ class SelectController extends NgInputController {
 
 		const updateSearchList = () => {
 			if (input.value) {
-				this.searchList = this.getSearchList(fuzzer.search(input.value));
+				this.searchList = this.getSearchList(this.list)
+					.filter(x => typeof x[this.text] === 'string')
+					.filter(x => (x[this.text] as string).toLowerCase().indexOf(input.value) > -1)
+					.sort((x, y) => {
+						const xText = (x[this.text] as string).toLowerCase();
+						const yText = (y[this.text] as string).toLowerCase();
+
+						let comparison = xText.indexOf(input.value) - yText.indexOf(input.value);
+						let i = 0;
+						while (comparison === 0 && i <= xText.length && i <= yText.length) {
+							comparison = xText.charCodeAt(i) - yText.charCodeAt(i);
+							i++;
+						}
+
+						return comparison;
+					});
 			} else {
 				this.searchList = window.angular.copy(this.list);
 			}
@@ -120,21 +133,9 @@ class SelectController extends NgInputController {
 			}
 		};
 
-		let fuzzer: Fuse<any>;
 		this.$scope.$watchCollection(
 			() => this.list,
-			_ => {
-				fuzzer = new Fuse(_, {
-					shouldSort: true,
-					threshold: 0.3,
-					location: 0,
-					distance: 100,
-					minMatchCharLength: 1,
-					keys: [this.text],
-				});
-
-				updateSearchList();
-			},
+			_ => updateSearchList(),
 		);
 	}
 
