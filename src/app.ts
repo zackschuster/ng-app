@@ -60,7 +60,7 @@ export class NgApp {
 	}
 
 	public readonly $id = '$core';
-	public $injector = window.angular.injector(['ng']);
+	public readonly $injector = window.angular.injector(['ng']);
 
 	protected $dependencies: string[] = [];
 	protected $router!: NgRouter;
@@ -117,6 +117,7 @@ export class NgApp {
 			.run([
 				'$injector', '$animate',
 				($injector: angular.auto.IInjectorService, $animate: { enabled(active: boolean): any }) => {
+					// @ts-expect-error cheating
 					this.$injector = $injector;
 					$animate.enabled(true);
 				},
