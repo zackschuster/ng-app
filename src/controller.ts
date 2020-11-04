@@ -4,14 +4,13 @@ import { NgAttributes } from './attributes';
 import { NgHttp } from './http';
 import { NgLogger } from './logger';
 import { NgService } from './service';
-import { NgInjector, NgScope } from './ng';
 import { NgAppConfig } from './options';
 import { NgStateService } from './router';
 
 export class NgController extends NgService {
-	public readonly $scope!: NgScope;
+	public readonly $scope!: angular.IScope;
 	public readonly $attrs!: NgAttributes;
-	public readonly $injector!: NgInjector;
+	public readonly $injector!: angular.auto.IInjectorService;
 
 	public readonly $config!: NgAppConfig;
 	public readonly $log!: NgLogger;
@@ -106,8 +105,8 @@ export function makeInjectableCtrl<T extends NgController>(ctrl: new () => T, lo
 
 		constructor(
 			$element: { [i: number]: HTMLElement },
-			public $scope: NgScope,
-			public $injector: NgInjector,
+			public $scope: angular.IScope,
+			public $injector: angular.auto.IInjectorService,
 		) {
 			super();
 
@@ -117,7 +116,7 @@ export function makeInjectableCtrl<T extends NgController>(ctrl: new () => T, lo
 		}
 	} as new (
 			$element: { [i: number]: HTMLElement },
-			$scope: NgScope,
-			$injector: NgInjector,
+			$scope: angular.IScope,
+			$injector: angular.auto.IInjectorService,
 		) => T;
 }

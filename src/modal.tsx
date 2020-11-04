@@ -2,7 +2,6 @@ import { NgController, makeInjectableCtrl } from './controller';
 import { NgLogger } from './logger';
 import { NgService } from './service';
 import { NgHttp } from './http';
-import { NgInjector, NgScope } from './ng';
 import { NgAppConfig } from './options';
 import { h } from './dom';
 
@@ -33,14 +32,15 @@ export class NgModal extends NgService {
 			aria-live='polite'
 			aria-modal='true'
 			role='dialog'>{this.$dialog}</div>;
-	protected readonly $compile: (element: Element) => (scope: NgScope) => { [i: number]: HTMLElement };
-	protected readonly $rootScope: NgScope;
+	protected readonly $compile:
+		(element: Element) => (scope: angular.IScope) => { [i: number]: HTMLElement };
+	protected readonly $rootScope: angular.IScope;
 
 	constructor(
 		protected readonly $log: NgLogger,
 		protected readonly $http: NgHttp,
 		protected readonly $config: NgAppConfig,
-		protected readonly $injector: NgInjector,
+		protected readonly $injector: angular.auto.IInjectorService,
 	) {
 		super();
 
@@ -148,7 +148,7 @@ export class NgModal extends NgService {
 
 	protected hideModal(
 		escapeKeyListener: (e: KeyboardEvent) => void,
-		scope: NgScope & { $ctrl: NgController; },
+		scope: angular.IScope & { $ctrl: NgController; },
 	) {
 		this.$backdrop.classList.remove('show');
 		this.$container.classList.remove('show');

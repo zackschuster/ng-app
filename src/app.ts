@@ -7,7 +7,6 @@ import { DEFAULT_REQUEST_TIMEOUT, NgHttp, NgHttpInterceptor, NgHttpOptions } fro
 import { InputService, NgInputOptions } from './inputs';
 import { NgLogger } from './logger';
 import { NgModal } from './modal';
-import { NgInjector } from './ng';
 import { NgAppConfig, NgComponentOptions } from './options';
 import { NgRouter } from './router';
 
@@ -117,7 +116,7 @@ export class NgApp {
 			])
 			.run([
 				'$injector', '$animate',
-				($injector: NgInjector, $animate: { enabled(active: boolean): any }) => {
+				($injector: angular.auto.IInjectorService, $animate: { enabled(active: boolean): any }) => {
 					this.$injector = $injector;
 					$animate.enabled(true);
 				},
