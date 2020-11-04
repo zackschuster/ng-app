@@ -1,6 +1,5 @@
 image: alpine/edge
 packages:
-  - nodejs-current
   - npm
 sources:
   - https://git.sr.ht/~ledge/ng-app
@@ -10,4 +9,7 @@ tasks:
       npx npm@7 install
   - test: |
       cd ng-app
-      npm test
+      npx node@10 ./node_modules/.bin/ava
+      npx node@12 ./node_modules/.bin/ava
+      npx node@14 ./node_modules/.bin/ava
+      npx node@15 ./node_modules/.bin/ava
