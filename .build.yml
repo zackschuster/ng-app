@@ -8,12 +8,13 @@ tasks:
       npx -p node@10 /bin/sh -c 'echo $PATH'
       npx -p node@10 /bin/sh -c 'which node'
       npx -p node@10 node --version
+      npx -p node@10 which node
   - install: |
       cd ng-app
       npx npm@7 install
   - test: |
       cd ng-app
-      npx -p node@10 sh -c 'npm test'
-      npx -p node@12 sh -c 'npm test'
-      npx -p node@14 sh -c 'npm test'
-      npx -p node@15 sh -c 'npm test'
+      npx -p node@10 sh -c 'node ./node_modules/.bin/ava'
+      npx -p node@12 sh -c 'node ./node_modules/.bin/ava'
+      npx -p node@14 sh -c 'node ./node_modules/.bin/ava'
+      npx -p node@15 sh -c 'node ./node_modules/.bin/ava'
