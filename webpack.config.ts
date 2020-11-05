@@ -43,7 +43,7 @@ export default (env = 'development') => {
 			modules: ['.', 'docs', 'node_modules'],
 		},
 		plugins: [
-			new HtmlWebpackPlugin({ template: 'docs/src/index.pug' }),
+			new HtmlWebpackPlugin({ template: 'docs/src/index.html' }),
 			new NgAppDocsPlugin(isDevelopment),
 		],
 	});
