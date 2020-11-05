@@ -1,3 +1,4 @@
+import { IListItem } from '@ledge/types';
 import { NgController, app, h } from 'index';
 
 class ModalController extends NgController {
@@ -5,7 +6,21 @@ class ModalController extends NgController {
 	public body = 'Body';
 }
 
+const listOne = [
+	{ Text: 'One', Value: 1 },
+	{ Text: 'Two', Value: 2 },
+	{ Text: 'Three', Value: 3 },
+	{ Text: 'Four', Value: 4 },
+];
+const listTwo = [
+	{ Text: 'Five', Value: 5 },
+	{ Text: 'Six', Value: 6 },
+	{ Text: 'Seven', Value: 7 },
+	{ Text: 'Eight', Value: 8 },
+];
+
 class AppController extends NgController {
+	public list: IListItem<number>[] = listOne;
 	public openModal() {
 		app.modal.open({
 			controller: ModalController,
@@ -19,6 +34,15 @@ class AppController extends NgController {
 			.then(() => this.$log.success('Yes!'))
 			.catch(() => this.$log.info('No...'));
 	}
+
+	public useListOne() {
+		this.list = listOne;
+		this.$log.info('Using list one');
+	}
+	public useListTwo() {
+		this.list = listTwo;
+		this.$log.info('Using list two');
+	}
 }
 
 class CustomElementExample extends HTMLElement {
@@ -31,10 +55,10 @@ customElements.define('custom-element-example', CustomElementExample);
 
 let clickCounter = 0;
 const jsxExampleSection =
-	<section className='container-fluid shadow pb-3'>
+	<section className='container-fluid pb-3 mt-sm-3'>
 		<div className='row'>
 			<div className='col-12'>
-				<div class='card'>
+				<div class='card shadow-sm'>
 					<div className='card-body'>
 						<h2>This section was made using ng-app's DOM-in-JSX feature</h2>
 						<h3>DOM-in-JSX lets you work directly with DOM elements using JSX's declarative syntax</h3>

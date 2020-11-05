@@ -16,15 +16,50 @@
 			<span role="status" class="sr-only">Loading...</span>
 		</div>
 		<nav class="navbar navbar-dark bg-light text-center">
-			<h1 class="w-100 text-info">
+			<h1 class="w-100 text-muted" style="font-weight:300;">
 				@ledge/ng-app
-				<strong class="text-success">docs</strong>
+				<strong class="text-info">docs</strong>
 			</h1>
 		</nav>
 
 		<main>
 			<div class="container-fluid">
-				<div class="row no-gutters">
+				<div class="row">
+					<div class="col-lg-auto mb-lg-0 mb-3">
+						<div class="card shadow-sm">
+							<div class="card-body">
+								<fieldset id="toasts">
+									<legend class="h2 border-bottom pb-2">Toasts</legend>
+									<button class="btn m-1 btn-info" ng-click="$ctrl.$log.info('Example info toast')"
+													type="button">info</button>
+									<button class="btn m-1 btn-success" ng-click="$ctrl.$log.success('Example success toast')"
+													type="button">success</button>
+									<button class="btn m-1 btn-warning" ng-click="$ctrl.$log.warning('Example warning toast')"
+													type="button">warning</button>
+									<button class="btn m-1 btn-danger" ng-click="$ctrl.$log.error('Example error toast')"
+													type="button">error</button>
+									<button class="btn btn-light m-1" type="button" ng-click="$ctrl.openConfirmToast()">confirm</button>
+									<button class="btn btn-outline-dark m-1" type="button" ng-click="$ctrl.$log.clear()">&times;
+										clear</button>
+								</fieldset>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg col pl-lg-0 pr-0">
+						<div class="card shadow-sm">
+							<div class="card-body">
+								<fieldset>
+									<legend class="h2 border-bottom pb-2">Spinners</legend>
+									<app-spinner color="primary"></app-spinner>
+									<app-spinner color="success"></app-spinner>
+									<app-spinner color="info"></app-spinner>
+									<app-spinner color="warning"></app-spinner>
+									<app-spinner color="danger"></app-spinner>
+									<app-spinner color="dark"></app-spinner>
+								</fieldset>
+							</div>
+						</div>
+					</div>
 					<div class="col-auto">
 						<div class="card shadow-sm">
 							<div class="card-body">
@@ -35,121 +70,79 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-auto">
-						<div class="card shadow-sm">
-							<div class="card-body">
-								<fieldset id="toasts">
-									<legend class="h2 border-bottom pb-2">Toasts</legend>
-									<button class="btn mr-1 btn-info" ng-click="$ctrl.$log.info('Example info toast')"
-													type="button">info</button>
-									<button class="btn mr-1 btn-success" ng-click="$ctrl.$log.success('Example success toast')"
-													type="button">success</button>
-									<button class="btn mr-1 btn-warning" ng-click="$ctrl.$log.warning('Example warning toast')"
-													type="button">warning</button>
-									<button class="btn mr-1 btn-danger" ng-click="$ctrl.$log.error('Example error toast')"
-													type="button">error</button>
-									<button class="btn btn-light mr-1" type="button" ng-click="$ctrl.openConfirmToast()">confirm</button>
-									<button class="btn btn-outline-dark" type="button" ng-click="$ctrl.$log.clear()">&times;
-										clear</button>
-								</fieldset>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="card shadow-sm">
-							<div class="card-body">
-								<fieldset>
-									<legend class="h2 border-bottom pb-2">Spinners</legend>
-									<app-spinner color="primary"></app-spinner>
-									<app-spinner color="secondary"></app-spinner>
-									<app-spinner color="success"></app-spinner>
-									<app-spinner color="info"></app-spinner>
-									<app-spinner color="warning"></app-spinner>
-									<app-spinner color="danger"></app-spinner>
-									<app-spinner color="light"></app-spinner>
-									<app-spinner color="dark"></app-spinner>
-								</fieldset>
-							</div>
-						</div>
-					</div>
 				</div>
 
-				<div class="card-deck">
+				<div class="card-deck mt-3">
 					<div class="card mr-0 shadow-sm">
 						<div class="card-body">
 							<fieldset>
 								<legend class="h2 border-bottom pb-2 mb-3">Inputs</legend>
+
 								<div class="row">
 									<div class="col">
-										<text-input ng-model="$ctrl.textInput">Text Input: <strong
-															ng-bind="$ctrl.textInput || '(empty)'"></strong></text-input>
+										<text-input ng-model="$ctrl.textInput"></text-input>
+										<pre ng-bind="$ctrl.textInput"></pre>
 									</div>
 									<div class="col">
-										<text-input ng-model="$ctrl.numberInput" type="number">Number Input: <strong
-															ng-bind="$ctrl.numberInput || '(empty)'"></strong></text-input>
+										<text-input ng-model="$ctrl.numberInput" type="number"></text-input>
+										<pre ng-bind="$ctrl.numberInput"></pre>
 									</div>
 								</div>
+
+								<text-box ng-model="$ctrl.textBox"></text-box>
+								<pre ng-bind="$ctrl.textBox"></pre>
+
 								<div class="row">
 									<div class="col">
-										<text-input ng-model="$ctrl.rangeInput" type="range">Range Input: <strong
-															ng-bind="$ctrl.rangeInput || '(empty)'"></strong></text-input>
+										<text-input ng-model="$ctrl.rangeInput" type="range"></text-input>
+										<br>
+										<check-box ng-model="$ctrl.checkBox"></check-box>
+										<pre ng-bind="$ctrl.checkBox"></pre>
 									</div>
 									<div class="col">
-										<date-input ng-model="$ctrl.dateInput">Date Input: <strong
-															ng-bind="$ctrl.dateInput || '(empty)'"></strong></date-input>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<text-box ng-model="$ctrl.textBox">Text Area: <strong ng-bind="$ctrl.textBox || '(empty)'"></strong>
-										</text-box>
+										<date-input ng-model="$ctrl.dateInput"></date-input>
+										<pre ng-bind="$ctrl.dateInput"></pre>
 									</div>
 								</div>
 							</fieldset>
 						</div>
 					</div>
-					<div class="card ml-0 shadow-sm"
-							 ng-init="$ctrl.list = [{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]">
+
+					<div class="card shadow-sm">
 						<div class="card-body">
 							<fieldset>
-								<legend class="h2 border-bottom pb-2 mb-3">Lists</legend>
+								<legend class="h2 border-bottom pb-2">Lists</legend>
+								<div class="row my-2">
+									<div class="col text-center">
+										<button class="btn btn-outline-secondary" type="button" ng-click="$ctrl.useListOne()">Use List
+											One</button>
+									</div>
+									<div class="col text-center">
+										<button class="btn btn-outline-secondary" type="button" ng-click="$ctrl.useListTwo()">Use List
+											Two</button>
+									</div>
+								</div>
+								<hr>
 								<div class="row">
-									<div class="col">
-										<select-list ng-model="$ctrl.selectSingle" list="$ctrl.list">Single Select: <strong
-															ng-bind="$ctrl.selectSingle || '(empty)'"></strong></select-list>
-									</div>
-									<div class="col">
-										<select-list ng-model="$ctrl.selectMultiple" list="$ctrl.list" multiple="multiple">Multiple Select:
-											<strong ng-bind="$ctrl.selectMultiple || '(empty)'"></strong></select-list>
-									</div>
+									<fieldset class="col">
+										<legend style="font-size: 1rem;">Radio List</legend>
+										<radio-list ng-model="$ctrl.radioList" list="$ctrl.list"></radio-list>
+										<pre ng-bind="$ctrl.radioList"></pre>
+									</fieldset>
+									<fieldset class="col">
+										<legend style="font-size: 1rem;">Radio List (Inline)</legend>
+										<radio-list ng-model="$ctrl.radioListInline" inline list="$ctrl.list"></radio-list>
+										<pre ng-bind="$ctrl.radioListInline"></pre>
+									</fieldset>
 								</div>
-								<div class="row">
-									<div class="col">
-										<fieldset>
-											<legend>Radio List: <strong ng-bind="$ctrl.radioList || '(empty)'"></strong></legend>
-											<radio-list ng-model="$ctrl.radioList" list="$ctrl.list"></radio-list>
-										</fieldset>
-									</div>
-									<div class="col">
-										<check-box ng-model="$ctrl.checkBox">Check Box: <strong
-															ng-bind="$ctrl.checkBox || '(empty)'"></strong></check-box>
-									</div>
-								</div>
-								<div class="row justify-content-center pt-5">
-									<div class="col-auto">
-										<button class="btn btn-dark btn-lg" type="button"
-														ng-click="$ctrl.list = [{Text: 'First Choice', Value: 1}, {Text: 'Second Choice', Value: 2}]">List
-											1</button>
-									</div>
-									<div class="col-auto">
-										<button class="btn btn-dark btn-lg" type="button"
-														ng-click="$ctrl.list = [{Text: 'Third Choice', Value: 3}, {Text: 'Fourth Choice', Value: 4}]">List
-											2</button>
-									</div>
-								</div>
-							</fieldset>
+								<select-list ng-model="$ctrl.selectOne" list="$ctrl.list"></select-list>
+								<pre ng-bind="$ctrl.selectOne"></pre>
+								<select-list ng-model="$ctrl.selectMultiple" list="$ctrl.list" multiple="multiple">
+								</select-list>
+								<pre ng-bind="$ctrl.selectMultiple"></pre>
 						</div>
 					</div>
+					</fieldset>
 				</div>
 			</div>
 

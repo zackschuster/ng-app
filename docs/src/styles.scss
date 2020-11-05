@@ -8,7 +8,7 @@ body {
 	}
 
 	> main {
-		margin-top: 0.23rem;
+		margin-top: 1rem;
 	}
 
 	> #loading-spinner {
@@ -46,6 +46,10 @@ body {
 
 .octicon {
 	fill: currentColor;
+}
+
+pre {
+	min-height: 1.46rem;
 }
 
 $select-border-radius: 0.23rem !default;
