@@ -1,6 +1,6 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { NgHttp, NgLogger, NgModal } from '..';
+import { NgHttp, NgLogger, NgModal } from '../index';
 import { $prefix, app } from './mocks';
 
 test('app.module.name is app.$id', async t => {

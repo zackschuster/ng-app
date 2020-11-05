@@ -1,4 +1,4 @@
-import { NgAttributes } from '../..';
+import { NgAttributes } from '../../index';
 import { $element } from './-controller';
 
 export function makeAttrs(ngModel: string) {

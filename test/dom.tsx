@@ -1,6 +1,6 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import { h } from '..';
+import { h } from '../index';
 
 test('h() creates html element', async t => {
 	const div = <div></div>;

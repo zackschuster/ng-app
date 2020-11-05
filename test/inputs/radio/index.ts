@@ -1,7 +1,7 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
 import * as util from '../-util';
-import { InputService, NgInputController, inputs } from '../../..';
+import { InputService, NgInputController, inputs } from '../../../index';
 
 const definition = InputService.defineInputComponent(inputs.radioList);
 const { controller, template } = util.mockInputCtrl(definition);

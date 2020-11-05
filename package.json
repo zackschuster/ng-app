@@ -32,7 +32,7 @@
 		"start": "webpack serve",
 		"test": "ava",
 		"prepare": "rollup -c rollup.config.ts",
-		"prepublishOnly": "npm run lint && npm test"
+		"prepublishOnly": "npm run lint && npm test -- --node-arguments='--title=../build/ng-app.cjs'"
 	},
 	"dependencies": {
 		"@ledge/is-ie-11": "7.0.0",

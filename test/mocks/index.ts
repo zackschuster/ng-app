@@ -1,5 +1,5 @@
 import { $injector } from './--injector';
-import { NgAttributes } from '../..';
+import { NgAttributes } from '../../index';
 
 export * from './--app';
 export * from './--injector';
