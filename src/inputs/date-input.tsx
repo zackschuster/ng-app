@@ -122,6 +122,10 @@ export const dateInput: NgInputOptions = {
 				const currentMonth = currentDate.getMonth();
 				const currentYear = currentDate.getFullYear();
 
+				let { minYear, maxYear } = this.$attrs;
+				minYear = Number(minYear ??= currentYear - 99);
+				maxYear = Number(maxYear ??= currentYear + 99);
+
 				const monthSelect =
 					<select class='form-control' ng-attr-id='month_{{$ctrl.uniqueId}}'>
 						{['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, i) => {
@@ -132,8 +136,8 @@ export const dateInput: NgInputOptions = {
 					</select> as HTMLSelectElement;
 
 				const yearSelect = <select class='form-control' ng-attr-id='year_{{$ctrl.uniqueId}}'></select> as HTMLSelectElement;
-				let yearOption = new Date(0).getFullYear();
-				while (yearOption < (currentYear + 99)) {
+				let yearOption = minYear;
+				while (yearOption <= maxYear) {
 					const option = <option value={`${yearOption}`}>{yearOption}</option> as HTMLOptionElement;
 					if (yearOption === currentYear) option.setAttribute('selected', 'selected');
 					yearSelect.appendChild(option);
