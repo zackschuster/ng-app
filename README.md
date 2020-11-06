@@ -172,7 +172,7 @@ ng-app only needs polyfills for the following APIs in IE11:
 				.controller(
 					'AppController',
 					ngApp.app.makeComponentController(function AppController() {
-						const $ctrl = this;
+						var $ctrl = this;
 
 						$ctrl.openModal = function openModal() {
 							ngApp.app.modal.open({
