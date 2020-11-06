@@ -1,9 +1,7 @@
 import { readdirSync, unlinkSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const cwd = process.cwd();
-const build = join(cwd, 'build');
 const docs = join(cwd, 'docs');
 
 class NgAppDocsPlugin {
@@ -27,29 +25,17 @@ class NgAppDocsPlugin {
 export default (env = 'development') => {
 	const isDevelopment = env === 'development' || (env?.hasOwnProperty('WEBPACK_SERVE') ?? true);
 	const config = require('@ledge/configs/webpack.merge')(env, {
-		entry: {
-			app: 'docs/src/app.tsx',
-			styles: 'docs/src/styles.scss',
-		},
-		optimization: {
-			runtimeChunk: false,
-		},
+		context: docs,
 		output: {
 			path: docs,
-			publicPath: '/',
-		},
-		resolve: {
-			extensions: ['.js', '.ts', '.tsx'],
-			modules: ['.', 'docs', 'node_modules'],
 		},
 		plugins: [
-			new HtmlWebpackPlugin({ template: 'docs/src/index.html' }),
 			new NgAppDocsPlugin(isDevelopment),
 		],
 	});
 
 	if (isDevelopment === false) {
-		config.resolve.alias = { index: join(build, 'ng-app.mjs') };
+		config.resolve = { alias: { index: join(cwd, 'build', 'ng-app.mjs') } };
 	}
 
 	return config;
