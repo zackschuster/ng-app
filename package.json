@@ -18,6 +18,18 @@
 		"src",
 		"build"
 	],
+	"keywords": [
+		"angular1",
+		"angularjs",
+		"angularjs1",
+		"browser",
+		"esm",
+		"esmodules",
+		"ie11",
+		"modules",
+		"ng-app",
+		"ng1"
+	],
 	"type": "module",
 	"types": "index.ts",
 	"main": "./build/ng-app.cjs",
