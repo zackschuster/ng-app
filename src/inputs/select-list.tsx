@@ -60,21 +60,36 @@ class SelectController extends NgInputController {
 
 		const updateSearchList = () => {
 			if (input.value) {
+				const inputValueSplit = input.value.split('');
 				this.searchList = this.getSearchList(this.list)
 					.filter(x => typeof x[this.text] === 'string')
-					.filter(x => (x[this.text] as string).toLowerCase().indexOf(input.value) > -1)
-					.sort((x, y) => {
-						const xText = (x[this.text] as string).toLowerCase();
-						const yText = (y[this.text] as string).toLowerCase();
-
-						let comparison = xText.indexOf(input.value) - yText.indexOf(input.value);
-						let i = 0;
-						while (comparison === 0 && i <= xText.length && i <= yText.length) {
-							comparison = xText.charCodeAt(i) - yText.charCodeAt(i);
-							i++;
+					.filter(x => {
+						const xText = x[this.text].toLowerCase() as string;
+						const xIndices = inputValueSplit.map(y => xText.indexOf(y));
+						if (xIndices.some(y => y === -1)) {
+							return false;
 						}
-
-						return comparison;
+						const xIndicesUnique = [];
+						for (const index of xIndices) {
+							if (xIndicesUnique.indexOf(index) === -1) {
+								xIndicesUnique.push(index);
+							} else {
+								const lastIndex = xIndicesUnique[xIndicesUnique.lastIndexOf(index)];
+								const nextIndex = xText.indexOf(xText.charAt(index), lastIndex + 1);
+								if (nextIndex !== -1 && xIndicesUnique.indexOf(nextIndex) === -1) {
+									xIndicesUnique.push(nextIndex);
+								}
+							}
+						}
+						return xIndicesUnique.length === xIndices.length;
+					})
+					.sort((x, y) => {
+						const xText = x[this.text].toLowerCase();
+						const yText = y[this.text].toLowerCase();
+						return (
+							inputValueSplit.reduce((a, b) => a + xText.indexOf(b), 0) -
+							inputValueSplit.reduce((a, b) => a + yText.indexOf(b), 0)
+						);
 					});
 			} else {
 				this.searchList = window.angular.copy(this.list);
