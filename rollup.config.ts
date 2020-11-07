@@ -9,7 +9,7 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 	const isEsmOrCjs = isEsm || isCjs;
 
 	return {
-		context: isEsmOrCjs ? 'globalThis' : 'window',
+		context: 'window',
 		external: ['angular', 'angular-messages'],
 		input: 'index.ts',
 		output: {

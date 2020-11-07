@@ -171,7 +171,9 @@ export class InputService extends NgService {
 			const requiredTag = $label.firstElementChild;
 			requiredTag?.remove();
 			$component.renderLabel?.call({ $label, $attrs });
-			$label.append(requiredTag ?? '');
+			if (requiredTag != null) {
+				$label.appendChild(requiredTag);
+			}
 
 			// add a transclusion slot for e.g. nesting inputs
 			$template.appendChild(<div ng-transclude='contain'></div>);

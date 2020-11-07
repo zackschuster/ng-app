@@ -8,7 +8,7 @@ export class NgAttributes {
 	public SPECIAL_CHARS_REGEXP = /[:\-_]+(.)/g;
 
 	constructor(private readonly $$element: Element, attrs: Indexed = {}) {
-		for (const { name: key, value } of [...$$element.attributes]) {
+		for (const { name: key, value } of Array.prototype.slice.call($$element.attributes)) {
 			this.$record(key, value);
 		}
 

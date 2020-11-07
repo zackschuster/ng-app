@@ -11,12 +11,20 @@ const listOne = [
 	{ Text: 'Two', Value: 2 },
 	{ Text: 'Three', Value: 3 },
 	{ Text: 'Four', Value: 4 },
-];
-const listTwo = [
 	{ Text: 'Five', Value: 5 },
 	{ Text: 'Six', Value: 6 },
 	{ Text: 'Seven', Value: 7 },
 	{ Text: 'Eight', Value: 8 },
+];
+const listTwo = [
+	{ Text: 'Nine', Value: 9 },
+	{ Text: 'Ten', Value: 10 },
+	{ Text: 'Eleven', Value: 11 },
+	{ Text: 'Twelve', Value: 12 },
+	{ Text: 'Thirteen', Value: 13 },
+	{ Text: 'Fourteen', Value: 14 },
+	{ Text: 'Fifteen', Value: 15 },
+	{ Text: 'Sixteen', Value: 16 },
 ];
 
 class AppController extends NgController {

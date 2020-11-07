@@ -58,9 +58,15 @@ export function closest(el: HTMLElement, s: string) {
 	if (typeof Element.prototype.closest === 'function') {
 		return el.closest(s);
 	}
+
+	const matches = Element.prototype.matches || (Element.prototype as any).msMatchesSelector;
 	do {
-		if (el.matches(s)) return el;
+		if (matches.call(el, s)) {
+			return el;
+		}
 		el = el.parentElement || el.parentNode as typeof el;
-	} while (el !== null && el.nodeType === 1);
+	}
+	while (el !== null && el.nodeType === 1);
+
 	return null;
 }

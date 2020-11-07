@@ -45,10 +45,6 @@ export const app = new NgApp()
 		},
 	});
 
-if (Promise == null) {
-	window.Promise = app.$injector.get('$q') as never as typeof Promise;
-}
-
 export * from './src/app';
 export * from './src/attributes';
 export * from './src/controller';

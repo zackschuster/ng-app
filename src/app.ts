@@ -28,7 +28,7 @@ export class NgApp {
 	}
 
 	public get dependencies() {
-		return [...this.$dependencies];
+		return this.$dependencies.slice();
 	}
 
 	public get state() {

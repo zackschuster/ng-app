@@ -1,3 +1,4 @@
+import { isIE11 } from '@ledge/is-ie-11';
 import { h } from '../dom';
 import { NgInputController, NgInputOptions } from './shared';
 
@@ -111,66 +112,72 @@ export const dateInput: NgInputOptions = {
 	type: 'input',
 	render() {
 		const useFallback = this.$attrs.hasOwnProperty('useFallback');
+		let useNativeDatepicker = !useFallback && !isIE11();
+
 		let input =
 			<input class='form-control' ng-attr-min='{{$ctrl.minDate}}' ng-attr-max='{{$ctrl.maxDate}}' />;
 
-		try {
-			(input as HTMLInputElement).type = 'date';
-		} finally {
-			if ((input as HTMLInputElement).type !== 'date' || useFallback) {
-				const currentDate = new Date();
-				const currentMonth = currentDate.getMonth();
-				const currentYear = currentDate.getFullYear();
-
-				let { minYear, maxYear } = this.$attrs;
-				minYear = Number(minYear ??= currentYear - 99);
-				maxYear = Number(maxYear ??= currentYear + 99);
-
-				const monthSelect =
-					<select class='form-control' ng-attr-id='month_{{$ctrl.uniqueId}}'>
-						{['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, i) => {
-							const option = <option value={`${i}`}>{x}</option> as HTMLOptionElement;
-							if (i === currentMonth) option.setAttribute('selected', 'selected');
-							return option;
-						})}
-					</select> as HTMLSelectElement;
-
-				const yearSelect = <select class='form-control' ng-attr-id='year_{{$ctrl.uniqueId}}'></select> as HTMLSelectElement;
-				let yearOption = minYear;
-				while (yearOption <= maxYear) {
-					const option = <option value={`${yearOption}`}>{yearOption}</option> as HTMLOptionElement;
-					if (yearOption === currentYear) option.setAttribute('selected', 'selected');
-					yearSelect.appendChild(option);
-					yearOption++;
-				}
-
-				input = <section class='w-100 px-2 mt-2 mb-n1'>
-					<div class='form-group row'>
-						<label class='col-xl-4 col-form-label' ng-attr-for='day_{{$ctrl.uniqueId}}'>Day</label>
-						<div class='col'>
-							<select class='form-control' ng-attr-id='day_{{$ctrl.uniqueId}}'></select>
-						</div>
-					</div>
-					<div class='form-group row'>
-						<label class='col-xl-4 col-form-label' ng-attr-for='month_{{$ctrl.uniqueId}}'>Month</label>
-						<div class='col'>
-							{monthSelect}
-						</div>
-					</div>
-					<div class='form-group row'>
-						<label class='col-xl-4 col-form-label' ng-attr-for='year_{{$ctrl.uniqueId}}'>Year</label>
-						<div class='col'>
-							{yearSelect}
-						</div>
-					</div>
-				</section>;
+		if (useNativeDatepicker) {
+			try {
+				(input as HTMLInputElement).type = 'date';
+				useNativeDatepicker = (input as HTMLInputElement).type === 'date';
+			} catch {
+				useNativeDatepicker = false;
 			}
 		}
 
-		const usesNativeDatepicker = (input as HTMLInputElement).type === 'date' && !useFallback;
+		if (useNativeDatepicker === false) {
+			const currentDate = new Date();
+			const currentMonth = currentDate.getMonth();
+			const currentYear = currentDate.getFullYear();
+
+			let { minYear, maxYear } = this.$attrs;
+			minYear = Number(minYear ??= currentYear - 99);
+			maxYear = Number(maxYear ??= currentYear + 99);
+
+			const monthSelect =
+				<select class='form-control' ng-attr-id='month_{{$ctrl.uniqueId}}'>
+					{['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map((x, i) => {
+						const option = <option value={`${i}`}>{x}</option> as HTMLOptionElement;
+						if (i === currentMonth) option.setAttribute('selected', 'selected');
+						return option;
+					})}
+				</select> as HTMLSelectElement;
+
+			const yearSelect = <select class='form-control' ng-attr-id='year_{{$ctrl.uniqueId}}'></select> as HTMLSelectElement;
+			let yearOption = minYear;
+			while (yearOption <= maxYear) {
+				const option = <option value={`${yearOption}`}>{yearOption}</option> as HTMLOptionElement;
+				if (yearOption === currentYear) option.setAttribute('selected', 'selected');
+				yearSelect.appendChild(option);
+				yearOption++;
+			}
+
+			input = <section class='w-100 px-2 mt-2 mb-n1'>
+				<div class='form-group row'>
+					<label class='col-xl-4 col-form-label' ng-attr-for='day_{{$ctrl.uniqueId}}'>Day</label>
+					<div class='col'>
+						<select class='form-control' ng-attr-id='day_{{$ctrl.uniqueId}}'></select>
+					</div>
+				</div>
+				<div class='form-group row'>
+					<label class='col-xl-4 col-form-label' ng-attr-for='month_{{$ctrl.uniqueId}}'>Month</label>
+					<div class='col'>
+						{monthSelect}
+					</div>
+				</div>
+				<div class='form-group row'>
+					<label class='col-xl-4 col-form-label' ng-attr-for='year_{{$ctrl.uniqueId}}'>Year</label>
+					<div class='col'>
+						{yearSelect}
+					</div>
+				</div>
+			</section>;
+		}
+
 		return (
-			<div class={`input-group ${usesNativeDatepicker ? '' : 'border'}`}>
-				{usesNativeDatepicker
+			<div class={`input-group ${useNativeDatepicker ? '' : 'border'}`}>
+				{useNativeDatepicker
 					? undefined
 					: (
 						<p class='p-2 bg-light d-flex align-items-center w-100' style={'line-height:1rem;' as never}>

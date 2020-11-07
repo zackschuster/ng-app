@@ -27,6 +27,7 @@ export default (env = 'development') => {
 	const config = require('@ledge/configs/webpack.merge')(env, {
 		context: docs,
 		output: {
+			globalObject: 'window',
 			path: docs,
 		},
 		plugins: [
@@ -36,6 +37,16 @@ export default (env = 'development') => {
 
 	if (isDevelopment === false) {
 		config.resolve = { alias: { index: join(cwd, 'build', 'ng-app.mjs') } };
+		config.module.rules.push({
+			test: /[.]mjs$/,
+			exclude: /node_modules/,
+			use: {
+				loader: require.resolve('babel-loader'),
+				options: {
+					presets: [['@babel/preset-env', { targets: { ie: '11' } }]],
+				},
+			},
+		});
 	}
 
 	return config;
