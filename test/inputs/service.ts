@@ -1,7 +1,7 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
 import { makeAttrs } from '../mocks';
-import { InputService, NgInputController } from '../../src/inputs';
+import { InputService, NgInputController } from '../../index';
 
 test('InputService.$validationAttrs', async t => {
 	t.deepEqual(InputService.$validationAttrs, [

@@ -3,9 +3,7 @@ import { ExecutionContext } from 'ava';
 import { element } from 'angular';
 
 import { $config, $http, $injector, $invokeTemplate, $log, $svc } from '../mocks';
-import { makeInjectableCtrl } from '../../src/controller';
-import { InputService, NgInputOptions } from '../../src/inputs';
-import { NgComponentOptions } from '../../src/options';
+import { InputService, NgComponentOptions, NgInputOptions, makeInjectableCtrl } from '../../index';
 
 const idRe = /(\w[_]){{\$ctrl.uniqueId}}/;
 
