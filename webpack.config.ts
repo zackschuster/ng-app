@@ -16,14 +16,11 @@ class NgAppDocsPlugin {
 
 		compiler.hooks.afterEmit.tap(this.constructor.name, () => {
 			writeFileSync(join(docs, 'CNAME'), 'ng-app.js.org');
-			const files = readdirSync(docs, { withFileTypes: true }).filter(x => x.name.endsWith('.txt'));
-			files.forEach(x => unlinkSync(join(docs, x.name)));
 		});
 	}
 }
 
-export default (env = 'development') => {
-	const isDevelopment = env === 'development' || (env?.hasOwnProperty('WEBPACK_SERVE') ?? true);
+export default (env: { staging?: boolean; production?: boolean; WEBPACK_SERVE?: boolean; }) => {
 	const config = require('@ledge/configs/webpack.merge')(env, {
 		context: docs,
 		output: {
@@ -31,11 +28,11 @@ export default (env = 'development') => {
 			path: docs,
 		},
 		plugins: [
-			new NgAppDocsPlugin(isDevelopment),
+			new NgAppDocsPlugin(env.WEBPACK_SERVE ?? false),
 		],
 	});
 
-	if (isDevelopment === false) {
+	if (env.staging || env.production) {
 		config.resolve = { alias: { index: join(cwd, 'build', 'ng-app.mjs') } };
 		config.module.rules.push({
 			test: /[.]mjs$/,

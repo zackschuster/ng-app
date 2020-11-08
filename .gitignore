@@ -4,7 +4,6 @@ node_modules
 *.js
 *.map
 !docs/*
-docs/*.txt
 
 .DS_Store
 t.*
