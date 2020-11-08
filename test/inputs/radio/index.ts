@@ -1,4 +1,3 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import * as util from '../-util';
 import { InputService, NgInputController, inputs } from '../../../index';
@@ -6,13 +5,13 @@ import { InputService, NgInputController, inputs } from '../../../index';
 const definition = InputService.defineInputComponent(inputs.radioList);
 const { controller, template } = util.mockInputCtrl(definition);
 
-test.after(async t => {
+test.after(t => {
 	t.snapshot(template.outerHTML);
 });
 
 const radioNgIdRe = /\w([_]{{\$ctrl.uniqueId}}[_]{{\$index}})/;
 
-test('radio bindings', async t => {
+test('radio bindings', t => {
 	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngChecked: '<',
@@ -24,27 +23,27 @@ test('radio bindings', async t => {
 	});
 });
 
-test('radio transclude', async t => {
+test('radio transclude', t => {
 	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
-test('radio require', async t => {
+test('radio require', t => {
 	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
-test('radio controller', async t => {
+test('radio controller', t => {
 	t.true(controller instanceof NgInputController);
 });
 
-test('radio controllerAs', async t => {
+test('radio controllerAs', t => {
 	t.is(definition.controllerAs, undefined);
 });
 
-test('radio element', async t => {
+test('radio element', t => {
 	t.is((controller as any).$element, template);
 });
 
-test('radio template', async t => {
+test('radio template', t => {
 	t.true(template.classList.contains('form-group'));
 
 	const formCheck = template.firstElementChild as Element;
@@ -66,7 +65,7 @@ test('radio template', async t => {
 	util.testNgTranscludeContain(template, t);
 });
 
-test('radio template (inlined)', async t => {
+test('radio template (inlined)', t => {
 	const tpl = util.makeTpl(definition.template, t, { inline: true });
 	t.true(tpl.classList.contains('form-group'));
 

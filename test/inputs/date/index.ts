@@ -1,4 +1,3 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import * as util from '../-util';
 import { InputService, NgInputController, inputs } from '../../../index';
@@ -6,11 +5,11 @@ import { InputService, NgInputController, inputs } from '../../../index';
 const definition = InputService.defineInputComponent(inputs.dateInput);
 const { controller, template } = util.mockInputCtrl(definition);
 
-test.after(async t => {
+test.after(t => {
 	t.snapshot(template.outerHTML);
 });
 
-test('date bindings', async t => {
+test('date bindings', t => {
 	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngModelOptions: '<',
@@ -22,27 +21,27 @@ test('date bindings', async t => {
 	});
 });
 
-test('date transclude', async t => {
+test('date transclude', t => {
 	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
-test('date require', async t => {
+test('date require', t => {
 	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
-test('date controller', async t => {
+test('date controller', t => {
 	t.true(controller instanceof NgInputController);
 });
 
-test('date controllerAs', async t => {
+test('date controllerAs', t => {
 	t.is(definition.controllerAs, undefined);
 });
 
-test('date element', async t => {
+test('date element', t => {
 	t.is((controller as any).$element, template);
 });
 
-test('date template', async t => {
+test('date template', t => {
 	const tpl = util.makeTpl(definition.template, t);
 	t.true(tpl.classList.contains('form-group'));
 
@@ -58,7 +57,7 @@ test('date template', async t => {
 	util.testNgTranscludeContain(tpl, t);
 });
 
-test('date template (fallback)', async t => {
+test('date template (fallback)', t => {
 	const tpl = util.makeTpl(definition.template, t, { useFallback: true, minYear: 1900, maxYear: 2100 });
 	t.true(tpl.classList.contains('form-group'));
 

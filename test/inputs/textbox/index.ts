@@ -1,4 +1,3 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import * as util from '../-util';
 import { InputService, NgInputController, inputs } from '../../../index';
@@ -6,11 +5,11 @@ import { InputService, NgInputController, inputs } from '../../../index';
 const definition = InputService.defineInputComponent(inputs.textBox);
 const { controller, template } = util.mockInputCtrl(definition);
 
-test.after(async t => {
+test.after(t => {
 	t.snapshot(template.outerHTML);
 });
 
-test('textbox bindings', async t => {
+test('textbox bindings', t => {
 	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngModelOptions: '<',
@@ -20,27 +19,27 @@ test('textbox bindings', async t => {
 	});
 });
 
-test('textbox transclude', async t => {
+test('textbox transclude', t => {
 	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
-test('textbox require', async t => {
+test('textbox require', t => {
 	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
-test('textbox controller', async t => {
+test('textbox controller', t => {
 	t.true(controller instanceof NgInputController);
 });
 
-test('textbox controllerAs', async t => {
+test('textbox controllerAs', t => {
 	t.is(definition.controllerAs, undefined);
 });
 
-test('textbox element', async t => {
+test('textbox element', t => {
 	t.is((controller as any).$element, template);
 });
 
-test('textbox template', async t => {
+test('textbox template', t => {
 	const input = util.testInput(template, t, 'TEXTAREA');
 	t.true(input.classList.contains('form-control'));
 	t.is(input.getAttribute('placeholder'), '');

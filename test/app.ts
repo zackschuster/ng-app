@@ -1,9 +1,8 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import { NgHttp, NgLogger, NgModal } from '../index';
 import { $prefix, app } from './mocks';
 
-test('app.module.name is app.$id', async t => {
+test('app.module.name is app.$id', t => {
 	t.is(app.$id, app.module.name);
 });
 
@@ -18,7 +17,7 @@ test(`app.bootstrap() doesn't throw with base tag`, async t => {
 	await t.notThrowsAsync(() => app.bootstrap());
 });
 
-test('app has default input components', async t => {
+test('app has default input components', t => {
 	t.deepEqual(app.components, [
 		'checkBox',
 		'dateInput',
@@ -31,18 +30,18 @@ test('app has default input components', async t => {
 	]);
 });
 
-test('app.http returns NgDataService', async t => {
+test('app.http returns NgDataService', t => {
 	t.true(app.http instanceof NgHttp);
 });
 
-test('app.http.getFullUrl returns prefixed url', async t => {
+test('app.http.getFullUrl returns prefixed url', t => {
 	t.is(app.http.getFullUrl('test', $prefix, false), `http://${$prefix}/test`);
 });
 
-test('app.log returns NgLogger', async t => {
+test('app.log returns NgLogger', t => {
 	t.true(app.log instanceof NgLogger);
 });
 
-test('app.modal returns NgModalService', async t => {
+test('app.modal returns NgModalService', t => {
 	t.true(app.modal instanceof NgModal);
 });

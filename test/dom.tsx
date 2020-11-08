@@ -1,14 +1,13 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import { h } from '../index';
 
-test('h() creates html element', async t => {
+test('h() creates html element', t => {
 	const div = <div></div>;
 	t.is(div.classList.length, 0);
 	t.is(div.attributes.length, 0);
 });
 
-test('h() creates html element with classes', async t => {
+test('h() creates html element with classes', t => {
 	const div = <div class='test1 test2'></div>;
 	t.is(div.classList.length, 2);
 	t.true(div.classList.contains('test1'));
@@ -17,7 +16,7 @@ test('h() creates html element with classes', async t => {
 	t.is(div.attributes.length, 1); // includes "class" attribute
 });
 
-test('h() creates html element with attributes', async t => {
+test('h() creates html element with attributes', t => {
 	// @ts-ignore
 	const div = <div test1='test1' test2='test2'></div>;
 	t.is(div.classList.length, 0);
@@ -27,7 +26,7 @@ test('h() creates html element with attributes', async t => {
 	t.is(div.getAttribute('test2'), 'test2');
 });
 
-test('h() creates html element with classes and attributes', async t => {
+test('h() creates html element with classes and attributes', t => {
 	// @ts-ignore
 	const div = <div class='test1 test2' test1='test1' test2='test2'></div>;
 	t.is(div.classList.length, 2);
@@ -39,7 +38,7 @@ test('h() creates html element with classes and attributes', async t => {
 	t.is(div.getAttribute('test2'), 'test2');
 });
 
-test('h() creates text input by default', async t => {
+test('h() creates text input by default', t => {
 	const input =
 		<input class='form-control'
 			ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
@@ -62,7 +61,7 @@ test('h() creates text input by default', async t => {
 	t.is(input.getAttribute('placeholder'), '{{placeholder}}');
 });
 
-test('h() creates radio input', async t => {
+test('h() creates radio input', t => {
 	const radio =
 		<input class='form-check-input'
 			ng-attr-name='{{id}}_{{$ctrl.uniqueId}}'
@@ -80,7 +79,7 @@ test('h() creates radio input', async t => {
 	t.is(radio.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 });
 
-test('h() creates checkbox input', async t => {
+test('h() creates checkbox input', t => {
 	const checkbox =
 		<input class='form-check-input'
 			ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
@@ -100,7 +99,7 @@ test('h() creates checkbox input', async t => {
 	t.is(checkbox.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 });
 
-test('h() creates range input', async t => {
+test('h() creates range input', t => {
 	const range =
 		<input class='custom-range'
 			ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
@@ -120,7 +119,7 @@ test('h() creates range input', async t => {
 	t.is(range.getAttribute('ng-model-options'), '$ctrl.ngModelOptions');
 });
 
-test('h() creates textarea', async t => {
+test('h() creates textarea', t => {
 	const input =
 		<textarea class='form-control'
 			ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'
@@ -145,7 +144,7 @@ test('h() creates textarea', async t => {
 	t.is(input.getAttribute('placeholder'), '{{placeholder}}');
 });
 
-test('h() creates icon', async t => {
+test('h() creates icon', t => {
 	const icon = <span class='fa fa-test'></span>;
 	t.is(icon.tagName.toLowerCase(), 'span');
 
@@ -154,7 +153,7 @@ test('h() creates icon', async t => {
 	t.true(icon.classList.contains('fa-test'));
 });
 
-test('h() creates fixed-width icon', async t => {
+test('h() creates fixed-width icon', t => {
 	const icon = <span class='fa fa-fw fa-test' aria-hidden='true'></span>;
 	t.is(icon.tagName.toLowerCase(), 'span');
 
@@ -167,7 +166,7 @@ test('h() creates fixed-width icon', async t => {
 	t.is(icon.getAttribute('aria-hidden'), 'true');
 });
 
-test('h() creates label', async t => {
+test('h() creates label', t => {
 	const label = <label class='test' ng-attr-for='{{id}}_{{$ctrl.uniqueId}}'></label>;
 	t.is(label.tagName.toLowerCase(), 'label');
 
@@ -178,7 +177,7 @@ test('h() creates label', async t => {
 	t.is(label.getAttribute('ng-attr-for'), '{{id}}_{{$ctrl.uniqueId}}');
 });
 
-test('h() creates label with sr-only class', async t => {
+test('h() creates label with sr-only class', t => {
 	const label = <label class='sr-only' ng-attr-for='{{id}}_{{$ctrl.uniqueId}}'></label>;
 	t.is(label.classList.length, 1);
 	t.true(label.classList.contains('sr-only'));
@@ -186,7 +185,7 @@ test('h() creates label with sr-only class', async t => {
 	t.is(label.attributes.length, 2); // includes "class" attribute
 });
 
-test('h() creates label with required asterisk', async t => {
+test('h() creates label with required asterisk', t => {
 	const label = <label><span class='text-danger'> *</span></label>;
 	t.is(label.classList.length, 0);
 
@@ -197,20 +196,20 @@ test('h() creates label with required asterisk', async t => {
 	t.is(span.textContent, ' *');
 });
 
-test('h() creates radio label without required asterisk', async t => {
+test('h() creates radio label without required asterisk', t => {
 	const label = <label></label>;
 	t.is(label.classList.length, 0);
 	t.falsy(label.querySelector('span'));
 });
 
-test('h() creates anonymous transclusion slot', async t => {
+test('h() creates anonymous transclusion slot', t => {
 	const slot = <ng-transclude></ng-transclude>;
 	t.is(slot.tagName.toLowerCase(), 'ng-transclude');
 	t.is(slot.classList.length, 0);
 	t.is(slot.attributes.length, 0);
 });
 
-test('h() creates named transclusion slot', async t => {
+test('h() creates named transclusion slot', t => {
 	const slot = <div ng-transclude='test'></div>;
 	t.is(slot.tagName.toLowerCase(), 'div');
 
@@ -219,7 +218,7 @@ test('h() creates named transclusion slot', async t => {
 	t.is(slot.getAttribute('ng-transclude'), 'test');
 });
 
-test('h() creates icon input', async t => {
+test('h() creates icon input', t => {
 	const input =
 		<input class='form-control'
 			ng-attr-id='{{id}}_{{$ctrl.uniqueId}}'

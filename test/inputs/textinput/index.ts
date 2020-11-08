@@ -1,4 +1,3 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import * as util from '../-util';
 import { InputService, NgInputController, inputs } from '../../../index';
@@ -6,18 +5,18 @@ import { InputService, NgInputController, inputs } from '../../../index';
 const definition = InputService.defineInputComponent(inputs.textInput);
 const { controller, template } = util.mockInputCtrl(definition);
 
-test.after(async t => {
+test.after(t => {
 	t.snapshot(template.outerHTML);
 });
 
-test('textinput -> htmlinput alias', async t => {
+test('textinput -> htmlinput alias', t => {
 	// should be separate objects with the same layout
 	t.false(definition === InputService.defineInputComponent(inputs.htmlInput));
 	// TODO: fails, fix
 	// t.deepEqual(definedHtmlInput, definedTextInput);
 });
 
-test('textinput bindings', async t => {
+test('textinput bindings', t => {
 	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngModelOptions: '<',
@@ -30,19 +29,19 @@ test('textinput bindings', async t => {
 	});
 });
 
-test('textinput transclude', async t => {
+test('textinput transclude', t => {
 	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
-test('textinput require', async t => {
+test('textinput require', t => {
 	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
-test('textinput controller', async t => {
+test('textinput controller', t => {
 	t.true(controller instanceof NgInputController);
 });
 
-test('textinput controller (number)', async t => {
+test('textinput controller (number)', t => {
 	const { controller: numberCtrl } = util.mockInputCtrl(definition, { min: 1, max: 3, type: 'number' });
 	t.true(numberCtrl instanceof NgInputController);
 	t.is(numberCtrl.$attrs.type, 'number');
@@ -75,15 +74,15 @@ test('textinput controller (number)', async t => {
 	t.false(numberCtrl.ngModelCtrl.$validators.maxVal(4, 4));
 });
 
-test('textinput controllerAs', async t => {
+test('textinput controllerAs', t => {
 	t.is(definition.controllerAs, undefined);
 });
 
-test('textinput element', async t => {
+test('textinput element', t => {
 	t.is((controller as any).$element, template);
 });
 
-test('textinput template', async t => {
+test('textinput template', t => {
 	const input = util.testInput(template, t);
 	t.true(input.classList.contains('form-control'));
 	t.is(input.type, 'text');
@@ -100,7 +99,7 @@ test('textinput template', async t => {
 	util.testNgTranscludeContain(template, t);
 });
 
-test('textinput template (number)', async t => {
+test('textinput template (number)', t => {
 	const tpl = util.makeTpl(definition.template, t, { type: 'number' });
 	const input = util.testInput(tpl, t);
 	t.true(input.classList.contains('form-control'));
@@ -125,7 +124,7 @@ test('textinput template (number)', async t => {
 	util.testNgTranscludeContain(tpl, t);
 });
 
-test('textinput template (range)', async t => {
+test('textinput template (range)', t => {
 	const tpl = util.makeTpl(definition.template, t, { type: 'range' });
 
 	const input = util.testInput(tpl, t);

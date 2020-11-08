@@ -1,8 +1,7 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import { $http, $prefix, pingTestUrl } from './mocks';
 
-test('getFullUrl returns prefixed url', async t => {
+test('getFullUrl returns prefixed url', t => {
 	t.is($http.getFullUrl('test', $prefix, false), `http://${$prefix}/test`);
 });
 

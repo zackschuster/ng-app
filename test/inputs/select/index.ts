@@ -1,4 +1,3 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import * as util from '../-util';
 import { InputService, NgInputController, inputs } from '../../../index';
@@ -6,11 +5,11 @@ import { InputService, NgInputController, inputs } from '../../../index';
 const definition = InputService.defineInputComponent(inputs.selectList);
 const { controller, template } = util.mockInputCtrl(definition);
 
-test.after(async t => {
+test.after(t => {
 	t.snapshot(template.outerHTML);
 });
 
-test('select bindings', async t => {
+test('select bindings', t => {
 	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngModelOptions: '<',
@@ -21,27 +20,27 @@ test('select bindings', async t => {
 	});
 });
 
-test('select transclude', async t => {
+test('select transclude', t => {
 	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
-test('select require', async t => {
+test('select require', t => {
 	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
-test('select controller', async t => {
+test('select controller', t => {
 	t.true(controller instanceof NgInputController);
 });
 
-test('select controllerAs', async t => {
+test('select controllerAs', t => {
 	t.is(definition.controllerAs, undefined);
 });
 
-test('select element', async t => {
+test('select element', t => {
 	t.is((controller as any).$element, template);
 });
 
-test('select template', async t => {
+test('select template', t => {
 	const input = util.testInput(template, t, 'SELECT');
 
 	const placeholder = input.firstElementChild as HTMLOptionElement;
@@ -53,7 +52,7 @@ test('select template', async t => {
 	util.testNgTranscludeContain(template, t);
 });
 
-test('select template (multiple)', async t => {
+test('select template (multiple)', t => {
 	const tpl = util.makeTpl(definition.template, t, { multiple: true });
 	const input = util.testInput(tpl, t, 'SELECT');
 

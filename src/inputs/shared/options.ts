@@ -1,4 +1,3 @@
-// tslint:disable:no-redundant-jsdoc
 import { Indexed } from '@ledge/types';
 import { NgInputController } from './controller';
 import { NgAttributes } from '../../attributes';
@@ -21,14 +20,12 @@ export interface NgInputOptions<T extends NgInputController = NgInputController>
 	attrs?: Indexed;
 
 	/**
-	 * CSS class to apply to the input container
-	 * @default 'form-group'
+	 * CSS class to apply to the input container. Defaults to `form-group`
 	 */
 	templateClass?: string;
 
 	/**
-	 * CSS class to apply to the input label
-	 * @default 'form-control-label'
+	 * CSS class to apply to the input label. Defaults to `form-control-label`
 	 */
 	labelClass?: string;
 

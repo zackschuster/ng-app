@@ -1,4 +1,3 @@
-// tslint:disable:no-async-without-await
 import test from 'ava';
 import * as util from '../-util';
 import { InputService, NgInputController, inputs } from '../../../index';
@@ -6,11 +5,11 @@ import { InputService, NgInputController, inputs } from '../../../index';
 const definition = InputService.defineInputComponent(inputs.checkBox);
 const { controller, template } = util.mockInputCtrl(definition);
 
-test.after(async t => {
+test.after(t => {
 	t.snapshot(template.outerHTML);
 });
 
-test('checkbox bindings', async t => {
+test('checkbox bindings', t => {
 	t.deepEqual(definition.bindings, {
 		ngModel: '=',
 		ngChecked: '<',
@@ -21,27 +20,27 @@ test('checkbox bindings', async t => {
 	});
 });
 
-test('checkbox transclude', async t => {
+test('checkbox transclude', t => {
 	t.deepEqual(definition.transclude, { contain: '?contain' });
 });
 
-test('checkbox require', async t => {
+test('checkbox require', t => {
 	t.deepEqual(definition.require, { ngModelCtrl: 'ngModel' });
 });
 
-test('checkbox controller', async t => {
+test('checkbox controller', t => {
 	t.true(controller instanceof NgInputController);
 });
 
-test('checkbox controllerAs', async t => {
+test('checkbox controllerAs', t => {
 	t.is(definition.controllerAs, undefined);
 });
 
-test('checkbox element', async t => {
-	t.is((controller as any).$element, template);
+test('checkbox element', t => {
+	t.is(controller.$element, template);
 });
 
-test('checkbox template', async t => {
+test('checkbox template', t => {
 	t.true(template.classList.contains('form-check'));
 
 	const input = util.testInput(template, t);
@@ -55,7 +54,7 @@ test('checkbox template', async t => {
 	util.testNgTranscludeContain(template, t);
 });
 
-test('checkbox template (inlined)', async t => {
+test('checkbox template (inlined)', t => {
 	const tpl = util.makeTpl(definition.template, t, { inline: true });
 
 	t.true(tpl.classList.contains('form-check-inline'));
