@@ -1,16 +1,6 @@
 // tslint:disable:no-async-without-await
 import test from 'ava';
-import http from 'http';
-import { HttpStatusCode } from '@ledge/types/http';
 import { $http, $prefix, pingTestUrl } from './mocks';
-
-const PORT = 2323;
-http
-	.createServer((req, res) => {
-		res.writeHead(HttpStatusCode.Ok, { 'Content-Type': 'application/json' });
-		res.end(JSON.stringify({ data: req.url as string }));
-	})
-	.listen(PORT);
 
 test('getFullUrl returns prefixed url', async t => {
 	t.is($http.getFullUrl('test', $prefix, false), `http://${$prefix}/test`);

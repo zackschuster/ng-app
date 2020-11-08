@@ -139,10 +139,7 @@ ng-app `.js` bundles are compiled to ES5 & are drop-in ready for IE11
 
 ng-app `.cjs`/`.mjs` bundles are compiled to ES2019 & are NOT drop-in ready for IE11
 
-ng-app only needs polyfills for the following APIs in IE11:
-- `fetch`
-- `AbortController`
-- `Promise`
+ng-app only needs a polyfill for the `Promise` API in IE11
 
 ### Starter HTML
 

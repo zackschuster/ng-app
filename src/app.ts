@@ -118,11 +118,11 @@ export class NgApp {
 	/**
 	 * Force the application to run an update cycle
 	 */
-	public async forceUpdate() {
-		await this.$injector.get('$rootScope').$applyAsync();
+	public forceUpdate() {
+		return this.$injector.get('$rootScope').$applyAsync();
 	}
 
-	public async bootstrap({ strictDi }: { strictDi?: boolean; } = { strictDi: true }) {
+	public bootstrap({ strictDi }: { strictDi?: boolean; } = { strictDi: true }) {
 		for (const name of Object.keys(this.$components)) {
 			this.$module.component(name, this.$components[name]);
 		}
@@ -131,7 +131,7 @@ export class NgApp {
 		}
 
 		setTimeout(() => document.body.classList.add('bootstrapped'));
-		return window.angular.bootstrap(document.body, [this.$id], { strictDi });
+		return Promise.resolve(window.angular.bootstrap(document.body, [this.$id], { strictDi }));
 	}
 
 	public configure(config: Partial<NgAppConfig>) {
@@ -226,9 +226,6 @@ export class NgApp {
 	}
 
 	protected $http(options: NgHttpOptions) {
-		if ((typeof options.onFinally === 'function') === false) {
-			options.onFinally = this.forceUpdate;
-		}
 		if (typeof options.getConfig !== 'function') {
 			options.getConfig = () => this.config;
 		}
@@ -240,7 +237,7 @@ export class NgApp {
 		// allow all dataservice instances to share the same interceptor queue
 		options.interceptors = this.$httpInterceptors;
 
-		return new NgHttp(options);
+		return new NgHttp(this.$injector.get('$http'), this.$injector.get('$rootScope'), options);
 	}
 
 	protected $logger() {

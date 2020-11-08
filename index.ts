@@ -13,10 +13,8 @@ export const app = new NgApp()
 	.addComponents(misc)
 	.addDependencies(['ngMessages', uirouter])
 	.addHttpInterceptor({
-		async responseError(response, err) {
-			const { status, statusText, url } = response;
-			const data = await response.json();
-
+		responseError(err) {
+			const { status, statusText, data, resource: url } = err;
 			switch (status) {
 				case HttpStatusCode.NotFound:
 					app.log.error(`Route '${url}' not found`);
@@ -40,7 +38,6 @@ export const app = new NgApp()
 					app.log.error(`The request to '${url}' returned an error (code: ${status})`);
 					break;
 			}
-
 			return err;
 		},
 	});

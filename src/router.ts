@@ -31,7 +31,7 @@ export class NgRouter<T extends NgRoute = NgRoute> extends NgService {
 		return state as T;
 	}
 
-	public async isAuthorized() {
+	public isAuthorized(): boolean | Promise<boolean> {
 		return true;
 	}
 
