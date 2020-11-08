@@ -139,7 +139,7 @@ ng-app `.js` bundles are compiled to ES5 & are drop-in ready for IE11
 
 ng-app `.cjs`/`.mjs` bundles are compiled to ES2019 & are NOT drop-in ready for IE11
 
-ng-app only needs a polyfill for the `Promise` API in IE11
+ng-app requires no polyfills to run in IE11
 
 ### Starter HTML
 
@@ -161,8 +161,6 @@ ng-app only needs a polyfill for the `Promise` API in IE11
 
 		<script src="https://unpkg.com/angular@1/angular.min.js"></script>
 		<script src="https://unpkg.com/angular-messages@1/angular-messages.min.js"></script>
-		<script src="https://unpkg.com/whatwg-fetch@3/dist/fetch.umd.js" nomodule></script>
-		<script src="https://unpkg.com/abortcontroller-polyfill@1/dist/polyfill-patch-fetch.js" nomodule></script>
 		<script src="https://unpkg.com/@ledge/ng-app@6/build/ng-app.production.js"></script>
 
 		<script>

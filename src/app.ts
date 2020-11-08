@@ -123,6 +123,10 @@ export class NgApp {
 	}
 
 	public bootstrap({ strictDi }: { strictDi?: boolean; } = { strictDi: true }) {
+		if (window.Promise == null) {
+			window.Promise = this.$injector.get('$q') as never as typeof Promise;
+		}
+
 		for (const name of Object.keys(this.$components)) {
 			this.$module.component(name, this.$components[name]);
 		}
@@ -130,8 +134,14 @@ export class NgApp {
 			this.$router = new (class extends NgRouter { })();
 		}
 
-		setTimeout(() => document.body.classList.add('bootstrapped'));
-		return Promise.resolve(window.angular.bootstrap(document.body, [this.$id], { strictDi }));
+		return new Promise((resolve, reject) => {
+			try {
+				setTimeout(() => document.body.classList.add('bootstrapped'));
+				resolve(window.angular.bootstrap(document.body, [this.$id], { strictDi }));
+			} catch (err) {
+				reject(err);
+			}
+		});
 	}
 
 	public configure(config: Partial<NgAppConfig>) {

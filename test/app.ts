@@ -8,7 +8,7 @@ test('app.module.name is app.$id', async t => {
 });
 
 test('app.bootstrap() throws without base tag', async t => {
-	await t.throwsAsync(app.bootstrap);
+	await t.throwsAsync(() => app.bootstrap());
 });
 
 test(`app.bootstrap() doesn't throw with base tag`, async t => {
