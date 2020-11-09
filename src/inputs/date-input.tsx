@@ -153,7 +153,7 @@ export const dateInput: NgInputOptions = {
 				yearOption++;
 			}
 
-			input = <section class='w-100 px-2 mt-2 mb-n1'>
+			input = <fieldset class='w-100 px-2 mt-2 mb-n1'>
 				<div class='form-group row'>
 					<label class='col-xl-4 col-form-label' ng-attr-for='day_{{$ctrl.uniqueId}}'>Day</label>
 					<div class='col'>
@@ -172,7 +172,7 @@ export const dateInput: NgInputOptions = {
 						{yearSelect}
 					</div>
 				</div>
-			</section>;
+			</fieldset>;
 		}
 
 		return (
