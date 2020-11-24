@@ -17,7 +17,6 @@ test('h() creates html element with classes', t => {
 });
 
 test('h() creates html element with attributes', t => {
-	// @ts-ignore
 	const div = <div test1='test1' test2='test2'></div>;
 	t.is(div.classList.length, 0);
 
@@ -27,7 +26,6 @@ test('h() creates html element with attributes', t => {
 });
 
 test('h() creates html element with classes and attributes', t => {
-	// @ts-ignore
 	const div = <div class='test1 test2' test1='test1' test2='test2'></div>;
 	t.is(div.classList.length, 2);
 	t.true(div.classList.contains('test1'));

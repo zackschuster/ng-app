@@ -1,11 +1,18 @@
 declare namespace JSX {
 	interface Element extends HTMLElement { }
+	interface HTMLElementIndex {
+		[key: string]:
+		((this: GlobalEventHandlers, e?: Event) => any) |
+		string |
+		number |
+		boolean |
+		null |
+		undefined
+	}
 	type IntrinsicElementTagNameMap = {
-		[Tag in keyof HTMLElementTagNameMap]: Partial<HTMLElementTagNameMap[Tag]>
-		& { class?: string, for?: string, role?: string, viewBox?: string, fill?: string, d?: string };
+		[Tag in keyof HTMLElementTagNameMap]: Partial<HTMLElementTagNameMap[Tag]> & HTMLElementIndex;
 	};
 	interface IntrinsicElements extends IntrinsicElementTagNameMap {
-		[element: string]: Partial<HTMLElement>
-		& { class?: string, for?: string, role?: string, viewBox?: string, fill?: string, d?: string };
+		[element: string]: Partial<HTMLElement> & HTMLElementIndex;
 	}
 }
