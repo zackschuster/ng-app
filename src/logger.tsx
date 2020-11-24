@@ -98,7 +98,7 @@ export class NgToast {
 			.toLocaleTimeString(navigator.language)
 			.replace(/(:\d{2})(?=\s[AP]M$)/, '');
 
-		return new Promise(resolve => {
+		return new Promise<void>(resolve => {
 			const onComplete = () => {
 				this.toast.removeEventListener('click', onComplete);
 				this.remove();
@@ -226,7 +226,7 @@ export class NgLogger extends NgConsole {
 		const toast = this.notify(msg, '$log', false);
 		toast.appendChild(footer);
 
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			const removeListeners = () => {
 				okBtn.removeEventListener('click', ok);
 				cancelBtn.removeEventListener('click', cancel);
