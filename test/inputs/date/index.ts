@@ -58,7 +58,13 @@ test('date template', t => {
 });
 
 test('date template (fallback)', t => {
-	const tpl = util.makeTpl(definition.template, t, { useFallback: true, minYear: 1900, maxYear: 2100 });
+	const tpl = util.makeTpl(definition.template, t, {
+		useFallback: true,
+		minYear: 1900,
+		maxYear: 2100,
+		defaultYear: 2020,
+		defaultMonth: 10,
+	});
 	t.true(tpl.classList.contains('form-group'));
 
 	const inputGroup = tpl.querySelector('.input-group') as HTMLDivElement;
