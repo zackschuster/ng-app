@@ -1,4 +1,4 @@
-import { h } from '../dom';
+import { h } from '@ledge/jsx';
 import { NgInputController, NgInputOptions } from './shared';
 
 const DEFAULT_MAX_HEIGHT = 9e4;

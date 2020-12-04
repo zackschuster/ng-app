@@ -49,7 +49,6 @@ export * from './src/http';
 export * from './src/logger';
 export * from './src/modal';
 export * from './src/options';
-export * from './src/dom';
 export * from './src/router';
 export * from './src/service';
 

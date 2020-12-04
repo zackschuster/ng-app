@@ -1,9 +1,9 @@
+import { h } from '@ledge/jsx';
 import { NgController, makeInjectableCtrl } from './controller';
 import { NgLogger } from './logger';
 import { NgService } from './service';
 import { NgHttp } from './http';
 import { NgAppConfig } from './options';
-import { h } from './dom';
 
 const MODAL_SHOW_DELAY = 23;
 const MODAL_HIDE_DELAY = 150;

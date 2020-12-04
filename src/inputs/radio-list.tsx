@@ -1,5 +1,5 @@
-import { closest, h } from '../dom';
-import { NgInputController, NgInputOptions } from './shared';
+import { h } from '@ledge/jsx';
+import { NgInputController, NgInputOptions, closest } from './shared';
 
 class RadioListController extends NgInputController {
 	public $postLink() {

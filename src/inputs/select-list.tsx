@@ -1,6 +1,6 @@
+import { h } from '@ledge/jsx';
 import { NgInputController, NgInputOptions } from './shared';
 import { NgAttributes } from '../attributes';
-import { h } from '../dom';
 import { NgService } from '../service';
 
 class SelectController extends NgInputController {

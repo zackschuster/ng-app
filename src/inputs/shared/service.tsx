@@ -1,3 +1,4 @@
+import { h } from '@ledge/jsx';
 import { Indexed } from '@ledge/types';
 
 import { NgInputController } from './controller';
@@ -5,7 +6,6 @@ import { NgInputOptions } from './options';
 import { NgAttributes } from '../../attributes';
 import { NgComponentOptions } from '../../options';
 import { NgService } from '../../service';
-import { closest, h } from '../../dom';
 
 const BaseComponent = Object.seal({
 	isRadioOrCheckbox: false,
@@ -36,6 +36,26 @@ const ValidationExpressions = Object.seal({
 		return `(${this.$Touched} || ${this.$FormInvalid}) && ${this.$Invalid}`;
 	},
 });
+
+/**
+ * see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+ */
+export function closest(el: HTMLElement, s: string) {
+	if (typeof Element.prototype.closest === 'function') {
+		return el.closest(s);
+	}
+
+	const matches = Element.prototype.matches || (Element.prototype as any).msMatchesSelector;
+	do {
+		if (matches.call(el, s)) {
+			return el;
+		}
+		el = el.parentElement || el.parentNode as typeof el;
+	}
+	while (el !== null && el.nodeType === 1);
+
+	return null;
+}
 
 export class InputService extends NgService {
 	public static readonly $validationAttrs = [

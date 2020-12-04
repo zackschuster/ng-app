@@ -1,5 +1,6 @@
+import { h } from '@ledge/jsx';
 import { IListItem } from '@ledge/types';
-import { NgController, app, h } from 'index';
+import { NgController, app } from 'index';
 
 class ModalController extends NgController {
 	public title = 'Example Modal';

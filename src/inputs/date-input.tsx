@@ -1,5 +1,5 @@
 import { isIE11 } from '@ledge/is-ie-11';
-import { h } from '../dom';
+import { h } from '@ledge/jsx';
 import { NgInputController, NgInputOptions } from './shared';
 
 function isNumber(n: any): n is number {

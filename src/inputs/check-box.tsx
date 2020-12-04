@@ -1,4 +1,4 @@
-import { h } from '../dom';
+import { h } from '@ledge/jsx';
 import { NgInputOptions } from './shared';
 
 export const checkBox: NgInputOptions = {

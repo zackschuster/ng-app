@@ -1,5 +1,5 @@
+import { h } from '@ledge/jsx';
 import { NgService } from './service';
-import { h } from './dom';
 
 type LogType = '$log' | '$warn' | '$error' | '$info' | '$success';
 enum LogTypeToastBackgrounds {
