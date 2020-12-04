@@ -132,10 +132,10 @@ export const dateInput: NgInputOptions = {
 			const currentYear = currentDate.getFullYear();
 
 			let { minYear, maxYear, defaultYear, defaultMonth } = this.$attrs;
-			minYear = Number(minYear ??= currentYear - 99);
-			maxYear = Number(maxYear ??= currentYear + 99);
-			defaultYear = Number(defaultYear ??= currentYear);
-			defaultMonth = Number(defaultMonth ??= currentMonth);
+			minYear = Number(minYear ?? currentYear - 99);
+			maxYear = Number(maxYear ?? currentYear + 99);
+			defaultYear = Number(defaultYear ?? currentYear);
+			defaultMonth = Number(defaultMonth ?? currentMonth);
 
 			const monthSelect =
 				<select class='form-control' ng-attr-id='month_{{$ctrl.uniqueId}}'>
