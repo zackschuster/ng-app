@@ -11,7 +11,7 @@ export class NgService {
 	}
 
 	/**
-	 * @see https://stackoverflow.com/a/2117523
+	 * see https://stackoverflow.com/a/2117523
 	 */
 	public static UUIDv4() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {

@@ -85,7 +85,7 @@ export interface NgModelController<T = any> {
 
 /**
  * Allows tuning how model updates are done.
- * @see https://docs.angularjs.org/api/ng/directive/ngModelOptions
+ * see https://docs.angularjs.org/api/ng/directive/ngModelOptions
  */
 export interface NgModelOptions {
 	updateOn?: string;
