@@ -100,7 +100,10 @@
 			"tsx"
 		],
 		"require": [
+			"browser-env/register",
 			"ts-node/register",
+			"angular/angular.js",
+			"angular-mocks",
 			"./test/-register.cjs"
 		]
 	}
