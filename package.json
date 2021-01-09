@@ -32,8 +32,9 @@
 	],
 	"type": "module",
 	"types": "index.ts",
-	"main": "./build/ng-app.cjs",
+	"browser": "./build/ng-app.mjs",
 	"module": "./build/ng-app.mjs",
+	"main": "./build/ng-app.cjs",
 	"exports": {
 		"import": "./build/ng-app.mjs",
 		"require": "./build/ng-app.cjs"
