@@ -7,6 +7,6 @@ test('$ctrl.apiPrefix', t => {
 
 test('$compCtrl.uniqueId', t => {
 	t.is(typeof $ctrl.uniqueId, 'string');
-	t.false($ctrl.uniqueId.includes('-'));
-	t.false($ctrl.uniqueId.includes(','));
+	t.is($ctrl.uniqueId.indexOf('-'), -1);
+	t.is($ctrl.uniqueId.indexOf(','), -1);
 });

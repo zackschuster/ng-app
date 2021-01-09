@@ -62,15 +62,17 @@ export class NgService {
 				.join(' ')
 				.replace(
 					/\w{1}\.?(\uFFFF){1}\s?/g,
-					([first, second]) =>
-						second === '.'
+					x => {
+						const first = x.charAt(0);
+						const second = x.charAt(1);
+						return second === '.'
 							? first + second
-							: first,
+							: first;
+					},
 				)
 				.replace(
 					/\.{1}\w{2,}/g,
-					([first, second, ...rest]) =>
-						`${first} ${second.toUpperCase()}${rest.join('')}`,
+					x => `${x.charAt(0)} ${x.charAt(1).toUpperCase()}${x.substring(2)}`,
 				)
 				.replace(/- /g, '-');
 	}

@@ -2,6 +2,14 @@ import { IConfig, Indexed } from '@ledge/types';
 import { NgController, makeInjectableCtrl } from './controller';
 import { NgAttributes } from './attributes';
 
+declare global {
+	const process: {
+		env: {
+			NODE_ENV: string;
+		},
+	};
+}
+
 export class NgAppConfig implements IConfig {
 	public readonly IS_PROD: boolean;
 	public readonly IS_DEV: boolean;

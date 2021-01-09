@@ -1,5 +1,6 @@
 import { HttpStatusCode } from '@ledge/types/http';
 import { injector } from 'angular';
+import type { } from 'angular-mocks';
 // import { module } from 'angular';
 
 import { $config } from './--app';

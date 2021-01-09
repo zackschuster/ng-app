@@ -61,13 +61,13 @@ class DateInputController extends NgInputController {
 	}
 
 	public update() {
-		const day = new Date(this.ngModel ?? Date.now());
+		const day = new Date(this.ngModel?.getTime() ?? Date.now());
 		const daySelect = document.querySelector(`#day_${this.uniqueId}`) as HTMLSelectElement;
 		while (daySelect.options.length > 0) {
 			daySelect.options.remove(0);
 		}
 		const currentDay = day.getDate();
-		const day2 = new Date(day);
+		const day2 = new Date(day.getTime());
 		day2.setDate(0);
 		const maxDay = day2.getDate();
 		let dayOption = 1;
@@ -85,7 +85,7 @@ class DateInputController extends NgInputController {
 		const currentMonth = day.getMonth();
 		const monthSelect = document.querySelector(`#month_${this.uniqueId}`) as HTMLSelectElement;
 		if (Number(monthSelect.value) !== currentMonth) {
-			for (const option of monthSelect.options) {
+			for (const option of Array.prototype.slice.call(monthSelect.options)) {
 				if (Number(option.value) === currentMonth) {
 					option.setAttribute('selected', 'selected');
 				} else {
@@ -97,7 +97,7 @@ class DateInputController extends NgInputController {
 		const currentYear = day.getFullYear();
 		const yearSelect = document.querySelector(`#year_${this.uniqueId}`) as HTMLSelectElement;
 		if (Number(yearSelect.value) !== currentYear) {
-			for (const option of yearSelect.options) {
+			for (const option of Array.prototype.slice.call(yearSelect.options)) {
 				if (Number(option.value) === currentYear) {
 					option.setAttribute('selected', 'selected');
 				} else {

@@ -1,10 +1,16 @@
 {
 	"extends": "@ledge/configs/tsconfig.browser.json",
 	"compilerOptions": {
+		"lib": [
+			"dom",
+			"es5",
+			"es2015.promise"
+		],
 		"baseUrl": ".",
 		"jsx": "react",
 		"jsxFactory": "h",
 		"target": "es5",
+		"types": [],
 		"paths": {
 			"index": [
 				"./index.ts"

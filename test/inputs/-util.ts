@@ -7,13 +7,17 @@ import { InputService, NgComponentOptions, NgInputOptions, makeInjectableCtrl } 
 
 const idRe = /(\w[_]){{\$ctrl.uniqueId}}/;
 
-export function mockInputCtrl<T extends NgInputOptions>(definition: T, $attrs: Partial<angular.IAttributes> = {}) {
-	Object.assign($attrs, {
-		ngModel: '$ctrl.ngModel',
-		required: true, ngRequired: true,
-		disabled: true, ngDisabled: true,
-		readonly: true, ngReadonly: true,
-	});
+export function mockInputCtrl<T extends NgInputOptions>(
+	definition: T,
+	$attrs: Partial<angular.IAttributes> = {},
+) {
+	$attrs.ngModel = '$ctrl.ngModel';
+	$attrs.required = true;
+	$attrs.ngRequired = true;
+	$attrs.disabled = true;
+	$attrs.ngDisabled = true;
+	$attrs.readonly = true;
+	$attrs.ngReadonly = true;
 
 	const el = document.createElement('div');
 	const html = $injector.invoke(
@@ -42,12 +46,13 @@ export function makeTpl(
 	t: ExecutionContext,
 	$attrs: Indexed = {},
 ) {
-	Object.assign($attrs, {
-		ngModel: '$ctrl.ngModel',
-		required: true, ngRequired: true,
-		disabled: true, ngDisabled: true,
-		readonly: true, ngReadonly: true,
-	});
+	$attrs.ngModel = '$ctrl.ngModel';
+	$attrs.required = true;
+	$attrs.ngRequired = true;
+	$attrs.disabled = true;
+	$attrs.ngDisabled = true;
+	$attrs.readonly = true;
+	$attrs.ngReadonly = true;
 
 	const child = document.createElement('div');
 

@@ -203,7 +203,7 @@ export class NgApp {
 	}
 
 	public removeHttpInterceptor(interceptor: NgHttpInterceptor) {
-		const i = this.$httpInterceptors.findIndex(x => x === interceptor);
+		const i = this.$httpInterceptors.indexOf(interceptor);
 		if (i > -1) {
 			if (i === (this.$httpInterceptors.length - 1)) {
 				this.$httpInterceptors.pop();

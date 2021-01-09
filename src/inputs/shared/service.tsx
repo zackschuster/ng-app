@@ -134,7 +134,11 @@ export class InputService extends NgService {
 				$definition.bindings[key] = $component.bindings[key];
 			}
 		}
-		if ($definition.transclude != null && $component.transclude != null) {
+		if (
+			$definition.transclude != null &&
+			typeof $component.transclude === 'object' &&
+			$component.transclude != null
+		) {
 			for (const key of Object.keys($component.transclude)) {
 				($definition.transclude as Indexed)[key] = ($component.transclude as Indexed)[key];
 			}
