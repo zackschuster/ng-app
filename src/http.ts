@@ -7,7 +7,7 @@ export const DEFAULT_REQUEST_TIMEOUT = 10000;
 export interface NgHttpInterceptor {
 	request?(config: angular.IHttpRequestConfigHeaders):
 		angular.IHttpRequestConfigHeaders | PromiseLike<angular.IHttpRequestConfigHeaders>;
-	response?(response: angular.IHttpResponse<any>): angular.IHttpResponse<any>;
+	response?(response: angular.IHttpResponse<any>): angular.IHttpResponse<any> | PromiseLike<angular.IHttpResponse<any>>;
 	responseError?(err: any): any;
 }
 
@@ -135,7 +135,7 @@ export class NgHttp extends NgService {
 				this.$rootScope.$applyAsync();
 				return res.data;
 			})
-			.catch(err => {
+			.catch<T>(err => {
 				for (const onResponseError of this.interceptors.responseError) {
 					err = onResponseError(err);
 				}
