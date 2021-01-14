@@ -2,14 +2,6 @@ import { IConfig, Indexed } from '@ledge/types';
 import { NgController, makeInjectableCtrl } from './controller';
 import { NgAttributes } from './attributes';
 
-declare global {
-	const process: {
-		env: {
-			NODE_ENV: string;
-		},
-	};
-}
-
 export class NgAppConfig implements IConfig {
 	public readonly IS_PROD: boolean;
 	public readonly IS_DEV: boolean;
@@ -37,13 +29,10 @@ export class NgAppConfig implements IConfig {
 
 	constructor({
 		NAME = 'ng-app',
-		ENV = '',
+		ENV = 'production',
 		API_HOST = '',
 		VERSION = '',
 	}: Partial<NgAppConfig> = {}) {
-		if (ENV == null || ENV.length === 0) {
-			ENV = process.env.NODE_ENV as string;
-		}
 		this.ENV = ENV;
 
 		this.IS_PROD = ENV === 'production';
