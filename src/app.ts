@@ -3,7 +3,7 @@ import { StateService } from '@uirouter/core';
 import { StateProvider } from '@uirouter/angularjs';
 
 import { NgController, makeInjectableCtrl } from './controller';
-import { DEFAULT_REQUEST_TIMEOUT, NgHttp, NgHttpInterceptor, NgHttpOptions } from './http';
+import { DEFAULT_REQUEST_TIMEOUT, NgHttp, NgHttpOptions } from './http';
 import { InputService, NgInputOptions } from './inputs';
 import { NgLogger } from './logger';
 import { NgModal } from './modal';
@@ -59,7 +59,7 @@ export class NgApp {
 
 	protected readonly $module = window.angular.module(this.$id, this.$dependencies);
 	protected readonly $components: Indexed<NgComponentOptions> = {};
-	protected readonly $httpInterceptors: NgHttpInterceptor[] = [];
+	protected readonly $httpInterceptors: angular.IHttpInterceptor[] = [];
 
 	private _http!: NgHttp;
 	private _log!: NgLogger;
@@ -102,6 +102,14 @@ export class NgApp {
 
 					for (const definition of this.router.getRoutes()) {
 						$stateProvider.state(definition);
+					}
+				},
+			])
+			.config([
+				'$httpProvider',
+				($httpProvider: angular.IHttpProvider) => {
+					for (const interceptor of this.$httpInterceptors) {
+						$httpProvider.interceptors.push(() => interceptor);
 					}
 				},
 			])
@@ -187,7 +195,7 @@ export class NgApp {
 		return this;
 	}
 
-	public addHttpInterceptor(interceptor: NgHttpInterceptor) {
+	public addHttpInterceptor(interceptor: angular.IHttpInterceptor) {
 		if (this.$httpInterceptors.every(x => x != null)) {
 			this.$httpInterceptors.push(interceptor);
 		} else {
@@ -202,7 +210,7 @@ export class NgApp {
 		return this;
 	}
 
-	public removeHttpInterceptor(interceptor: NgHttpInterceptor) {
+	public removeHttpInterceptor(interceptor: angular.IHttpInterceptor) {
 		const i = this.$httpInterceptors.indexOf(interceptor);
 		if (i > -1) {
 			if (i === (this.$httpInterceptors.length - 1)) {
@@ -239,14 +247,6 @@ export class NgApp {
 		if (typeof options.getConfig !== 'function') {
 			options.getConfig = () => this.config;
 		}
-		if (Array.isArray(options.interceptors)) {
-			for (const interceptor of options.interceptors) {
-				this.addHttpInterceptor(interceptor);
-			}
-		}
-		// allow all dataservice instances to share the same interceptor queue
-		options.interceptors = this.$httpInterceptors;
-
 		return new NgHttp(this.$injector.get('$http'), this.$injector.get('$rootScope'), options);
 	}
 

@@ -4,13 +4,6 @@ import { NgAppConfig } from './options';
 
 export const DEFAULT_REQUEST_TIMEOUT = 10000;
 
-export interface NgHttpInterceptor {
-	request?(config: angular.IHttpRequestConfigHeaders):
-		angular.IHttpRequestConfigHeaders | PromiseLike<angular.IHttpRequestConfigHeaders>;
-	response?(response: angular.IHttpResponse<any>): angular.IHttpResponse<any> | PromiseLike<angular.IHttpResponse<any>>;
-	responseError?(err: any): any;
-}
-
 export interface NgHttpOptions {
 	/**
 	 * Defaults to `location.host`
@@ -29,8 +22,6 @@ export interface NgHttpOptions {
 	 */
 	timeout?: number;
 
-	interceptors?: NgHttpInterceptor[];
-
 	withCredentials?: boolean;
 
 	getConfig(): NgAppConfig;
@@ -38,37 +29,12 @@ export interface NgHttpOptions {
 }
 
 export class NgHttp extends NgService {
-	private interceptors: {
-		request: (
-			(config: angular.IHttpRequestConfigHeaders)
-				=> angular.IHttpRequestConfigHeaders | PromiseLike<angular.IHttpRequestConfigHeaders>
-		)[];
-		response: ((response: angular.IHttpResponse<any>) => angular.IHttpResponse<any>)[];
-		responseError: (<T extends Error>(err: T) => void)[];
-	};
-
 	constructor(
 		private $http: angular.IHttpService,
 		private $rootScope: angular.IRootScopeService,
 		private options: NgHttpOptions,
 	) {
 		super();
-		const { interceptors = [] } = options;
-		this.interceptors = {
-			request: interceptors
-				.map(x => x.request)
-				.filter(x => typeof x === 'function') as
-				((config: angular.IHttpRequestConfigHeaders)
-					=> angular.IHttpRequestConfigHeaders | PromiseLike<angular.IHttpRequestConfigHeaders>)[],
-			response: interceptors
-				.map(x => x.response)
-				.filter(x => typeof x === 'function') as
-				((response: angular.IHttpResponse<any>) => angular.IHttpResponse<any>)[],
-			responseError: interceptors
-				.map(x => x.responseError)
-				.filter(x => typeof x === 'function') as
-				((err: any) => any)[],
-		};
 	}
 
 	public Get<T = any>(url: string) {
@@ -126,20 +92,16 @@ export class NgHttp extends NgService {
 			params: {
 				timestamp: (this.isIE11 ? Date.now() : null),
 			},
-			transformRequest: this.interceptors.request,
-			transformResponse: this.interceptors.response,
 		};
 
-		return this.$http<T>(request)
-			.then(res => {
-				this.$rootScope.$applyAsync();
-				return res.data;
-			})
-			.catch<T>(err => {
-				for (const onResponseError of this.interceptors.responseError) {
-					err = onResponseError(err);
-				}
-				return err;
-			});
+		return this.$http<T>(request).then(res => {
+			this.$rootScope.$applyAsync();
+			return res.data;
+		});
 	}
 }
+
+/**
+ * @deprecated
+ */
+export type NgHttpInterceptor = angular.IHttpInterceptor;
