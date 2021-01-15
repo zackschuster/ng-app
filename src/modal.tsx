@@ -50,9 +50,9 @@ export class NgModal extends NgService {
 		document.body.appendChild(this.$container);
 	}
 
-	public open<T extends typeof NgController>(options: NgModalOptions<T> = {}) {
-		const { $log } = this;
+	public open<T extends typeof NgController, Y = undefined>(options: NgModalOptions<T, Y> = { item: {} as Y }) {
 		const {
+			item,
 			title = 'Set the <code>title</code> property to replace me :)',
 			template = '<p class="lead">Set the <code>template</code> property to replace me :)</p>',
 			controller = NgController,
@@ -94,16 +94,21 @@ export class NgModal extends NgService {
 		});
 
 		$scope.$ctrl = new $ctrl($element, $scope, this.$injector) as NgController;
+		Object.defineProperty($scope.$ctrl, 'item', { value: item });
 		$scope.$applyAsync();
 
+		const deferred = this.$injector.get('$q').defer<Y>();
 		const escapeKeyListener = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' || e.key === 'Esc') {
 				close();
 			}
 		};
-		const dismiss = () => {
+		const dismiss = (shouldReject?: Event | boolean) => {
 			removeEventListeners();
 			this.hideModal(escapeKeyListener, $scope);
+			if (shouldReject !== false) {
+				deferred.reject();
+			}
 		};
 
 		this.showModal(escapeKeyListener);
@@ -115,15 +120,16 @@ export class NgModal extends NgService {
 		};
 
 		const close = () => {
-			if (onClose.call({ $log }, controller as T)) {
-				dismiss();
+			if (onClose()) {
+				deferred.resolve(item);
+				dismiss(false);
 			}
 		};
 		this.$cancelBtn.addEventListener('click', dismiss);
 		this.$submitBtn.addEventListener('click', close);
 		this.$backdrop.addEventListener('click', close);
 
-		return { close, dismiss };
+		return { close, dismiss, result: deferred.promise };
 	}
 
 	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
@@ -164,7 +170,8 @@ export class NgModal extends NgService {
 	}
 }
 
-export interface NgModalOptions<T extends typeof NgController> {
+export interface NgModalOptions<T extends typeof NgController, Y = undefined> {
+	item?: Y;
 	/**
 	 * String representing the modal's title
 	 */
@@ -190,5 +197,5 @@ export interface NgModalOptions<T extends typeof NgController> {
 	 */
 	controller?: T;
 
-	onClose?(this: { $log: NgLogger }, controller: T): boolean;
+	onClose?(): boolean;
 }
