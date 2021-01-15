@@ -1,6 +1,6 @@
 {
 	"name": "@ledge/ng-app",
-	"version": "6.1.0",
+	"version": "6.1.1",
 	"description": "Powerful, easy-to-use app container for Angular.js with ES Modules. Types included. IE11 supported.",
 	"homepage": "https://ng-app.js.org",
 	"author": {
