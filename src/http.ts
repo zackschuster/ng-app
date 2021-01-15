@@ -73,7 +73,7 @@ export class NgHttp extends NgService {
 		const {
 			host = this.options.getConfig().API_HOST,
 			ssl = location.protocol === 'https:',
-			withCredentials = false,
+			withCredentials = true,
 			headers = {},
 			timeout = DEFAULT_REQUEST_TIMEOUT,
 			responseType = 'json',
