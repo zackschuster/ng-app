@@ -35,13 +35,10 @@ export default (env: { staging?: boolean; production?: boolean; WEBPACK_SERVE?: 
 	if (env.staging || env.production) {
 		config.resolve = { alias: { index: join(cwd, 'build', 'ng-app.mjs') } };
 		config.module.rules.push({
-			test: /[.]mjs$/,
-			exclude: /node_modules/,
+			test: /[.]m?js$/,
+			exclude: /node_modules(?![/]@ledge[/]jsx)/,
 			use: {
-				loader: require.resolve('babel-loader'),
-				options: {
-					presets: [['@babel/preset-env', { targets: { ie: '11' } }]],
-				},
+				loader: '../webpack.plugin.ts',
 			},
 		});
 	}

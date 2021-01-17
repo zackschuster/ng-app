@@ -64,11 +64,11 @@ customElements.define('custom-element-example', CustomElementExample);
 
 let clickCounter = 0;
 const jsxExampleSection =
-	<section className='container-fluid pb-3 mt-sm-3'>
-		<div className='row'>
-			<div className='col-12'>
+	<section class='container-fluid pb-3 mt-sm-3'>
+		<div class='row'>
+			<div class='col-12'>
 				<div class='card shadow-sm'>
-					<div className='card-body'>
+					<div class='card-body'>
 						<h2>This section was made using ng-app's DOM-in-JSX feature</h2>
 						<h3>DOM-in-JSX lets you work directly with DOM elements using JSX's declarative syntax</h3>
 						<custom-element-example>Custom Elements?</custom-element-example>
