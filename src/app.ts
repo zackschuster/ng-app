@@ -36,9 +36,9 @@ export class NgApp {
 	}
 
 	public get http() {
-		return this._http ??= this.$http({
-			timeout: this.$config.IS_PROD ? DEFAULT_REQUEST_TIMEOUT : undefined,
-			getConfig: () => this.$config,
+		return this._http ??= this.makeHttpService({
+			host: () => this.config.API_HOST,
+			timeout: () => (this.$config.IS_PROD ? DEFAULT_REQUEST_TIMEOUT : undefined),
 		});
 	}
 
@@ -234,6 +234,13 @@ export class NgApp {
 		return injectable as NonReadonly<typeof injectable>;
 	}
 
+	public makeHttpService(options: NgHttpOptions) {
+		function getRootScope(this: NgApp) {
+			return this.$injector.get('$rootScope');
+		}
+		return new NgHttp(this.$injector.get('$http'), getRootScope.bind(this), options);
+	}
+
 	protected $modal() {
 		return new NgModal(
 			this.log,
@@ -241,13 +248,6 @@ export class NgApp {
 			this.config,
 			this.$injector,
 		);
-	}
-
-	protected $http(options: NgHttpOptions) {
-		if (typeof options.getConfig !== 'function') {
-			options.getConfig = () => this.config;
-		}
-		return new NgHttp(this.$injector.get('$http'), this.$injector.get('$rootScope'), options);
 	}
 
 	protected $logger() {

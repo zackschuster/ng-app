@@ -12,7 +12,7 @@ export const $http = new NgHttp(
 	$injector.get('$http'),
 	$injector.get('$rootScope'),
 	{
-		getConfig() { return $config; },
+		host: $config.API_HOST,
 	});
 
 // doesn't work, never gotten $sceDelegateProvider code to make a difference

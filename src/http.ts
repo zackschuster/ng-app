@@ -1,37 +1,23 @@
 import { PatchPayload } from '@ledge/types/patch';
 import { NgService } from './service';
-import { NgAppConfig } from './options';
 
 export const DEFAULT_REQUEST_TIMEOUT = 10000;
 
 export interface NgHttpOptions {
 	/**
-	 * Defaults to `location.host`
+	 * The host domain to use for making requests. Defaults to `location.host`
 	 */
-	host?: string;
-
+	host?: string | (() => string);
 	/**
-	 * If true, use `https://`. Otherwise, use `http://`
+	 * How many milliseconds to wait before aborting the request. Defaults to `undefined` (no timeout)
 	 */
-	ssl?: boolean;
-
-	headers?: object;
-
-	/**
-	 * How many milliseconds to wait before aborting the request. Defaults to `10000` (10 seconds)
-	 */
-	timeout?: number;
-
-	withCredentials?: boolean;
-
-	getConfig(): NgAppConfig;
-	responseType?: '' | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text';
+	timeout?: number | (() => number | undefined);
 }
 
 export class NgHttp extends NgService {
 	constructor(
 		private $http: angular.IHttpService,
-		private $rootScope: angular.IRootScopeService,
+		private $rootScope: angular.IRootScopeService | (() => angular.IRootScopeService),
 		private options: NgHttpOptions,
 	) {
 		super();
@@ -61,7 +47,7 @@ export class NgHttp extends NgService {
 		return this.fetch<T>(url, 'JSONP');
 	}
 
-	public getFullUrl(uri: string, host: string, ssl: boolean) {
+	public getFullUrl(uri: string, host = location.host, ssl = location.protocol === 'https:') {
 		return `http${ssl ? 's' : ''}://${host}/${uri}`;
 	}
 
@@ -70,32 +56,24 @@ export class NgHttp extends NgService {
 		method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE' | 'JSONP',
 		data?: any,
 	) {
-		const {
-			host = this.options.getConfig().API_HOST,
-			ssl = location.protocol === 'https:',
-			withCredentials = true,
-			headers = {},
-			timeout = DEFAULT_REQUEST_TIMEOUT,
-			responseType = 'json',
-		} = this.options;
-
-		const url = this.getFullUrl(uri, host, ssl);
-
-		const request: angular.IRequestConfig = {
-			data,
-			headers,
-			method,
-			responseType,
+		let { host, timeout } = this.options;
+		if (typeof host === 'function') {
+			host = host();
+		}
+		if (typeof timeout === 'function') {
+			timeout = timeout();
+		}
+		return this.$http<T>({
+			withCredentials: true,
+			url: this.getFullUrl(uri, host),
 			timeout,
-			url,
-			withCredentials,
+			method,
+			data,
 			params: {
 				timestamp: (this.isIE11 ? Date.now() : null),
 			},
-		};
-
-		return this.$http<T>(request).then(res => {
-			this.$rootScope.$applyAsync();
+		}).then(res => {
+			(typeof this.$rootScope === 'function' ? this.$rootScope() : this.$rootScope).$applyAsync();
 			return res.data;
 		});
 	}
