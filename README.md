@@ -191,3 +191,7 @@ ng-app requires no polyfills to run in IE11
 	</body>
 </html>
 ```
+
+### Webpack
+
+By default, the `.mjs` bundle will be used. This bundle is compiled to es2015 does not run in ie11 out-of-the-box. You can either alias to the es5 bundles or transform the bundle using a plugin. For an example of the latter, see the webpack configuration in the project repository.
