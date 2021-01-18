@@ -76,4 +76,4 @@ export const textInput: NgInputOptions<TextInputController> = {
 	controller: TextInputController,
 };
 
-export const htmlInput = { ...textInput };
+export const htmlInput = window.angular.copy(textInput);

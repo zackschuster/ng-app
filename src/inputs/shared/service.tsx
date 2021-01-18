@@ -7,8 +7,7 @@ import { NgAttributes } from '../../attributes';
 import { NgComponentOptions } from '../../options';
 import { NgService } from '../../service';
 
-const BaseComponent = Object.seal({
-	isRadioOrCheckbox: false,
+const BaseComponent: NgInputOptions = Object.seal({
 	type: 'input',
 	labelClass: 'form-control-label',
 	templateClass: 'form-group',
@@ -25,7 +24,7 @@ const BaseComponent = Object.seal({
 	postRender() {
 		return;
 	},
-}) as NgInputOptions & { isRadioOrCheckbox: boolean };
+});
 
 const ValidationExpressions = Object.seal({
 	$Error: '$ctrl.ngModelCtrl.$error',
@@ -123,8 +122,11 @@ export class InputService extends NgService {
 	 * @param component An object representing the requested component definition
 	 */
 	public static defineInputComponent<T extends NgInputOptions>(component: T) {
-		const $component = window.angular.copy({ ...InputService.$BaseComponent, ...component });
-		$component.isRadioOrCheckbox = $component.labelClass === 'form-check-label';
+		const $component = window.angular.copy(InputService.$BaseComponent);
+		for (const key of Object.keys(component) as (keyof T)[]) {
+			($component as T)[key] = component[key];
+		}
+		const isRadioOrCheckbox = $component.labelClass === 'form-check-label';
 
 		const $definition = window.angular.copy(InputService.$baseDefinition);
 
@@ -168,7 +170,7 @@ export class InputService extends NgService {
 				$label.appendChild(<span class='text-danger'> *</span>);
 			}
 
-			if ($component.isRadioOrCheckbox === false) {
+			if (isRadioOrCheckbox === false) {
 				$template.appendChild($label);
 			}
 
@@ -202,7 +204,7 @@ export class InputService extends NgService {
 			// add a transclusion slot for e.g. nesting inputs
 			$template.appendChild(<div ng-transclude='contain'></div>);
 
-			if ($component.isRadioOrCheckbox === true) {
+			if (isRadioOrCheckbox === true) {
 				$label.style.setProperty('cursor', 'pointer');
 				$template.appendChild($label);
 			}

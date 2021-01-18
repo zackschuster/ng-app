@@ -46,7 +46,6 @@ test('InputService.$baseComponent', t => {
 	t.true(($baseComponent.controller as any).prototype instanceof NgInputController);
 
 	t.like($baseComponent, {
-		isRadioOrCheckbox: false,
 		labelClass: 'form-control-label',
 		templateClass: 'form-group',
 		attrs: {},
