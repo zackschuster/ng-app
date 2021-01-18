@@ -72,10 +72,10 @@ export class NgHttp extends NgService {
 			params: {
 				timestamp: (this.isIE11 ? Date.now() : null),
 			},
-		}).then(res => {
-			(typeof this.$rootScope === 'function' ? this.$rootScope() : this.$rootScope).$applyAsync();
-			return res.data;
-		});
+		})
+			.then(res => res.data)
+			.finally(() =>
+				(typeof this.$rootScope === 'function' ? this.$rootScope() : this.$rootScope).$applyAsync());
 	}
 }
 
