@@ -202,6 +202,7 @@ export class NgLogger extends NgConsole {
 		this.container.style.setProperty('right', '-1.5rem');
 		this.container.style.setProperty('width', '100%');
 		this.container.style.setProperty('max-width', '23rem');
+		this.container.style.setProperty('z-index', '2323');
 
 		document.body.appendChild(this.container);
 	}
