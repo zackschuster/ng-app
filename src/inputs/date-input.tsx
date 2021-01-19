@@ -7,7 +7,7 @@ function isNumber(n: any): n is number {
 }
 
 class DateInputController extends NgInputController {
-	public ngModel: Date | null | undefined;
+	public ngModel: Date | number | string | null | undefined;
 	private minDate?: Date | number | string;
 	private maxDate?: Date | number | string;
 
@@ -61,14 +61,14 @@ class DateInputController extends NgInputController {
 	}
 
 	public update() {
-		const day = new Date(this.ngModel?.getTime() ?? Date.now());
+		const day = new Date(this.ngModel?.valueOf() ?? Date.now());
 		const daySelect = document.querySelector(`#day_${this.uniqueId}`) as HTMLSelectElement;
 		while (daySelect.options.length > 0) {
 			const option = daySelect.options.item(0) as HTMLOptionElement;
 			daySelect.removeChild(option);
 		}
 		const currentDay = day.getDate();
-		const day2 = new Date(day.getTime());
+		const day2 = new Date(day.valueOf());
 		day2.setDate(0);
 		const maxDay = day2.getDate();
 		let dayOption = 1;
