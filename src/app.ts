@@ -4,7 +4,7 @@ import { StateProvider } from '@uirouter/angularjs';
 
 import { NgController, makeInjectableCtrl } from './controller';
 import { DEFAULT_REQUEST_TIMEOUT, NgHttp, NgHttpOptions } from './http';
-import { InputService, NgInputOptions } from './inputs';
+import { InputService, NgInputOptions, addSelectListStylesheet } from './inputs';
 import { NgLogger } from './logger';
 import { NgModal } from './modal';
 import { NgAppConfig, NgComponentOptions } from './options';
@@ -144,6 +144,7 @@ export class NgApp {
 
 		return new Promise((resolve, reject) => {
 			try {
+				addSelectListStylesheet();
 				setTimeout(() => document.body.classList.add('bootstrapped'));
 				resolve(window.angular.bootstrap(document.body, [this.$id], { strictDi }));
 			} catch (err) {

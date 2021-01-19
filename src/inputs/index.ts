@@ -16,3 +16,4 @@ export const inputs = {
 };
 
 export * from './shared';
+export { addSelectListStylesheet } from './select-list';
