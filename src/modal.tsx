@@ -9,7 +9,7 @@ const MODAL_SHOW_DELAY = 23;
 const MODAL_HIDE_DELAY = 150;
 
 export class NgModal extends NgService {
-	protected readonly $backdrop = <div class='modal-backdrop fade'></div>;
+	protected readonly $backdrop = <div class='modal-backdrop fade in'></div>;
 	protected readonly $title =
 		<h5 class='modal-title' id={`modal-title-${this.uniqueId}`}></h5> as HTMLHeadingElement;
 	protected readonly $header = <header class='modal-header'>{this.$title}</header>;
@@ -27,7 +27,7 @@ export class NgModal extends NgService {
 		</form> as HTMLFormElement;
 	protected readonly $dialog = <div class='modal-dialog' role='dialog'>{this.$form}</div>;
 	protected readonly $container =
-		<div class='fade modal'
+		<div class='modal fade in'
 			aria-labelledby={this.$title.id}
 			aria-live='polite'
 			aria-modal='true'
@@ -160,8 +160,8 @@ export class NgModal extends NgService {
 		this.$container.classList.remove('show');
 
 		setTimeout(() => {
-			this.$container.style.setProperty('display', 'none');
 			this.$backdrop.style.setProperty('display', 'none');
+			this.$container.style.setProperty('display', 'none');
 		}, MODAL_HIDE_DELAY);
 
 		scope.$destroy();
