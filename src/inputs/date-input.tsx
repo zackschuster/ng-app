@@ -64,7 +64,8 @@ class DateInputController extends NgInputController {
 		const day = new Date(this.ngModel?.getTime() ?? Date.now());
 		const daySelect = document.querySelector(`#day_${this.uniqueId}`) as HTMLSelectElement;
 		while (daySelect.options.length > 0) {
-			daySelect.options.remove(0);
+			const option = daySelect.options.item(0) as HTMLOptionElement;
+			daySelect.removeChild(option);
 		}
 		const currentDay = day.getDate();
 		const day2 = new Date(day.getTime());

@@ -195,7 +195,9 @@ export class InputService extends NgService {
 			}
 
 			const requiredTag = $label.firstElementChild;
-			requiredTag?.remove();
+			if (requiredTag != null) {
+				$label.removeChild(requiredTag);
+			}
 			$component.renderLabel?.call({ $label, $attrs });
 			if (requiredTag != null) {
 				$label.appendChild(requiredTag);
