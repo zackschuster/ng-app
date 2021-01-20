@@ -114,7 +114,7 @@ export class NgModal extends NgService {
 			removeEventListeners();
 			this.hideModal(escapeKeyListener, $scope);
 			if (shouldReject !== false) {
-				deferred.reject();
+				deferred.reject(new Error('NgModal dismissed'));
 			}
 			this.$rootScope.$apply();
 		};
