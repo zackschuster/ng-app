@@ -195,22 +195,22 @@ export class NgModal extends NgService {
 export interface NgModalOptions<T extends typeof NgController, Y = undefined> {
 	item?: Y;
 	/**
-	 * String representing the modal's title
+	 * String representing the modal's title.
 	 */
 	title?: string | (() => string);
 
 	/**
-	 * Inline template representing the modal's content
+	 * Inline template representing the modal's content.
 	 */
 	template?: string | (() => string);
 
 	/**
-	 * Ok button text (false to hide)
+	 * Submit button text. Set to `false` to hide. Defaults to `'Ok'`.
 	 */
 	okBtnText?: string | boolean;
 
 	/**
-	 * Cancel button text (false to hide, true for default)
+	 * Cancel button text. Set to `false` to hide. Defaults to `'Cancel'`.
 	 */
 	cancelBtnText?: string | boolean;
 
