@@ -80,9 +80,9 @@ app.bootstrap();
 ```js
 import { app } from '@ledge/ng-app';
 
-const http = app.http; // using fetch
-const modal = app.modal; // using custom modal targeting bootstrap css
-const log = app.log; // using $log service + custom toast targeting bootstrap css
+const http = app.http; // using $http service
+const log = app.log; // using $log service + custom toast w/ bootstrap classes
+const modal = app.modal; // using custom modal w/ bootstrap classes
 ```
 
 ## Built-in, zero-config components
@@ -132,7 +132,7 @@ const log = app.log; // using $log service + custom toast targeting bootstrap cs
 
 ng-app `.js` bundles are compiled to ES5 & are drop-in ready for IE11
 
-ng-app `.cjs`/`.mjs` bundles are compiled to ES2019 & are NOT drop-in ready for IE11
+ng-app `.cjs`/`.mjs` bundles are compiled to ES2015 & are NOT drop-in ready for IE11 (see [below](#using-build-tools))
 
 ng-app requires no polyfills to run in IE11
 
@@ -192,6 +192,6 @@ ng-app requires no polyfills to run in IE11
 </html>
 ```
 
-### Webpack
+### Using build tools
 
-By default, the `.mjs` bundle will be used. This bundle is compiled to es2015 does not run in ie11 out-of-the-box. You can either alias to the es5 bundles or transform the bundle using a plugin. For an example of the latter, see the webpack configuration in the project repository.
+By default, the `.mjs` bundle will be used. This bundle is compiled to es2015 and does NOT run in IE11 out-of-the-box. You can either alias to the es5 bundles or transform the bundle using a plugin. For an example of the latter, see the webpack configuration in the project repository.
