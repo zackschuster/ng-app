@@ -43,11 +43,11 @@ export class NgApp {
 	}
 
 	public get log() {
-		return this._log ??= this.$logger();
+		return this._log ??= this.makeLogger();
 	}
 
 	public get modal() {
-		return this._modal ??= this.$modal();
+		return this._modal ??= this.makeModal();
 	}
 
 	public readonly $id = '$core';
@@ -242,16 +242,16 @@ export class NgApp {
 		return new NgHttp(this.$injector.get('$http'), getRootScope.bind(this), options);
 	}
 
-	protected $modal() {
+	public makeLogger(isProd = this.$config.IS_PROD) {
+		return new NgLogger(isProd);
+	}
+
+	public makeModal() {
 		return new NgModal(
 			this.log,
 			this.http,
 			this.config,
 			this.$injector,
 		);
-	}
-
-	protected $logger() {
-		return new NgLogger(this.$config.IS_PROD);
 	}
 }
