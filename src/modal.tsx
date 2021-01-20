@@ -129,7 +129,7 @@ export class NgModal extends NgService {
 		this.$submitBtn.addEventListener('click', close);
 		this.$backdrop.addEventListener('click', close);
 
-		return { close, dismiss, result: deferred.promise };
+		return { close, dismiss, element: this.$container, result: deferred.promise };
 	}
 
 	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
