@@ -55,6 +55,7 @@ export class NgModal extends NgService {
 			title = 'Set the <code>title</code> property to replace me :)',
 			template = '<p class="lead">Set the <code>template</code> property to replace me :)</p>',
 			controller = NgController,
+			show = true,
 			onClose = () => {
 				return true;
 			},
@@ -117,7 +118,9 @@ export class NgModal extends NgService {
 			}
 		};
 
-		this.showModal(escapeKeyListener);
+		if (show) {
+			this.showModal(escapeKeyListener);
+		}
 
 		const removeEventListeners = () => {
 			this.$cancelBtn.removeEventListener('click', dismiss);
@@ -135,44 +138,57 @@ export class NgModal extends NgService {
 		this.$submitBtn.addEventListener('click', close);
 		this.$backdrop.addEventListener('click', close);
 
-		return { close, dismiss, element: this.$container, result: deferred.promise };
+		return {
+			close,
+			dismiss,
+			show: () => this.showModal(escapeKeyListener),
+			hide: () => this.hideModal(escapeKeyListener, $scope),
+			element: this.$container,
+			result: deferred.promise,
+		};
 	}
 
 	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
-		this.$backdrop.style.setProperty('display', 'block');
+		return new Promise<void>(resolve => {
+			this.$backdrop.style.setProperty('display', 'block');
 
-		this.$container.style.setProperty('display', 'block');
-		this.$container.classList.remove('show');
-		this.$container.removeAttribute('aria-hidden');
-		this.$container.setAttribute('aria-modal', 'true');
-		this.$container.style.setProperty('padding-right', '17px');
-		this.$container.style.setProperty('pointer-events', 'none');
+			this.$container.style.setProperty('display', 'block');
+			this.$container.classList.remove('show');
+			this.$container.removeAttribute('aria-hidden');
+			this.$container.setAttribute('aria-modal', 'true');
+			this.$container.style.setProperty('padding-right', '17px');
+			this.$container.style.setProperty('pointer-events', 'none');
 
-		window.addEventListener('keydown', escapeKeyListener);
-		document.body.appendChild(this.$backdrop);
-		document.body.classList.add('modal-open');
+			window.addEventListener('keydown', escapeKeyListener);
+			document.body.appendChild(this.$backdrop);
+			document.body.classList.add('modal-open');
 
-		setTimeout(() => {
-			this.$backdrop.classList.add('show');
-			this.$container.classList.add('show');
-		}, MODAL_SHOW_DELAY);
+			setTimeout(() => {
+				this.$backdrop.classList.add('show');
+				this.$container.classList.add('show');
+				resolve();
+			}, MODAL_SHOW_DELAY);
+		});
 	}
 
 	protected hideModal(
 		escapeKeyListener: (e: KeyboardEvent) => void,
 		scope: angular.IScope & { $ctrl: NgController; },
 	) {
-		this.$backdrop.classList.remove('show');
-		this.$container.classList.remove('show');
+		return new Promise<void>(resolve => {
+			this.$backdrop.classList.remove('show');
+			this.$container.classList.remove('show');
 
-		setTimeout(() => {
-			this.$backdrop.style.setProperty('display', 'none');
-			this.$container.style.setProperty('display', 'none');
-		}, MODAL_HIDE_DELAY);
+			scope.$destroy();
+			window.removeEventListener('keydown', escapeKeyListener);
+			document.body.classList.remove('modal-open');
 
-		scope.$destroy();
-		window.removeEventListener('keydown', escapeKeyListener);
-		document.body.classList.remove('modal-open');
+			setTimeout(() => {
+				this.$backdrop.style.setProperty('display', 'none');
+				this.$container.style.setProperty('display', 'none');
+				resolve();
+			}, MODAL_HIDE_DELAY);
+		});
 	}
 }
 
@@ -197,6 +213,11 @@ export interface NgModalOptions<T extends typeof NgController, Y = undefined> {
 	 * Cancel button text (false to hide, true for default)
 	 */
 	cancelBtnText?: string | boolean;
+
+	/**
+	 * Whether to immediately show the modal. Defaults to `true`.
+	 */
+	show?: boolean;
 
 	/**
 	 * A controller for a modal instance.
