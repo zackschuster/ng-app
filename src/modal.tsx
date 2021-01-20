@@ -67,17 +67,24 @@ export class NgModal extends NgService {
 			okBtnText = defaultOkBtnText,
 		} = options;
 
-		if (cancelBtnText !== false) {
+		if (cancelBtnText === false) {
+			this.$cancelBtn.hidden = true;
+		} else {
 			if (cancelBtnText === true) {
 				cancelBtnText = defaultCancelBtnText;
 			}
 			this.$cancelBtn.innerText = cancelBtnText;
 		}
-		if (okBtnText !== false) {
+		if (okBtnText === false) {
+			this.$submitBtn.hidden = true;
+		} else {
 			if (okBtnText === true) {
 				okBtnText = defaultOkBtnText;
 			}
 			this.$submitBtn.value = okBtnText;
+		}
+		if (this.$cancelBtn.hidden && this.$submitBtn.hidden) {
+			this.$footer.hidden = true;
 		}
 
 		this.$title.innerHTML = typeof title === 'function' ? title() : title;
