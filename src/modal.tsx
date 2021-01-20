@@ -49,7 +49,7 @@ export class NgModal extends NgService {
 		document.body.appendChild(this.$container);
 	}
 
-	public open<T extends typeof NgController, Y = undefined>(options: NgModalOptions<T, Y> = { item: {} as Y }) {
+	public open<T extends typeof NgController, Y = undefined>(options: NgModalOptions<T, Y> = {}) {
 		const {
 			item,
 			title = 'Set the <code>title</code> property to replace me :)',
