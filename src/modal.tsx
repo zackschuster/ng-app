@@ -192,7 +192,7 @@ export class NgModal extends NgService {
 	}
 }
 
-export interface NgModalOptions<T extends typeof NgController, Y = undefined> {
+export interface NgModalOptions<T extends typeof NgController = typeof NgController, Y = undefined> {
 	item?: Y;
 	/**
 	 * String representing the modal's title.
