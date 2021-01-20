@@ -10,8 +10,7 @@ const MODAL_HIDE_DELAY = 150;
 
 export class NgModal extends NgService {
 	protected readonly $backdrop = <div class='modal-backdrop fade in'></div>;
-	protected readonly $title =
-		<h5 class='modal-title' id={`modal-title-${this.uniqueId}`}></h5> as HTMLHeadingElement;
+	protected readonly $title = <h5 class='modal-title'></h5> as HTMLHeadingElement;
 	protected readonly $header = <header class='modal-header'>{this.$title}</header>;
 	protected readonly $main = <main class='modal-body'></main>;
 	protected readonly $cancelBtn =
