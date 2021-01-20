@@ -1,6 +1,5 @@
 import { Indexed } from '@ledge/types';
 import { ExecutionContext } from 'ava';
-import { element } from 'angular';
 
 import { $config, $http, $injector, $invokeTemplate, $log, $svc } from '../mocks';
 import { InputService, NgComponentOptions, NgInputOptions, makeInjectableCtrl } from '../../index';
@@ -23,7 +22,7 @@ export function mockInputCtrl<T extends NgInputOptions>(
 	const html = $injector.invoke(
 		definition.template as angular.Injectable<(...args: any[]) => string>,
 		{},
-		{ $element: element(el), $attrs },
+		{ $element: window.angular.element(el), $attrs },
 	);
 
 	const controller = makeInjectableCtrl(definition.controller as any, {
@@ -33,7 +32,7 @@ export function mockInputCtrl<T extends NgInputOptions>(
 		config: () => $config,
 	});
 
-	const $element = element(html);
+	const $element = window.angular.element(html);
 
 	return {
 		controller: new controller($element, $injector.get('$rootScope').$new(true), $injector) as InstanceType<NonNullable<T['controller']>>,

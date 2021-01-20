@@ -1,12 +1,10 @@
 import { HttpStatusCode } from '@ledge/types/http';
-import { injector } from 'angular';
 import type { } from 'angular-mocks';
-// import { module } from 'angular';
 
 import { $config } from './--app';
 import { NgHttp } from '../../index';
 
-const $injector = injector(['ngMock']);
+const $injector = window.angular.injector(['ngMock']);
 
 export const $http = new NgHttp(
 	$injector.get('$http'),
@@ -14,13 +12,6 @@ export const $http = new NgHttp(
 	{
 		host: $config.API_HOST,
 	});
-
-// doesn't work, never gotten $sceDelegateProvider code to make a difference
-// pROBABLY BECAUSE INJECTOR DOESN'T COME FROM HERE, DUDE
-// module('ngMock')
-// 	.config(['$sceDelegateProvider', ($sceDelegateProvider: angular.ISCEDelegateProvider) => {
-// 		$sceDelegateProvider.resourceUrlWhitelist(['self', `${$prefix}/**`]);
-// 	}]);
 
 const $backend = $injector.get('$httpBackend');
 export async function pingTestUrl(
