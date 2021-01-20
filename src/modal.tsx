@@ -50,10 +50,14 @@ export class NgModal extends NgService {
 	}
 
 	public open<T extends typeof NgController, Y = undefined>(options: NgModalOptions<T, Y> = {}) {
+		const defaultCancelBtnText = 'Cancel';
+		const defaultOkBtnText = 'Ok';
 		const {
 			item,
 			title = 'Set the <code>title</code> property to replace me :)',
 			template = '<p class="lead">Set the <code>template</code> property to replace me :)</p>',
+			cancelBtnText = defaultCancelBtnText,
+			okBtnText = defaultOkBtnText,
 			controller = NgController,
 			show = true,
 			onClose = () => {
@@ -61,28 +65,15 @@ export class NgModal extends NgService {
 			},
 		} = options;
 
-		const defaultCancelBtnText = 'Cancel';
-		const defaultOkBtnText = 'Ok';
-		let {
-			cancelBtnText = defaultCancelBtnText,
-			okBtnText = defaultOkBtnText,
-		} = options;
-
 		if (cancelBtnText === false) {
 			this.$cancelBtn.hidden = true;
 		} else {
-			if (cancelBtnText === true) {
-				cancelBtnText = defaultCancelBtnText;
-			}
-			this.$cancelBtn.innerText = cancelBtnText;
+			this.$cancelBtn.innerText = cancelBtnText === true ? defaultCancelBtnText : cancelBtnText;
 		}
 		if (okBtnText === false) {
 			this.$submitBtn.hidden = true;
 		} else {
-			if (okBtnText === true) {
-				okBtnText = defaultOkBtnText;
-			}
-			this.$submitBtn.value = okBtnText;
+			this.$submitBtn.value = okBtnText === true ? defaultOkBtnText : okBtnText;
 		}
 		if (this.$cancelBtn.hidden && this.$submitBtn.hidden) {
 			this.$footer.hidden = true;
