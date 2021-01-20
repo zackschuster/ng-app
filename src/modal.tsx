@@ -116,6 +116,7 @@ export class NgModal extends NgService {
 			if (shouldReject !== false) {
 				deferred.reject();
 			}
+			this.$rootScope.$apply();
 		};
 
 		if (show) {
