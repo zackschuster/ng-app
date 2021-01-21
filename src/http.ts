@@ -35,8 +35,8 @@ export class NgHttp extends NgService {
 		return this.fetch<T>(url, 'PATCH', data);
 	}
 
-	public Put<T = any>(url: string, data: T) {
-		return this.fetch(url, 'PUT', data);
+	public Put<T = any>(url: string, data: any) {
+		return this.fetch<T>(url, 'PUT', data);
 	}
 
 	public Delete<T = any>(url: string) {
