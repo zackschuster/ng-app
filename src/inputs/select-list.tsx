@@ -102,7 +102,7 @@ class SelectController extends NgInputController {
 		};
 
 		input.onblur = e => {
-			if (e.relatedTarget == null) {
+			if (e.relatedTarget !== container) {
 				input.hidden = true;
 				dropdownlist.hidden = true;
 				dropdown.classList.add('border-bottom-0');
@@ -118,7 +118,14 @@ class SelectController extends NgInputController {
 				input.hidden = false;
 			}
 
-			input.hidden = !input.hidden;
+			input.hidden = (
+				!this.isMultiple ||
+				target instanceof HTMLDivElement &&
+				(
+					target.classList.contains('placeholder') ||
+					target.classList.contains('select-list')
+				)
+			) && !input.hidden;
 
 			if (input.hidden) {
 				dropdown.classList.add('border-bottom-0');
