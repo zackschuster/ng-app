@@ -105,25 +105,25 @@ class SelectController extends NgInputController {
 			if (e.relatedTarget == null) {
 				input.hidden = true;
 				dropdownlist.hidden = true;
-				dropdown.classList.remove('border-top-0');
-				dropdown.classList.remove('border-bottom-0');
+				dropdown.classList.add('border-bottom-0');
 			}
 		};
 
-		container.onclick = e => {
-			if (e.target instanceof HTMLSelectElement) {
+		container.onclick = ({ target }) => {
+			if (target instanceof HTMLSelectElement) {
 				return;
 			}
 
-			if (e.target instanceof HTMLButtonElement) {
+			if (target instanceof HTMLButtonElement) {
 				input.hidden = false;
 			}
 
 			input.hidden = !input.hidden;
-			dropdown.classList.toggle('border-top-0', input.hidden);
-			dropdown.classList.toggle('border-bottom-0', input.hidden);
 
-			if (!input.hidden) {
+			if (input.hidden) {
+				dropdown.classList.add('border-bottom-0');
+			} else {
+				dropdown.classList.remove('border-bottom-0');
 				input.focus();
 			}
 
@@ -299,8 +299,7 @@ export const selectList: NgInputOptions = {
 				ng-attr-name={`${type}_{{$ctrl.uniqueId}}`}
 				ng-attr-id={`${type}_{{$ctrl.uniqueId}}`}>
 				{inner}
-				<div class='select-dropdown border-bottom-0 border-top-0'
-					aria-expanded='false'>
+				<div class='select-dropdown border-bottom-0' aria-expanded='false'>
 					{input}
 					{list}
 				</div>
@@ -372,6 +371,7 @@ export function addSelectListStylesheet() {
 			margin: 0;
 			border: 0;
 			border-bottom: 1px solid #ced4da;
+			border-top: 1px solid #ced4da;
 			border-radius: 0;
 		}
 		.select-container .select-button {
@@ -410,7 +410,7 @@ export function addSelectListStylesheet() {
 		}
 		.select-container .select-list.single,
 		.select-container .single.select-dropdown {
-			padding: 0.375rem;
+			padding: 0.275rem;
 		}
 		.select-container .select-list.single > .select-item,
 		.select-container .single.select-dropdown > .select-item {
@@ -429,12 +429,13 @@ export function addSelectListStylesheet() {
 		.select-container .select-list.multiple > .select-item,
 		.select-container .multiple.select-dropdown > .select-item {
 			border-radius: 1rem;
-			background-color: #007bff;
-			border: 1px solid #007bff;
+			background-color: darkblue;
 			color: #fff;
+			display: inline-flex;
+			align-items: center;
 			word-break: break-all;
-			padding: 0.23rem 0.75rem;
-			margin: 0.1rem;
+			padding: 0 0.75rem;
+			margin: 0 0.1rem;
 			opacity: 1;
 			width: max-content;
 		}
@@ -442,8 +443,7 @@ export function addSelectListStylesheet() {
 		.select-container .multiple.select-dropdown > .select-item.is-highlighted,
 		.select-container .select-list.multiple > .select-item:hover,
 		.select-container .multiple.select-dropdown > .select-item:hover {
-			background-color: #006fe6;
-			border: 1px solid #006fe6;
+			background-color: blue;
 		}
 		.select-container .select-list.multiple > .select-item.placeholder,
 		.select-container .multiple.select-dropdown > .select-item.placeholder {
@@ -475,7 +475,9 @@ export function addSelectListStylesheet() {
 			position: absolute;
 			width: 100%;
 			background-color: #fff;
-			border: 1px solid #ced4da;
+			border-bottom: 1px solid #ced4da;
+			border-left: 1px solid #ced4da;
+			border-right: 1px solid #ced4da;
 			margin-top: -1px;
 			border-bottom-left-radius: 0.23rem;
 			border-bottom-right-radius: 0.23rem;
