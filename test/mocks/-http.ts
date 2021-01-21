@@ -14,9 +14,11 @@ export const $http = new NgHttp(
 	});
 
 const $backend = $injector.get('$httpBackend');
+const $sce = $injector.get('$sce');
 export async function pingTestUrl(
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'JSONP',
 	endpoint: string,
+	{ useSce } = { useSce: method === 'JSONP' },
 ) {
 	const url = $http.getFullUrl(endpoint, $config.API_HOST, false);
 	$backend.when(method, url).respond(HttpStatusCode.Ok, { data: `/${endpoint}` });
@@ -31,20 +33,20 @@ export async function pingTestUrl(
 		}
 	});
 
+	const requestUrl = useSce ? $sce.trustAsResourceUrl(url) : endpoint;
 	switch (method) {
 		case 'GET':
-			return $http.Get<string>(endpoint);
+			return $http.Get<{ data: string; }>(requestUrl);
 		case 'POST':
-			return $http.Post<string>(endpoint, endpoint);
+			return $http.Post<{ data: string; }>(requestUrl, endpoint);
 		case 'PUT':
-			return $http.Put<string>(endpoint, endpoint);
+			return $http.Put<{ data: string; }>(requestUrl, endpoint);
 		case 'PATCH':
-			return $http.Patch<string>(endpoint, [{ op: 'add', path: '/path', value: endpoint }]);
+			return $http.Patch<{ data: string; }>(requestUrl, [{ op: 'add', path: '/path', value: endpoint }]);
 		case 'DELETE':
-			return $http.Delete<string>(endpoint);
+			return $http.Delete<{ data: string; }>(requestUrl);
 		case 'JSONP':
-			// return $http.Jsonp<string>(endpoint);
-			throw new Error('Currently unable to test JSONP');
+			return $http.Jsonp<{ data: string; }>(requestUrl);
 		default:
 			throw new Error('Bad method');
 	}

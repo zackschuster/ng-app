@@ -43,12 +43,15 @@ export class NgHttp extends NgService {
 		return this.fetch<T>(url, 'DELETE');
 	}
 
+	/**
+	 * @note Not recommended for use due to idiosyncrasies in Angular.js' JSONP support
+	 */
 	public Jsonp<T = any>(url: string) {
 		return this.fetch<T>(url, 'JSONP');
 	}
 
 	public getFullUrl(uri: string, host = location.host, ssl = location.protocol === 'https:') {
-		return `http${ssl ? 's' : ''}://${host}/${uri}`;
+		return typeof uri !== 'string' ? uri : `http${ssl ? 's' : ''}://${host}/${uri}`;
 	}
 
 	private fetch<T>(
