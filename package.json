@@ -64,7 +64,6 @@
 	"devDependencies": {
 		"@ledge/configs": "23.3.223",
 		"@rollup/plugin-node-resolve": "11.1.0",
-		"@rollup/plugin-replace": "2.3.4",
 		"@rollup/plugin-typescript": "8.1.0",
 		"@types/angular-mocks": "1.7.0",
 		"angular-mocks": "1.8.2",

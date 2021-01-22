@@ -1,13 +1,12 @@
 import { transpileModule } from 'typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
-import replace from '@rollup/plugin-replace';
 import typescript from '@rollup/plugin-typescript';
 
 import { compilerOptions } from './tsconfig.json';
 Object.assign(compilerOptions, { module: 5, sourceMap: true });
 
-export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env => {
+export default ['', 'production', 'esm', 'cjs'].map(env => {
 	const isEsm = env === 'esm';
 	const isCjs = env === 'cjs';
 	const isEsmOrCjs = isEsm || isCjs;
@@ -18,7 +17,7 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 		external: ['angular', 'angular-messages'],
 		input: 'index.ts',
 		output: {
-			file: `build/ng-app.${isEsm ? 'mjs' : `${env}${isCjs ? '' : '.js'}`}`,
+			file: `build/ng-app.${isEsm ? 'mjs' : isCjs ? env : `${env + (env.length === 0 ? '' : '.')}js`}`,
 			format: isEsmOrCjs ? env : 'iife',
 			globals: {
 				angular: 'angular',
@@ -29,7 +28,6 @@ export default ['development', 'staging', 'production', 'esm', 'cjs'].map(env =>
 		plugins: [
 			nodeResolve({ modulesOnly: true }),
 			typescript({ target: `es${isEsmOrCjs ? 2015 : 5}`, lib }),
-			replace({ 'process.env.NODE_ENV': JSON.stringify(isEsmOrCjs ? 'production' : env) }),
 			isEsmOrCjs
 				? {}
 				: {
