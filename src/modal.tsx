@@ -6,10 +6,10 @@ import { NgHttp } from './http';
 import { NgAppConfig } from './options';
 
 const MODAL_SHOW_DELAY = 23;
-const MODAL_HIDE_DELAY = 150;
+const MODAL_HIDE_DELAY = 232;
 
 export class NgModal extends NgService {
-	protected readonly $backdrop = <div class='modal-backdrop fade in'></div>;
+	protected readonly $backdrop = <div class='modal-backdrop'></div>;
 	protected readonly $title = <h5 class='modal-title'></h5> as HTMLHeadingElement;
 	protected readonly $header = <header class='modal-header'>{this.$title}</header>;
 	protected readonly $main = <main class='modal-body'></main>;
@@ -26,8 +26,8 @@ export class NgModal extends NgService {
 		</form> as HTMLFormElement;
 	protected readonly $dialog = <div class='modal-dialog' role='dialog'>{this.$form}</div>;
 	protected readonly $container =
-		<div class='modal fade in'
-			aria-labelledby={this.$title.id}
+		<div class='modal'
+			aria-hidden='true'
 			aria-live='polite'
 			aria-modal='true'
 			role='dialog'>{this.$dialog}</div>;
@@ -40,7 +40,10 @@ export class NgModal extends NgService {
 	) {
 		super();
 
-		document.body.appendChild(this.$container);
+		this.$backdrop.style.setProperty('opacity', '0');
+		this.$backdrop.style.setProperty('transition', `opacity ${MODAL_HIDE_DELAY}ms`);
+		this.$container.style.setProperty('display', 'unset');
+		this.$container.style.setProperty('transition', `opacity ${MODAL_HIDE_DELAY}ms`);
 	}
 
 	public open<T extends typeof NgController, Y = undefined>(options: NgModalOptions<T, Y> = {}) {
@@ -136,23 +139,20 @@ export class NgModal extends NgService {
 	}
 
 	protected showModal(escapeKeyListener: (e: KeyboardEvent) => void) {
+		if (this.$container.hasAttribute('aria-hidden') === false) {
+			return;
+		}
 		return new Promise<void>(resolve => {
-			this.$backdrop.style.setProperty('display', 'block');
-
-			this.$container.style.setProperty('display', 'block');
-			this.$container.classList.remove('show');
 			this.$container.removeAttribute('aria-hidden');
-			this.$container.setAttribute('aria-modal', 'true');
-			this.$container.style.setProperty('padding-right', '17px');
-			this.$container.style.setProperty('pointer-events', 'none');
 
 			window.addEventListener('keydown', escapeKeyListener);
 			document.body.appendChild(this.$backdrop);
+			document.body.appendChild(this.$container);
 			document.body.classList.add('modal-open');
 
 			setTimeout(() => {
-				this.$backdrop.classList.add('show');
-				this.$container.classList.add('show');
+				this.$backdrop.style.setProperty('opacity', '0.46');
+				this.$container.style.setProperty('opacity', '1');
 				resolve();
 			}, MODAL_SHOW_DELAY);
 		});
@@ -162,17 +162,24 @@ export class NgModal extends NgService {
 		escapeKeyListener: (e: KeyboardEvent) => void,
 		scope: angular.IScope & { $ctrl: NgController; },
 	) {
+		if (this.$container.hasAttribute('aria-hidden')) {
+			return;
+		}
 		return new Promise<void>(resolve => {
-			this.$backdrop.classList.remove('show');
-			this.$container.classList.remove('show');
+			this.$backdrop.style.setProperty('opacity', '0');
+			this.$container.style.setProperty('opacity', '0');
+			this.$container.setAttribute('aria-hidden', 'true');
 
 			scope.$destroy();
 			window.removeEventListener('keydown', escapeKeyListener);
-			document.body.classList.remove('modal-open');
 
 			setTimeout(() => {
-				this.$backdrop.style.setProperty('display', 'none');
-				this.$container.style.setProperty('display', 'none');
+				document.body.classList.remove('modal-open');
+			}, MODAL_SHOW_DELAY * 3);
+
+			setTimeout(() => {
+				document.body.removeChild(this.$backdrop);
+				document.body.removeChild(this.$container);
 				resolve();
 			}, MODAL_HIDE_DELAY);
 		});

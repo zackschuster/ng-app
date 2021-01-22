@@ -123,12 +123,12 @@ test('NgModal allows configuring text on open for cancel button', t => {
 
 test('NgModal allows dynamic show & hide', async t => {
 	const modal = $openNewModal({ show: false });
-	t.false(modal.element.classList.contains('show'));
+	t.is(modal.element.style.getPropertyValue('opacity'), '');
 	t.snapshot(modal.element.outerHTML);
 	await modal.show();
-	t.true(modal.element.classList.contains('show'));
+	t.is(modal.element.style.getPropertyValue('opacity'), '1');
 	await modal.hide();
-	t.false(modal.element.classList.contains('show'));
+	t.is(modal.element.style.getPropertyValue('opacity'), '0');
 });
 
 test('NgModal hides submit button on open when text configuration is set to false', t => {
