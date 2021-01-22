@@ -251,7 +251,7 @@ export class NgApp {
 			this.log,
 			this.http,
 			this.config,
-			this.$injector,
+			() => this.$injector,
 		);
 	}
 }

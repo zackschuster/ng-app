@@ -31,20 +31,14 @@ export class NgModal extends NgService {
 			aria-live='polite'
 			aria-modal='true'
 			role='dialog'>{this.$dialog}</div>;
-	protected readonly $compile:
-		(element: Element) => (scope: angular.IScope) => { [i: number]: HTMLElement };
-	protected readonly $rootScope: angular.IScope;
 
 	constructor(
 		protected readonly $log: NgLogger,
 		protected readonly $http: NgHttp,
 		protected readonly $config: NgAppConfig,
-		protected readonly $injector: angular.auto.IInjectorService,
+		protected readonly $injector: angular.auto.IInjectorService | (() => angular.auto.IInjectorService),
 	) {
 		super();
-
-		this.$compile = this.$injector.get('$compile');
-		this.$rootScope = this.$injector.get('$rootScope');
 
 		document.body.appendChild(this.$container);
 	}
@@ -75,27 +69,28 @@ export class NgModal extends NgService {
 		} else {
 			this.$submitBtn.value = okBtnText === true ? defaultOkBtnText : okBtnText;
 		}
-		if (this.$cancelBtn.hidden && this.$submitBtn.hidden) {
-			this.$footer.hidden = true;
-		}
+		this.$footer.hidden = this.$cancelBtn.hidden && this.$submitBtn.hidden;
 
 		this.$title.innerHTML = typeof title === 'function' ? title() : title;
 		this.$main.innerHTML =
 			typeof template === 'function' ? template() : template;
 
-		const $scope = this.$rootScope.$new(true) as Parameters<NgModal['hideModal']>[1];
-		const $element = this.$compile(this.$container)($scope);
+		const $injector = typeof this.$injector === 'function' ? this.$injector() : this.$injector;
+		const $rootScope = $injector.get('$rootScope');
+		const $compile = $injector.get('$compile');
+		const $scope = $rootScope.$new(true) as Parameters<NgModal['hideModal']>[1];
+		const $element = $compile(this.$container)($scope);
 		const $ctrl = makeInjectableCtrl(controller, {
 			log: this.$log,
 			http: this.$http,
 			config: () => this.$config,
 		});
 
-		$scope.$ctrl = new $ctrl($element, $scope, this.$injector) as NgController;
+		$scope.$ctrl = new $ctrl($element, $scope, $injector) as NgController;
 		Object.defineProperty($scope.$ctrl, 'item', { value: item });
 		$scope.$applyAsync();
 
-		const deferred = this.$injector.get('$q').defer<Y>();
+		const deferred = $injector.get('$q').defer<Y>();
 		const escapeKeyListener = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' || e.key === 'Esc') {
 				close();
@@ -107,7 +102,7 @@ export class NgModal extends NgService {
 			if (shouldReject !== false) {
 				deferred.reject(new Error('NgModal dismissed'));
 			}
-			this.$rootScope.$apply();
+			$rootScope.$apply();
 		};
 
 		if (show) {
