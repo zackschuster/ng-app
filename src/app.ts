@@ -114,10 +114,8 @@ export class NgApp {
 				},
 			])
 			.run([
-				'$injector', '$animate',
-				($injector: angular.auto.IInjectorService, $animate: { enabled(active: boolean): any }) => {
-					// @ts-expect-error cheating
-					this.$injector = $injector;
+				'$animate',
+				($animate: { enabled(active: boolean): any }) => {
 					$animate.enabled(true);
 				},
 			]);
@@ -142,11 +140,13 @@ export class NgApp {
 			this.$router = new (class extends NgRouter { })();
 		}
 
-		return new Promise((resolve, reject) => {
+		return new Promise<NgApp['$injector']>((resolve, reject) => {
 			try {
 				addSelectListStylesheet();
 				setTimeout(() => document.body.classList.add('bootstrapped'));
-				resolve(window.angular.bootstrap(document.body, [this.$id], { strictDi }));
+				// @ts-expect-error readonly assignment
+				this.$injector = window.angular.bootstrap(document.body, [this.$id], { strictDi });
+				resolve(this.$injector);
 			} catch (err) {
 				reject(err);
 			}
