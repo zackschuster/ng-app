@@ -236,10 +236,11 @@ export class NgApp {
 	}
 
 	public makeHttpService(options: NgHttpOptions) {
-		function getRootScope(this: NgApp) {
-			return this.$injector.get('$rootScope');
-		}
-		return new NgHttp(this.$injector.get('$http'), getRootScope.bind(this), options);
+		return new NgHttp(
+			this.$injector.get('$http'),
+			() => this.$injector.get('$rootScope'),
+			options,
+		);
 	}
 
 	public makeLogger(isProd = this.$config.IS_PROD) {
