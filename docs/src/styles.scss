@@ -43,6 +43,12 @@ body {
 			opacity: 0;
 		}
 	}
+
+	@include media-breakpoint-up(md) {
+		&.modal-open {
+			padding-right: 15px;
+		}
+	}
 }
 
 pre {
